@@ -1,0 +1,11 @@
+.env
+*.venv
+*.zip
+*.pyc
+*build
+*dist
+*data
+*node_modules
+.idea/
+grokerylab.iml
+.DS_Store

@@ -1,0 +1,177 @@
+
+.D3DataFlow {
+     background-color: #e7ebee;
+}
+
+#flow {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none
+}
+
+.flow-overlay {
+    fill: none;
+    /*stroke: #333;*/
+    stroke-width: 1px
+}
+
+#mark-end-arrow {
+    fill: #4c5763;
+    stroke: #4c5763;
+}
+
+
+/* Nodes */
+g {
+    fill: #fff;
+    stroke: #333;
+    stroke-width: 1.5;
+}
+
+g.undefined {
+    fill: #e7ebee;
+    stroke: #333;
+}
+
+g:hover {
+    stroke: #d62728;
+    stroke-width: 2;
+} 
+
+g.selected {
+    stroke: #d62728;
+    stroke-width: 3;
+} 
+
+g.selected:hover {
+    stroke: #d62728;
+    stroke-width: 4;
+} 
+
+g.colored.charts-node,
+g.colored.jobs-node {
+    fill: #FF7F0E;
+    stroke: #FF7F0E;
+    stroke-width: 0;
+}
+
+g.colored.datasources-node,
+g.colored.dashboards-node {
+    fill: #1f77b4;
+    stroke: #1f77b4;
+    stroke-width: 0; 
+}
+
+g.colored:hover {
+    fill: white;
+    stroke: #d62728;
+    stroke-width: 2;
+} 
+
+g.colored.selected {
+    fill: white;
+    stroke: #d62728;
+    stroke-width: 3;
+} 
+
+g.colored.selected:hover {
+    fill: white;
+    stroke: #d62728;
+    stroke-width: 4;
+} 
+
+
+/* Text / Icons */
+g text {
+    font-size: 30px;
+    font-weight: 100;
+    text-anchor: middle;
+    pointer-events: none;
+    fill: #4c5763;
+    stroke: #4c5763;
+    stroke-width: 1;
+}
+
+g.colored text {
+    fill: #fff;
+    stroke: #fff;
+}
+
+g.colored:hover text,
+g.colored.selected text,
+g.colored.selected:hover text {
+    fill: #4c5763;
+    stroke: #4c5763;
+}
+
+g text.node-icon {
+    font-size: 24px;
+    font-weight: 100;
+    text-anchor: middle;
+    pointer-events: none;
+    fill: #4c5763;
+}
+
+g.colored text.node-icon {
+    font-size:24px;
+    font-weight: 100;
+    text-anchor: middle;
+    pointer-events: none;
+    fill: white;
+    stroke-width: 0;
+}
+
+
+/* Edges */
+path.link {
+    fill: none;
+    stroke: #4c5763;
+    stroke-width: 3px;
+    cursor: default;
+}
+
+path.link:hover {
+    stroke: #d62728;
+}
+
+path.link.selected {
+    stroke: #d62728;
+    stroke-width: 4px;
+}
+
+path.link.selected:hover {
+    stroke: #d62728;
+    stroke-width: 4px;
+}
+
+
+/*  */
+g.inactive,
+g.inactive text,
+path.link.inactive {
+    opacity: .1
+}
+
+
+/*  */
+#flow-header-content {
+    position: absolute;
+    width: 306px;
+    right: 2px;
+    top: 2px;
+}
+
+g.colored:hover text.tooltiptext,
+g.colored.selected text.tooltiptext,
+g.colored.selected:hover text.tooltiptext  {
+    fill: black;
+    stroke: black;
+    font-size: 68px;
+    stroke-width: 2;
+}

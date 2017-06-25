@@ -1,0 +1,9 @@
+
+.auth {
+  background-color: #4c5763;
+  height: 1000px
+}
+
+.auth .signin-panel {
+  padding-top: 100px;
+}

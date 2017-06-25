@@ -1,0 +1,37 @@
+{
+  "name": "grokerylab",
+  "version": "0.0.1",
+  "private": true,
+  "devDependencies": {
+    "react-scripts": "^0.6.0",
+    "redux-devtools": "^3.3.1",
+    "redux-devtools-dock-monitor": "^1.1.1",
+    "redux-devtools-log-monitor": "^1.0.11",
+    "redux-logger": "^2.6.1"
+  },
+  "dependencies": {
+    "d3": "3.5.17",
+    "history": "^4.5.1",
+    "humps": "^1.1.0",
+    "lodash": "^4.17.4",
+    "normalizr": "^2.2.1",
+    "prop-types": "^15.5.10",
+    "react": "^15.5.0",
+    "react-dom": "^15.3.0",
+    "react-redux": "^4.4.5",
+    "react-router": "^3.0.4",
+    "react-router-redux": "^4.0.5",
+    "redux": "^3.5.2",
+    "redux-thunk": "^2.1.0",
+    "classnames": "^2.2.5",
+    "codemirror": "^5.18.2",
+    "lodash.debounce": "^4.0.8",
+    "lodash.isequal": "^4.5.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "clean": "rm -r build/*",
+    "eject": "react-scripts eject"
+  }
+}

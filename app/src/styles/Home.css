@@ -1,0 +1,49 @@
+
+.home .cloud-sections {
+  float:right;
+  width: 100%;
+  padding-left: 35px;
+  padding-right: 50px;
+}
+
+.home .cloud-sections .cloud-section {
+  padding-top:20px;
+  padding-bottom:20px;
+  clear: both
+}
+
+.home .cloud-sections .cloud-section .cloud-title {
+  font-weight: 300;
+  font-size: 24px;
+  line-height: 1.1;
+  color: #333;
+}
+
+.home .cloud-sections .cloud-section .cloud-section-header {
+  margin-left:9px;
+}
+
+.home .cloud-section a i {
+  color: grey;
+  font-size: 20px;
+}
+
+.home .cloud-section a i:hover {
+  color: #4c5763;
+}
+
+.home a,
+.home a:hover {
+  text-decoration: none;
+}
+
+.home .cloud-icon {
+  height: 25px;
+  padding-bottom:5px;
+  margin-right:5px;
+}
+
+.home h1 {
+  padding-top: 15px;
+  padding-left: 15px;
+}
