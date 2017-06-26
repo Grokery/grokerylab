@@ -162,9 +162,19 @@ path.link.inactive {
 /*  */
 #flow-header-content {
     position: absolute;
-    width: 306px;
-    right: 2px;
-    top: 2px;
+    right: 0;
+    top: 0;
+}
+
+#flow-header-content i {
+    font-size: x-large;
+    color: #1f77b4;
+    padding: 10px;
+}
+
+#flow-header-content .drag-create-img {
+    height: 35px;
+    margin-bottom: 8px;
 }
 
 g.colored:hover text.tooltiptext,

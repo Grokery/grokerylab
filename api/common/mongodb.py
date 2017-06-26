@@ -49,9 +49,8 @@ def update(collection, item_id, body):
     update_values['collection'] = collection
     update_values['id'] = item_id
     current_values = db[collection].find_one({'id': item_id})
-    for key in current_values:
-        if key in update_values:
-            current_values[key] = update_values[key]
+    for key in update_values:
+        current_values[key] = update_values[key]
     db[collection].update_one({'id': item_id}, {'$set': current_values}, upsert=False)
     del current_values['_id']
     return {"Item": current_values}

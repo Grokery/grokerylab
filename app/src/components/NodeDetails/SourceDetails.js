@@ -33,7 +33,7 @@ class SourceDetails extends Component {
     return (                    
       <div className='btn-group pull-right item-options'>
           <a href='' onClick={this.toggleEditDialog.bind(this)} className='btn btn-default'><i className='fa fa-cog'></i></a>
-          <a href='' onClick={toggleNodeDetailsPain} className='btn btn-default'><i className='fa fa-share-alt'></i></a>
+          <a href='' onClick={toggleNodeDetailsPain} className='btn btn-default'><i className='fa fa-arrows-v'></i></a>
           <a href={exitHref} className='btn btn-default'><i className='fa fa-times'></i></a>
       </div>
     )

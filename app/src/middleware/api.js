@@ -5,7 +5,7 @@
 import { AUTH_ENABLED } from "../globals.js"
 import { getSessionInfo } from '../authentication'
 
-const callApi = (endpoint, method, data, token) => {
+const callApi = (endpoint, method, data, token, cb) => {
     var myHeaders = new Headers({
         "Content-Type":"application/json"
     })
@@ -25,6 +25,9 @@ const callApi = (endpoint, method, data, token) => {
             response.json().then(json => {
                 if (!response.ok) {
                     return Promise.reject(json)
+                }
+                if (typeof(cb) === 'function') {
+                    cb(json)
                 }
                 return json
             })
@@ -53,11 +56,11 @@ export default store => next => action => {
     
     next(actionWith({ type: requestType }))
     
-    const { endpoint, method, data } = callApiActionInfo
+    const { endpoint, method, data, cb } = callApiActionInfo
     const sessionInfo = getSessionInfo()
     const fullUrl = sessionInfo['selectedCloud']['url'] + endpoint
     const token = sessionInfo['token']
-    return callApi(fullUrl, method, data, token).then(
+    return callApi(fullUrl, method, data, token, cb).then(
         response => next(actionWith({
             response,
             type: successType

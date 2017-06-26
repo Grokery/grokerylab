@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { AUTH_ENABLED, APPSTATUS } from "../../globals.js"
+import { AUTH_ENABLED, APPSTATUS} from "../../globals.js"
 import { history } from '../../index.js'
 import { setAppStatus } from '../../actions'
 import { getSessionInfo } from '../../authentication'
@@ -46,10 +46,13 @@ class D3DataFlow extends Component {
       <div className='D3DataFlow'>
           <div id="flow-header-content" className={this.props.showControls ? '' : 'hidden'}>
             <div>
-                <button type="button" className="btn btn-default" onClick={this.createJob.bind(this)}>+job</button>
-                <button type="button" className="btn btn-default" onClick={this.createSource.bind(this)}>+source</button>
-                <button type="button" className="btn btn-default" onClick={this.createChart.bind(this)}>+chart</button>
-                <button type="button" className="btn btn-default" onClick={this.createBoard.bind(this)}>+board</button>
+                <img className="drag-create-img" src="img/job.png" onDragEnd={this.createJob.bind(this)}/>
+                <img className="drag-create-img" src="img/source.png" onDragEnd={this.createSource.bind(this)}/>
+                {/*<img className="drag-create-img" src="img/chart.png" onDragEnd={this.dragCreate.bind(this, "chart")}/>
+                <img className="drag-create-img" src="img/board.png" onDragEnd={this.dragCreate.bind(this, "board")}/>*/}
+                <a><i className="fa fa-plus" aria-hidden="true"></i></a>
+                <a onClick={this.onDelete.bind(this)}><i className="fa fa-trash" aria-hidden="true"></i></a>
+                <a><i className="fa fa-filter" aria-hidden="true"></i></a>
             </div>
           </div>
         <div id='flow'></div>
@@ -121,7 +124,8 @@ class D3DataFlow extends Component {
         xgridSize: 10,
         ygridSize: 10,
         nodes: [],
-        edges: []
+        edges: [],
+        mouseLocation: [0,0]
     }
     var d3state = this.d3state
 
@@ -146,6 +150,18 @@ class D3DataFlow extends Component {
 
     this.svgG = this.svg.append("g").classed("graph", true)
 
+
+
+    this.svgG.append("rect")
+        .attr('x', '0')
+        .attr('y', '0')
+        .attr('fill','transparent')
+        .attr('stroke', 'black')
+        .attr('width' , 1000)
+        .attr('height', 1000)
+
+
+
     // displayed when dragging between shapes
     this.dragLine = this.svgG.append('svg:path')
         .attr('class', 'link dragline hidden')
@@ -159,9 +175,12 @@ class D3DataFlow extends Component {
     // mouseup and mousedown
     this.svg.on("mousedown", function(d) {
         this.svgMouseDown.call(this, d)
-    }.bind(this));
-    this.svg.on("mouseup", function(d) {
+    }.bind(this))
+    .on("mouseup", function(d) {
         this.svgMouseUp.call(this, d)
+    }.bind(this))
+    .on('mousemove', function () {
+        this.d3state.mouseLocation = d3.mouse(d3.select('#flow').node())  
     }.bind(this))
 
     // handle drag
@@ -403,15 +422,15 @@ class D3DataFlow extends Component {
             });
         });
 
-        newGs.each(function(){
-            d3.select(this).append("text")
-                .attr("class", function (d) {
-                        return "hidden tooltiptext tip-" + d.id
-                })
-                .text(function (d) {
-                        return d.title
-                })
-        })
+        // newGs.each(function(){
+        //     d3.select(this).append("text")
+        //         .attr("class", function (d) {
+        //                 return "hidden tooltiptext tip-" + d.id
+        //         })
+        //         .text(function (d) {
+        //                 return d.title
+        //         })
+        // })
 
     //   newGs.each(function() {
     //       let gEl = d3.select(this)
@@ -615,7 +634,6 @@ class D3DataFlow extends Component {
       let d3state = this.d3state;
       let sessionInfo = getSessionInfo()
 
-
       if (d3state.drawEdge) {
           d3state.drawEdge = false;
           this.dragLine.classed("hidden", true);
@@ -743,8 +761,7 @@ class D3DataFlow extends Component {
       } else if (d3state.justScaleTransGraph) {
           d3state.justScaleTransGraph = false;
       } else if (d3state.dblClickSVGTimeout) {
-          // this.useMouseLocation = true;
-          // $('#create-node-modal').modal('show');
+          // todo
       } else {
           d3state.dblClickSVGTimeout = true;
           setTimeout(function() {
@@ -754,55 +771,57 @@ class D3DataFlow extends Component {
 
       d3state.graphMouseDown = false;
   }
-  createJob(xy) {
+  createJob(e) {
+      e = e || window.event
       this.createNode({
         collection: "jobs",
         title: "New Job",
         description: "Default description",
         upstream: [],
         downstream: [],
-        x: 100,
-        y: 100
+        x: e.pageX,
+        y: e.pageY
       })
   }
-  createSource() {
+  createSource(e) {
+      e = e || window.event
       this.createNode({
         collection: "datasources",
         title: "New Source",
         description: "Default description",
         upstream: [],
         downstream: [],
-        x: 100,
-        y: 100
+        x: e.pageX,
+        y: e.pageY
       })
   }
-  createChart() {
+  createChart(e) {
+      e = e || window.event
       this.createNode({
         collection: "charts",
         title: "New Chart",
         description: "Default description",
         upstream: [],
         downstream: [],
-        x: 100,
-        y: 100
+        x: e.pageX,
+        y: e.pageY
       })
   }
-  createBoard() {
+  createBoard(e) {
+      e = e || window.event
       this.createNode({
         collection: "dashboards",
         title: "New Board",
         description: "Default description",
         upstream: [],
         downstream: [],
-        x: 100,
-        y: 100
+        x: e.pageX,
+        y: e.pageY
       })
   }
   createNode(newNode, tempNode) {
-      var xycoords = [0, 0];
-      newNode.x = xycoords[0];
-      newNode.y = xycoords[1];
-
+      console.log(newNode)
+      this.removeSelectFromNode()
       var onSuccess = function(result) {
           var node = {
               collection: result.collection,
@@ -813,9 +832,8 @@ class D3DataFlow extends Component {
               downstream: result.downstream,
               x: result.x,
               y: result.y
-          };
+          }
           this.d3state.nodes.push(node);
-          this.d3state.selectedNode = node;
           this.renderD3();
       }.bind(this);
 
@@ -847,7 +865,6 @@ class D3DataFlow extends Component {
                     setAppStatus(APPSTATUS.ERROR)
                     return Promise.reject(json)
                 }
-                
                 cb(json.Item)
                 setAppStatus(APPSTATUS.OK)
             })
@@ -891,16 +908,38 @@ class D3DataFlow extends Component {
         )
   }
   deleteNode(node) {
-    //   var d3state = this.d3state;
-    //   if (confirm("Confirm delete node?")===true) {
-    //   d3state.nodes.splice(d3state.nodes.indexOf(node), 1);
-    //   this.spliceLinksForNode(node);
-    //   this.props.onDeleteNode(node);
-    //   this.renderD3();
-    //   }
+    const { setAppStatus } = this.props
+    setAppStatus(APPSTATUS.BUSY)
+    const sessionInfo = getSessionInfo()
+    const fullUrl = sessionInfo['selectedCloud']['url'] + "/resources/" + node.collection + "/" + node.id
+    const token = sessionInfo['token']
+
+    var myHeaders = new Headers({
+        "Content-Type":"application/json"
+    })
+    if (AUTH_ENABLED && token) {
+        myHeaders.append("Authorization", token)
+    }
+    var params = { 
+        method: 'DELETE',
+        mode: 'cors',
+        headers: myHeaders
+    }
+    return fetch(fullUrl, params)
+        .then(response =>
+            response.json().then(json => {
+                if (!response.ok) {
+                    setAppStatus(APPSTATUS.ERROR)
+                    return Promise.reject(json)
+                }
+                this.d3state.nodes.splice(this.d3state.nodes.indexOf(node), 1);
+                this.spliceLinksForNode(node);
+                this.renderD3();
+                setAppStatus(APPSTATUS.OK)
+            })
+        )
   }
   deleteEdge(edge) {
-      // if (confirm("Confirm delete connection?")===true) {
       var d3state = this.d3state;
       var source = edge.source;
       var target = edge.target;
@@ -911,16 +950,19 @@ class D3DataFlow extends Component {
       d3state.changedNodes[target.id] = target;
       this.onUpdateNodes(d3state.changedNodes);
       this.renderD3();
-      // }
   }
   onDelete() {
       if (this.d3state.selectedNode) {
-          this.deleteNode(this.d3state.selectedNode);
-          this.removeSelectFromNode();
+        // if (confirm("Confirm delete node?")===true) {
+            this.deleteNode(this.d3state.selectedNode);
+            this.removeSelectFromNode();
+        // }
       }
       if (this.d3state.selectedEdge) {
+          // if (confirm("Confirm delete connection?")===true) {
           this.deleteEdge(this.d3state.selectedEdge);
           this.removeSelectFromNode();
+          // }
       }
   }
   buildPathStr(ed) {

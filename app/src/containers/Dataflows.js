@@ -12,7 +12,7 @@ class Dataflows extends Component {
           selectedNodeId={nodeId}
           zoomOnHighlight={false}
           singleClickNav={false}
-          colored={true}
+          colored={false}
         ></D3DataFlow>
         {this.props.children}
       </div>

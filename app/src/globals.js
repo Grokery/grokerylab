@@ -22,7 +22,6 @@ export const AUTH_ENABLED = process.env.AUTH_ENABLED === true
 export const AUTH_URL = "" 
 
 // Default API 
-export const DEFAULT_API_BASEURL = "http://localhost:5000/"
 export const DEFAULT_SESSION_INFO = {
     "username": "yourusername@domain.com",
     "clouds": {

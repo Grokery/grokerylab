@@ -7,12 +7,13 @@ export const FETCHNODES_REQUEST = 'FETCHNODES_REQUEST'
 export const FETCHNODES_SUCCESS = 'FETCHNODES_SUCCESS'
 export const FETCHNODES_FAILURE = 'FETCHNODES_FAILURE'
 
-export const fetchNodes = () => (dispatch, getState) => {
+export const fetchNodes = (cb) => (dispatch, getState) => {
     dispatch({
         [CALL_API]: {
             types: [FETCHNODES_REQUEST, FETCHNODES_SUCCESS, FETCHNODES_FAILURE],
             endpoint: '/dataflowservice',
-            method: 'GET'
+            method: 'GET',
+            callback: cb
         }
     })
 }
@@ -33,12 +34,13 @@ export const FETCHNODE_REQUEST = 'FETCHNODE_REQUEST'
 export const FETCHNODE_SUCCESS = 'FETCHNODE_SUCCESS'
 export const FETCHNODE_FAILURE = 'FETCHNODE_FAILURE'
 
-export const fetchNode = (collection, nodeId) => (dispatch, getState) => {
+export const fetchNode = (collection, nodeId, cb) => (dispatch, getState) => {
     dispatch({
         [CALL_API]: {
             types: [FETCHNODE_REQUEST, FETCHNODE_SUCCESS, FETCHNODE_FAILURE],
             endpoint: '/resources/' + collection + "/" + nodeId,
-            method: 'GET'
+            method: 'GET',
+            callback: cb
         }
     })
 }
@@ -49,13 +51,31 @@ export const UPDATENODE_REQUEST = 'UPDATENODE_REQUEST'
 export const UPDATENODE_SUCCESS = 'UPDATENODE_SUCCESS'
 export const UPDATENODE_FAILURE = 'UPDATENODE_FAILURE'
 
-export const updateNode = (collection, node) => (dispatch, getState) => {
+export const updateNode = (collection, node, cb) => (dispatch, getState) => {
     dispatch({
         [CALL_API]: {
             types: [UPDATENODE_REQUEST, UPDATENODE_SUCCESS, UPDATENODE_FAILURE],
             endpoint: '/resources/' + collection + "/" + node.id,
             method: 'PUT',
-            data: node
+            data: node,
+            callback: cb
+        }
+    })
+}
+
+//--------------------------------
+
+export const DELETEENODE_REQUEST = 'DELETEENODE_REQUEST'
+export const DELETEENODE_SUCCESS = 'DELETEENODE_SUCCESS'
+export const DELETEENODE_FAILURE = 'DELETEENODE_FAILURE'
+
+export const deleteNode = (collection, node, cb) => (dispatch, getState) => {
+    dispatch({
+        [CALL_API]: {
+            types: [DELETEENODE_REQUEST, DELETEENODE_SUCCESS, DELETEENODE_FAILURE],
+            endpoint: '/resources/' + collection + "/" + node.id,
+            method: 'DELETE',
+            callback: cb
         }
     })
 }

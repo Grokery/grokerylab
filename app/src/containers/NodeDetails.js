@@ -24,7 +24,7 @@ class NodeDetails extends Component {
           height={flowPreviewHeight}
           zoomOnHighlight={false}
           singleClickNav={true}
-          colored={true}
+          colored={false}
         ></D3DataFlow>
         <div id='node-details-pain' className='node-details' style={{'top':'0px'}}>
             {this.getCollectionComponent()}
