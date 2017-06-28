@@ -155,7 +155,7 @@ path.link.selected:hover {
 g.inactive,
 g.inactive text,
 path.link.inactive {
-    opacity: .1
+    opacity: .5
 }
 
 

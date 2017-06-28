@@ -102,7 +102,7 @@ class D3DataFlow extends Component {
         highlightedMaxY: -9999,
         highlightedMinX: 9999,
         highlightedMinY: 9999,
-        selectedNode: selectedNodeId ? nodes[selectedNodeId] : null,
+        selectedNodes: selectedNodeId ? [nodes[selectedNodeId]] : [],
         selectedEdge: null,
         mouseDownNode: null,
         mouseDownEdge: null,
@@ -473,10 +473,7 @@ class D3DataFlow extends Component {
       // remove old shapes
       this.shapes.exit().remove();
 
-      if (d3state.selectedNode) {
-          this.selectNode(d3state.selectedNode)
-      }
-
+    this.selectNodes(d3state.selectedNodes)
   }
   updateWindow(svg) {
       var docEl = document.documentElement;
@@ -580,11 +577,6 @@ class D3DataFlow extends Component {
   pathMouseDown(d3path, d) {
       d3.event.stopPropagation();
       this.d3state.mouseDownEdge = d;
-
-    //   if (this.d3state.selectedNode) {
-    //       this.removeSelectFromNode();
-    //   }
-
       var prevEdge = this.d3state.selectedEdge;
       if (!prevEdge || prevEdge !== d) {
           this.selectEdge(d3path, d);
@@ -609,81 +601,34 @@ class D3DataFlow extends Component {
           state.dblClickPathTimeout = true;
       }
   }
-  selectNode(d) {
-      if (this.d3state.selectedNode) {
-          this.removeSelectFromNode();
-      }
-      this.d3state.selectedNode = d;
-      d3.select("#n" + d.id).classed(this.d3state.selectedClass, true);
-      this.highlightFlow(d);
+  addNodeToSelected(d) {
+      this.d3state.selectedNodes.push(d)
+      this.selectNodes(this.d3state.selectedNodes)
   }
-  removeSelectFromNode() {
-      if (!this.d3state.selectedNode) { return }
-      d3.select("#n" + this.d3state.selectedNode.id).classed(this.d3state.selectedClass, false);
-      this.d3state.selectedNode = null;
-      this.highlightFlow(null);
-      //$('#delete-button').addClass('hidden');
+  removeNodeFromSelected(d) {
+      let index = this.d3state.selectedNodes.indexOf(d)
+      if (index > -1) {
+        this.d3state.selectedNodes.splice(index, 1);
+      }
+      this.selectNodes(this.d3state.selectedNodes)
   }
-  shapeMouseDown(d) {
-      d3.event.stopPropagation();
-      this.d3state.mouseDownNode = d;
-
-      if (d3.event.shiftKey) {
-          this.d3state.drawEdge = true;
-          this.dragLine.classed('hidden', false).attr('d', this.buildDragLineStr(d));
+  selectNodes(nodes) {
+      this.clearAllHighlight()
+      if (!nodes || nodes.length > 0) {
+        this.d3state.selectedNodes = nodes
+        this.paths.classed('inactive', true)
+        this.shapes.classed('inactive', true)
+        nodes.forEach(function(node) {
+            d3.select("#n" + node.id).classed(this.d3state.selectedClass, true)
+            this.highlightFlow(node)
+        }.bind(this))
       }
   }
-  shapeMouseUp(d) {
-      let d3state = this.d3state;
-      let sessionInfo = getSessionInfo()
-
-      if (d3state.drawEdge) {
-          d3state.drawEdge = false;
-          this.dragLine.classed("hidden", true);
-          if (d3state.mouseDownNode !== d) {
-              // create new edge for mousedown edge and add to graph
-              var newEdge = { source: d3state.mouseDownNode, target: d };
-              var filtRes = this.paths.filter(function(d) {
-                  if (d.source === newEdge.target && d.target === newEdge.source) {
-                      this.d3state.edges.splice(this.d3state.edges.indexOf(d), 1);
-                  }
-                  return d.source === newEdge.source && d.target === newEdge.target;
-              }.bind(this));
-              if (!filtRes[0].length) {
-                  this.d3state.edges.push(newEdge);
-                  // update nodes with new edgeinfo
-                  newEdge.source.downstream.push({ id: newEdge.target.id, collection: newEdge.target.collection });
-                  newEdge.target.upstream.push({ id: newEdge.source.id, collection: newEdge.source.collection });
-                  d3state.changedNodes[newEdge.source.id] = newEdge.source;
-                  d3state.changedNodes[newEdge.target.id] = newEdge.target;
-                  this.onUpdateNodes(d3state.changedNodes);
-                  this.renderD3();
-              }
-          }
-      } else if (d3state.dragging) {
-          d3state.dragging = false;
-          this.onUpdateNodes(d3state.changedNodes);
-      } else if (d3state.dblClickNodeTimeout) {
-          history.push("/clouds/"+ sessionInfo['selectedCloud'].id + "/" + d.collection + "/" + d.id + "?flow=open")
-      } else {
-          if (!this.d3state.selectedNode || this.d3state.selectedNode.id !== d.id) {
-              if (this.props.singleClickNav) {
-                  history.push("/clouds/"+ sessionInfo['selectedCloud'].id + "/" + d.collection + "/" + d.id)
-              } else {
-                  this.selectNode(d)
-              }
-          } else {
-              this.removeSelectFromNode()
-          }
-
-          // set for potential dblclick
-          d3state.dblClickNodeTimeout = true;
-          setTimeout(function() {
-              d3state.dblClickNodeTimeout = false;
-          }, 300);
-      }
-
-      d3state.mouseDownNode = null;
+  clearAllHighlight() {
+    this.paths.classed(this.d3state.selectedClass, false)
+    this.shapes.classed(this.d3state.selectedClass, false)
+    this.paths.classed('inactive', false)
+    this.shapes.classed('inactive', false)
   }
   highlightFlow(d) {
       const { zoomOnHighlight } = this.props
@@ -694,15 +639,7 @@ class D3DataFlow extends Component {
       d3state.highlightedMinX = 9999
       d3state.highlightedMinY = 9999
 
-      if (!d) {
-          this.paths.classed('inactive', false);
-          this.shapes.classed('inactive', false);
-          return;
-      }
-
-      this.paths.classed('inactive', true);
-      this.shapes.classed('inactive', true);
-      d3.select("#n" + d.id).classed('inactive', false);
+      d3.select("#n" + d.id).classed('inactive', false)
       this.highlightUpstream(d);
       this.highlightDownstream(d);
 
@@ -747,6 +684,69 @@ class D3DataFlow extends Component {
           d3.select('#n' + d.id + node.id).classed('inactive', false);
           this.highlightDownstream(nodes[node.id]);
       }.bind(this))
+  }
+  shapeMouseDown(d) {
+      d3.event.stopPropagation();
+      this.d3state.mouseDownNode = d;
+
+      if (d3.event.shiftKey) {
+          this.d3state.drawEdge = true;
+          this.dragLine.classed('hidden', false).attr('d', this.buildDragLineStr(d));
+      }
+  }
+  shapeMouseUp(d) {
+      let d3state = this.d3state;
+      let sessionInfo = getSessionInfo()
+
+      if (d3state.drawEdge) {
+          d3state.drawEdge = false;
+          this.dragLine.classed("hidden", true);
+          if (d3state.mouseDownNode !== d) {
+              // create new edge for mousedown edge and add to graph
+              var newEdge = { source: d3state.mouseDownNode, target: d };
+              var filtRes = this.paths.filter(function(d) {
+                  if (d.source === newEdge.target && d.target === newEdge.source) {
+                      this.d3state.edges.splice(this.d3state.edges.indexOf(d), 1);
+                  }
+                  return d.source === newEdge.source && d.target === newEdge.target;
+              }.bind(this));
+              if (!filtRes[0].length) {
+                  this.d3state.edges.push(newEdge);
+                  // update nodes with new edgeinfo
+                  newEdge.source.downstream.push({ id: newEdge.target.id, collection: newEdge.target.collection });
+                  newEdge.target.upstream.push({ id: newEdge.source.id, collection: newEdge.source.collection });
+                  d3state.changedNodes[newEdge.source.id] = newEdge.source;
+                  d3state.changedNodes[newEdge.target.id] = newEdge.target;
+                  this.onUpdateNodes(d3state.changedNodes);
+                  this.renderD3();
+              }
+          }
+      } else if (d3state.dragging) {
+          d3state.dragging = false;
+          this.onUpdateNodes(d3state.changedNodes);
+      } else if (d3state.dblClickNodeTimeout) {
+          history.push("/clouds/"+ sessionInfo['selectedCloud'].id + "/" + d.collection + "/" + d.id + "?flow=open")
+      } else {
+          if (this.d3state.selectedNodes.indexOf(d) > -1) {
+              this.removeNodeFromSelected(d)
+          } else if (d3.event.shiftKey) {
+            //   this.addNodeToSelected(d)
+          } else {
+            //   this.selectNodes([d])
+              this.addNodeToSelected(d)
+          }
+
+        //       if (this.props.singleClickNav) {
+        //           history.push("/clouds/"+ sessionInfo['selectedCloud'].id + "/" + d.collection + "/" + d.id)
+
+          // set for potential dblclick
+          d3state.dblClickNodeTimeout = true;
+          setTimeout(function() {
+              d3state.dblClickNodeTimeout = false;
+          }, 300);
+      }
+
+      d3state.mouseDownNode = null;
   }
   svgMouseDown() {
       this.d3state.graphMouseDown = true;
@@ -831,9 +831,9 @@ class D3DataFlow extends Component {
       })
   }
   createNode(newNode, tempNode) {
-      newNode.x = newNode.x - this.d3state.shapeWidth/2
-      newNode.y = newNode.y - this.d3state.shapeHeight/2
-      this.removeSelectFromNode()
+      newNode.x -= this.d3state.shapeWidth/2
+      newNode.y -= this.d3state.shapeHeight/2
+      this.removeNodeFromSelected()
       var onSuccess = function(result) {
           var node = {
               collection: result.collection,
@@ -963,16 +963,19 @@ class D3DataFlow extends Component {
       this.renderD3();
   }
   onDelete() {
-      if (this.d3state.selectedNode) {
-        // if (confirm("Confirm delete node?")===true) {
-            this.deleteNode(this.d3state.selectedNode);
-            this.removeSelectFromNode();
-        // }
+      if (this.d3state.selectedNodes) {
+        if (confirm("Confirm delete nodes?")===true) {
+            this.d3state.selectedNodes.forEach(function(node) {
+                this.deleteNode(node);
+            }.bind(this))
+            this.d3state.selectedNodes = []
+            this.selectNodes(this.d3state.selectedNodes)
+        }
       }
       if (this.d3state.selectedEdge) {
           // if (confirm("Confirm delete connection?")===true) {
           this.deleteEdge(this.d3state.selectedEdge);
-          this.removeSelectFromNode();
+          this.removeNodeFromSelected();
           // }
       }
   }
