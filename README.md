@@ -3,7 +3,7 @@
 
 ## Build & Deploy
 
-You will need Git, Npm, and Docker.
+You will need Git, Npm, Python and Docker.
 
 Clone repo:
 
@@ -22,6 +22,15 @@ Finally, to start:
 
     docker-compose up
 
+Or, to locally in dev mode:
+
+    cd api
+    ./run_with_venv.sh (or run_with_venv.bat)
+
+...and in a new window:
+
+    cd app
+    npm start
 
 ## License
 

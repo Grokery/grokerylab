@@ -46,10 +46,9 @@ class D3DataFlow extends Component {
       <div className='D3DataFlow'>
           <div id="flow-header-content" className={this.props.showControls ? '' : 'hidden'}>
             <div>
-                <img className="drag-create-img" src="img/job.png" onDragEnd={this.createJob.bind(this)}/>
-                <img className="drag-create-img" src="img/source.png" onDragEnd={this.createSource.bind(this)}/>
-                {/*<img className="drag-create-img" src="img/chart.png" onDragEnd={this.dragCreate.bind(this, "chart")}/>
-                <img className="drag-create-img" src="img/board.png" onDragEnd={this.dragCreate.bind(this, "board")}/>*/}
+                <span id="mousexy"></span>
+                <img className="drag-create-img" role='presentation' src="img/job.png" onMouseDown={this.createNodeDrag.bind(this, this.createJob.bind(this))}/>
+                <img className="drag-create-img" role='presentation' src="img/source.png" onMouseDown={this.createNodeDrag.bind(this, this.createSource.bind(this))}/>
                 <a><i className="fa fa-plus" aria-hidden="true"></i></a>
                 <a onClick={this.onDelete.bind(this)}><i className="fa fa-trash" aria-hidden="true"></i></a>
                 <a><i className="fa fa-filter" aria-hidden="true"></i></a>
@@ -93,7 +92,7 @@ class D3DataFlow extends Component {
     let width = this.getWindowWidth()
     let height = this.getWindowHeight()
     this.d3state = {
-        width: width -= 64, // allow for sidebar 
+        width: width,
         height: height,
         maxX: -9999,
         maxY: -9999,
@@ -125,7 +124,8 @@ class D3DataFlow extends Component {
         ygridSize: 10,
         nodes: [],
         edges: [],
-        mouseLocation: [0,0]
+        mouseLocation: [0,0],
+        dragNode: null
     }
     var d3state = this.d3state
 
@@ -148,19 +148,15 @@ class D3DataFlow extends Component {
         .append('svg:path')
         .attr('d', 'M0,-5L10,0L0,5')
 
-    this.svgG = this.svg.append("g").classed("graph", true)
+    this.svgG = this.svg.append("g").classed("graph", true).attr("id","graph")
 
-
-
-    this.svgG.append("rect")
-        .attr('x', '0')
-        .attr('y', '0')
-        .attr('fill','transparent')
-        .attr('stroke', 'black')
-        .attr('width' , 1000)
-        .attr('height', 1000)
-
-
+    // this.svgG.append("rect")
+    //     .attr('x', '0')
+    //     .attr('y', '0')
+    //     .attr('fill','transparent')
+    //     .attr('stroke', 'black')
+    //     .attr('width' , 1000)
+    //     .attr('height', 1000)
 
     // displayed when dragging between shapes
     this.dragLine = this.svgG.append('svg:path')
@@ -180,7 +176,14 @@ class D3DataFlow extends Component {
         this.svgMouseUp.call(this, d)
     }.bind(this))
     .on('mousemove', function () {
-        this.d3state.mouseLocation = d3.mouse(d3.select('#flow').node())  
+        this.d3state.mouseLocation = d3.mouse(d3.select('#graph').node()) 
+        document.getElementById("mousexy").innerHTML = ""
+        if (this.d3state.dragNode) {
+            let dragNode = document.getElementById("dragnode")
+            dragNode.style.top = this.d3state.mouseLocation[0] + "px"
+            dragNode.style.left = this.d3state.mouseLocation[1] + "px"
+            document.getElementById("mousexy").innerHTML = "Mouse: " + this.d3state.mouseLocation
+        } 
     }.bind(this))
 
     // handle drag
@@ -498,12 +501,14 @@ class D3DataFlow extends Component {
     let x = minX + (maxX - minX) / 2
     let y = minY + (maxY - minY) / 2
 
+    // // graph 0,0
     // this.svgG.append("circle")
     //         .attr("cx", 0)
     //         .attr("cy", 0)
     //         .attr("fill", "red")
     //         .attr("r", 20) 
 
+    // // flow center relative to graph 0,0
     // this.svgG.append("circle")
     //         .attr("cx", x)
     //         .attr("cy", y)
@@ -661,10 +666,8 @@ class D3DataFlow extends Component {
           d3state.dragging = false;
           this.onUpdateNodes(d3state.changedNodes);
       } else if (d3state.dblClickNodeTimeout) {
-        //   console.log("dbl click")
           history.push("/clouds/"+ sessionInfo['selectedCloud'].id + "/" + d.collection + "/" + d.id + "?flow=open")
       } else {
-        //   console.log("click")
           if (!this.d3state.selectedNode || this.d3state.selectedNode.id !== d.id) {
               if (this.props.singleClickNav) {
                   history.push("/clouds/"+ sessionInfo['selectedCloud'].id + "/" + d.collection + "/" + d.id)
@@ -771,56 +774,67 @@ class D3DataFlow extends Component {
 
       d3state.graphMouseDown = false;
   }
-  createJob(e) {
-      e = e || window.event
+  createNodeDrag(cb, e) {
+    this.d3state.dragNode = true
+    let dragNode = e.target.cloneNode(true)
+    dragNode.id = "dragnode"
+    dragNode.style.position = "absolute"
+    dragNode.style.top = this.d3state.mouseLocation[0]+"px"
+    dragNode.style.left = this.d3state.mouseLocation[1]+"px"
+    document.getElementById("graph").appendChild(dragNode);
+    window.onmouseup = function(e) {
+        this.d3state.dragNode = false
+        window.onmouseup = null
+        cb(this.d3state.mouseLocation)
+      }.bind(this)
+  }
+  createJob(xy) {
       this.createNode({
         collection: "jobs",
         title: "New Job",
         description: "Default description",
         upstream: [],
         downstream: [],
-        x: e.pageX,
-        y: e.pageY
+        x: xy[0],
+        y: xy[1]
       })
   }
-  createSource(e) {
-      e = e || window.event
+  createSource(xy) {
       this.createNode({
         collection: "datasources",
         title: "New Source",
         description: "Default description",
         upstream: [],
         downstream: [],
-        x: e.pageX,
-        y: e.pageY
+        x: xy[0],
+        y: xy[1]
       })
   }
-  createChart(e) {
-      e = e || window.event
+  createChart(xy) {
       this.createNode({
         collection: "charts",
         title: "New Chart",
         description: "Default description",
         upstream: [],
         downstream: [],
-        x: e.pageX,
-        y: e.pageY
+        x: xy[0],
+        y: xy[1]
       })
   }
-  createBoard(e) {
-      e = e || window.event
+  createBoard(xy) {
       this.createNode({
         collection: "dashboards",
         title: "New Board",
         description: "Default description",
         upstream: [],
         downstream: [],
-        x: e.pageX,
-        y: e.pageY
+        x: xy[0],
+        y: xy[1]
       })
   }
   createNode(newNode, tempNode) {
-      console.log(newNode)
+      newNode.x = newNode.x - this.d3state.shapeWidth/2
+      newNode.y = newNode.y - this.d3state.shapeHeight/2
       this.removeSelectFromNode()
       var onSuccess = function(result) {
           var node = {
@@ -836,7 +850,6 @@ class D3DataFlow extends Component {
           this.d3state.nodes.push(node);
           this.renderD3();
       }.bind(this);
-
       this.onCreateNode(newNode, onSuccess);
   }
   onCreateNode(newNode, cb){

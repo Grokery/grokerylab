@@ -175,6 +175,11 @@ path.link.inactive {
 #flow-header-content .drag-create-img {
     height: 35px;
     margin-bottom: 8px;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }
 
 g.colored:hover text.tooltiptext,
@@ -184,4 +189,10 @@ g.colored.selected:hover text.tooltiptext  {
     stroke: black;
     font-size: 68px;
     stroke-width: 2;
+}
+
+#mousexy,
+#graphxy {
+    padding-left: 10px;
+    padding-right: 10px;
 }
