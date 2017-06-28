@@ -46,7 +46,6 @@ class D3DataFlow extends Component {
       <div className='D3DataFlow'>
           <div id="flow-header-content" className={this.props.showControls ? '' : 'hidden'}>
             <div>
-                <span id="mousexy"></span>
                 <img className="drag-create-img" role='presentation' src="img/job.png" onMouseDown={this.createNodeDrag.bind(this, this.createJob.bind(this))}/>
                 <img className="drag-create-img" role='presentation' src="img/source.png" onMouseDown={this.createNodeDrag.bind(this, this.createSource.bind(this))}/>
                 <a><i className="fa fa-plus" aria-hidden="true"></i></a>
@@ -176,13 +175,12 @@ class D3DataFlow extends Component {
         this.svgMouseUp.call(this, d)
     }.bind(this))
     .on('mousemove', function () {
-        this.d3state.mouseLocation = d3.mouse(d3.select('#graph').node()) 
-        document.getElementById("mousexy").innerHTML = ""
         if (this.d3state.dragNode) {
+            this.d3state.mouseLocation = d3.mouse(d3.select('#graph').node()) 
+            let pagexy = d3.mouse(d3.select('#flow').node()) 
             let dragNode = document.getElementById("dragnode")
-            dragNode.style.top = this.d3state.mouseLocation[0] + "px"
-            dragNode.style.left = this.d3state.mouseLocation[1] + "px"
-            document.getElementById("mousexy").innerHTML = "Mouse: " + this.d3state.mouseLocation
+            dragNode.style.left = pagexy[0] - 15 + "px"
+            dragNode.style.top = pagexy[1] - 15 + "px"
         } 
     }.bind(this))
 
@@ -775,14 +773,14 @@ class D3DataFlow extends Component {
       d3state.graphMouseDown = false;
   }
   createNodeDrag(cb, e) {
-    this.d3state.dragNode = true
     let dragNode = e.target.cloneNode(true)
     dragNode.id = "dragnode"
+    dragNode.style.height = "35px"
     dragNode.style.position = "absolute"
-    dragNode.style.top = this.d3state.mouseLocation[0]+"px"
-    dragNode.style.left = this.d3state.mouseLocation[1]+"px"
-    document.getElementById("graph").appendChild(dragNode);
+    document.getElementById("flow").appendChild(dragNode)
+    this.d3state.dragNode = true
     window.onmouseup = function(e) {
+        dragNode.parentNode.removeChild(dragNode)
         this.d3state.dragNode = false
         window.onmouseup = null
         cb(this.d3state.mouseLocation)

@@ -21,7 +21,6 @@ class EditModal extends Component {
           {this.props.children}
         </div>
         <div className="modal-footer">
-          <button type="button" className="btn btn-danger pull-left" onClick={this.props.toggleEditDialog}>Delete Node</button>
           <button type="button" className="btn btn-primary" onClick={this.props.toggleEditDialog}>Close Edit</button>
         </div>
       </Modal>

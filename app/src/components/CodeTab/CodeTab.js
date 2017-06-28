@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { fetchNode } from '../../actions'
 import IChart from '../IChart/IChart'
-import TemplateModal from '../TemplateModal/TemplateModal'
 import CodeEditor from '../CodeEditor/CodeEditor'
 import './CodeTab.css'
 
@@ -67,10 +66,8 @@ class CodeTab extends Component {
         </div>
         <div className='output col-md-6'>
           <div className='template-select'>
-            <a href='' onClick={this.toggleTemplateModal.bind(this)}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></a>
             <a href='' onClick={function(){}}><i className="fa fa-play" aria-hidden="true"></i></a>
           </div>
-          <TemplateModal shown={this.state.showModal} toggleTemplateModal={this.toggleTemplateModal.bind(this)} setTemplate={this.setTemplate.bind(this)}></TemplateModal>
           <IChart
             key={node.id}
             id={node.id}
