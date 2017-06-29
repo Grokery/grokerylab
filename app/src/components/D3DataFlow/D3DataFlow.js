@@ -42,6 +42,7 @@ class D3DataFlow extends Component {
     colored: PropTypes.bool
   }
   render() {
+      console.log("D3DataFlow render()")
     return (
       <div className='D3DataFlow'>
           <div id="flow-header-content" className={this.props.showControls ? '' : 'hidden'}>
@@ -190,7 +191,9 @@ class D3DataFlow extends Component {
             return { x: d.x, y: d.y }
         })
         .on("dragstart", function() {
-            if (!d3.event.sourceEvent.shiftKey) d3.select('#flow').style("cursor", "move")
+            if (!d3.event.sourceEvent.shiftKey) {
+                d3.select('#flow').style("cursor", "move")
+            }
         })
         .on("drag", function(args) {
             d3state.dragging = true
@@ -541,12 +544,20 @@ class D3DataFlow extends Component {
   }
   dragmove(d) {
       if (this.d3state.drawEdge) {
-          this.dragLine.attr('d', this.buildDragLineStr(d));
+          this.dragLine.attr('d', this.buildDragLineStr(d))
       } else {
-          d.x += d3.event.dx;
-          d.y += d3.event.dy;
-          this.d3state.changedNodes[d.id] = d;
-          this.renderD3();
+        if (this.d3state.selectedNodes.length > 0) {
+          this.d3state.selectedNodes.forEach(function(node) {
+            node.x += d3.event.dx
+            node.y += d3.event.dy
+            this.d3state.changedNodes[node.id] = node
+          }.bind(this))
+        } else {
+            d.x += d3.event.dx
+            d.y += d3.event.dy
+            this.d3state.changedNodes[d.id] = d
+        }
+          this.renderD3()
       }
   }
   spliceLinksForNode(node) {
@@ -851,6 +862,7 @@ class D3DataFlow extends Component {
       this.onCreateNode(newNode, onSuccess);
   }
   onCreateNode(newNode, cb){
+      console.log("Calling api to create new node")
     const { setAppStatus } = this.props
     setAppStatus(APPSTATUS.BUSY)
     const sessionInfo = getSessionInfo()
@@ -887,7 +899,8 @@ class D3DataFlow extends Component {
         this.onUpdateNode(node, cb)
     }.bind(this))
   }
-  onUpdateNode(node, cb){
+  onUpdateNode(node, cb) {
+      console.log("Calling api to update node")
     const { setAppStatus } = this.props
     setAppStatus(APPSTATUS.BUSY)
     const sessionInfo = getSessionInfo()
@@ -919,6 +932,7 @@ class D3DataFlow extends Component {
         )
   }
   deleteNode(node) {
+      console.log("Calling api to delete node")
     const { setAppStatus } = this.props
     setAppStatus(APPSTATUS.BUSY)
     const sessionInfo = getSessionInfo()
