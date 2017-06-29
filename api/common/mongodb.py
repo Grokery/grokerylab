@@ -59,4 +59,7 @@ def update(collection, item_id, body):
 def delete(collection, item_id):
     """Handle delete item"""
     result = db[collection].remove({'id': item_id})
-    return result
+    if result['ok']:
+        return {"Success": True, "Item": {"id": item_id}}
+    else:
+        return {"Success": False, "Item": {"id": item_id}}

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { AUTH_ENABLED, APPSTATUS} from "../../globals.js"
 import { history } from '../../index.js'
-import { setAppStatus } from '../../actions'
+import { setAppStatus, deleteNode } from '../../actions'
 import { getSessionInfo } from '../../authentication'
 import d3 from 'd3'
 import './D3DataFlow.css'
@@ -31,6 +31,7 @@ Svg
 class D3DataFlow extends Component {
   static propTypes = {
     setAppStatus: PropTypes.func.isRequired,
+    deleteNode: PropTypes.func.isRequired,
     nodes: PropTypes.object.isRequired,
     selectedNodeId: PropTypes.string,
     onSelectNode: PropTypes.func,
@@ -931,39 +932,6 @@ class D3DataFlow extends Component {
             })
         )
   }
-  deleteNode(node) {
-      console.log("Calling api to delete node")
-    const { setAppStatus } = this.props
-    setAppStatus(APPSTATUS.BUSY)
-    const sessionInfo = getSessionInfo()
-    const fullUrl = sessionInfo['selectedCloud']['url'] + "/resources/" + node.collection + "/" + node.id
-    const token = sessionInfo['token']
-
-    var myHeaders = new Headers({
-        "Content-Type":"application/json"
-    })
-    if (AUTH_ENABLED && token) {
-        myHeaders.append("Authorization", token)
-    }
-    var params = { 
-        method: 'DELETE',
-        mode: 'cors',
-        headers: myHeaders
-    }
-    return fetch(fullUrl, params)
-        .then(response =>
-            response.json().then(json => {
-                if (!response.ok) {
-                    setAppStatus(APPSTATUS.ERROR)
-                    return Promise.reject(json)
-                }
-                this.d3state.nodes.splice(this.d3state.nodes.indexOf(node), 1);
-                this.spliceLinksForNode(node);
-                this.renderD3();
-                setAppStatus(APPSTATUS.OK)
-            })
-        )
-  }
   deleteEdge(edge) {
       var d3state = this.d3state;
       var source = edge.source;
@@ -978,9 +946,13 @@ class D3DataFlow extends Component {
   }
   onDelete() {
       if (this.d3state.selectedNodes) {
-        if (confirm("Confirm delete nodes?")===true) {
+        if (confirm("Confirm delete nodes?" )=== true) {
             this.d3state.selectedNodes.forEach(function(node) {
-                this.deleteNode(node);
+                let cb = function(response) {
+                    this.spliceLinksForNode(node);
+                    this.renderD3();
+                }.bind(this)
+                this.props.deleteNode(node.collection, node, cb)
             }.bind(this))
             this.d3state.selectedNodes = []
             this.selectNodes(this.d3state.selectedNodes)
@@ -1018,5 +990,6 @@ const mapStateToProps = (state, ownProps) => {
 }
 
 export default connect(mapStateToProps, {
-    setAppStatus
+    setAppStatus,
+    deleteNode
 })(D3DataFlow)

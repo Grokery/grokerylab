@@ -10,6 +10,10 @@ export const nodes = (state = {}, action) => {
         let foo = Object.assign({}, state)
         foo[action.response.Item.id] = action.response.Item
         return foo
+    } else if (action.type === ActionTypes.DELETEENODE_SUCCESS) {
+        let foo = Object.assign({}, state)
+        delete foo[action.response.Item.id]
+        return foo
     } else if (action.type === ActionTypes.CLEAR_NODES) {
         return {}
     } 
