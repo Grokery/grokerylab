@@ -1,6 +1,5 @@
 import * as ActionTypes from '../actions'
 import _ from 'lodash'
-import { APPSTATUS } from "../globals.js"
 
 export const nodes = (state = {}, action) => {
     if (action.type === ActionTypes.FETCHNODES_SUCCESS) {

@@ -1,5 +1,3 @@
-import { CALL_API } from '../middleware/api'
-
 
 export const SET_D3STATE = 'SET_D3STATE'
 

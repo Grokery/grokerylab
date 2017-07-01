@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { AUTH_ENABLED, APPSTATUS} from "../../globals.js"
 import { history } from '../../index.js'
 import { setD3State, createNode, updateNode, deleteNode } from '../../actions'
 import { getSessionInfo } from '../../authentication'
@@ -63,25 +62,25 @@ class D3DataFlow extends Component {
     )
   }
   componentDidMount() {
-    const { selectedNodeId, nodes, setD3State } = this.props
-    let width = this.getWindowWidth()
-    let height = this.getWindowHeight()
-    console.log(width)
-    console.log(height)
-    setD3State({"hello":"world"})
+    const { selectedNodeId, nodes } = this.props
+
+    // ************************
+    // Set up D3 state
+    // ************************
     this.d3state = {
-        width: width,
-        height: height,
+        width: this.getWindowWidth(),
+        height: this.getWindowHeight(),
+        scale: .5,
         maxX: -9999,
         maxY: -9999,
         minX: 9999,
         minY: 9999,
-        scale: .5,
         highlightedMaxX: -9999,
         highlightedMaxY: -9999,
         highlightedMinX: 9999,
         highlightedMinY: 9999,
-        selectedNodes: selectedNodeId ? [nodes[selectedNodeId]] : [],
+        selectedNodes: selectedNodeId ? {selectedNodeId: nodes[selectedNodeId]} : {},
+        changedNodes: {},
         selectedEdge: null,
         mouseDownNode: null,
         mouseDownEdge: null,
@@ -93,28 +92,24 @@ class D3DataFlow extends Component {
         dblClickSVGTimeout: false,
         dblClickNodeTimeout: false,
         dblClickPathTimeout: false,
-        changedNodes: {},
         selectedClass: "selected",
         shapeGClass: "conceptG",
         shapeWidth: 160,
         shapeHeight: 120,
         xgridSize: 10,
         ygridSize: 10,
-        nodes: [],
-        edges: [],
         mouseLocation: [0,0],
         dragNode: null
     }
-    var d3state = this.d3state
 
+    // ************************
     // Set up D3 graph
-    d3.select("#flow").selectAll("*").remove()
-
+    // ************************
     this.svg = d3.select("#flow").append("svg")
-        .attr("width", width)
-        .attr("height", height)
+        .attr("width", this.d3state.width)
+        .attr("height", this.d3state.height)
 
-    // define arrow for graph edges
+    // define arrow for edges
     var defs = this.svg.append('svg:defs')
     defs.append('svg:marker')
         .attr('id', 'mark-end-arrow')
@@ -126,17 +121,20 @@ class D3DataFlow extends Component {
         .append('svg:path')
         .attr('d', 'M0,-5L10,0L0,5')
 
-    this.svgG = this.svg.append("g").classed("graph", true).attr("id","graph")
+    this.svgG = this.svg.append("g")
+        .attr("id","graph")
+        .classed("graph", true)
 
     // this.svgG.append("rect")
     //     .attr('x', '0')
     //     .attr('y', '0')
     //     .attr('fill','transparent')
     //     .attr('stroke', 'black')
+    //     .attr('stroke-width',1)
     //     .attr('width' , 1000)
     //     .attr('height', 1000)
 
-    // displayed when dragging between shapes
+    // define temp line displayed when shift dragging between shapes
     this.dragLine = this.svgG.append('svg:path')
         .attr('class', 'link dragline hidden')
         .attr('d', 'M 0,0 C 0,0 0,0 0,0')
@@ -146,7 +144,7 @@ class D3DataFlow extends Component {
     this.paths = this.svgG.append("g").selectAll("g")
     this.shapes = this.svgG.append("g").selectAll("g")
 
-    // mouseup and mousedown
+    // bind svg actions
     this.svg.on("mousedown", function(d) {
         this.svgMouseDown.call(this, d)
     }.bind(this))
@@ -163,7 +161,7 @@ class D3DataFlow extends Component {
         } 
     }.bind(this))
 
-    // handle drag
+    // define drag behavior
     this.drag = d3.behavior.drag()
         .origin(function(d) {
             return { x: d.x, y: d.y }
@@ -174,16 +172,16 @@ class D3DataFlow extends Component {
             }
         })
         .on("drag", function(args) {
-            d3state.dragging = true
+            this.d3state.dragging = true
             this.dragmove.call(this, args)
         }.bind(this))
         .on("dragend", function() {
             d3.select('#flow').style("cursor", "auto")
         })
 
-    // handle zoom
+    // define zoom behavior
     this.zoomSvg = d3.behavior.zoom()
-        .scaleExtent([0.05, 3])
+        .scaleExtent([.1, 2])
         .on("zoom", function() {
             if (d3.event.sourceEvent.shiftKey) {
                 return false
@@ -197,236 +195,228 @@ class D3DataFlow extends Component {
         })
         .on("zoomend", function() {
             d3.select('#flow').style("cursor", "auto")
-        });
+        })
+
     this.svg.call(this.zoomSvg).on("dblclick.zoom", null)
 
     // listen for resize
     window.onresize = function() {
         this.updateWindow(this.svg)
-    }.bind(this)
-
-    this.renderD3()   
-    this.centerAndFitFlow()
+    }.bind(this) 
   }
   componentWillReceiveProps(nextProps) {
-      console.log("componentWillReceiveProps")
-    //   console.log(this.props.nodes)
-    //   console.log(nextProps.nodes)
+      let doCenterAndFit = false
+      if (Object.keys(this.props.nodes).length === 0) {
+          doCenterAndFit = true
+      }
       this.props = nextProps
       this.renderD3()
-      
-    //   this.centerAndFitFlow()
-  }
-  shouldComponentUpdate(nextProps, nextState){
-      return false
+      if (doCenterAndFit) {
+          this.centerAndFitFlow()
+      }
   }
   renderD3() {
-      const { nodes, colored } = this.props
-      // let { d3state } = this.props
-      let graph = this;
-      let d3state = graph.d3state;
-      
-      if (Object.keys(nodes).length === 0){
-          return
-        }
+    const { nodes, colored } = this.props
 
-      // Build node and edge lists and set min and max x and y
-      d3state.nodes = []
-      Object.keys(nodes).forEach(function(key) {
-          let node = nodes[key]
-          if(!node.x){node.x = 0}
-          if(!node.x){node.y = 0}
-          d3state.maxX = d3state.maxX < node.x ? node.x : d3state.maxX
-          d3state.minX = d3state.minX > node.x ? node.x : d3state.minX
-          d3state.maxY = d3state.maxY < node.y ? node.y : d3state.maxY
-          d3state.minY = d3state.minY > node.y ? node.y : d3state.minY
-          if (!node.upstream){node.upstream = []}
-          if (!node.downstream){node.downstream = []}
-          node.downstream.forEach(function(dnode){
-              if (nodes[dnode.id]) {
-                  d3state.edges.push({ source: node, target: nodes[dnode.id] })
-              }
-          })
-          d3state.nodes.push(node)
-      })
+    if (Object.keys(nodes).length === 0) {
+        return
+    }
 
-      // Add padding 
-      d3state.maxX += d3state.shapeWidth*2
-      d3state.maxY += d3state.shapeHeight*2
-      d3state.minY -= d3state.shapeHeight
-      d3state.minX -= d3state.shapeWidth
+    // let { d3state } = this.props
+    let graph = this
+    let d3state = this.d3state
 
-      // get paths
-      graph.paths = graph.paths.data(d3state.edges, function(d) {
-          return String(d.source.id) + "+" + String(d.target.id);
-      });
-      let paths = graph.paths;
-
-      // update existing paths
-      paths.style('marker-end', 'url(#mark-end-arrow)')
-          .classed(d3state.selectedClass, function(d) { return d === d3state.selectedEdge })
-          .attr("d", function(d) { return graph.buildPathStr(d) })
-
-      // add new paths
-      paths.enter()
-          .append("path")
-          .style('marker-end', 'url(#mark-end-arrow)')
-          .classed("link", true)
-          .attr('id', function(d) { return "n" + d.source.id + d.target.id })
-          .attr("d", function(d) { return graph.buildPathStr(d) })
-          .on("mousedown", function(d) { graph.pathMouseDown.call(graph, d3.select(this), d) })
-          .on("mouseup", function(d) { graph.pathMouseUp.call(graph, d3.select(this), d) })
-
-      // remove old paths
-      paths.exit().remove();
-
-      // get shapes
-      this.shapes = this.shapes.data(d3state.nodes, function(d) { return d.id; });
-
-      // update existing shapes
-      this.shapes.attr("transform", function(d) {
-          let tr = "translate(" + (Math.round(d.x / d3state.xgridSize) * d3state.xgridSize)
-          tr += "," + (Math.round(d.y / d3state.ygridSize) * d3state.ygridSize) + ")"
-          return tr
-      });
-
-      // add new shapes
-      let newGs = this.shapes.enter()
-          .append("g");
     
-      let coloredClass = colored ? ' colored' : ''
-      newGs.classed(d3state.shapeGClass, true)
-          .attr('id', function(d) { return "n" + d.id })
-          .attr('class', function(d) { 
-              return d3state.shapeGClass + " " + d.collection + "-node" + coloredClass
-          })
-          .attr("transform", function(d) {
-              let tr = "translate(" + (Math.round(d.x / d3state.xgridSize) * d3state.xgridSize)
-              tr += "," + (Math.round(d.y / d3state.ygridSize) * d3state.ygridSize) + ")"
-              return tr
+    // *****************
+    // Build node and edge lists and set min and max x and y
+    // ****************
+    let nodeList = []
+    let edgeList = []
+    d3state.maxX = -9999
+    d3state.maxY = -9999
+    d3state.minY = 9999
+    d3state.minX = 9999
+    Object.keys(nodes).forEach(function(key) {
+        let node = nodes[key]
+        if(!node.x){node.x = 0}
+        if(!node.x){node.y = 0}
+        d3state.maxX = d3state.maxX < node.x ? node.x : d3state.maxX
+        d3state.minX = d3state.minX > node.x ? node.x : d3state.minX
+        d3state.maxY = d3state.maxY < node.y ? node.y : d3state.maxY
+        d3state.minY = d3state.minY > node.y ? node.y : d3state.minY
+        if (!node.upstream){node.upstream = []}
+        if (!node.downstream){node.downstream = []}
+        node.downstream.forEach(function(dnode){
+            if (nodes[dnode.id]) {
+                edgeList.push({ source: node, target: nodes[dnode.id] })
+            }
         })
-          .on("mousedown", function(d) {
-              graph.shapeMouseDown(d);
-          })
-          .on("mouseup", function(d) {
-              graph.shapeMouseUp(d);
-          })
-          .on("mouseover", function(d) {
-              d3.select(".tip-" + d.id).classed("hidden", false);
-          })
-          .on("mouseout", function(d) {
-              d3.select(".tip-" + d.id).classed("hidden", true);
-          })
-          .call(this.drag);
+        nodeList.push(node)
+        if (d3state.selectedNodes[node.id]) {
+            d3state.selectedNodes[node.id] = node
+        }
+    })
+    // Add padding to account for shape width & height
+    d3state.maxX += d3state.shapeWidth*2
+    d3state.maxY += d3state.shapeHeight*2
+    d3state.minY -= d3state.shapeHeight
+    d3state.minX -= d3state.shapeWidth
 
-      newGs.append("path")
-          .attr('d', function(d) {
-              if (d.collection==="masterdatasources") {
-                  return "M 160 108" +
-                      "c 0 6.62 -35.82 12 -80 12" +
-                      "s -80 -5.38 -80 -12" +
-                      "v -96" +
-                      "c 0 -6.63 35.82 -12 80 -12" +
-                      "s 80 5.37 80 12" +
-                      "z" +
-                      "M 160 12" +
-                      "c 0 6.62 -35.82 12 -80 12" +
-                      "s -80 -5.38 -80 -12";
-              } else if (d.collection==="jobs") {
-                  return "M 28.5 4.4" +
-                      "c 1.3 -2.44 4.6 -4.4 7.36 -4.4" +
-                      "h 88" +
-                      "c 2.76 0 6.05 1.96 7.35 4.4" +
-                      "l 27.3 51.17" +
-                      "c 1.3 2.45 1.3 6.4 0 8.84" +
-                      "l -27.3 51.17" +
-                      "c -1.3 2.45 -4.6 4.43-7.35 4.43" +
-                      "h -88" +
-                      "c -2.77 0 -6.06 -1.98 -7.36 -4.42" +
-                      "l -27.3 -51.16" +
-                      "c -1.3 -2.44 -1.3 -6.4 0 -8.83" +
-                      "z";
-              } else if (d.collection==="datasources") {
-                  return "M 16 120" +
-                      "c -8.83 0 -16 -26.87 -16 -60 0 -33.14 7.17 -60 16 -60" +
-                      "h 128" +
-                      "c 8.84 0 16 26.86 16 60 0 33.13 -7.16 60 -16 60" +
-                      "z";
-              } else if (d.collection==="charts") {
-                  return "M 16 120" +
-                      "c -8.83 0 -16 -26.87 -16 -60 0 -33.14 7.17 -60 16 -60" +
-                      "h 108" +
-                      "c 2.76 0 6.05 1.96 7.35 4.4" +
-                      "l 27.3 51.17" +
-                      "c 1.3 2.45 1.3 6.4 0 8.84" +
-                      "l -27.3 51.17" +
-                      "c -1.3 2.45 -4.6 4.43-7.35 4.43" +
-                      "z";
-              } else if (d.collection==="dashboards") {
-                  return "M 0 5" +
-                      "c 0 -2.77 2.23 -5 5 -5" +
-                      "h 150" +
-                      "c 2.76 0 5 2.23 5 5" +
-                      "v 110" +
-                      "c 0 2.76 -2.24 5 -5 5" +
-                      "h -150" +
-                      "c -2.77 0 -5 -2.24 -5 -5" +
-                      "z";
-              } else {
-                  return "M 0 5" +
-                      "c 0 -2.77 2.23 -5 5 -5" +
-                      "h 150" +
-                      "c 2.76 0 5 2.23 5 5" +
-                      "v 110" +
-                      "c 0 2.76 -2.24 5 -5 5" +
-                      "h -150" +
-                      "c -2.77 0 -5 -2.24 -5 -5" +
-                      "z";
-              }
-          })
 
-    //   newGs.append('circle')    
-    //       .attr('cx', '0')
-    //       .attr('cy', '0')
-    //       .attr('r','5')
-    //       .attr('fill','black')
-    //   newGs.append("rect")
-    //       .attr('x', '0')
-    //       .attr('y', '0')
-    //       .attr('fill','transparent')
-    //       .attr('width' , graph.d3state.shapeWidth)
-    //       .attr('height', graph.d3state.shapeHeight)
+    // *****************
+    // Render paths
+    // ****************
+    graph.paths = graph.paths.data(edgeList, function(d) {
+        return String(d.source.id) + "+" + String(d.target.id)
+    })
 
-        newGs.each(function(){
-            let gEl = d3.select(this);
-            let el = gEl.append("text")
-                .attr("class", "node-text")
-                .attr("dy", graph.d3state.shapeHeight/2+8)
-                .attr("dx", graph.d3state.shapeWidth/2)
-            el.text(function (d){
-                if (d.collection === "jobs") {
-                    return d.type_abrev ? d.type_abrev : 'Job'
-                } else if (d.collection === "datasources") {
-                    return d.type_abrev ? d.type_abrev : 'Source'
-                } else if (d.collection === "charts") {
-                    return d.type_abrev ? d.type_abrev : 'Chart'
-                } else if (d.collection === "dashboards") {
-                    return d.type_abrev ? d.type_abrev : 'Board'
-                } else {
-                    return ""
-                }
-            });
-        });
+    // update existing
+    graph.paths.style('marker-end', 'url(#mark-end-arrow)')
+        .classed(d3state.selectedClass, function(d) { return d === d3state.selectedEdge })
+        .attr("d", function(d) { return graph.buildPathStr(d) })
+    
+    // add new
+    graph.paths.enter() 
+        .append("path")
+        .style('marker-end', 'url(#mark-end-arrow)')
+        .classed("link", true)
+        .attr('id', function(d) { return "n" + d.source.id + d.target.id })
+        .attr("d", function(d) { return graph.buildPathStr(d) })
+        .on("mousedown", function(d) { graph.pathMouseDown.call(graph, d3.select(graph), d) })
+        .on("mouseup", function(d) { graph.pathMouseUp.call(graph, d3.select(graph), d) })
+    
+    // remove old
+    graph.paths.exit().remove() 
 
-        // newGs.each(function(){
-        //     d3.select(this).append("text")
-        //         .attr("class", function (d) {
-        //                 return "hidden tooltiptext tip-" + d.id
-        //         })
-        //         .text(function (d) {
-        //                 return d.title
-        //         })
-        // })
+    
+    // *****************
+    // Render shapes
+    // ****************
+    graph.shapes = graph.shapes.data(nodeList, function(d) { return d.id })
+    
+    // update existing
+    this.shapes.attr("transform", function(d) {
+        let tr = "translate(" + (Math.round(d.x / d3state.xgridSize) * d3state.xgridSize)
+        tr += "," + (Math.round(d.y / d3state.ygridSize) * d3state.ygridSize) + ")"
+        return tr
+    })
+    
+    // add new
+    let newGs = this.shapes.enter().append("g")
+    
+    // bind actions
+    newGs.classed(d3state.shapeGClass, true)
+    .attr('id', function(d) { return "n" + d.id })
+    .attr('class', function(d) { 
+        let colorclass = colored ? ' colored' : ''
+        return d3state.shapeGClass + " " + d.collection + "-node" + colorclass
+    })
+    .attr("transform", function(d) {
+        let tr = "translate(" + (Math.round(d.x / d3state.xgridSize) * d3state.xgridSize)
+        tr += "," + (Math.round(d.y / d3state.ygridSize) * d3state.ygridSize) + ")"
+        return tr
+    })
+    .on("mousedown", function(d) {
+        graph.shapeMouseDown(d)
+    })
+    .on("mouseup", function(d) {
+        graph.shapeMouseUp(d)
+    })
+    .on("mouseover", function(d) {
+        d3.select(".tip-" + d.id).classed("hidden", false)
+    })
+    .on("mouseout", function(d) {
+        d3.select(".tip-" + d.id).classed("hidden", true)
+    })
+    .call(this.drag)
+
+    // draw  
+    newGs.append("path")
+        .attr('d', function(d) {
+        if (d.collection==="jobs") {
+            return "M 28.5 4.4" +
+                "c 1.3 -2.44 4.6 -4.4 7.36 -4.4" +
+                "h 88" +
+                "c 2.76 0 6.05 1.96 7.35 4.4" +
+                "l 27.3 51.17" +
+                "c 1.3 2.45 1.3 6.4 0 8.84" +
+                "l -27.3 51.17" +
+                "c -1.3 2.45 -4.6 4.43-7.35 4.43" +
+                "h -88" +
+                "c -2.77 0 -6.06 -1.98 -7.36 -4.42" +
+                "l -27.3 -51.16" +
+                "c -1.3 -2.44 -1.3 -6.4 0 -8.83" +
+                "z";
+        } else if (d.collection==="datasources") {
+            return "M 16 120" +
+                "c -8.83 0 -16 -26.87 -16 -60 0 -33.14 7.17 -60 16 -60" +
+                "h 128" +
+                "c 8.84 0 16 26.86 16 60 0 33.13 -7.16 60 -16 60" +
+                "z";
+        } else if (d.collection==="charts") {
+            return "M 16 120" +
+                "c -8.83 0 -16 -26.87 -16 -60 0 -33.14 7.17 -60 16 -60" +
+                "h 108" +
+                "c 2.76 0 6.05 1.96 7.35 4.4" +
+                "l 27.3 51.17" +
+                "c 1.3 2.45 1.3 6.4 0 8.84" +
+                "l -27.3 51.17" +
+                "c -1.3 2.45 -4.6 4.43-7.35 4.43" +
+                "z";
+        } else if (d.collection==="dashboards") {
+            return "M 0 5" +
+                "c 0 -2.77 2.23 -5 5 -5" +
+                "h 150" +
+                "c 2.76 0 5 2.23 5 5" +
+                "v 110" +
+                "c 0 2.76 -2.24 5 -5 5" +
+                "h -150" +
+                "c -2.77 0 -5 -2.24 -5 -5" +
+                "z";
+        } else {
+            return "M 0 5" +
+                "c 0 -2.77 2.23 -5 5 -5" +
+                "h 150" +
+                "c 2.76 0 5 2.23 5 5" +
+                "v 110" +
+                "c 0 2.76 -2.24 5 -5 5" +
+                "h -150" +
+                "c -2.77 0 -5 -2.24 -5 -5" +
+                "z";
+        }
+    })
+
+    // add content
+    newGs.each(function() {
+        let gEl = d3.select(this)
+        let el = gEl.append("text")
+            .attr("class", "node-text")
+            .attr("dy", graph.d3state.shapeHeight/2+8)
+            .attr("dx", graph.d3state.shapeWidth/2)
+        el.text(function (d) {
+            if (d.collection === "jobs") {
+                return d.type_abrev ? d.type_abrev : 'Job'
+            } else if (d.collection === "datasources") {
+                return d.type_abrev ? d.type_abrev : 'Source'
+            } else if (d.collection === "charts") {
+                return d.type_abrev ? d.type_abrev : 'Chart'
+            } else if (d.collection === "dashboards") {
+                return d.type_abrev ? d.type_abrev : 'Board'
+            } else {
+                return ""
+            }
+        })
+    })
+
+    // newGs.each(function(){
+    //     d3.select(this).append("text")
+    //         .attr("class", function (d) {
+    //                 return "hidden tooltiptext tip-" + d.id
+    //         })
+    //         .text(function (d) {
+    //                 return d.title
+    //         })
+    // })
 
     //   newGs.each(function() {
     //       let gEl = d3.select(this)
@@ -465,12 +455,13 @@ class D3DataFlow extends Component {
     //       });
     //   });
 
-      // remove old shapes
-      this.shapes.exit().remove();
+    // remove old
+    this.shapes.exit().remove();
 
+    // add selected styling
     this.selectNodes(d3state.selectedNodes)
 
-    //this.props.setState(d3state)
+    //this.props.setD3State(d3state)
   }
   getWindowWidth(){
     const { width } = this.props
@@ -501,7 +492,6 @@ class D3DataFlow extends Component {
   centerAndFitFlow() {
     let d3state = this.d3state
     let {highlightedMaxX, highlightedMinX, highlightedMaxY, highlightedMinY} = this.d3state
-
     let maxX = highlightedMaxX !== -9999 ? highlightedMaxX : d3state.maxX 
     let minX = highlightedMinX !== 9999 ? highlightedMinX : d3state.minX 
     let maxY = highlightedMaxY !== -9999 ? highlightedMaxY : d3state.maxY
@@ -559,29 +549,28 @@ class D3DataFlow extends Component {
       if (this.d3state.drawEdge) {
           this.dragLine.attr('d', this.buildDragLineStr(d))
       } else {
-        if (this.d3state.selectedNodes.length > 0) {
-          this.d3state.selectedNodes.forEach(function(node) {
-              if (node.id !== d.id) {
-                node.x += d3.event.dx
-                node.y += d3.event.dy
-                this.d3state.changedNodes[node.id] = node
-              }
+        if (Object.keys(this.d3state.selectedNodes).length > 0) {
+        Object.keys(this.d3state.selectedNodes).forEach(function(id) {
+            let node = this.d3state.selectedNodes[id]
+            node.x += d3.event.dx
+            node.y += d3.event.dy
+            this.d3state.changedNodes[node.id] = node
           }.bind(this))
+        } else {
+            d.x += d3.event.dx
+            d.y += d3.event.dy
+            this.d3state.changedNodes[d.id] = d
         }
-        d.x += d3.event.dx
-        d.y += d3.event.dy
-        this.d3state.changedNodes[d.id] = d
         this.renderD3()
       }
   }
   spliceLinksForNode(node) {
-      // remove edges associated with a node
       var toSplice = this.d3state.edges.filter(function(l) {
-          return (l.source === node || l.target === node);
-      });
+          return (l.source === node || l.target === node)
+      })
       toSplice.map(function(l) {
-          this.d3state.edges.splice(this.d3state.edges.indexOf(l), 1);
-      }.bind(this));
+          this.d3state.edges.splice(this.d3state.edges.indexOf(l), 1)
+      }.bind(this))
   }
   selectEdge(d3Path, edgeData) {
       d3Path.classed(this.d3state.selectedClass, true);
@@ -641,30 +630,31 @@ class D3DataFlow extends Component {
     document.getElementById('delete-icon').style.display = 'none'
   }
   addNodeToSelected(d) {
-      this.d3state.selectedNodes.push(d)
+      this.d3state.selectedNodes[d.id] = d
       this.selectNodes(this.d3state.selectedNodes)
   }
   removeNodeFromSelected(d) {
-      let index = this.d3state.selectedNodes.indexOf(d)
-      if (index > -1) {
-        this.d3state.selectedNodes.splice(index, 1);
-      }
-      this.selectNodes(this.d3state.selectedNodes)
+    delete this.d3state.selectedNodes[d.id]
+    this.selectNodes(this.d3state.selectedNodes)
   }
   selectNodes(nodes) {
       this.clearAllHighlight()
-      if (!nodes || nodes.length > 0) {
+      if (nodes && Object.keys(nodes).length > 0) {
         this.d3state.selectedNodes = nodes
         this.paths.classed('inactive', true)
         this.shapes.classed('inactive', true)
-        nodes.forEach(function(node) {
-            d3.select("#n" + node.id).classed(this.d3state.selectedClass, true)
-            this.highlightFlow(node)
+        Object.keys(nodes).forEach(function(id) {
+            d3.select("#n" + id).classed(this.d3state.selectedClass, true)
+            this.highlightFlow(nodes[id])
         }.bind(this))
         this.showDeleteIcon()
       }
   }
   clearAllHighlight() {
+    this.d3state.highlightedMaxX = -9999
+    this.d3state.highlightedMaxY = -9999
+    this.d3state.highlightedMinX = 9999
+    this.d3state.highlightedMinY = 9999
     this.paths.classed(this.d3state.selectedClass, false)
     this.shapes.classed(this.d3state.selectedClass, false)
     this.paths.classed('inactive', false)
@@ -673,25 +663,20 @@ class D3DataFlow extends Component {
   }
   clearAllSelection() {
       this.clearAllHighlight()
-      this.d3state.selectedNodes = []
+      this.d3state.selectedNodes = {}
   }
   highlightFlow(d) {
       const { zoomOnHighlight } = this.props
-
-      let d3state = this.d3state
-      d3state.highlightedMaxX = -9999
-      d3state.highlightedMaxY = -9999
-      d3state.highlightedMinX = 9999
-      d3state.highlightedMinY = 9999
 
       d3.select("#n" + d.id).classed('inactive', false)
       this.highlightUpstream(d);
       this.highlightDownstream(d);
 
-      d3state.highlightedMaxX += d3state.shapeWidth*2
-      d3state.highlightedMaxY += d3state.shapeHeight*2
-      d3state.highlightedMinX -= d3state.shapeHeight
-      d3state.highlightedMinY -= d3state.shapeWidth
+      this.d3state.highlightedMaxX += this.d3state.shapeWidth*2
+      this.d3state.highlightedMaxY += this.d3state.shapeHeight*2
+      this.d3state.highlightedMinX -= this.d3state.shapeHeight
+      this.d3state.highlightedMinY -= this.d3state.shapeWidth
+
       if (zoomOnHighlight) {
           this.centerAndFitFlow()
       }
@@ -746,33 +731,35 @@ class D3DataFlow extends Component {
       if (d3state.drawEdge) {
           d3state.drawEdge = false;
           this.dragLine.classed("hidden", true);
-          if (d3state.mouseDownNode !== d) {
+          if (d3state.mouseDownNode.id !== d.id) {
               // create new edge for mousedown edge and add to graph
-              var newEdge = { source: d3state.mouseDownNode, target: d };
-              var filtRes = this.paths.filter(function(d) {
-                  if (d.source === newEdge.target && d.target === newEdge.source) {
-                      this.d3state.edges.splice(this.d3state.edges.indexOf(d), 1);
-                  }
-                  return d.source === newEdge.source && d.target === newEdge.target;
-              }.bind(this));
-              if (!filtRes[0].length) {
-                  this.d3state.edges.push(newEdge);
+            //   var newEdge = { source: d3state.mouseDownNode, target: d };
+            //   var filtRes = this.paths.filter(function(d) {
+            //       if (d.source === newEdge.target && d.target === newEdge.source) {
+            //           this.d3state.edges.splice(this.d3state.edges.indexOf(d), 1);
+            //       }
+            //       return d.source === newEdge.source && d.target === newEdge.target;
+            //   }.bind(this));
+            //   if (!filtRes[0].length) {
+                //   this.d3state.edges.push(newEdge);
                   // update nodes with new edgeinfo
-                  newEdge.source.downstream.push({ id: newEdge.target.id, collection: newEdge.target.collection });
-                  newEdge.target.upstream.push({ id: newEdge.source.id, collection: newEdge.source.collection });
-                  d3state.changedNodes[newEdge.source.id] = newEdge.source;
-                  d3state.changedNodes[newEdge.target.id] = newEdge.target;
+                //   newEdge.source.downstream.push({ id: newEdge.target.id, collection: newEdge.target.collection });
+                //   newEdge.target.upstream.push({ id: newEdge.source.id, collection: newEdge.source.collection });
+                d.upstream.push({"collection":d3state.mouseDownNode.collection,"id":d3state.mouseDownNode.id})
+                d3state.mouseDownNode.downstream.push({"collection":d.collection,"id":d.id})
+                  d3state.changedNodes[d.id] = d
+                  d3state.changedNodes[d3state.mouseDownNode.id] = d3state.mouseDownNode
                   this.onUpdateNodes(d3state.changedNodes);
-                  this.renderD3();
-              }
+                //   this.renderD3();
+            //   }
           }
       } else if (d3state.dragging) {
-          d3state.dragging = false;
-          this.onUpdateNodes(d3state.changedNodes);
+          d3state.dragging = false
+          this.onUpdateNodes(d3state.changedNodes)
       } else if (d3state.dblClickNodeTimeout) {
           history.push("/clouds/"+ sessionInfo['selectedCloud'].id + "/" + d.collection + "/" + d.id + "?flow=open")
       } else {
-          if (this.d3state.selectedNodes.indexOf(d) > -1) {
+          if (this.d3state.selectedNodes[d.id]) {
               this.removeNodeFromSelected(d)
           } else if (d3.event.shiftKey) {
             //   this.addNodeToSelected(d)
@@ -878,22 +865,10 @@ class D3DataFlow extends Component {
   createNode(newNode, tempNode) {
       newNode.x -= this.d3state.shapeWidth/2
       newNode.y -= this.d3state.shapeHeight/2
-    //   this.removeNodeFromSelected()
-    //   var onSuccess = function(result) {
-    //       var node = {
-    //           collection: result.collection,
-    //           id: result.id,
-    //           title: result.title,
-    //           description: result.description,
-    //           upstream: result.upstream,
-    //           downstream: result.downstream,
-    //           x: result.x,
-    //           y: result.y
-    //       }
-    //       this.d3state.nodes.push(node);
-    //       this.renderD3();
-    //   }.bind(this);
       this.props.createNode(newNode.collection, newNode, null)
+  }
+  onSave() {
+      this.onUpdateNodes(this.d3state.changedNodes)
   }
   onUpdateNodes(nodes) {
     Object.keys(nodes).forEach(function(key){
@@ -914,24 +889,19 @@ class D3DataFlow extends Component {
       this.renderD3();
   }
   onDelete() {
-      if (this.d3state.selectedNodes) {
+      if (Object.keys(this.d3state.selectedNodes).length > 0) {
         if (confirm("Confirm delete nodes?" )=== true) {
-            this.d3state.selectedNodes.forEach(function(node) {
-                let cb = function(response) {
-                    this.spliceLinksForNode(node);
-                    this.renderD3();
-                }.bind(this)
-                this.props.deleteNode(node.collection, node, cb)
+            Object.keys(this.d3state.selectedNodes).forEach(function(id) {
+                let node = this.d3state.selectedNodes[id]
+                this.props.deleteNode(node.collection, node, null)
             }.bind(this))
-            this.d3state.selectedNodes = []
-            this.selectNodes(this.d3state.selectedNodes)
+            this.clearAllSelection()
         }
       }
       if (this.d3state.selectedEdge) {
-          // if (confirm("Confirm delete connection?")===true) {
+        // if (confirm("Confirm delete connection?")===true) {
           this.deleteEdge(this.d3state.selectedEdge);
-          this.removeNodeFromSelected();
-          // }
+        // }
       }
   }
   buildPathStr(ed) {
