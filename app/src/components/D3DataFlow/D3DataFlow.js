@@ -54,7 +54,9 @@ class D3DataFlow extends Component {
                 </span>
                 <a onClick={this.toggleCreateNodes}><i className="fa fa-plus" aria-hidden="true"></i></a>
                 <a id='delete-icon' onClick={this.onDelete.bind(this)} style={{display:'none'}}><i className="fa fa-trash" aria-hidden="true"></i></a>
+                
                 {/*<a><i className="fa fa-filter" aria-hidden="true"></i></a>*/}
+            
             </div>
           </div>
         <div id='flow'></div>
@@ -729,29 +731,14 @@ class D3DataFlow extends Component {
       let sessionInfo = getSessionInfo()
 
       if (d3state.drawEdge) {
-          d3state.drawEdge = false;
-          this.dragLine.classed("hidden", true);
+          d3state.drawEdge = false
+          this.dragLine.classed("hidden", true)
           if (d3state.mouseDownNode.id !== d.id) {
-              // create new edge for mousedown edge and add to graph
-            //   var newEdge = { source: d3state.mouseDownNode, target: d };
-            //   var filtRes = this.paths.filter(function(d) {
-            //       if (d.source === newEdge.target && d.target === newEdge.source) {
-            //           this.d3state.edges.splice(this.d3state.edges.indexOf(d), 1);
-            //       }
-            //       return d.source === newEdge.source && d.target === newEdge.target;
-            //   }.bind(this));
-            //   if (!filtRes[0].length) {
-                //   this.d3state.edges.push(newEdge);
-                  // update nodes with new edgeinfo
-                //   newEdge.source.downstream.push({ id: newEdge.target.id, collection: newEdge.target.collection });
-                //   newEdge.target.upstream.push({ id: newEdge.source.id, collection: newEdge.source.collection });
-                d.upstream.push({"collection":d3state.mouseDownNode.collection,"id":d3state.mouseDownNode.id})
-                d3state.mouseDownNode.downstream.push({"collection":d.collection,"id":d.id})
-                  d3state.changedNodes[d.id] = d
-                  d3state.changedNodes[d3state.mouseDownNode.id] = d3state.mouseDownNode
-                  this.onUpdateNodes(d3state.changedNodes);
-                //   this.renderD3();
-            //   }
+            d.upstream.push({"collection":d3state.mouseDownNode.collection,"id":d3state.mouseDownNode.id})
+            d3state.mouseDownNode.downstream.push({"collection":d.collection,"id":d.id})
+            d3state.changedNodes[d.id] = d
+            d3state.changedNodes[d3state.mouseDownNode.id] = d3state.mouseDownNode
+            this.onUpdateNodes(d3state.changedNodes)
           }
       } else if (d3state.dragging) {
           d3state.dragging = false
