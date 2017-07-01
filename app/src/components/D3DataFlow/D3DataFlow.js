@@ -790,6 +790,8 @@ class D3DataFlow extends Component {
           this.clearAllSelection()
           history.push("/clouds/"+ sessionInfo['selectedCloud'].id + "/flow")
       } else {
+          this.clearAllSelection()
+          history.push("/clouds/"+ sessionInfo['selectedCloud'].id + "/flow")
           d3state.dblClickSVGTimeout = true
           setTimeout(function() {
               d3state.dblClickSVGTimeout = false
