@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { AUTH_ENABLED, APPSTATUS} from "../../globals.js"
 import { history } from '../../index.js'
-import { setAppStatus, deleteNode } from '../../actions'
+import { setD3State, createNode, updateNode, deleteNode } from '../../actions'
 import { getSessionInfo } from '../../authentication'
 import d3 from 'd3'
 import './D3DataFlow.css'
@@ -30,7 +30,9 @@ Svg
 
 class D3DataFlow extends Component {
   static propTypes = {
-    setAppStatus: PropTypes.func.isRequired,
+    setD3State: PropTypes.func.isRequired,
+    createNode: PropTypes.func.isRequired,
+    updateNode: PropTypes.func.isRequired,
     deleteNode: PropTypes.func.isRequired,
     nodes: PropTypes.object.isRequired,
     selectedNodeId: PropTypes.string,
@@ -43,16 +45,17 @@ class D3DataFlow extends Component {
     colored: PropTypes.bool
   }
   render() {
-      console.log("D3DataFlow render()")
     return (
       <div className='D3DataFlow'>
           <div id="flow-header-content" className={this.props.showControls ? '' : 'hidden'}>
             <div>
-                <img className="drag-create-img" role='presentation' src="img/job.png" onMouseDown={this.createNodeDrag.bind(this, this.createJob.bind(this))}/>
-                <img className="drag-create-img" role='presentation' src="img/source.png" onMouseDown={this.createNodeDrag.bind(this, this.createSource.bind(this))}/>
-                <a><i className="fa fa-plus" aria-hidden="true"></i></a>
-                <a onClick={this.onDelete.bind(this)}><i className="fa fa-trash" aria-hidden="true"></i></a>
-                <a><i className="fa fa-filter" aria-hidden="true"></i></a>
+                <span id='create-nodes' style={{display:'none'}}>
+                    <img className="drag-create-img" role='presentation' src="img/job.png" onMouseDown={this.createNodeDrag.bind(this, this.createJob.bind(this))}/>
+                    <img className="drag-create-img" role='presentation' src="img/source.png" onMouseDown={this.createNodeDrag.bind(this, this.createSource.bind(this))}/>
+                </span>
+                <a onClick={this.toggleCreateNodes}><i className="fa fa-plus" aria-hidden="true"></i></a>
+                <a id='delete-icon' onClick={this.onDelete.bind(this)} style={{display:'none'}}><i className="fa fa-trash" aria-hidden="true"></i></a>
+                {/*<a><i className="fa fa-filter" aria-hidden="true"></i></a>*/}
             </div>
           </div>
         <div id='flow'></div>
@@ -60,38 +63,12 @@ class D3DataFlow extends Component {
     )
   }
   componentDidMount() {
-      this.initalizeD3()
-  }
-  componentWillReceiveProps(nextProps){
-      this.props = nextProps
-      this.initalizeD3()
-  }
-  shouldComponentUpdate(nextProps, nextState){
-      return false
-  }
-  getWindowWidth(){
-    const { width } = this.props
-    if (!width) {
-        const docEl = document.documentElement
-        const flowEl = document.getElementById('flow')
-        return window.innerWidth || docEl.clientWidth || flowEl.clientWidth
-    }
-    return width
-  }
-  getWindowHeight(){
-    const { height } = this.props
-    if (!height) {
-        const docEl = document.documentElement
-        const flowEl = document.getElementById('flow')
-        let foo = window.innerHeight || docEl.clientHeight || flowEl.clientHeight
-        return foo -= (foo*.06)
-    }
-    return height
-  }
-  initalizeD3() {
-    const { selectedNodeId, nodes } = this.props
+    const { selectedNodeId, nodes, setD3State } = this.props
     let width = this.getWindowWidth()
     let height = this.getWindowHeight()
+    console.log(width)
+    console.log(height)
+    setD3State({"hello":"world"})
     this.d3state = {
         width: width,
         height: height,
@@ -231,8 +208,21 @@ class D3DataFlow extends Component {
     this.renderD3()   
     this.centerAndFitFlow()
   }
+  componentWillReceiveProps(nextProps) {
+      console.log("componentWillReceiveProps")
+    //   console.log(this.props.nodes)
+    //   console.log(nextProps.nodes)
+      this.props = nextProps
+      this.renderD3()
+      
+    //   this.centerAndFitFlow()
+  }
+  shouldComponentUpdate(nextProps, nextState){
+      return false
+  }
   renderD3() {
       const { nodes, colored } = this.props
+      // let { d3state } = this.props
       let graph = this;
       let d3state = graph.d3state;
       
@@ -241,6 +231,7 @@ class D3DataFlow extends Component {
         }
 
       // Build node and edge lists and set min and max x and y
+      d3state.nodes = []
       Object.keys(nodes).forEach(function(key) {
           let node = nodes[key]
           if(!node.x){node.x = 0}
@@ -478,6 +469,27 @@ class D3DataFlow extends Component {
       this.shapes.exit().remove();
 
     this.selectNodes(d3state.selectedNodes)
+
+    //this.props.setState(d3state)
+  }
+  getWindowWidth(){
+    const { width } = this.props
+    if (!width) {
+        const docEl = document.documentElement
+        const flowEl = document.getElementById('flow')
+        return window.innerWidth || docEl.clientWidth || flowEl.clientWidth
+    }
+    return width
+  }
+  getWindowHeight(){
+    const { height } = this.props
+    if (!height) {
+        const docEl = document.documentElement
+        const flowEl = document.getElementById('flow')
+        let foo = window.innerHeight || docEl.clientHeight || flowEl.clientHeight
+        return foo -= (foo*.06)
+    }
+    return height
   }
   updateWindow(svg) {
       var docEl = document.documentElement;
@@ -549,16 +561,17 @@ class D3DataFlow extends Component {
       } else {
         if (this.d3state.selectedNodes.length > 0) {
           this.d3state.selectedNodes.forEach(function(node) {
-            node.x += d3.event.dx
-            node.y += d3.event.dy
-            this.d3state.changedNodes[node.id] = node
+              if (node.id !== d.id) {
+                node.x += d3.event.dx
+                node.y += d3.event.dy
+                this.d3state.changedNodes[node.id] = node
+              }
           }.bind(this))
-        } else {
-            d.x += d3.event.dx
-            d.y += d3.event.dy
-            this.d3state.changedNodes[d.id] = d
         }
-          this.renderD3()
+        d.x += d3.event.dx
+        d.y += d3.event.dy
+        this.d3state.changedNodes[d.id] = d
+        this.renderD3()
       }
   }
   spliceLinksForNode(node) {
@@ -576,7 +589,7 @@ class D3DataFlow extends Component {
           this.removeSelectFromEdge();
       }
       this.d3state.selectedEdge = edgeData;
-      //$('#delete-button').removeClass('hidden');
+      this.showDeleteIcon()
   }
   removeSelectFromEdge() {
       if (!this.d3state.selectedEdge) { return }
@@ -584,7 +597,7 @@ class D3DataFlow extends Component {
           return cd === this.d3state.selectedEdge;
       }.bind(this)).classed(this.d3state.selectedClass, false);
       this.d3state.selectedEdge = null;
-      //$('#delete-button').addClass('hidden');
+      this.hideDeleteIcon()
   }
   pathMouseDown(d3path, d) {
       d3.event.stopPropagation();
@@ -613,6 +626,20 @@ class D3DataFlow extends Component {
           state.dblClickPathTimeout = true;
       }
   }
+  toggleCreateNodes() {
+      if (document.getElementById('create-nodes').style.display === 'inline') {        
+          document.getElementById('create-nodes').style.display = 'none'
+      } else {
+          document.getElementById('create-nodes').style.display = 'inline'
+      }
+    
+  }
+  showDeleteIcon() {
+    document.getElementById('delete-icon').style.display = 'inline'
+  }
+  hideDeleteIcon() {
+    document.getElementById('delete-icon').style.display = 'none'
+  }
   addNodeToSelected(d) {
       this.d3state.selectedNodes.push(d)
       this.selectNodes(this.d3state.selectedNodes)
@@ -634,6 +661,7 @@ class D3DataFlow extends Component {
             d3.select("#n" + node.id).classed(this.d3state.selectedClass, true)
             this.highlightFlow(node)
         }.bind(this))
+        this.showDeleteIcon()
       }
   }
   clearAllHighlight() {
@@ -641,6 +669,11 @@ class D3DataFlow extends Component {
     this.shapes.classed(this.d3state.selectedClass, false)
     this.paths.classed('inactive', false)
     this.shapes.classed('inactive', false)
+    this.hideDeleteIcon()
+  }
+  clearAllSelection() {
+      this.clearAllHighlight()
+      this.d3state.selectedNodes = []
   }
   highlightFlow(d) {
       const { zoomOnHighlight } = this.props
@@ -774,7 +807,7 @@ class D3DataFlow extends Component {
       } else if (d3state.justScaleTransGraph) {
           d3state.justScaleTransGraph = false;
       } else if (d3state.dblClickSVGTimeout) {
-          // todo
+          this.clearAllSelection()
       } else {
           d3state.dblClickSVGTimeout = true;
           setTimeout(function() {
@@ -845,92 +878,28 @@ class D3DataFlow extends Component {
   createNode(newNode, tempNode) {
       newNode.x -= this.d3state.shapeWidth/2
       newNode.y -= this.d3state.shapeHeight/2
-      this.removeNodeFromSelected()
-      var onSuccess = function(result) {
-          var node = {
-              collection: result.collection,
-              id: result.id,
-              title: result.title,
-              description: result.description,
-              upstream: result.upstream,
-              downstream: result.downstream,
-              x: result.x,
-              y: result.y
-          }
-          this.d3state.nodes.push(node);
-          this.renderD3();
-      }.bind(this);
-      this.onCreateNode(newNode, onSuccess);
+    //   this.removeNodeFromSelected()
+    //   var onSuccess = function(result) {
+    //       var node = {
+    //           collection: result.collection,
+    //           id: result.id,
+    //           title: result.title,
+    //           description: result.description,
+    //           upstream: result.upstream,
+    //           downstream: result.downstream,
+    //           x: result.x,
+    //           y: result.y
+    //       }
+    //       this.d3state.nodes.push(node);
+    //       this.renderD3();
+    //   }.bind(this);
+      this.props.createNode(newNode.collection, newNode, null)
   }
-  onCreateNode(newNode, cb){
-      console.log("Calling api to create new node")
-    const { setAppStatus } = this.props
-    setAppStatus(APPSTATUS.BUSY)
-    const sessionInfo = getSessionInfo()
-    const fullUrl = sessionInfo['selectedCloud']['url'] + "/resources/" + newNode.collection
-    const token = sessionInfo['token']
-
-    var myHeaders = new Headers({
-        "Content-Type":"application/json"
-    })
-    if (AUTH_ENABLED && token) {
-        myHeaders.append("Authorization", token)
-    }
-    var params = { 
-        method: 'POST',
-        mode: 'cors',
-        headers: myHeaders,
-        body: JSON.stringify(newNode)
-    }
-    return fetch(fullUrl, params)
-        .then(response =>
-            response.json().then(json => {
-                if (!response.ok) {
-                    setAppStatus(APPSTATUS.ERROR)
-                    return Promise.reject(json)
-                }
-                cb(json.Item)
-                setAppStatus(APPSTATUS.OK)
-            })
-        )
-  }
-  onUpdateNodes(nodes, cb) {
+  onUpdateNodes(nodes) {
     Object.keys(nodes).forEach(function(key){
         let node = nodes[key]
-        this.onUpdateNode(node, cb)
+        this.props.updateNode(node.collection, node, null)
     }.bind(this))
-  }
-  onUpdateNode(node, cb) {
-      console.log("Calling api to update node")
-    const { setAppStatus } = this.props
-    setAppStatus(APPSTATUS.BUSY)
-    const sessionInfo = getSessionInfo()
-    const fullUrl = sessionInfo['selectedCloud']['url'] + "/resources/" + node.collection + "/" + node.id
-    const token = sessionInfo['token']
-
-    var myHeaders = new Headers({
-        "Content-Type":"application/json"
-    })
-    if (AUTH_ENABLED && token) {
-        myHeaders.append("Authorization", token)
-    }
-    var params = { 
-        method: 'PUT',
-        mode: 'cors',
-        headers: myHeaders,
-        body: JSON.stringify(node)
-    }
-    return fetch(fullUrl, params)
-        .then(response =>
-            response.json().then(json => {
-                if (!response.ok) {
-                    setAppStatus(APPSTATUS.ERROR)
-                    return Promise.reject(json)
-                }
-                // cb(json)
-                setAppStatus(APPSTATUS.OK)
-            })
-        )
   }
   deleteEdge(edge) {
       var d3state = this.d3state;
@@ -990,6 +959,8 @@ const mapStateToProps = (state, ownProps) => {
 }
 
 export default connect(mapStateToProps, {
-    setAppStatus,
+    setD3State,
+    createNode,
+    updateNode,
     deleteNode
 })(D3DataFlow)

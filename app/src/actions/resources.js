@@ -65,6 +65,24 @@ export const updateNode = (collection, node, cb) => (dispatch, getState) => {
 
 //--------------------------------
 
+export const CREATEENODE_REQUEST = 'CREATEENODE_REQUEST'
+export const CREATENODE_SUCCESS = 'CREATENODE_SUCCESS'
+export const CREATENODE_FAILURE = 'CREATENODE_FAILURE'
+
+export const createNode = (collection, node, cb) => (dispatch, getState) => {
+    dispatch({
+        [CALL_API]: {
+            types: [CREATEENODE_REQUEST, CREATENODE_SUCCESS, CREATENODE_FAILURE],
+            endpoint: '/resources/' + collection,
+            method: 'POST',
+            data: node,
+            callback: cb
+        }
+    })
+}
+
+//--------------------------------
+
 export const DELETEENODE_REQUEST = 'DELETEENODE_REQUEST'
 export const DELETEENODE_SUCCESS = 'DELETEENODE_SUCCESS'
 export const DELETEENODE_FAILURE = 'DELETEENODE_FAILURE'
@@ -77,16 +95,5 @@ export const deleteNode = (collection, node, cb) => (dispatch, getState) => {
             method: 'DELETE',
             callback: cb
         }
-    })
-}
-
-//--------------------------------
-
-export const SET_APPSTATUS = 'SET_APPSTATUS'
-
-export const setAppStatus = (status) => (dispatch, getState) => {
-    dispatch({
-        type: SET_APPSTATUS,
-        status: status
     })
 }
