@@ -634,11 +634,17 @@ class D3DataFlow extends Component {
     document.getElementById('delete-icon').style.display = 'none'
   }
   addNodeToSelected(d) {
-      this.d3state.selectedNodes[d.id] = d
-      this.selectNodes(this.d3state.selectedNodes)
+    this.d3state.selectedNodes[d.id] = d
+    if (Object.keys(this.d3state.selectedNodes).length > 1) {
+        history.push("/clouds/"+ getSessionInfo()['selectedCloud'].id + "/flow")
+    }
+    this.selectNodes(this.d3state.selectedNodes)
   }
   removeNodeFromSelected(d) {
     delete this.d3state.selectedNodes[d.id]
+    if (Object.keys(this.d3state.selectedNodes).length < 1) {
+        history.push("/clouds/"+ getSessionInfo()['selectedCloud'].id + "/flow")
+    }
     this.selectNodes(this.d3state.selectedNodes)
   }
   selectNodes(nodes) {
@@ -770,22 +776,24 @@ class D3DataFlow extends Component {
       this.d3state.graphMouseDown = true;
   }
   svgMouseUp() {
-      var d3state = this.d3state;
+      var d3state = this.d3state
+      let sessionInfo = getSessionInfo()
 
       if (!d3state.graphMouseDown) {
           if (d3state.drawEdge) {
-              d3state.drawEdge = false;
-              this.dragLine.classed("hidden", true);
+              d3state.drawEdge = false
+              this.dragLine.classed("hidden", true)
           }
       } else if (d3state.justScaleTransGraph) {
-          d3state.justScaleTransGraph = false;
+          d3state.justScaleTransGraph = false
       } else if (d3state.dblClickSVGTimeout) {
           this.clearAllSelection()
+          history.push("/clouds/"+ sessionInfo['selectedCloud'].id + "/flow")
       } else {
-          d3state.dblClickSVGTimeout = true;
+          d3state.dblClickSVGTimeout = true
           setTimeout(function() {
-              d3state.dblClickSVGTimeout = false;
-          }, 300);
+              d3state.dblClickSVGTimeout = false
+          }, 300)
       }
 
       d3state.graphMouseDown = false;
