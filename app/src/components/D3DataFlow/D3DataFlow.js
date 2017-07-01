@@ -10,8 +10,8 @@ import './D3DataFlow.css'
 /*
 
 Node:
-    hover        -> highlight node and peak info
-    click        -> deselect all -> select node -> highlight node and flow (dont pan)
+    hover        -> soft highlight node and flow and peak info
+    click        -> select node -> highlight node and flow (dont pan)
     shftclick    -> add to selected -> highlight node and flow for each
     dblclick     -> descelct all -> navigate to node details and select and pan to flow
     drag         -> drag node and all selected if part of selection
@@ -553,7 +553,7 @@ class D3DataFlow extends Component {
       if (this.d3state.drawEdge) {
           this.dragLine.attr('d', this.buildDragLineStr(d))
       } else {
-        if (Object.keys(this.d3state.selectedNodes).length > 0) {
+        if (Object.keys(this.d3state.selectedNodes).length > 0 && this.d3state.selectedNodes[d.id]) {
         Object.keys(this.d3state.selectedNodes).forEach(function(id) {
             let node = this.d3state.selectedNodes[id]
             node.x += d3.event.dx
