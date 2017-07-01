@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { updateNode } from '../actions'
+import { history } from '../index.js'
 import D3DataFlow from '../components/D3DataFlow/D3DataFlow'
 import JobDetails from '../components/NodeDetails/JobDetails'
 import SourceDetails from '../components/NodeDetails/SourceDetails'
@@ -14,8 +15,22 @@ class NodeDetails extends Component {
   static propTypes = {
     updateNode: PropTypes.func.isRequired
   }
-  render() {
+  close() {
     const { params } = this.props
+    history.push("/clouds/"+ params.cloudId + "/flow/"+ params.nodeId +"?center-and-fit=true")
+  }
+  getRightMenuOptions(){
+    const { params, toggleNodeDetailsPain, close } = this.props
+    return (                    
+      <div className='btn-group pull-right item-options'>
+          <a href='' onClick={this.toggleEditDialog.bind(this)} className='btn btn-default'><i className='fa fa-cog'></i></a>
+          <a href='' onClick={toggleNodeDetailsPain} className='btn btn-default'><i className='fa fa-arrows-v'></i></a>
+          <a onClick={close} className='btn btn-default'><i className='fa fa-times'></i></a>
+      </div>
+    )
+  }
+  render() {
+    const { params, location } = this.props
     return (
       <div className='page-content white'>
         <D3DataFlow
@@ -25,6 +40,7 @@ class NodeDetails extends Component {
           zoomOnHighlight={false}
           singleClickNav={true}
           colored={false}
+          query={location.query}
         ></D3DataFlow>
         <div id='node-details-pain' className='node-details' style={{'top':'0px'}}>
             {this.getCollectionComponent()}
@@ -34,7 +50,6 @@ class NodeDetails extends Component {
     )
   }
   componentDidMount() {
-    
     const { location } = this.props
     if (location.query.flow === "open") {
       this.toggleNodeDetailsPain()
@@ -62,24 +77,32 @@ class NodeDetails extends Component {
     if (params.collection === 'jobs') {
       return (<JobDetails 
         params={params} 
+        close={this.close.bind(this)}
+        getRightMenuOptions={this.getRightMenuOptions}
         onUpdate={this.onUpdate.bind(this)} 
         toggleNodeDetailsPain={this.toggleNodeDetailsPain}
       ></JobDetails>)
     } else if (params.collection === 'datasources') {
       return (<SourceDetails 
         params={params} 
+        close={this.close.bind(this)}
+        getRightMenuOptions={this.getRightMenuOptions}
         onUpdate={this.onUpdate.bind(this)} 
         toggleNodeDetailsPain={this.toggleNodeDetailsPain}>
       </SourceDetails>)
     } else if (params.collection === 'charts') {
       return (<ChartDetails 
         params={params} 
+        close={this.close.bind(this)}
+        getRightMenuOptions={this.getRightMenuOptions}
         onUpdate={this.onUpdate.bind(this)} 
         toggleNodeDetailsPain={this.toggleNodeDetailsPain}
       ></ChartDetails>)
     } else if (params.collection === 'dashboards') {
       return (<BoardDetails 
         params={params} 
+        close={this.close.bind(this)}
+        getRightMenuOptions={this.getRightMenuOptions}
         onUpdate={this.onUpdate.bind(this)} 
         toggleNodeDetailsPain={this.toggleNodeDetailsPain}
       ></BoardDetails>)

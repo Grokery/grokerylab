@@ -64,8 +64,6 @@ class D3DataFlow extends Component {
     )
   }
   componentDidMount() {
-    const { selectedNodeId, nodes } = this.props
-
     // ************************
     // Set up D3 state
     // ************************
@@ -81,7 +79,7 @@ class D3DataFlow extends Component {
         highlightedMaxY: -9999,
         highlightedMinX: 9999,
         highlightedMinY: 9999,
-        selectedNodes: selectedNodeId ? {selectedNodeId: nodes[selectedNodeId]} : {},
+        selectedNodes: {},
         changedNodes: {},
         selectedEdge: null,
         mouseDownNode: null,
@@ -208,7 +206,9 @@ class D3DataFlow extends Component {
   }
   componentWillReceiveProps(nextProps) {
       let doCenterAndFit = false
-      if (Object.keys(this.props.nodes).length === 0) {
+      if (Object.keys(this.props.nodes).length === 0 || 
+          this.props.query['center-and-fit'] === "true" ||
+          this.props.singleClickNav === true) {
           doCenterAndFit = true
       }
       this.props = nextProps
@@ -218,16 +218,18 @@ class D3DataFlow extends Component {
       }
   }
   renderD3() {
-    const { nodes, colored } = this.props
-
+    let graph = this
+    let d3state = this.d3state
+    const { selectedNodeId, nodes, colored } = this.props
     if (Object.keys(nodes).length === 0) {
         return
     }
-
-    // let { d3state } = this.props
-    let graph = this
-    let d3state = this.d3state
-
+    if (selectedNodeId){
+        d3state.selectedNodes[selectedNodeId]  = nodes[selectedNodeId]
+    }
+    d3state.width = this.getWindowWidth()
+    d3state.height = this.getWindowHeight()
+    
     
     // *****************
     // Build node and edge lists and set min and max x and y
@@ -671,8 +673,8 @@ class D3DataFlow extends Component {
       const { zoomOnHighlight } = this.props
 
       d3.select("#n" + d.id).classed('inactive', false)
-      this.highlightUpstream(d);
-      this.highlightDownstream(d);
+      this.highlightUpstream(d)
+      this.highlightDownstream(d)
 
       this.d3state.highlightedMaxX += this.d3state.shapeWidth*2
       this.d3state.highlightedMaxY += this.d3state.shapeHeight*2
@@ -747,6 +749,7 @@ class D3DataFlow extends Component {
           history.push("/clouds/"+ sessionInfo['selectedCloud'].id + "/" + d.collection + "/" + d.id + "?flow=open")
       } else {
         if (this.props.singleClickNav) {
+            this.clearAllSelection()
             history.push("/clouds/"+ sessionInfo['selectedCloud'].id + "/" + d.collection + "/" + d.id + "?flow=open")
         } else {
             if (this.d3state.selectedNodes[d.id]) {

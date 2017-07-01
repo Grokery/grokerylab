@@ -4,15 +4,16 @@ import D3DataFlow from '../components/D3DataFlow/D3DataFlow'
 
 class Dataflows extends Component {
   render() {
-    const { nodeId } = this.props.params
+    const { params, location } = this.props
     return (
       <div className='page-content'>
         <D3DataFlow 
           showControls={true}
-          selectedNodeId={nodeId}
+          selectedNodeId={params.nodeId}
           zoomOnHighlight={false}
           singleClickNav={false}
           colored={false}
+          query={location.query}
         ></D3DataFlow>
         {this.props.children}
       </div>

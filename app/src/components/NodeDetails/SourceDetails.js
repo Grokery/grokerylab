@@ -27,17 +27,6 @@ class SourceDetails extends Component {
       this.setState({shown: true})
     }
   }
-  getRightMenuOptions(){
-    const { params, toggleNodeDetailsPain } = this.props
-    const exitHref = "#/clouds/"+params.cloudId+"/flow/" + params.nodeId
-    return (                    
-      <div className='btn-group pull-right item-options'>
-          <a href='' onClick={this.toggleEditDialog.bind(this)} className='btn btn-default'><i className='fa fa-cog'></i></a>
-          <a href='' onClick={toggleNodeDetailsPain} className='btn btn-default'><i className='fa fa-arrows-v'></i></a>
-          <a href={exitHref} className='btn btn-default'><i className='fa fa-times'></i></a>
-      </div>
-    )
-  }
   handleChange(e) {
     this.props.onUpdate(JSON.parse(e.target.value))
   }
@@ -55,7 +44,7 @@ class SourceDetails extends Component {
     const { params, onUpdate } = this.props
     return (
       <div className='source-details'>
-        <Tabs getRightMenuOptions={this.getRightMenuOptions.bind(this)}>
+        <Tabs getRightMenuOptions={this.props.getRightMenuOptions.bind(this)}>
           <Panel title='Info'>
             <InfoTab key={params.nodeId} params={params} onUpdate={onUpdate}></InfoTab>
           </Panel>
