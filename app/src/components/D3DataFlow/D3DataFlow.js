@@ -746,25 +746,21 @@ class D3DataFlow extends Component {
       } else if (d3state.dblClickNodeTimeout) {
           history.push("/clouds/"+ sessionInfo['selectedCloud'].id + "/" + d.collection + "/" + d.id + "?flow=open")
       } else {
-          if (this.d3state.selectedNodes[d.id]) {
-              this.removeNodeFromSelected(d)
-          } else if (d3.event.shiftKey) {
-            //   this.addNodeToSelected(d)
-          } else {
-            //   this.selectNodes([d])
-              this.addNodeToSelected(d)
-          }
-
-        //       if (this.props.singleClickNav) {
-        //           history.push("/clouds/"+ sessionInfo['selectedCloud'].id + "/" + d.collection + "/" + d.id)
-
-          // set for potential dblclick
-          d3state.dblClickNodeTimeout = true;
-          setTimeout(function() {
-              d3state.dblClickNodeTimeout = false;
-          }, 300);
+        if (this.props.singleClickNav) {
+            history.push("/clouds/"+ sessionInfo['selectedCloud'].id + "/" + d.collection + "/" + d.id + "?flow=open")
+        } else {
+            if (this.d3state.selectedNodes[d.id]) {
+                this.removeNodeFromSelected(d)
+            } else {
+                this.addNodeToSelected(d)
+            }
+        }
+        // set for potential dblclick
+        d3state.dblClickNodeTimeout = true;
+        setTimeout(function() {
+            d3state.dblClickNodeTimeout = false;
+        }, 300);
       }
-
       d3state.mouseDownNode = null;
   }
   svgMouseDown() {
