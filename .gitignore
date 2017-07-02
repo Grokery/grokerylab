@@ -10,4 +10,4 @@
 *.iml
 env.*.js
 .DS_Store
-*package-lock.js
+*package-lock.json
