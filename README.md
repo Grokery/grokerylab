@@ -1,7 +1,30 @@
 # GrokeryLab
+ 
+    Grok v: To understand deeply and intuitively or by empathy
+    Grokery n: A place of deep insight
+
+GrokeryLab is an end-to-end data flow management & exploration platform.
+
+I'm creating it because I want a top level, integrated and transparent platform that makes it easy to:
+
+1. Create and manage big (or small) data pipelines to ingest and process intelligence data
+2. Create beautiful and informative visualizations that are completely integrated into the pipelines
+3. Collaborate with others through all three phases of the intelligence stack: Ingestion, Processization, and Visualization. 
+
+### Why?
+
+The central pain point that this product takes to heart is the difficulty of understanding and managing the pedigree of the data flowing through our intelligence systems. 
+
+Data pedigree is about knowing three things: 
+
+1. Where the data came from
+2. What's been done to it, and
+3. Who else uses/knows about it
+
+Knowing these basic facts is essential to knowing weather the data is trustworthy, which is of course vital to making good business decisions.
 
 
-## Build & Deploy
+### Getting up and running
 
 You will need Git, Npm, Python and Docker.
 
@@ -18,11 +41,11 @@ Edit .env variables, then:
     npm run build
     cd ../
 
-Finally, to start:
+Finally, to start in docker:
 
     docker-compose up
 
-Or, to locally in dev mode:
+Or, to run locally in dev mode:
 
     cd api
     ./run_with_venv.sh (or run_with_venv.bat)
@@ -32,10 +55,20 @@ Or, to locally in dev mode:
     cd app
     npm start
 
-## License
+
+### Using and contributing
+
+GrokeryaLab is licensed under the Apache license because I believe in the power of openness, 
+transparency, and community.
+
+If you are interested in useing and/or contributing to this project, please reach out to me:
+
+    chmod740 at gmail dot com
+
+
+### License
 
 GrokeryLab - A dataflow management platform
-
 |                      |                                          |
 |:---------------------|:-----------------------------------------|
 | **Author:**          | Dan Hogue (<chmod740@gmail.com>)
