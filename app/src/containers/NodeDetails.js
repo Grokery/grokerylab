@@ -20,7 +20,7 @@ class NodeDetails extends Component {
     history.push("/clouds/"+ params.cloudId + "/flow/"+ params.nodeId +"?center-and-fit=true")
   }
   getRightMenuOptions(){
-    const { params, toggleNodeDetailsPain, close } = this.props
+    const { toggleNodeDetailsPain, close } = this.props
     return (                    
       <div className='btn-group pull-right item-options'>
           <a href='' onClick={this.toggleEditDialog.bind(this)} className='btn btn-default'><i className='fa fa-cog'></i></a>

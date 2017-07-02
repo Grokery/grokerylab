@@ -286,8 +286,8 @@ class D3DataFlow extends Component {
         .classed("link", true)
         .attr('id', function(d) { return "n" + d.source.id + d.target.id })
         .attr("d", function(d) { return graph.buildPathStr(d) })
-        .on("mousedown", function(d) { graph.pathMouseDown.call(graph, d3.select(graph), d) })
-        .on("mouseup", function(d) { graph.pathMouseUp.call(graph, d3.select(graph), d) })
+        .on("mousedown", function(d) { graph.pathMouseDown.call(graph, d) })
+        .on("mouseup", function(d) { graph.pathMouseUp.call(graph, d) })
     
     // remove old
     graph.paths.exit().remove() 
@@ -576,47 +576,20 @@ class D3DataFlow extends Component {
           this.d3state.edges.splice(this.d3state.edges.indexOf(l), 1)
       }.bind(this))
   }
-  selectEdge(d3Path, edgeData) {
-      d3Path.classed(this.d3state.selectedClass, true);
-      if (this.d3state.selectedEdge) {
-          this.removeSelectFromEdge();
-      }
-      this.d3state.selectedEdge = edgeData;
-      this.showDeleteIcon()
-  }
-  removeSelectFromEdge() {
-      if (!this.d3state.selectedEdge) { return }
-      this.paths.filter(function(cd) {
-          return cd === this.d3state.selectedEdge;
-      }.bind(this)).classed(this.d3state.selectedClass, false);
-      this.d3state.selectedEdge = null;
-      this.hideDeleteIcon()
-  }
-  pathMouseDown(d3path, d) {
+  pathMouseDown(d) {
       d3.event.stopPropagation();
-      this.d3state.mouseDownEdge = d;
-      var prevEdge = this.d3state.selectedEdge;
-      if (!prevEdge || prevEdge !== d) {
-          this.selectEdge(d3path, d);
-      } else {
-          this.removeSelectFromEdge();
-      }
   }
-  pathMouseUp() {
+  pathMouseUp(d) {
       d3.event.stopPropagation();
-
-      var state = this.d3state;
-
-      state.drawEdge = false;
-
-      setTimeout(function() {
-          state.dblClickPathTimeout = false;
-      }, 300);
-
-      if (state.dblClickPathTimeout) {
-
+      if (this.d3state.selectedEdge === d) {
+        this.clearAllSelection()
+        this.d3state.selectedEdge = null
+        this.hideDeleteIcon()
       } else {
-          state.dblClickPathTimeout = true;
+        this.clearAllSelection()
+        this.d3state.selectedEdge = d
+        d3.select('#n' + d.source.id + d.target.id).classed(this.d3state.selectedClass, true)
+        this.showDeleteIcon()
       }
   }
   toggleCreateNodes() {
@@ -873,20 +846,18 @@ class D3DataFlow extends Component {
     }.bind(this))
   }
   deleteEdge(edge) {
-      var d3state = this.d3state;
-      var source = edge.source;
-      var target = edge.target;
-      d3state.edges.splice(d3state.edges.indexOf(edge), 1);
-      source.downstream = source.downstream.filter(function(n) { return n.id !== target.id; });
-      target.upstream = target.upstream.filter(function(n) { return n.id !== source.id });
-      d3state.changedNodes[source.id] = source;
-      d3state.changedNodes[target.id] = target;
-      this.onUpdateNodes(d3state.changedNodes);
-      this.renderD3();
+      let d3state = this.d3state
+      let source = edge.source
+      let target = edge.target
+      source.downstream = source.downstream.filter(function(n) { return n.id !== target.id; })
+      target.upstream = target.upstream.filter(function(n) { return n.id !== source.id })
+      d3state.changedNodes[source.id] = source
+      d3state.changedNodes[target.id] = target
+      this.onUpdateNodes(d3state.changedNodes)
   }
   onDelete() {
       if (Object.keys(this.d3state.selectedNodes).length > 0) {
-        if (confirm("Confirm delete nodes?" )=== true) {
+        if (confirm("Confirm delete node(s)?" ) === true) {
             Object.keys(this.d3state.selectedNodes).forEach(function(id) {
                 let node = this.d3state.selectedNodes[id]
                 this.props.deleteNode(node.collection, node, null)
@@ -895,9 +866,9 @@ class D3DataFlow extends Component {
         }
       }
       if (this.d3state.selectedEdge) {
-        // if (confirm("Confirm delete connection?")===true) {
-          this.deleteEdge(this.d3state.selectedEdge);
-        // }
+        if (confirm("Confirm delete edge?") === true) {
+          this.deleteEdge(this.d3state.selectedEdge)
+        }
       }
   }
   buildPathStr(ed) {
