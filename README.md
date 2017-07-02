@@ -11,6 +11,7 @@ I'm creating it because I want a top level, integrated and transparent platform 
 2. Create beautiful and informative visualizations that are completely integrated into the pipelines
 3. Collaborate with others through all three phases of the intelligence stack: Ingestion, Processization, and Visualization. 
 
+
 ### Why?
 
 The central pain point that this product takes to heart is the difficulty of understanding and managing the pedigree of the data flowing through our intelligence systems. 
@@ -61,19 +62,18 @@ Or, to run locally in dev mode:
 GrokeryaLab is licensed under the Apache license because I believe in the power of openness, 
 transparency, and community.
 
-If you are interested in useing and/or contributing to this project, please reach out to me:
+If you are interested in useing and/or contributing to this project, please reach out to me: 
 
-    chmod740 at gmail dot com
+[https://grokery.io/#contact](https://grokery.io/#contact)
 
 
 ### License
 
 GrokeryLab - A dataflow management platform
-|                      |                                          |
-|:---------------------|:-----------------------------------------|
-| **Author:**          | Dan Hogue (<chmod740@gmail.com>)
-| **Copyright:**       | Copyright 2016, Grokery
-| **License:**         | Apache License, Version 2.0
+
+    **Author:**  Dan Hogue (<chmod740@gmail.com>)
+    **Copyright:**  Copyright 2016, Grokery
+    **License:**  Apache License, Version 2.0
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
