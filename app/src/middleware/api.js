@@ -58,7 +58,6 @@ export default store => next => action => {
     
     const { endpoint, method, data, callback } = callApiActionInfo
     const sessionInfo = getSessionInfo()
-    console.log(sessionInfo)
     const fullUrl = sessionInfo['selectedCloud']['url'] + endpoint
     const token = sessionInfo['token']
     return callApi(fullUrl, method, data, token, callback).then(

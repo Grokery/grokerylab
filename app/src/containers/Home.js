@@ -19,6 +19,13 @@ class Home extends Component {
         <CloudSection key={cloudid} cloudid={cloudid} cloud={cloud}></CloudSection>
       )
     })
+    sections.push(
+        <div key={Math.random()}>   
+          <div className='cloud-section'>
+            <a className='btn new-cloud-button' href='#'><i className='fa fa-plus'/></a>
+          </div>
+         </div>
+    )
     return sections
   }
   render() {
@@ -29,7 +36,9 @@ class Home extends Component {
     return (
       <div className='page-content home'>
         <div>
-          <h1>Your Clouds:</h1>
+          <div className='user-section'>
+            <h1>Hi {username.split('@')[0]}</h1>
+          </div>
           <div className='cloud-sections'>
             {this.getCloudSections()}
           </div>
@@ -41,7 +50,6 @@ class Home extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   let sessionInfo = getSessionInfo()
-  console.log(sessionInfo)
   if (!sessionInfo) {
     sessionInfo = {
       username: "",

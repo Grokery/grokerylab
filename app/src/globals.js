@@ -1,4 +1,5 @@
 
+import "./env.prod.js"
 
 // Causes application to run in verbose mode printing debug information to console
 export const DEBUG_MODE = process.env.NODE_ENV !== 'production'
@@ -19,7 +20,7 @@ export const error = function(info) {
 
 // Authentication and authorization constants
 export const AUTH_ENABLED = process.env.AUTH_ENABLED === true
-export const AUTH_URL = "" 
+export const AUTH_URL = process.env.AUTH_URL
 
 // Default API 
 export const DEFAULT_SESSION_INFO = {

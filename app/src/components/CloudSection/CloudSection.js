@@ -36,10 +36,10 @@ class CloudSection extends Component {
   }
   getCloudLinks(cloudid, cloud) {
     let links = []
-    // links.push({
-    //     title: 'Data Flow',
-    //     url: '#/clouds/' + cloudid,
-    //   })
+    links.push({
+        title: 'Data Flow',
+        url: '#/clouds/' + cloudid,
+      })
     if (cloud.links) {
       cloud.links.forEach(function(link){
         links.push(link)
@@ -56,6 +56,7 @@ class CloudSection extends Component {
             <img src={this.getCloudIcon(cloud)} className='cloud-icon' role="presentation"/>
             {cloud.name}
           </a>
+          <a href='#' onClick={this.toggleEditDialog.bind(this)}><i className='fa fa-cog pull-right cloud-edit-icon'/></a>
           <EditModal title="Edit Cloud" shown={this.state.shown} toggleEditDialog={this.toggleEditDialog.bind(this)}>
             <ContentEditable type='pre' value={JSON.stringify(cloud, null, 2)} onChange={function(){}}></ContentEditable>
           </EditModal>
@@ -63,6 +64,7 @@ class CloudSection extends Component {
         <div className='cloud-section-quicklinks'>
           <Gallery itemSize='medium' colorClass='dark' images={false} items={this.getCloudLinks(cloudid, cloud)} params={{}}></Gallery>
         </div>
+        <hr />
       </div>
     )
   }

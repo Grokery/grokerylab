@@ -7,5 +7,7 @@
 *data
 *node_modules
 .idea/
-grokerylab.iml
+*.iml
+env.*.js
 .DS_Store
+*package-lock.js
