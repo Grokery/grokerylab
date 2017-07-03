@@ -12,16 +12,21 @@ color-scheme {
   color: #9467bd;
   /* brown */
   color: #8c564b;
+
+  /* blue accent */
+  color: #2180c4;
   /* dark background  */
   color: #4c5763;
   /* grey background */
-  color: #e7ebee;
+  color: #f1f5f9;
   /* white background */
   color: #fff;
   /* font color light */
   color: #fff;
   /* font color dark */
   color: #333;
+
+
 }
 
 html,
@@ -31,7 +36,7 @@ body,
     padding: 0;
     height: 100%;
     width: 100%;
-    background-color: #e7ebee;
+    background-color: #f1f5f9;
     font-family: "Open Sans", sans-serif;
 }
 
@@ -76,9 +81,19 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
   clear: both;
-  color: #1f77b4;
+  color: #258fda;
   margin-top: 10px;
   margin-left: 10px;
   padding-left: 0;
   font-size: 2em;
+}
+
+.btn-primary {
+  background-color: #258fda;
+  border-color: #258fda; 
+}
+
+.btn-primary:hover {
+  background-color: #258fda;
+  border-color: #258fda; 
 }

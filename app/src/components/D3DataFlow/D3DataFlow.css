@@ -1,6 +1,6 @@
 
 .D3DataFlow {
-     background-color: #e7ebee;
+     background-color: #f1f5f9;
 }
 
 #flow {
@@ -31,7 +31,7 @@
 g {
     fill: #fff;
     stroke: #333;
-    stroke-width: 1.5;
+    stroke-width: 2;
 }
 
 g.undefined {
@@ -56,15 +56,15 @@ g.selected:hover {
 
 g.colored.charts-node,
 g.colored.jobs-node {
-    fill: #FF7F0E;
-    stroke: #FF7F0E;
+    fill: #ff9233;
+    stroke: #ff9233;
     stroke-width: 0;
 }
 
 g.colored.datasources-node,
 g.colored.dashboards-node {
-    fill: #1f77b4;
-    stroke: #1f77b4;
+    fill: #2180c4;
+    stroke: #2180c4;
     stroke-width: 0; 
 }
 
@@ -155,7 +155,7 @@ path.link.selected:hover {
 g.inactive,
 g.inactive text,
 path.link.inactive {
-    opacity: .5
+    opacity: .2
 }
 
 
