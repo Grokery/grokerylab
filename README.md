@@ -59,12 +59,12 @@ Or, to run locally in dev mode:
 
 ### Using and contributing
 
-GrokeryaLab is licensed under the Apache license because I believe in the power of openness, 
+GrokeryLab is licensed under the Apache license because I believe in the power of openness, 
 transparency, and community.
 
-If you are interested in useing and/or contributing to this project, please reach out to me: 
+If you are interested in using this product, feel free! If you would like to contribute, please do! 
 
-[https://grokery.io/#contact](https://grokery.io/#contact)
+You can contact me using the form on the website: [https://grokery.io/#contact](https://grokery.io/#contact)
 
 
 ### License
