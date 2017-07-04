@@ -16,18 +16,18 @@ color-scheme {
 
 
   /* blue accent */
-  color: #026aa7;
+  color: #0271b1;
+  /* orange accent */
+  color: #FF851A;
   /* dark background  */
-  color: #4c5763;
-  /* grey background */
-  color: #f1f2f4;
-  /* white background */
-  color: #fff;
+  color: #4C5763;
+  /* light background */
+  color: #F1F2F4;
+  color: #e7ebee;
   /* font color light */
-  color: #fff;
+  color: #FBFCFF;
   /* font color dark */
-  color: #333;
-
+  color: #373F48;
 
 }
 
@@ -38,12 +38,12 @@ body,
     padding: 0;
     height: 100%;
     width: 100%;
-    background-color: #faf8f8;
+    background-color: #FFF;
     font-family: "Open Sans", sans-serif;
 }
 
 pre {
-    background-color: white;
+    background-color: #FFF;
 }
 
 .page-content-wrapper {
@@ -63,7 +63,7 @@ pre {
 }
 
 .page-content.white {
-  background-color: white;
+  background-color: #FFF;
 }
 
 @media(max-width: 767px) {
@@ -83,7 +83,7 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
   clear: both;
-  color: #026aa7;
+  color: #026AA7;
   margin-top: 10px;
   margin-left: 10px;
   padding-left: 0;
@@ -91,11 +91,11 @@ h1 {
 }
 
 .btn-primary {
-  background-color: #026aa7;
-  border-color: #026aa7; 
+  background-color: #026AA7;
+  border-color: #026AA7; 
 }
 
 .btn-primary:hover {
-  background-color: #026aa7;
-  border-color: #026aa7; 
+  background-color: #026AA7;
+  border-color: #026AA7; 
 }

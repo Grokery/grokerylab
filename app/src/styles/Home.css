@@ -21,14 +21,14 @@
   font-weight: 300;
   font-size: 24px;
   line-height: 1.1;
-  color: #333;
+  color: #373F48;
 }
 
 .home .cloud-sections hr {
     display: block;
     height: 1px;
     border: 0;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #c5ccd3;
     padding-top: 20px; 
     margin:0;
     clear: both;
@@ -39,12 +39,12 @@
 }
 
 .home .user-section {
-  background-color: #4c5763;
+  background-color: #4C5763;
   height: 800px
 }
 
 .home .user-section h1 {
-  color: white;
+  color: #FBFCFF;
   margin-top: 20px;
 }
 
@@ -54,12 +54,12 @@
 }
 
 .home .cloud-section a i {
-  color: grey;
+  color: #4C5763;
   font-size: 20px;
 }
 
 .home .cloud-section a i:hover {
-  color: #4c5763;
+  color: #4C5763;
 }
 
 .home .cloud-edit-icon {

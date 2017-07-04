@@ -4,6 +4,10 @@
     min-height: 300px;
 }
 
+.modal-dialog pre {
+    border: none;
+}
+
 .modal-dialog .nav-tabs {
     box-shadow: none;   
 }

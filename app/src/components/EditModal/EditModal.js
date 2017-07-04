@@ -22,10 +22,10 @@ class EditModal extends Component {
         <div className="modal-body">
 
         <Tabs getRightMenuOptions={function(){return[]}}>
-          <Panel title='Info'>
+          <Panel title='Options'>
             <div>hello</div>
           </Panel>
-          <Panel title='Code'>
+          <Panel title='Json'>
             <ContentEditable type='pre' value={JSON.stringify(this.getNodeJsonForEdit(), null, 2)} onChange={this.handleChange.bind(this)}></ContentEditable>
           </Panel>
         </Tabs>

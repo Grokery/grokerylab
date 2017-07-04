@@ -9,14 +9,15 @@
 
 .gallery .gallery-item {
   padding: 5px;
-  box-shadow: 1px 1px 2px 0 #ccc;
+  box-shadow: 1px 1px 2px 0 #4C5763;
   border-radius: 3px;
   overflow:  hidden;
-  background: #fff;
+  background: #FBFCFF;
 }
 
 .gallery.dark .gallery-item {
-  background: #026aa7;
+  background: #026AA7;
+  box-shadow:  none;
 }
 
 .gallery a,
@@ -26,7 +27,7 @@
 
 .gallery.dark a,
 .gallery.dark a:hover {
-  color: #fff
+  color: #FBFCFF
 }
 
 .gallery .gallery-item-preview {
@@ -51,7 +52,7 @@
 
 .gallery .gallery-item i {
   font-size: larger;
-  color: #4c5763;
+  color: #4C5763;
   padding: 10px;
 }
 

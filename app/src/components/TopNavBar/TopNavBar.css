@@ -1,6 +1,6 @@
 #top-nav-wrapper {
   margin: 0;
-  background-color: #026aa7 !important;
+  background-color: #0271b1 !important;
 }
 
 #top-nav-wrapper {
@@ -17,7 +17,7 @@
 .nav .open>a:hover,
 #top-nav-wrapper #top-menu-wrapper a:hover,
 #top-nav-wrapper #top-menu-wrapper a:focus {
-  background-color: #026aa7;
+  background-color: #0271b1;
 }
 
 #top-nav-wrapper #top-menu-wrapper .navbar-header {

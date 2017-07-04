@@ -1,6 +1,6 @@
 
 .auth {
-  background-color:#4c5763;
+  background-color:#4C5763;
 }
 
 .auth .signin-panel {
@@ -9,6 +9,10 @@
 
 .auth .signin-panel .panel {
   border-radius: 6px;
+}
+
+.panel-default>.panel-heading {
+  background-color: #F1F2F4;
 }
 
 .auth .panel-body {

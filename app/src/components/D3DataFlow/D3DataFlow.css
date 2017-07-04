@@ -1,6 +1,6 @@
 
 .D3DataFlow {
-     background-color: #f1f2f4;
+     background-color: #e7ebee;
 }
 
 #flow {
@@ -17,26 +17,25 @@
 
 .flow-overlay {
     fill: none;
-    /*stroke: #333;*/
     stroke-width: 1px
 }
 
 #mark-end-arrow {
-    fill: #4c5763;
-    stroke: #4c5763;
+    fill: #373F48;
+    stroke: #373F48;
 }
 
 
 /* Nodes */
 g {
     fill: #fff;
-    stroke: #4c5763;
+    stroke: #373F48;
     stroke-width: 2;
 }
 
 g.undefined {
     fill: #e7ebee;
-    stroke: #4c5763;
+    stroke: #373F48;
 }
 
 g:hover {
@@ -63,8 +62,8 @@ g.colored.jobs-node {
 
 g.colored.datasources-node,
 g.colored.dashboards-node {
-    fill: #026aa7;
-    stroke: #026aa7;
+    fill: #0271b1;
+    stroke: #0271b1;
     stroke-width: 0; 
 }
 
@@ -93,8 +92,8 @@ g text {
     font-weight: 100;
     text-anchor: middle;
     pointer-events: none;
-    fill: #4c5763;
-    stroke: #4c5763;
+    fill: #373F48;
+    stroke: #373F48;
     stroke-width: 1;
 }
 
@@ -106,8 +105,8 @@ g.colored text {
 g.colored:hover text,
 g.colored.selected text,
 g.colored.selected:hover text {
-    fill: #4c5763;
-    stroke: #4c5763;
+    fill: #373F48;
+    stroke: #373F48;
 }
 
 g text.node-icon {
@@ -115,7 +114,7 @@ g text.node-icon {
     font-weight: 100;
     text-anchor: middle;
     pointer-events: none;
-    fill: #4c5763;
+    fill: #373F48;
 }
 
 g.colored text.node-icon {
@@ -131,7 +130,7 @@ g.colored text.node-icon {
 /* Edges */
 path.link {
     fill: none;
-    stroke: #4c5763;
+    stroke: #373F48;
     stroke-width: 3px;
     cursor: default;
 }
@@ -155,7 +154,7 @@ path.link.selected:hover {
 g.inactive,
 g.inactive text,
 path.link.inactive {
-    opacity: .2
+    opacity: .1
 }
 
 
@@ -168,13 +167,14 @@ path.link.inactive {
 
 #flow-header-content i {
     font-size: x-large;
-    color: #1e72ae;
+    color: #0271b1;
     padding: 10px;
 }
 
 #flow-header-content .drag-create-img {
     height: 35px;
     margin-bottom: 8px;
+    margin-right: 4px;
     user-select: none;
     -moz-user-select: none;
     -webkit-user-drag: none;
@@ -185,8 +185,8 @@ path.link.inactive {
 g.colored:hover text.tooltiptext,
 g.colored.selected text.tooltiptext,
 g.colored.selected:hover text.tooltiptext  {
-    fill: black;
-    stroke: black;
+    fill: #373F48;
+    stroke: #373F48;
     font-size: 68px;
     stroke-width: 2;
 }
