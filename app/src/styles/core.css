@@ -1,5 +1,6 @@
 
 color-scheme {
+
   /* blue */
   color: #1f77b4;
   /* orange */
@@ -13,12 +14,13 @@ color-scheme {
   /* brown */
   color: #8c564b;
 
+
   /* blue accent */
-  color: #2180c4;
+  color: #026aa7;
   /* dark background  */
   color: #4c5763;
   /* grey background */
-  color: #f1f5f9;
+  color: #f1f2f4;
   /* white background */
   color: #fff;
   /* font color light */
@@ -36,7 +38,7 @@ body,
     padding: 0;
     height: 100%;
     width: 100%;
-    background-color: #f1f5f9;
+    background-color: #faf8f8;
     font-family: "Open Sans", sans-serif;
 }
 
@@ -81,7 +83,7 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
   clear: both;
-  color: #258fda;
+  color: #026aa7;
   margin-top: 10px;
   margin-left: 10px;
   padding-left: 0;
@@ -89,11 +91,11 @@ h1 {
 }
 
 .btn-primary {
-  background-color: #258fda;
-  border-color: #258fda; 
+  background-color: #026aa7;
+  border-color: #026aa7; 
 }
 
 .btn-primary:hover {
-  background-color: #258fda;
-  border-color: #258fda; 
+  background-color: #026aa7;
+  border-color: #026aa7; 
 }

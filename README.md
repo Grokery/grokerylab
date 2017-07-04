@@ -1,5 +1,5 @@
 # GrokeryLab
- 
+
     Grok v: To understand deeply and intuitively or by empathy
     Grokery n: A place of deep insight
 
@@ -11,12 +11,11 @@ I'm creating it because I want a top level, integrated and transparent platform 
 2. Create beautiful and informative visualizations that are completely integrated into the pipelines
 3. Collaborate with others through all three phases of the intelligence stack: Ingestion, Processization, and Visualization. 
 
+## Why?
 
-### Why?
+The central pain point that this product takes to heart is the difficulty of understanding and managing the pedigree of the data flowing through our intelligence systems.
 
-The central pain point that this product takes to heart is the difficulty of understanding and managing the pedigree of the data flowing through our intelligence systems. 
-
-Data pedigree is about knowing three things: 
+Data pedigree is about knowing three things:
 
 1. Where the data came from
 2. What's been done to it, and
@@ -24,8 +23,7 @@ Data pedigree is about knowing three things:
 
 Knowing these basic facts is essential to knowing weather the data is trustworthy, which is of course vital to making good business decisions.
 
-
-### Getting up and running
+## Getting up and running
 
 You will need Git, Npm, Python and Docker.
 
@@ -56,8 +54,7 @@ Or, to run locally in dev mode:
     cd app
     npm start
 
-
-### Using and contributing
+## Using and contributing
 
 GrokeryLab is licensed under the Apache license because I believe in the power of openness, 
 transparency, and community.
@@ -66,8 +63,7 @@ If you are interested in using this product, feel free! If you would like to con
 
 You can contact me using the form on the website: [https://grokery.io/#contact](https://grokery.io/#contact)
 
-
-### License
+## License
 
 GrokeryLab - A dataflow management platform
 

@@ -13,7 +13,7 @@
 }
 
 .tabs-navigation {
-    background-color: #f1f5f9
+    background-color: #f1f2f4
 }
 
 .nav.nav-tabs {
@@ -31,7 +31,7 @@
 }
 
 .nav>li>a:focus, .nav>li>a:hover {
-    background-color: #f1f5f9;
+    background-color: #f1f2f4;
 }
 
 .nav>li>a:focus, 
@@ -47,11 +47,11 @@
 
 .item-options i {
   font-size: x-large;
-  color: #2180c4;
+  color: #026aa7;
 }
 
 .nav-tabs {
-  background-color: #f1f5f9;
+  background-color: #f1f2f4;
   box-shadow: 0px -4px 3px -3px rgb(187, 187, 187);
   border: none;
 }

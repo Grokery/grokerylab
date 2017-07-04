@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { Tabs, Panel } from '../Tabs/Tabs'
 import EditModal from '../EditModal/EditModal'
 import InfoTab from '../InfoTab/InfoTab'
-import ContentEditable from '../ContentEditable/ContentEditable'
 import CodeTab from '../CodeTab/CodeTab'
 import DataTab from '../DataTab/DataTab'
 import './NodeDetails.css'
@@ -28,21 +27,8 @@ class ChartDetails extends Component {
       this.setState({shown: true})
     }
   }
-  handleChange(e) {
-    this.props.onUpdate(JSON.parse(e.target.value))
-  }
-  getNodeJsonForEdit() {
-    let json = Object.assign({}, this.props.node) 
-    if (!json) {
-      json = {}
-    }
-    delete json.code
-    delete json.data
-    delete json.img
-    return json
-  }
   render() {
-    const { onUpdate, params } = this.props
+    const { onUpdate, params, node } = this.props
     return (
       <div className='chart-details'>
         <Tabs getRightMenuOptions={this.props.getRightMenuOptions.bind(this)}>
@@ -59,11 +45,7 @@ class ChartDetails extends Component {
             <p>Panel content</p>
           </Panel>
         </Tabs>
-
-        <EditModal title="Edit Chart" shown={this.state.shown} toggleEditDialog={this.toggleEditDialog.bind(this)}>
-          <ContentEditable type='pre' value={JSON.stringify(this.getNodeJsonForEdit(), null, 2)} onChange={this.handleChange.bind(this)}></ContentEditable>
-        </EditModal>
-
+        <EditModal title="Edit Chart" node={node} onUpdate={this.props.onUpdate} shown={this.state.shown} toggleEditDialog={this.toggleEditDialog.bind(this)}></EditModal>
         {this.props.children}
       </div>
     )

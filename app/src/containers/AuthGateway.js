@@ -1,8 +1,9 @@
-import { Component } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { setRedirectUrl, isAuthenticated, setSessionInfo } from '../authentication'
 import { history } from '../index.js'
+import TopNavBar from '../components/TopNavBar/TopNavBar'
 import { AUTH_ENABLED, DEFAULT_SESSION_INFO } from "../globals.js"
 
 class AuthGateway extends Component {
@@ -15,7 +16,12 @@ class AuthGateway extends Component {
   render() {
     const { isAuthenticated, children } = this.props
     if (isAuthenticated() || !AUTH_ENABLED) {
-      return children
+      return (
+        <div className='page-content-wrapper'>
+          <TopNavBar></TopNavBar>
+          {children}
+        </div>
+        )
     } else {
       return null
     }

@@ -1,6 +1,6 @@
 #top-nav-wrapper {
   margin: 0;
-  background-color: #2180c4 !important;
+  background-color: #026aa7 !important;
 }
 
 #top-nav-wrapper {
@@ -17,7 +17,7 @@
 .nav .open>a:hover,
 #top-nav-wrapper #top-menu-wrapper a:hover,
 #top-nav-wrapper #top-menu-wrapper a:focus {
-  background-color: #2180c4;
+  background-color: #026aa7;
 }
 
 #top-nav-wrapper #top-menu-wrapper .navbar-header {
@@ -58,7 +58,7 @@
 }
 
 #top-nav-wrapper #top-menu-wrapper .dropdown-menu li a:hover {
-  background-color: #353d47;
+  background-color: #4c5763;
 }
 
 #top-nav-wrapper #top-right-nav-options {

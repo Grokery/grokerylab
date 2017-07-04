@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { Tabs, Panel } from '../Tabs/Tabs'
 import EditModal from '../EditModal/EditModal'
 import InfoTab from '../InfoTab/InfoTab'
-import ContentEditable from '../ContentEditable/ContentEditable'
 import CodeTab from '../CodeTab/CodeTab'
 import './NodeDetails.css'
 
@@ -28,24 +27,10 @@ class JobDetails extends Component {
       this.setState({shown: true})
     }
   }
-  handleChange(e) {
-    this.props.onUpdate(JSON.parse(e.target.value))
-  }
-  getNodeJsonForEdit() {
-    let json = Object.assign({}, this.props.node) 
-    if (!json) {
-      json = {}
-    }
-    delete json.code
-    delete json.data
-    delete json.img
-    return json
-  }
   render() {
-    const { onUpdate, params } = this.props
+    const { onUpdate, params, node } = this.props
     return (
       <div className='job-details'>
-
         <Tabs getRightMenuOptions={this.props.getRightMenuOptions.bind(this)}>
           <Panel title='Info'>
             <InfoTab key={params.nodeId} params={params} onUpdate={onUpdate}></InfoTab>
@@ -57,11 +42,7 @@ class JobDetails extends Component {
             <p></p>
           </Panel>
         </Tabs>
-
-        <EditModal title="Edit ETL Job" shown={this.state.shown} toggleEditDialog={this.toggleEditDialog.bind(this)}>
-          <ContentEditable type='pre' value={JSON.stringify(this.getNodeJsonForEdit(), null, 2)} onChange={this.handleChange.bind(this)}></ContentEditable>
-        </EditModal>
-
+        <EditModal title="Edit ETL Job" node={node} onUpdate={this.props.onUpdate} shown={this.state.shown} toggleEditDialog={this.toggleEditDialog.bind(this)}></EditModal>
         {this.props.children}
       </div>
     )

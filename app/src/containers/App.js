@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { resetErrorMessage } from '../actions'
 import { setSelectedCloud } from '../authentication'
-import TopNavBar from '../components/TopNavBar/TopNavBar'
 
 class App extends Component {
   static propTypes = {
@@ -15,8 +14,7 @@ class App extends Component {
     setSelectedCloud('')
     return (
       <div>
-        <TopNavBar></TopNavBar>
-        <div className='page-content-wrapper'>
+        <div>
           {/*{this.renderErrorMessage()}*/}
           {children}
         </div>

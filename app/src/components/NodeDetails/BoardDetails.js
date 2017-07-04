@@ -32,17 +32,10 @@ class BoardDetails extends Component {
             <span>empty</span>
           </Panel>
         </Tabs>
-
-        <EditModal title="Edit Dash Board" shown={this.state.shown} toggleEditDialog={this.toggleEditDialog.bind(this)}>
-          <ContentEditable type='pre' value={JSON.stringify(this.props.node, null, 2)} onChange={this.handleChange.bind(this)}></ContentEditable>
-        </EditModal>
-
+        <EditModal title="Edit Dashboard" node={node} onUpdate={this.props.onUpdate} shown={this.state.shown} toggleEditDialog={this.toggleEditDialog.bind(this)}></EditModal>
         {this.props.children}
       </div>
     )
-  }
-  handleChange(e) {
-    this.props.onUpdate(JSON.parse(e.target.value))
   }
   toggleEditDialog(e) {
     e.preventDefault()
