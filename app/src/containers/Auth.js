@@ -47,7 +47,7 @@ class Auth extends Component {
                       <div className="form-group">
                         <input className="form-control" name="password" type="password" />
                       </div>
-                      <div className="checkbox" style={{textAlign:'right'}}>
+                      <div className="signup" style={{textAlign:'right'}}>
                         <span>No login? Please </span><a href='https://grokery.io'>Sign Up</a>
                       </div>
                       <input className="btn btn-lg btn-primary btn-block" type="submit" value="Login" onClick={this.onSubmit.bind(this)} />

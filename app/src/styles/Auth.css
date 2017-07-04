@@ -4,9 +4,25 @@
 }
 
 .auth .signin-panel {
-  padding-top: 100px;
+  padding-top: 125px;
 }
 
-.auth .signin-panel {
-  padding-top: 100px;
+.auth .signin-panel .panel {
+  border-radius: 6px;
+}
+
+.auth .panel-body {
+  padding: 30px;
+}
+
+.auth .form-control {
+  height: 42px;
+  font-size: 16px;
+}
+
+.auth .signup {
+  position: relative;
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
