@@ -1,12 +1,12 @@
 
 .home .user-section {
   float:left;
-  width: 25%;
+  width: 20%;
 }
 
 .home .cloud-sections {
   float:right;
-  width: 75%;
+  width: 80%;
   padding-left: 35px;
   padding-right: 50px;
 }

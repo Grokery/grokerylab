@@ -13,6 +13,8 @@
 
 .panel-default>.panel-heading {
   background-color: #F1F2F4;
+  height: 35px;
+  padding: 8px 15px;
 }
 
 .auth .panel-body {
