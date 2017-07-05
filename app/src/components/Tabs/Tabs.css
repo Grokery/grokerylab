@@ -8,12 +8,14 @@
     left: 0;
 }
 
+.tabs-menu-item,
 .tabs-menu-item a {
+    border-radius: 0;
     cursor: pointer
 }
 
 .nav.nav-tabs {
-    border:none
+    border:none;
 }
 
 .nav-tabs>li {
@@ -23,7 +25,8 @@
 .nav-tabs>li.active>a, 
 .nav-tabs>li.active>a:focus, 
 .nav-tabs>li.active>a:hover {
-    border:none
+    border:none;
+    border-radius: 2px
 }
 
 .nav>li>a:focus, .nav>li>a:hover {

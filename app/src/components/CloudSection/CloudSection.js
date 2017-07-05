@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Gallery from '../Gallery/Gallery'
-import EditModal from '../EditModal/EditModal'
+import Modal from '../Modal/Modal'
 import ContentEditable from '../ContentEditable/ContentEditable'
 import './CloudSection.css'
 
@@ -18,14 +18,14 @@ class CloudSection extends Component {
       }
   }
   toggleEditDialog(e) {
-    e ? e.preventDefault() : null
+    if (e) {e.preventDefault()}
     if (this.state.shown) {
       this.setState({shown: false})
     } else {
       this.setState({shown: true})
     }
   }
-    getCloudIcon(cloud){
+  getCloudIcon(cloud){
     if (cloud.type === 'aws'){
       return 'img/aws.png'
     } else if (cloud.type === 'azure') {
@@ -57,9 +57,18 @@ class CloudSection extends Component {
             {cloud.name}
           </a>
           <a href='#' onClick={this.toggleEditDialog.bind(this)}><i className='fa fa-cog pull-right cloud-edit-icon'/></a>
-          <EditModal title="Edit Cloud" shown={this.state.shown} toggleEditDialog={this.toggleEditDialog.bind(this)}>
-            <ContentEditable type='pre' value={JSON.stringify(cloud, null, 2)} onChange={function(){}}></ContentEditable>
-          </EditModal>
+          <Modal shown={this.state.shown}>
+            <div className="modal-header">
+              <button type="button" className="close" onClick={this.toggleEditDialog.bind(this)} aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 className="modal-title">Edit Cloud</h4>
+            </div>
+            <div className="modal-body">
+                <ContentEditable type='pre' value={JSON.stringify(cloud, null, 2)} onChange={function(){}}></ContentEditable>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-primary" onClick={this.toggleEditDialog.bind(this)}>Close Edit</button>
+            </div>
+          </Modal>
         </div>
         <div className='cloud-section-quicklinks'>
           <Gallery itemSize='medium' colorClass='dark' images={false} items={this.getCloudLinks(cloudid, cloud)} params={{}}></Gallery>

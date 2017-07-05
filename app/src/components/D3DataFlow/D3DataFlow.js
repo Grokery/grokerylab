@@ -98,8 +98,8 @@ class D3DataFlow extends Component {
         shapeGClass: "conceptG",
         shapeWidth: 160,
         shapeHeight: 120,
-        xgridSize: 10,
-        ygridSize: 10,
+        xgridSize: 1,
+        ygridSize: 1,
         mouseLocation: [0,0],
         dragNode: null
     }

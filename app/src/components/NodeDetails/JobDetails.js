@@ -20,7 +20,7 @@ class JobDetails extends Component {
       }
   }
   toggleEditDialog(e) {
-    e ? e.preventDefault() : null
+    if (e) {e.preventDefault()}
     if (this.state.shown) {
       this.setState({shown: false})
     } else {
