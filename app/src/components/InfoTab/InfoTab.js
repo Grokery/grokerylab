@@ -5,7 +5,7 @@ import { fetchNode } from '../../actions'
 import ContentEditable from '../ContentEditable/ContentEditable'
 import IChart from '../IChart/IChart'
 import SchemaExplorer from '../SchemaExplorer/SchemaExplorer'
-import Activity from './Activity'
+import Comments from '../Comments/Comments'
 import './InfoTab.css'
 
 class InfoTab extends Component {
@@ -168,7 +168,7 @@ class InfoTab extends Component {
                 </div>
             </div>
             <div className='col-md-6'>
-                <Activity></Activity>
+                <Comments></Comments>
             </div>
         </div>
     )

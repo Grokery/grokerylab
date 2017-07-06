@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import './Activity.css'
+import './Comments.css'
 
-export default class InfoTab extends Component {
+class Comments extends Component {
     render() {
         return (
             <div className='chat-panel panel panel-default'>
@@ -75,3 +75,10 @@ export default class InfoTab extends Component {
         )
     }
 }
+
+const mapStateToProps = (state, ownProps) => {
+  return {}
+}
+
+export default connect(mapStateToProps, {
+})(Comments)
