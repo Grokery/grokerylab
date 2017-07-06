@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Modal from '../Modal/Modal'
 import { Tabs, Panel } from '../Tabs/Tabs'
-import ContentEditable from '../ContentEditable/ContentEditable'
+import CodeEditor from '../CodeEditor/CodeEditor'
 import './EditModal.css'
 
 class EditModal extends Component {
@@ -13,8 +13,13 @@ class EditModal extends Component {
     toggleEditDialog: PropTypes.func.isRequired
   }
   render() {
+    let options = {
+      lineNumbers: false,
+      dragDrop: false,
+      mode: {name: "javascript"}
+    }
     return (
-      <Modal shown={this.props.shown}>
+      <Modal id="edit-modal" shown={this.props.shown}>
         <div className="modal-header">
           <button type="button" className="close" onClick={this.props.toggleEditDialog} aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 className="modal-title">{this.props.title}</h4>
@@ -23,10 +28,10 @@ class EditModal extends Component {
 
         <Tabs getRightMenuOptions={function(){return[]}}>
           <Panel title='Options'>
-            <div>hello</div>
+            <div></div>
           </Panel>
           <Panel title='Json'>
-            <ContentEditable type='pre' value={JSON.stringify(this.getNodeJsonForEdit(), null, 2)} onChange={this.handleChange.bind(this)}></ContentEditable>
+            <CodeEditor value={JSON.stringify(this.getNodeJsonForEdit(), null, 2)} options={options} onChange={this.updateCode.bind(this)} />
           </Panel>
         </Tabs>
         
@@ -37,8 +42,13 @@ class EditModal extends Component {
       </Modal>
     )
   }
-  handleChange(e) {
-    this.props.onUpdate(JSON.parse(e.target.value))
+  updateCode(newValue) {
+    if (this.debounce){
+      clearTimeout(this.debounce)
+    }
+    this.debounce = setTimeout(function() {
+      this.props.onUpdate(newValue)
+    }.bind(this), 1000);
   }
   getNodeJsonForEdit() {
     let json = Object.assign({}, this.props.node) 

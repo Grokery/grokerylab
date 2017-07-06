@@ -99,3 +99,17 @@ h1 {
   background-color: #0291E3;
   border-color: #0291E3; 
 }
+
+
+/* Default modal styles */
+.modal-dialog {
+    min-width: 60%;
+}
+
+.modal-body {
+    overflow-y: auto;
+}
+
+.ReactCodeMirror .CodeMirror {
+    height: auto;
+}

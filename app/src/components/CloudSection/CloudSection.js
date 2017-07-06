@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Gallery from '../Gallery/Gallery'
 import Modal from '../Modal/Modal'
-import ContentEditable from '../ContentEditable/ContentEditable'
+import CodeEditor from '../CodeEditor/CodeEditor'
 import './CloudSection.css'
 
 class CloudSection extends Component {
@@ -49,6 +49,12 @@ class CloudSection extends Component {
   }
   render() {
     const { cloudid, cloud } = this.props
+    let options = {
+      lineNumbers: false,
+      dragDrop: false,
+      mode: {name: "javascript"}
+    }
+    let value = this.state.shown ? JSON.stringify(cloud, null, 2) : ""
     return (
       <div className='cloud-section'>
         <div className='cloud-section-header'>
@@ -63,7 +69,7 @@ class CloudSection extends Component {
               <h4 className="modal-title">Edit Cloud</h4>
             </div>
             <div className="modal-body">
-                <ContentEditable type='pre' value={JSON.stringify(cloud, null, 2)} onChange={function(){}}></ContentEditable>
+                <CodeEditor value={value} options={options} onChange={this.updateCloud.bind(this)} />
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-primary" onClick={this.toggleEditDialog.bind(this)}>Close Edit</button>
@@ -76,6 +82,14 @@ class CloudSection extends Component {
         <hr />
       </div>
     )
+  }
+  updateCloud(newValue) {
+    if (this.debounce){
+      clearTimeout(this.debounce)
+    }
+    this.debounce = setTimeout(function() {
+      // this.props.onUpdate(newValue)
+    }.bind(this), 1000);
   }
 }
 

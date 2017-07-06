@@ -1,18 +1,14 @@
 
-.modal-dialog {
-    min-width: 1000px;
-    min-height: 300px;
-}
 
-.modal-dialog pre {
-    border: none;
-}
-
-.modal-dialog .nav-tabs {
+#edit-modal .modal-dialog .nav-tabs {
     box-shadow: none;   
 }
 
-.modal-dialog .modal-body {
+#edit-modal .modal-dialog .modal-body {
     height: 500px;
     overflow-y: auto;
+}
+
+#edit-modal .ReactCodeMirror .CodeMirror {
+    height: auto;
 }

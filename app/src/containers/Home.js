@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { getSessionInfo } from '../authentication'
 import CloudSection from '../components/CloudSection/CloudSection'
 import Modal from '../components/Modal/Modal'
-import ContentEditable from '../components/ContentEditable/ContentEditable'
+import CodeEditor from '../components/CodeEditor/CodeEditor'
 import '../styles/Home.css'
 
 class Home extends Component {
@@ -26,6 +26,14 @@ class Home extends Component {
       this.setState({shown: true})
     }
   }
+  createCloud(newValue) {
+    if (this.debounce){
+      clearTimeout(this.debounce)
+    }
+    this.debounce = setTimeout(function() {
+      // this.props.onUpdate(newValue)
+    }.bind(this), 1000);
+  }
   getCloudSections() {
     const { clouds } = this.props
     let sections = []
@@ -41,6 +49,11 @@ class Home extends Component {
       "type": "local",
       "url": "http://localhost:5000/dev"
     }
+    let options = {
+      lineNumbers: false,
+      dragDrop: false,
+      mode: {name: "javascript"}
+    }
     sections.push(
         <div key={Math.random()}>   
           <div className='cloud-section'>
@@ -51,7 +64,7 @@ class Home extends Component {
                 <h4 className="modal-title">Add Cloud</h4>
               </div>
               <div className="modal-body">
-                  <ContentEditable type='pre' value={JSON.stringify(newCloudDef, null, 2)} onChange={function(){}}></ContentEditable>
+                  <CodeEditor value={JSON.stringify(newCloudDef, null, 2)} options={options} onChange={this.createCloud.bind(this)} />
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-primary" onClick={this.toggleEditDialog.bind(this)}>Save</button>
