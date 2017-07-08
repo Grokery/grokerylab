@@ -45,6 +45,7 @@
   margin-right: -1px;
   border-radius: 2px;
   min-width: 200px; 
+  border: none;
 }
 
 #top-nav-wrapper #top-menu-wrapper .dropdown-menu li {

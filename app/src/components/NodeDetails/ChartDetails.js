@@ -6,6 +6,7 @@ import EditModal from '../EditModal/EditModal'
 import InfoTab from '../InfoTab/InfoTab'
 import CodeTab from '../CodeTab/CodeTab'
 import DataTab from '../DataTab/DataTab'
+import History from '../History/History'
 import './NodeDetails.css'
 
 class ChartDetails extends Component {
@@ -42,7 +43,7 @@ class ChartDetails extends Component {
             <DataTab key={params.nodeId} params={params} onUpdate={onUpdate}></DataTab>
           </Panel>
           <Panel title='History'>
-            <p>Panel content</p>
+            <History params={this.props.params}></History>
           </Panel>
         </Tabs>
         <EditModal title="Edit Chart" node={node} onUpdate={this.props.onUpdate} shown={this.state.shown} toggleEditDialog={this.toggleEditDialog.bind(this)}></EditModal>

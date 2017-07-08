@@ -1,87 +1,63 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { fetchHistory } from '../../actions'
+import { getSessionInfo } from '../../authentication'
+import { fetchHistory, appendHistoryItem } from '../../actions'
 import './Comments.css'
 
 class Comments extends Component {
     static propTypes = {
         comments: PropTypes.array.isRequired,
-        fetchHistory: PropTypes.func.isRequired
+        fetchHistory: PropTypes.func.isRequired,
+        appendHistoryItem: PropTypes.func.isRequired
     }
     componentDidMount() {
         const { fetchHistory, params } = this.props
-        console.log(this.props)
         fetchHistory(params.nodeId)
+    }
+    getComments() {
+        let lis = []
+        this.props.comments.forEach(function(comment) {
+            lis.push((
+                <li className='left clearfix'>
+                    <span className='chat-img pull-left'><i className='fa fa-user fa-fw'></i></span>
+                    <div className='chat-body clearfix'>
+                        <div className='header'>
+                            <strong className='primary-font'>{comment.user}</strong>
+                            <small className='text-muted'><i className='fa fa-clock-o fa-fw'></i>{comment.datetime}</small>
+                        </div>
+                        <p>{comment.body}</p>
+                    </div>
+                </li>
+            ))
+        })
+        return lis
+    }
+    onSubmit(event) {
+        event.preventDefault()
+        const { username, appendHistoryItem, params } = this.props
+        let newcomment = {
+            collection: "history",
+            datetime: new Date().getTime(),
+            referenceid: params.nodeId,
+            type: "comment",
+            user: username.split('@')[0],
+            body: document.getElementById('comment-input').value
+        }
+        console.log(newcomment)
+        appendHistoryItem(newcomment, null)
     }
     render() {
         return (
             <div className='chat-panel panel panel-default'>
                 <div className='input-group'>
-                    <input id='btn-input' type='text' className='form-control input-sm' placeholder='Add comment ....' />
+                    <input id='comment-input' type='text' className='form-control input-sm' placeholder='Add comment ....' />
                     <span className='input-group-btn'>
-                        <button id='btn-chat' className='btn btn-primary btn-sm'>Send</button>    
+                        <button id='btn-chat' className='btn btn-primary btn-sm' onClick={this.onSubmit.bind(this)}>Send</button>    
                     </span>
                 </div>
                 <div className='panel-body'>
-                    <ul className='chat'>
-
-                        <li className='left clearfix'>
-                            <span className='chat-img pull-left'><i className='fa fa-user fa-fw'></i></span>
-                            <div className='chat-body clearfix'>
-                                <div className='header'>
-                                    <strong className='primary-font'>Capt Jack Sparrow</strong>
-                                    <small className='text-muted'><i className='fa fa-clock-o fa-fw'></i>13 mins ago</small>
-                                </div>
-                                <p>Why is the rum always gone?</p>
-                            </div>
-                        </li>
-
-                        <li className='left clearfix'>
-                            <span className='chat-img pull-left'><i className='fa fa-user fa-fw'></i></span>
-                            <div className='chat-body clearfix'>
-                                <div className='header'>
-                                    <strong className='primary-font'>Black Sam</strong>
-                                    <small className='text-muted'><i className='fa fa-clock-o fa-fw'></i>15 mins ago</small>
-                                </div>
-                                <p>I am sorry they won't let you have your sloop again, for I scorn to do anyone a mischief, when it is not for my advantage.</p>
-                            </div>
-                        </li>
-
-                        <li className='left clearfix'>
-                            <span className='chat-img pull-left'><i className='fa fa-user fa-fw'></i></span>
-                            <div className='chat-body clearfix'>
-                                <div className='header'>
-                                    <strong className='primary-font'>Capt Jack Sparrow</strong>
-                                    <small className='text-muted'><i className='fa fa-clock-o fa-fw'></i>20 mins ago</small>
-                                </div>
-                                <p>And that was done without a single drop of rum… STOP BLOWING HOLES IN MY SHIP!!! you know, thats the 2nd time I’v watched that man sail away with my ship.</p>
-                            </div>
-                        </li>
-
-                        <li className='left clearfix'>
-                            <span className='chat-img pull-left'><i className='fa fa-user fa-fw'></i></span>
-                            <div className='chat-body clearfix'>
-                                <div className='header'>
-                                    <strong className='primary-font'>Black Sam</strong>
-                                    <small className='text-muted'><i className='fa fa-clock-o fa-fw'></i>22 mins ago</small>
-                                </div>
-                                <p>Aye, tough mermaids are the lot of them</p>
-                            </div>
-                        </li>
-
-                        <li className='left clearfix'>
-                            <span className='chat-img pull-left'><i className='fa fa-user fa-fw'></i></span>
-                            <div className='chat-body clearfix'>
-                                <div className='header'>
-                                    <strong className='primary-font'>Capt Jack Sparrow</strong>
-                                    <small className='text-muted'><i className='fa fa-clock-o fa-fw'></i>23 mins ago</small>
-                                </div>
-                                <p>Not all treasure is silver and gold mate!</p>
-                            </div>
-                        </li>
-
-                    </ul>
+                    <ul className='chat'>{this.getComments()}</ul>
                 </div>
             </div>
         )
@@ -89,11 +65,14 @@ class Comments extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  return {
-      comments: state.history.filter(function(item){return item.type === "comment"})
-  }
+    let sessionInfo = getSessionInfo()
+    return {
+        username: sessionInfo ? sessionInfo['username'] : "User Name",
+        comments: state.history.filter(function(item){return item.type === "comment"})
+    }
 }
 
 export default connect(mapStateToProps, {
-    fetchHistory
+    fetchHistory,
+    appendHistoryItem
 })(Comments)
