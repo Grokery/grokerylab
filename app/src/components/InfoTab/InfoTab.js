@@ -168,7 +168,7 @@ class InfoTab extends Component {
                 </div>
             </div>
             <div className='col-md-6'>
-                <Comments></Comments>
+                <Comments params={this.props.params}></Comments>
             </div>
         </div>
     )

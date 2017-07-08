@@ -3,36 +3,34 @@ import { CALL_API } from '../middleware/api'
 
 //--------------------------------
 
-export const FETCHLINES_REQUEST = 'FETCHLINES_REQUEST'
-export const FETCHLINES_SUCCESS = 'FETCHLINES_SUCCESS'
-export const FETCHLINES_FAILURE = 'FETCHLINES_FAILURE'
+export const FETCHHISTORY_REQUEST = 'FETCHHISTORY_REQUEST'
+export const FETCHHISTORY_SUCCESS = 'FETCHHISTORY_SUCCESS'
+export const FETCHHISTORY_FAILURE = 'FETCHHISTORY_FAILURE'
 
-export const fetchLines = (cb) => (dispatch, getState) => {
-    // TODO add object id to filter on 
+export const fetchHistory = (nodeid, cb) => (dispatch, getState) => {
     dispatch({
         [CALL_API]: {
-            types: [FETCHLINES_REQUEST, FETCHLINES_SUCCESS, FETCHLINES_FAILURE],
-            endpoint: '/historyservice',
+            types: [FETCHHISTORY_REQUEST, FETCHHISTORY_SUCCESS, FETCHHISTORY_FAILURE],
+            endpoint: '/history?nodeid=' + nodeid,
             method: 'GET',
             callback: cb
         }
     })
 }
 
-
 //--------------------------------
 
-export const APPENDLINE_REQUEST = 'APPENDLINE_REQUEST'
-export const APPENDLINE_SUCCESS = 'APPENDLINE_SUCCESS'
-export const APPENDLINE_FAILURE = 'APPENDLINE_FAILURE'
+export const APPENDHISTORY_REQUEST = 'APPENDHISTORY_REQUEST'
+export const APPENDHISTORY_SUCCESS = 'APPENDHISTORY_SUCCESS'
+export const APPENDHISTORY_FAILURE = 'APPENDHISTORY_FAILURE'
 
-export const appendLine = (collection, line, cb) => (dispatch, getState) => {
+export const appendHistoryItem = (item, cb) => (dispatch, getState) => {
     dispatch({
         [CALL_API]: {
-            types: [APPENDLINE_REQUEST, APPENDLINE_SUCCESS, APPENDLINE_FAILURE],
-            endpoint: '/history/' + collection,
+            types: [APPENDHISTORY_REQUEST, APPENDHISTORY_SUCCESS, APPENDHISTORY_FAILURE],
+            endpoint: '/history',
             method: 'POST',
-            data: line,
+            data: item,
             callback: cb
         }
     })

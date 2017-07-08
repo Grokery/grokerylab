@@ -1,0 +1,24 @@
+
+log api:
+POST /log <= new log object => bool result and new id
+GET  /log/{id}?projection={} => returns log object
+GET  /log?key=value&projection={} => returns paged filtered list of log objects ordered by recency
+no put or delete
+hk='logs', rk=1237812372-1
+
+
+job api;
+POST /jobjurs <= jobrun object => bool result and jobrun id 
+GET  /jobrun/{id}?projection={} projected item
+GET  /jobrun?key=value&projection={} filtered and projected list
+no put or delete
+hk='jobruns', rk=1263781623-1
+
+job api:
+POST   /job <= job object => bool result and new id 
+GET    /job/{id}?projection={} projected item
+GET    /job?key=value&projection={} => filtered and projected list
+PUT    /job <= job object > bool result and id
+DELETE /job/{id} => bool result and id
+
+hk='jobs', rk=guid

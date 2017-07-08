@@ -1,7 +1,19 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { fetchHistory } from '../../actions'
 import './Comments.css'
 
 class Comments extends Component {
+    static propTypes = {
+        comments: PropTypes.array.isRequired,
+        fetchHistory: PropTypes.func.isRequired
+    }
+    componentDidMount() {
+        const { fetchHistory, params } = this.props
+        console.log(this.props)
+        fetchHistory(params.nodeId)
+    }
     render() {
         return (
             <div className='chat-panel panel panel-default'>
@@ -77,8 +89,11 @@ class Comments extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  return {}
+  return {
+      comments: state.history.filter(function(item){return item.type === "comment"})
+  }
 }
 
 export default connect(mapStateToProps, {
+    fetchHistory
 })(Comments)
