@@ -7,7 +7,7 @@ import './Comments.css'
 
 class Comments extends Component {
     static propTypes = {
-        username: PropTypes.stringisRequired,
+        username: PropTypes.string.isRequired,
         nodeId: PropTypes.string.isRequired,
         comments: PropTypes.array.isRequired,
         fetchHistory: PropTypes.func.isRequired,

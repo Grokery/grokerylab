@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { getSessionInfo } from '../../authentication'
 import { fetchHistory, appendHistoryItem } from '../../actions'
-import './History.css'
+import './HistoryTab.css'
 
-class History extends Component {
+class HistoryTab extends Component {
     static propTypes = {
         history: PropTypes.array.isRequired,
         fetchHistory: PropTypes.func.isRequired,
@@ -54,4 +54,4 @@ const mapStateToProps = (state, ownProps) => {
 export default connect(mapStateToProps, {
     fetchHistory,
     appendHistoryItem
-})(History)
+})(HistoryTab)

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { updateQueryParam } from '../globals.js'
 import { updateNode } from '../actions'
 import { history } from '../index.js'
 import D3DataFlow from '../components/D3DataFlow/D3DataFlow'
@@ -61,8 +62,10 @@ class NodeDetails extends Component {
     }
     let pain = document.getElementById("node-details-pain")
     if (pain.style.top === '0px') {
+      updateQueryParam('flow','open')
       pain.style.top = flowPreviewHeight+'px'
     } else {
+      updateQueryParam('flow','closed')
       pain.style.top = '0px'
     }
     window.scrollTo(0,0)

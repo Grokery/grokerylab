@@ -2,11 +2,10 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { fetchNode } from '../../actions'
-import IChart from '../IChart/IChart'
 import CodeEditor from '../CodeEditor/CodeEditor'
-import './CodeTab.css'
+import './JobCodeTab.css'
 
-class CodeTab extends Component {
+class JobCodeTab extends Component {
   static propTypes = {
     options: PropTypes.object,
     node: PropTypes.object,
@@ -61,20 +60,14 @@ class CodeTab extends Component {
     }
     return (
       <div className='code-tab'>
-        <div className='code col-md-6'>
-          <CodeEditor value={node.code} options={options} onChange={this.updateCode.bind(this)} />
-        </div>
-        <div className='output col-md-6'>
-          <div className='template-select'>
+        <div className='output col col-md-2'>
+          {/*<input className='form-control' />*/}
+          <div className='run-button pull-right'>
             <a href='' onClick={function(){}}><i className="fa fa-play" aria-hidden="true"></i></a>
           </div>
-          <IChart
-            key={node.id}
-            id={node.id}
-            params={params}
-            height={350}
-            width={600}
-          ></IChart>
+        </div>
+        <div className='code col col-md-10'>
+          <CodeEditor value={node.code} options={options} onChange={this.updateCode.bind(this)} />
         </div>
       </div>
     )
@@ -89,4 +82,4 @@ const mapStateToProps = (state, ownProps) => {
 
 export default connect(mapStateToProps, {
   fetchNode
-})(CodeTab)
+})(JobCodeTab)

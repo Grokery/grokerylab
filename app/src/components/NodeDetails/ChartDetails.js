@@ -4,9 +4,9 @@ import { connect } from 'react-redux'
 import { Tabs, Panel } from '../Tabs/Tabs'
 import EditModal from '../EditModal/EditModal'
 import InfoTab from '../InfoTab/InfoTab'
-import CodeTab from '../CodeTab/CodeTab'
+import ChartCodeTab from '../ChartCodeTab/ChartCodeTab'
 import DataTab from '../DataTab/DataTab'
-import History from '../History/History'
+import HistoryTab from '../HistoryTab/HistoryTab'
 import './NodeDetails.css'
 
 class ChartDetails extends Component {
@@ -37,13 +37,13 @@ class ChartDetails extends Component {
             <InfoTab key={params.nodeId} params={params} onUpdate={onUpdate}></InfoTab>
           </Panel>
           <Panel title='Code'>
-            <CodeTab key={params.nodeId} params={params} onUpdate={onUpdate}></CodeTab>
+            <ChartCodeTab key={params.nodeId} params={params} onUpdate={onUpdate}></ChartCodeTab>
           </Panel>
           <Panel title='Data'>
             <DataTab key={params.nodeId} params={params} onUpdate={onUpdate}></DataTab>
           </Panel>
           <Panel title='History'>
-            <History params={this.props.params}></History>
+            <HistoryTab params={this.props.params}></HistoryTab>
           </Panel>
         </Tabs>
         <EditModal title="Edit Chart" node={node} onUpdate={this.props.onUpdate} shown={this.state.shown} toggleEditDialog={this.toggleEditDialog.bind(this)}></EditModal>
