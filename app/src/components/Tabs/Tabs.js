@@ -17,10 +17,9 @@ export class Tabs extends Component {
     }
     constructor(props) {
         super(props)
-        let index = parseInt(getQueryParamByName('activeTab'))
-        index = index ? index : 1
+        let index = parseInt(getQueryParamByName('activeTab'), 10)
         this.state = {
-            activeTab: props.activeTab ? props.activeTab : index
+            activeTab: props.activeTab ? props.activeTab : index ? index : 1
         }
     }
     componentDidMount() {

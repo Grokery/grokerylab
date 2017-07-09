@@ -21,6 +21,13 @@
     padding-left: 10px;
 }
 
+.info-tab .node-info .col-md-6 {
+    margin: 0;
+    padding: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
 .info-tab select {
     margin-left: 10px;
 }

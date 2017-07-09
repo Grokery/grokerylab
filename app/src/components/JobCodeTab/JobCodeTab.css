@@ -9,7 +9,11 @@
 
 .code-tab .col {
     padding: 0;
-    border-Left: 3px solid #e7ebee;
+}
+
+.code-tab .code {
+    padding: 0;
+    border-left: 3px solid #e7ebee;
 }
 
 .code-tab .run-button {

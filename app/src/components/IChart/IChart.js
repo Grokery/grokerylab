@@ -58,7 +58,7 @@ class IChart extends Component {
             doc = iframe.document
         }
         doc.open()
-        doc.writeln(node.code || "No Content")
+        doc.writeln(node.code || "")
         doc.close()
 
         var dataNode = document.createElement('script')

@@ -603,10 +603,16 @@ class D3DataFlow extends Component {
     
   }
   showDeleteIcon() {
-    document.getElementById('delete-icon').style.display = 'inline'
+    let icon = document.getElementById('delete-icon')
+      if (icon) {
+          icon.style.display = 'inline'
+      }
   }
   hideDeleteIcon() {
-    document.getElementById('delete-icon').style.display = 'none'
+      let icon = document.getElementById('delete-icon')
+      if (icon) {
+          icon.style.display = 'none'
+      }
   }
   addNodeToSelected(d) {
     this.d3state.selectedNodes[d.id] = d

@@ -12,3 +12,7 @@
 #edit-modal .ReactCodeMirror .CodeMirror {
     height: auto;
 }
+
+#edit-modal form {
+    padding: 15px;
+}

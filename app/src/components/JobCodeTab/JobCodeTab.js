@@ -47,7 +47,7 @@ class JobCodeTab extends Component {
     }.bind(this), 1000);
   }
   render() {
-    let { options, node, params } = this.props
+    let { options, node } = this.props
     if (!node){
       return (<div></div>)
     }
@@ -60,7 +60,7 @@ class JobCodeTab extends Component {
     }
     return (
       <div className='code-tab'>
-        <div className='output col col-md-2'>
+        <div className='col col-md-2'>
           {/*<input className='form-control' />*/}
           <div className='run-button pull-right'>
             <a href='' onClick={function(){}}><i className="fa fa-play" aria-hidden="true"></i></a>

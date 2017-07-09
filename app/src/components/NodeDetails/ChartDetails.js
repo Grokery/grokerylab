@@ -21,7 +21,9 @@ class ChartDetails extends Component {
       }
   }
   toggleEditDialog(e) {
-    e.preventDefault()
+    if (e) {
+      e.preventDefault()
+    }
     if (this.state.shown) {
       this.setState({shown: false})
     } else {

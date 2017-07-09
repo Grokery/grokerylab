@@ -15,13 +15,9 @@ class InfoTab extends Component {
     fetchNode: PropTypes.func.isRequired
   }
   shouldComponentUpdate(nextProps, nextState) {
-    if (nextProps.node && this.props.node && 
-        (nextProps.node.id !== this.props.node.id ||
-        nextProps.node.title !== this.props.node.title ||
-        nextProps.node.description !== this.props.node.description)
-    ) {
+    if (!nextProps.node || !this.props.node) {
         return true
-    } else if (!nextProps.node || !this.props.node) {
+    } else if (JSON.stringify(nextProps.node) !== JSON.stringify(this.props.node)) {
         return true
     }
     return false
@@ -168,6 +164,10 @@ class InfoTab extends Component {
                 </div>
             </div>
             <div className='col-md-6'>
+                <div className='node-info'>
+                    <div className='col-md-6'><label>Type: </label> {node.type}</div>
+                    <div className='col-md-6'><label>Owner: </label>{node.owner}</div>
+                </div>
                 <Comments nodeId={params.nodeId}></Comments>
             </div>
         </div>
