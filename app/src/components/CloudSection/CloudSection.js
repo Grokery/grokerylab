@@ -89,6 +89,8 @@ class CloudSection extends Component {
     }
     this.debounce = setTimeout(function() {
       // this.props.onUpdate(newValue)
+      let self = this
+      return self
     }.bind(this), 1000);
   }
 }

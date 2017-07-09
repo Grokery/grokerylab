@@ -38,7 +38,7 @@ export const fetchNode = (collection, nodeId, cb) => (dispatch, getState) => {
     dispatch({
         [CALL_API]: {
             types: [FETCHNODE_REQUEST, FETCHNODE_SUCCESS, FETCHNODE_FAILURE],
-            endpoint: '/resources/' + collection + "/" + nodeId,
+            endpoint: '/nodes/' + collection + "/" + nodeId,
             method: 'GET',
             callback: cb
         }
@@ -55,7 +55,7 @@ export const updateNode = (collection, node, cb) => (dispatch, getState) => {
     dispatch({
         [CALL_API]: {
             types: [UPDATENODE_REQUEST, UPDATENODE_SUCCESS, UPDATENODE_FAILURE],
-            endpoint: '/resources/' + collection + "/" + node.id,
+            endpoint: '/nodes/' + collection + "/" + node.id,
             method: 'PUT',
             data: node,
             callback: cb
@@ -73,7 +73,7 @@ export const createNode = (collection, node, cb) => (dispatch, getState) => {
     dispatch({
         [CALL_API]: {
             types: [CREATEENODE_REQUEST, CREATENODE_SUCCESS, CREATENODE_FAILURE],
-            endpoint: '/resources/' + collection,
+            endpoint: '/nodes/' + collection,
             method: 'POST',
             data: node,
             callback: cb
@@ -91,7 +91,7 @@ export const deleteNode = (collection, node, cb) => (dispatch, getState) => {
     dispatch({
         [CALL_API]: {
             types: [DELETEENODE_REQUEST, DELETEENODE_SUCCESS, DELETEENODE_FAILURE],
-            endpoint: '/resources/' + collection + "/" + node.id,
+            endpoint: '/nodes/' + collection + "/" + node.id,
             method: 'DELETE',
             callback: cb
         }

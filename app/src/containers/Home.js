@@ -32,6 +32,8 @@ class Home extends Component {
     }
     this.debounce = setTimeout(function() {
       // this.props.onUpdate(newValue)
+      let foo = this
+      return foo
     }.bind(this), 1000);
   }
   getCloudSections() {
@@ -104,7 +106,7 @@ const mapStateToProps = (state, ownProps) => {
     }
   }
   return {
-    username: sessionInfo['username'],
+    username: sessionInfo['name'],
     clouds: sessionInfo['clouds']
   }
 }

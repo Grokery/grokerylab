@@ -156,7 +156,7 @@ class InfoTab extends Component {
       this.props.onUpdate({'description': e.target.value})
   }
   render() {
-    const { node } = this.props
+    const { node, params } = this.props
     if (!node) { return <div></div> }
     return (
         <div className='info-tab'>
@@ -168,7 +168,7 @@ class InfoTab extends Component {
                 </div>
             </div>
             <div className='col-md-6'>
-                <Comments params={this.props.params}></Comments>
+                <Comments nodeId={params.nodeId}></Comments>
             </div>
         </div>
     )

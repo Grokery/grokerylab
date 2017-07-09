@@ -17,3 +17,13 @@
   list-style: none;
   padding: 0;
 }
+
+#btn-chat {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+#comment-input {
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}

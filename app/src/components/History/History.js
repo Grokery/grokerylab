@@ -19,11 +19,11 @@ class History extends Component {
         let lis = []
         this.props.history.forEach(function(item) {
             lis.push((
-                <li className='left clearfix'>
+                <li key={item.id} className='left clearfix'>
                     <span className='chat-img pull-left'></span>
                     <div className='chat-body clearfix'>
                         <div className='header'>
-                            <a className='primary-font'>{item.type} : {item.user}</a>
+                            <a className='primary-font'>{item.collection.charAt(0).toUpperCase() + item.collection.slice(1)} : {item.user}</a>
                             <small className='text-muted'><i className='fa fa-clock-o fa-fw'></i>{item.datetime}</small>
                         </div>
                     </div>
