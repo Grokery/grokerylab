@@ -166,7 +166,7 @@ class InfoTab extends Component {
             <div className='col-md-6'>
                 <div className='node-info'>
                     <div className='col-md-6'><label>Type: </label> {node.type}</div>
-                    <div className='col-md-6'><label>Owner: </label>{node.owner}</div>
+                    <div className='col-md-6'><label>Owner: </label> {node.owner}</div>
                 </div>
                 <Comments nodeId={params.nodeId}></Comments>
             </div>

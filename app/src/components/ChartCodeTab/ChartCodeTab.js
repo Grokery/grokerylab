@@ -65,9 +65,9 @@ class ChartCodeTab extends Component {
           <CodeEditor value={node.code} options={options} onChange={this.updateCode.bind(this)} />
         </div>
         <div className='output col-md-6'>
-          <div className='template-select'>
-            <a href='' onClick={function(){}}><i className="fa fa-play" aria-hidden="true"></i></a>
-          </div>
+          {/*<div className='template-select'>
+            <a href='' onClick={function(){}}><i className="fa fa-edit" aria-hidden="true"></i></a>
+          </div>*/}
           <IChart
             key={node.id}
             id={node.id}

@@ -3,13 +3,18 @@
     height: auto;
 }
 
+.CodeMirror-gutters {
+    background-color: #e7ebee;
+    border: none;
+    border-top: solid 1px #ddd;
+}
+
 .code-tab .ReactCodeMirror .CodeMirror .CodeMirror-scroll {
     min-height: 800px;
 }
 
 .code-tab .col-md-6 {
     padding: 0;
-    border-right: 3px solid #e7ebee;
 }
 
 .code-tab .template-select {
