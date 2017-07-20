@@ -25,12 +25,12 @@ class TopNavBar extends Component {
     }
     getCloudName() {
         const { getSessionInfo } = this.props
-        let cloudName = "GrokeryLab"
+        let cloudName = "GLab"
         if (
             getSessionInfo() && 
             getSessionInfo()['selectedCloud']
         ) {
-            cloudName = getSessionInfo()['selectedCloud'].name
+            cloudName += " | " + getSessionInfo()['selectedCloud'].name
         }
         return cloudName
     }
@@ -43,7 +43,7 @@ class TopNavBar extends Component {
                 <div id='top-menu-wrapper'>
                     <div className='navbar-header'>
                         <a id='menu-toggle' className='navbar-brand' href='#'><i className='fa fa-bars'></i></a>
-                        <a className='navbar-brand' href='#'><i className='fa fa-cloud'></i></a>
+                        {/* <a className='navbar-brand' href='#'><img src="logo-inverse.png"></img></a> */}
                         <a className='navbar-brand' href='#'>{this.getCloudName()}</a>
                     </div>
                     <ul id='top-right-nav-options' className={'nav navbar-top-links navbar-right pull-right '+showRightNav}>

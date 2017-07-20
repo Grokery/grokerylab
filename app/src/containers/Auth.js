@@ -36,6 +36,7 @@ class Auth extends Component {
             <div className="col-md-4 col-md-offset-4">
                 <div className="panel panel-default">
                   <div className="panel-heading">
+                    <span>GLab</span>
                     <span className="pull-right"><a href='https://grokery.io'>sign up</a> | <a href="https://grokery.io">reset pass</a></span>
                 </div>
                   <div className="panel-body">
