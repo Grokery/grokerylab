@@ -55,19 +55,31 @@ class JobCodeTab extends Component {
       options = {
         lineNumbers: true,
         dragDrop: false,
-        mode: {name: "htmlmixed"}
+        mode: {name: "javascript"}
       }
     }
     return (
-      <div className='code-tab'>
-        <div className='col col-md-2'>
-          {/*<input className='form-control' />*/}
-          <div className='run-button pull-right'>
-            <a href='' onClick={function(){}}><i className="fa fa-play" aria-hidden="true"></i></a>
-          </div>
-        </div>
-        <div className='code col col-md-10'>
+      <div className='job-code-tab'>
+        <div className='code col col-md-6'>
           <CodeEditor value={node.code} options={options} onChange={this.updateCode.bind(this)} />
+        </div>
+        <div className='col col-md-6'>
+          <div className=''>
+            <div className='col col-md-1 run-button'>
+              {/* <a href='#' onClick={function(){}}><i className="fa fa-pause" aria-hidden="true"></i></a> */}
+              <label className="switch"><input type="checkbox" /><span className="slider round"></span></label>
+            </div>
+            <div className='col col-md-11 output-select'>
+              <select className='form-control'>
+              <option>Next Scheduled Run: - None -</option>
+                <option>Next Scheduled Run: 2017-05-31 09:30</option>
+                <option>Started 2017-05-31 10:00 - In Progress... </option>
+                <option>Completed: 2017-05-31 09:20 - 12 min -  Warning</option>
+                <option>Completed: 2017-05-31 09:18 - 5 min -  Success</option>
+                <option>Completed: 2017-05-30 13:13 - 5 min - Success</option>
+              </select>
+            </div>
+          </div>
         </div>
       </div>
     )

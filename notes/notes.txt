@@ -1,4 +1,20 @@
 
+IDEAS:
+
+toggling datapipeline active/inactive sets select to next scheduled or paused state. running jobs are unaffected
+
+put js console underchart
+put files on left of code so you can break out the html, js , and css
+put job files on left also
+add run/compile/active buttons for both charts and jobs 
+show run progress/output in right column
+for datasources show files on left and file contents preview on right
+
+put library code local so I don't have to use the cdn when debuging
+put navigate buttons(dropdown for multiple) in center of details pain nav
+
+==========================================================================================
+
 log api:
 POST /log <= new log object => bool result and new id
 GET  /log/{id}?projection={} => returns log object
@@ -22,3 +38,4 @@ PUT    /job <= job object > bool result and id
 DELETE /job/{id} => bool result and id
 
 hk='jobs', rk=guid
+

@@ -73,7 +73,7 @@ class DataTab extends Component {
       mode: "text/x-livescript"
     }
     return (
-      <div className='code-tab'>
+      <div className='data-code-tab'>
         <div className='code col-md-6'>
           <CodeEditor value={node.query} options={queryOptions} onChange={this.updateCode.bind(this)} />
         </div>

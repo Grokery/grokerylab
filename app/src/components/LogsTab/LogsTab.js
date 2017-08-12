@@ -2,22 +2,22 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { getSessionInfo } from '../../authentication'
-import { fetchHistory, appendHistoryItem } from '../../actions'
-import './HistoryTab.css'
+import { fetchLogs, appendLogItem } from '../../actions'
+import './LogsTab.css'
 
-class HistoryTab extends Component {
+class LogsTab extends Component {
     static propTypes = {
-        history: PropTypes.array.isRequired,
-        fetchHistory: PropTypes.func.isRequired,
-        appendHistoryItem: PropTypes.func.isRequired
+        logs: PropTypes.array.isRequired,
+        fetchLogs: PropTypes.func.isRequired,
+        appendLogItem: PropTypes.func.isRequired
     }
     componentDidMount() {
-        const { fetchHistory, params } = this.props
-        fetchHistory(params.nodeId)
+        const { fetchLogs, params } = this.props
+        fetchLogs(params.nodeId)
     }
-    getHistory() {
+    getLogs() {
         let lis = []
-        this.props.history.forEach(function(item) {
+        this.props.logs.forEach(function(item) {
             lis.push((
                 <li key={item.id} className='left clearfix'>
                     <span className='chat-img pull-left'></span>
@@ -36,7 +36,7 @@ class HistoryTab extends Component {
         return (
             <div className='chat-panel panel panel-default'>
                 <div className='panel-body'>
-                    <ul className='chat'>{this.getHistory()}</ul>
+                    <ul className='chat'>{this.getLogs()}</ul>
                 </div>
             </div>
         )
@@ -47,11 +47,11 @@ const mapStateToProps = (state, ownProps) => {
     let sessionInfo = getSessionInfo()
     return {
         username: sessionInfo ? sessionInfo['username'] : "User Name",
-        history: state.history
+        logs: state.logs
     }
 }
 
 export default connect(mapStateToProps, {
-    fetchHistory,
-    appendHistoryItem
-})(HistoryTab)
+    fetchLogs,
+    appendLogItem
+})(LogsTab)

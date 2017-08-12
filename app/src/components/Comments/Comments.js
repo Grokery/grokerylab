@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { getSessionInfo } from '../../authentication'
-import { fetchHistory, appendHistoryItem } from '../../actions'
+import { fetchLogs, appendLogItem } from '../../actions'
 import './Comments.css'
 
 class Comments extends Component {
@@ -10,12 +10,12 @@ class Comments extends Component {
         username: PropTypes.string.isRequired,
         nodeId: PropTypes.string.isRequired,
         comments: PropTypes.array.isRequired,
-        fetchHistory: PropTypes.func.isRequired,
-        appendHistoryItem: PropTypes.func.isRequired
+        fetchLogs: PropTypes.func.isRequired,
+        appendLogItem: PropTypes.func.isRequired
     }
     componentDidMount() {
-        const { fetchHistory, nodeId } = this.props
-        fetchHistory(nodeId)
+        const { fetchLogs, nodeId } = this.props
+        fetchLogs(nodeId)
     }
     getComments() {
         let lis = []
@@ -44,7 +44,7 @@ class Comments extends Component {
     }
     onSubmit(event) {
         event.preventDefault()
-        const { username, appendHistoryItem, nodeId } = this.props
+        const { username, appendLogItem, nodeId } = this.props
         let newcomment = {
             collection: "comments",
             datetime: new Date().getTime(),
@@ -52,7 +52,7 @@ class Comments extends Component {
             user: username.split('@')[0],
             body: document.getElementById('comment-input').value
         }
-        appendHistoryItem("comments", newcomment, null)
+        appendLogItem("comments", newcomment, null)
         document.getElementById('comment-input').value = ""
     }
     render() {
@@ -84,11 +84,11 @@ const mapStateToProps = (state, ownProps) => {
     }
     return {
         username: sessionInfo['name'] ? sessionInfo['name'] : "User Name",
-        comments: state.history.filter(filter).sort(sort)
+        comments: state.logs.filter(filter).sort(sort)
     }
 }
 
 export default connect(mapStateToProps, {
-    fetchHistory,
-    appendHistoryItem
+    fetchLogs,
+    appendLogItem
 })(Comments)
