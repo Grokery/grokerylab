@@ -76,6 +76,7 @@ class NodeDetails extends Component {
     updateNode(params.collection, nodeData)
   }
   getCollectionComponent() {
+    // THOUGHT: could use the factory pattern here
     const { params} = this.props
     if (params.collection === 'jobs') {
       return (<JobDetails 
