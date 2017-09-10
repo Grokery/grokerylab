@@ -27,6 +27,10 @@
     padding: 5px;
 }
 
+.job-code-tab .run-logs pre {
+    border: none;
+}
+
 
 /* The switch - the box around the slider */
 .job-code-tab .switch {
