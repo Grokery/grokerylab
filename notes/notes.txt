@@ -1,4 +1,28 @@
 
+IDEAS:
+
+changing type for a job sets an event in the logs, but dosent' change anythingbefor that data. the code tab only shows stuff from the new configuration
+when setting type for jobs and sources give option to create new or select existing.
+perhaps version jobs (and sources) and allow rolling back so if I change type that bumps version and I can look at older versions (this is probably a bad idea...)
+python or shell script or java or c# jobs could use same collapseing form design as datapipeline to make better use of space on the left
+warn user when switching job type (except on initial) what information will be lost
+dont store pipeline def in job, pull as needed from aws. write a module to handle that
+http://jsoneditoronline.org/ for inspiration for a datapipeline editor: collapse and put name and type in title. put toggle button to show as form or as json
+activate/deactivate modal on toggle to ask weather you want to cancel in progress tasks and explain consequences and option to cancel
+toggling datapipeline active/inactive sets select to next scheduled or paused state
+
+put js console underchart
+put files on left of code so you can break out the html, js , and css (udpate: use select above or accordian)
+put job files on left also (update: use select above or accordian)
+add run/compile/active buttons for both charts and jobs 
+show run progress/output in right column
+for datasources show files on left and file contents preview on right
+
+put library code local so I don't have to use the cdn when debuging
+put navigate buttons(dropdown for multiple) in center of details pain nav
+
+==========================================================================================
+
 log api:
 POST /log <= new log object => bool result and new id
 GET  /log/{id}?projection={} => returns log object
@@ -22,3 +46,4 @@ PUT    /job <= job object > bool result and id
 DELETE /job/{id} => bool result and id
 
 hk='jobs', rk=guid
+

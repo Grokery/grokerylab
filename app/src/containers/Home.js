@@ -69,7 +69,7 @@ class Home extends Component {
                   <CodeEditor value={JSON.stringify(newCloudDef, null, 2)} options={options} onChange={this.createCloud.bind(this)} />
               </div>
               <div className="modal-footer">
-                <button type="button" className="btn btn-primary" onClick={this.toggleEditDialog.bind(this)}>Save</button>
+                <button type="button" className="btn btn-primary" onClick={this.toggleEditDialog.bind(this)}>Create</button>
               </div>
             </Modal>
           </div>

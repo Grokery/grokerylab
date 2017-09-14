@@ -5,7 +5,7 @@ import { Tabs, Panel } from '../Tabs/Tabs'
 import EditModal from '../EditModal/EditModal'
 import InfoTab from '../InfoTab/InfoTab'
 import DataTab from '../DataTab/DataTab'
-import HistoryTab from '../HistoryTab/HistoryTab'
+import LogsTab from '../LogsTab/LogsTab'
 import './NodeDetails.css'
 
 class SourceDetails extends Component {
@@ -38,8 +38,8 @@ class SourceDetails extends Component {
           <Panel title='Data'>
             <DataTab key={params.nodeId} params={params} onUpdate={onUpdate}></DataTab>
           </Panel>
-          <Panel title='History'>
-            <HistoryTab params={this.props.params}></HistoryTab>
+          <Panel title='Logs'>
+            <LogsTab params={this.props.params}></LogsTab>
           </Panel>
         </Tabs>
         <EditModal title="Edit Data Source" node={node} onUpdate={this.props.onUpdate} shown={this.state.shown} toggleEditDialog={this.toggleEditDialog.bind(this)}></EditModal>

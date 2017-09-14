@@ -60,7 +60,7 @@ class ChartCodeTab extends Component {
       }
     }
     return (
-      <div className='code-tab'>
+      <div className='chart-code-tab'>
         <div className='code col-md-6'>
           <CodeEditor value={node.code} options={options} onChange={this.updateCode.bind(this)} />
         </div>

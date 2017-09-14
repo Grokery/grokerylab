@@ -5,7 +5,7 @@ import { Tabs, Panel } from '../Tabs/Tabs'
 import EditModal from '../EditModal/EditModal'
 import InfoTab from '../InfoTab/InfoTab'
 import JobCodeTab from '../JobCodeTab/JobCodeTab'
-import HistoryTab from '../HistoryTab/HistoryTab'
+import LogsTab from '../LogsTab/LogsTab'
 import './NodeDetails.css'
 
 class JobDetails extends Component {
@@ -39,8 +39,8 @@ class JobDetails extends Component {
           <Panel title='Code'>
             <JobCodeTab key={params.nodeId} params={params} onUpdate={onUpdate}></JobCodeTab>
           </Panel>
-          <Panel title='History'>
-            <HistoryTab params={this.props.params}></HistoryTab>
+          <Panel title='Logs'>
+            <LogsTab params={this.props.params}></LogsTab>
           </Panel>
         </Tabs>
         <EditModal title="Edit ETL Job" node={node} onUpdate={this.props.onUpdate} shown={this.state.shown} toggleEditDialog={this.toggleEditDialog.bind(this)}></EditModal>

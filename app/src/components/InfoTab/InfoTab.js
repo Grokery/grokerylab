@@ -3,9 +3,10 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { fetchNode } from '../../actions'
 import ContentEditable from '../ContentEditable/ContentEditable'
-import IChart from '../IChart/IChart'
-import SchemaExplorer from '../SchemaExplorer/SchemaExplorer'
 import Comments from '../Comments/Comments'
+import ChartInfo from './ChartInfo'
+import SourceInfo from './SourceInfo'
+import JobInfo from './JobInfo'
 import './InfoTab.css'
 
 class InfoTab extends Component {
@@ -14,134 +15,15 @@ class InfoTab extends Component {
     onUpdate: PropTypes.func.isRequired,
     fetchNode: PropTypes.func.isRequired
   }
-  shouldComponentUpdate(nextProps, nextState) {
-    if (!nextProps.node || !this.props.node) {
-        return true
-    } else if (JSON.stringify(nextProps.node) !== JSON.stringify(this.props.node)) {
-        return true
-    }
-    return false
-  }
   getItemDetailSection() {
-      const { node, params } = this.props
+    const { node, params } = this.props
     if (node.collection === "charts") {
-        return (
-            <div>
-                {/*<div className="config-row">
-                    <div className="row">
-                        <div className="col-md-12 form-inline form-group">
-                            <label>Chart type</label>
-                            <select className="form-control">
-                                <option>C3</option>
-                                <option>HTML/JS/CSS</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>*/}
-                <IChart
-                    key={Math.random()}
-                    id={node.id}
-                    params={params}
-                    height={350}
-                    width={600}
-                ></IChart>
-            </div>
-        )
+        return (<ChartInfo node={node} params={params}></ChartInfo>)
     } else if (node.collection === "datasources") {
-        return (
-            <div>
-                {/*<div className="config-row">
-                    <div className="row">
-                        <div className="col-md-12 form-inline form-group">
-                            <label>Datasource type</label>
-                            <select className="form-control">
-                                <option>File(s)</option>
-                                <option selected>MySql</option>
-                                <option>MSSql</option>
-                                <option>PostgreSql</option>
-                                <option>MongoDB</option>
-                                <option>AWS S3</option>
-                                <option>AWS DynamoDB</option>
-                                <option>AWS Redshift</option>
-                                <option>Azure Blob Storage</option>
-                                <option>Azure Data Lake Store</option>
-                                <option>Azure SQL Data Warehouse</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>*/}
-                <SchemaExplorer datasource={node}></SchemaExplorer>
-            </div>
-        )
+        return (<SourceInfo node={node} params={params}></SourceInfo>)
     } else if (node.collection === "jobs") {
-        return (
-            <div>
-                {/*<hr />*/}
-                {/*<h2>Config:</h2>*/}
-                {/*<div className="row config-row">
-                    <div className="col-md-5 form-inline form-group">
-                        <label>Job type</label>
-                        <select className="form-control">
-                            <option>Shell Script</option>
-                            <option>SQL Stored Procedure</option>
-                            <option>AWS Redshift Sproc</option>
-                            <option>AWS Data Pipeline</option>
-                            <option>AWS Lambda</option>
-                            <option>Azure USQL Sproc</option>
-                            <option>Azure Data Factory</option>
-                            <option>Azure Function</option>
-                        </select>
-                    </div>
-                    <div className="col-md-4 form-inline form-group">
-                        <label>Schedule</label>
-                        <select className="form-control">
-                            <option>Hourly</option>
-                            <option>Daily</option>
-                            <option>Weekly</option>
-                            <option>Monthly</option>
-                        </select>
-                    </div>
-                    <div className="col-md-3">
-                        <label>Run Now</label>
-                        <a className="btn"><i className="fa fa-play" aria-hidden="true"></i></a>
-                    </div>
-                </div>*/}
-                {/*<hr />*/}
-                {/*<h2>Run History:</h2>*/}
-                <table className="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Start time</th>
-                            <th>End time</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>2017-05-31 10:26</td>
-                            <td>2017-05-31 10:26</td>
-                            <td><span className="label label-success">Finished</span></td>
-                        </tr>
-                        <tr>
-                            <td>2017-05-31 10:26</td>
-                            <td>2017-05-31 10:26</td>
-                            <td><span className="label label-warning">Finished</span></td>
-                        </tr>
-                        <tr>
-                            <td>2017-05-31 10:26</td>
-                            <td>2017-05-31 10:26</td>
-                            <td><span className="label label-success">Finished</span></td>
-                        </tr>
-                        <tr>
-                            <td>2017-05-31 10:26</td>
-                            <td>2017-05-31 10:26</td>
-                            <td><span className="label label-success">Finished</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        )
-    } else {
+        return (<JobInfo node={node} params={params}></JobInfo>)
+    }  else {
         return (<div></div>)
     }
   }
@@ -167,6 +49,7 @@ class InfoTab extends Component {
                 <div className='node-info'>
                     <div className='col-md-6'><label>Type: </label> {node.type}</div>
                     <div className='col-md-6'><label>Owner: </label> {node.owner}</div>
+                    {/* Maybe make component to handle collection and type specific fields */}
                 </div>
                 <Comments nodeId={params.nodeId}></Comments>
             </div>
