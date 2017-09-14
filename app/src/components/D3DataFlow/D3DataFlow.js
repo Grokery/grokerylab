@@ -56,9 +56,10 @@ class D3DataFlow extends Component {
                 </span>
                 <a onClick={this.toggleCreateNodes}><i className="fa fa-plus" aria-hidden="true"></i></a>
                 <a id='delete-icon' onClick={this.onDelete.bind(this)} style={{display:'none'}}><i className="fa fa-trash" aria-hidden="true"></i></a>
-                
-                {/*<a><i className="fa fa-filter" aria-hidden="true"></i></a>*/}
-            
+                <span id='filter-nodes' style={{display:'none'}}>
+                    <input id="filter-input" className="form-control" />
+                </span>
+                <a onClick={this.toggleFiltereNodes}><i className="fa fa-filter" aria-hidden="true"></i></a>
             </div>
           </div>
         <div id='flow'></div>
@@ -600,7 +601,13 @@ class D3DataFlow extends Component {
       } else {
           document.getElementById('create-nodes').style.display = 'inline'
       }
-    
+  }
+  toggleFiltereNodes() {
+    if (document.getElementById('filter-nodes').style.display === 'inline') {        
+        document.getElementById('filter-nodes').style.display = 'none'
+    } else {
+        document.getElementById('filter-nodes').style.display = 'inline'
+    }
   }
   showDeleteIcon() {
     let icon = document.getElementById('delete-icon')

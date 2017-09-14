@@ -3,6 +3,12 @@
      background-color: #e7ebee;
 }
 
+#filter-input {
+    display: inline-block;
+    width: auto;
+    border: 1px solid #ddd;
+}
+
 #flow {
     margin: 0;
     padding: 0;
