@@ -16,7 +16,7 @@ color-scheme {
 
 
   /* blue accent */
-  color: #0271b1;
+  color: #0291E3;
   /* orange accent */
   color: #FF851A;
   /* dark background  */
@@ -83,7 +83,7 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
   clear: both;
-  color: #026AA7;
+  color: #0291E3;
   margin-top: 10px;
   margin-left: 10px;
   padding-left: 0;
@@ -91,11 +91,25 @@ h1 {
 }
 
 .btn-primary {
-  background-color: #026AA7;
-  border-color: #026AA7; 
+  background-color: #0291E3;
+  border-color: #0291E3; 
 }
 
 .btn-primary:hover {
-  background-color: #026AA7;
-  border-color: #026AA7; 
+  background-color: #0291E3;
+  border-color: #0291E3; 
+}
+
+
+/* Default modal styles */
+.modal-dialog {
+    min-width: 60%;
+}
+
+.modal-body {
+    overflow-y: auto;
+}
+
+.ReactCodeMirror .CodeMirror {
+    height: auto;
 }

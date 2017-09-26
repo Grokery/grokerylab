@@ -1,6 +1,6 @@
 """Server.py"""
 
-import handlers
+import controllers
 from flask import Flask, request, Response, json
 
 AUTH_ENABLED = False
@@ -26,11 +26,13 @@ def before_request():
             token = request.headers.get('Authorization', '')
             if not token:
                 return "", 401
+            # TODO Get actual endpoint to pass to authorize func
             event = {
-                "methodArn": request.method,
+                "endpoint": "ENDPOINTHERE",
+                "method": request.method,
                 "authorizationToken": token
             }
-            response = handlers.authorize(event, None)
+            response = controllers.authorize(event, None)
             if response['policyDocument']['Statement'][0]['Effect'] is not "Allow":
                 return "", 401
 
@@ -46,49 +48,63 @@ def after_request(response):
 @app.route("/")
 def hello_world():
     """Hello World"""
-    return "Hello World"
+    return "Hello World. Im alive!"
 
 
-@app.route("/dev/resources/<collection>", methods=["GET", "POST"])
-@app.route("/dev/resources/<collection>/<item_id>", methods=["GET", "PUT", "DELETE"])
-def resources(collection, item_id=None):
-    """Handles CRUD calls"""
+@app.route("/authenticate")
+def authenticate():
+    """Authenticate user and return token"""
+    # TODO check db for user profile and return jwt token
+    return "Not implemented!"
+
+@app.route("/history", methods=["GET"])
+@app.route("/history/<collection>", methods=["GET", "POST"])
+@app.route("/history/<collection>/<item_id>", methods=["GET"])
+def history(collection=None, item_id=None):
+    """Handles CRUD calls for history items"""
     try:
-        data = None
-        if request.method == "PUT" or request.method == "POST":
-            data = request.data
         event = {
             "httpMethod": request.method,
             "pathParameters": {"collection": collection, "id": item_id},
-            "query": {},
-            "body": data
+            "query": request.args,
+            "body": request.data
         }
-        foo = handlers.resources(event, None)
-        resp = Response(response=foo["body"],
-            status=200,
-            mimetype="application/json")
-        return(resp)
+        response = controllers.history(event, None)
+        return Response(response=response["body"], status=200, mimetype="application/json")
+    except Exception, ex:
+        print ex.message
+        return "Internal Server Error", 500
+
+@app.route("/nodes/<collection>", methods=["GET", "POST"])
+@app.route("/nodes/<collection>/<item_id>", methods=["GET", "PUT", "DELETE"])
+def nodes(collection, item_id=None):
+    """Handles CRUD calls for nodes"""
+    try:
+        event = {
+            "httpMethod": request.method,
+            "pathParameters": {"collection": collection, "id": item_id},
+            "query": request.args,
+            "body": request.data
+        }
+        foo = controllers.nodes(event, None)
+        return Response(response=foo["body"], status=200, mimetype="application/json")
     except Exception, ex:
         print ex.message
         return "Internal Server Error", 500
 
 
-@app.route("/dev/dataflowservice", methods=["GET"])
+@app.route("/dataflowservice", methods=["GET"])
 def dataflowservice():
     """Handels dataflow exploration calls"""
     try:
         event = {
             "httpMethod": request.method,
             "pathParameters": None,
-            "query": {},
+            "query": request.args,
             "body": None
         }
-        foo = handlers.dataflowservice(event, None)
-        resp = Response(response=foo["body"],
-            status=200,
-            mimetype="application/json")
-        
-        return(resp)
+        foo = controllers.dataflowservice(event, None)
+        return Response(response=foo["body"], status=200, mimetype="application/json")
     except Exception, ex:
         print(ex.message)
         return "Internal Server Error", 500

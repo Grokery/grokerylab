@@ -1,5 +1,6 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
+import { getQueryParamByName, updateQueryParam } from '../../globals.js'
 import './Tabs.css'
 
 export class Tabs extends Component {
@@ -16,8 +17,9 @@ export class Tabs extends Component {
     }
     constructor(props) {
         super(props)
+        let index = parseInt(getQueryParamByName('activeTab'), 10)
         this.state = {
-            activeTab: props.activeTab ? props.activeTab : 1
+            activeTab: props.activeTab ? props.activeTab : index ? index : 1
         }
     }
     componentDidMount() {
@@ -43,7 +45,7 @@ export class Tabs extends Component {
             var cancel = onBeforeChange(index, selectedPanel, selectedTabMenu)
             if(cancel === false){ return }
         }
-
+        updateQueryParam('activeTab', index)
         this.setState({ activeTab: index }, function()  {
             if (onAfterChange) {
                 onAfterChange(index, selectedPanel, selectedTabMenu)

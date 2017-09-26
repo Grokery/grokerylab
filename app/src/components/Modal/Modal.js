@@ -10,7 +10,7 @@ class Modal extends Component {
   render() {
     const { shown } = this.props
     return (
-      <div className={"modal fade" + (shown ? " in" : "")} role="dialog">
+      <div id={this.props.id} className={"modal fade" + (shown ? " in" : "")} role="dialog">
           <div className="modal-dialog" role="document">
             <div className="modal-content">
               {this.props.children}

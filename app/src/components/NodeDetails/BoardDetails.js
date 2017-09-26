@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { Tabs, Panel } from '../Tabs/Tabs'
 import EditModal from '../EditModal/EditModal'
 import IChart from '../IChart/IChart'
-import ContentEditable from '../ContentEditable/ContentEditable'
 import './NodeDetails.css'
 
 class BoardDetails extends Component {
@@ -38,7 +37,7 @@ class BoardDetails extends Component {
     )
   }
   toggleEditDialog(e) {
-    e.preventDefault()
+    if (e) {e.preventDefault()}
     if (this.state.shown) {
       this.setState({shown: false})
     } else {

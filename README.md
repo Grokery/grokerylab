@@ -25,33 +25,20 @@ Knowing these basic facts is essential to knowing weather the data is trustworth
 
 ## Getting up and running
 
-You will need Git, Npm, Python and Docker.
-
-Clone repo:
+Clone repo and set up env vars:
 
     git clone https://github.com/Grokery/grokerylab.git
     cd grokerylab
     cp api/common/.env-example api/common/.env
 
-Edit .env variables, then:
+Edit env vars as necessary, then run API with:
+
+    ./api/run_with_venv.sh (or run_with_venv.bat)
+
+Then in a new window:
 
     cd app
     npm install
-    npm run build
-    cd ../
-
-Finally, to start in docker:
-
-    docker-compose up
-
-Or, to run locally in dev mode:
-
-    cd api
-    ./run_with_venv.sh (or run_with_venv.bat)
-
-...and in a new window:
-
-    cd app
     npm start
 
 ## Using and contributing

@@ -1,4 +1,4 @@
-"""Resources"""
+"""Nodes"""
 import simplejson as json
 import logging
 from common import settings
@@ -8,8 +8,8 @@ log = logging.getLogger()
 log.setLevel(logging.DEBUG)
 
 
-def resources(event, context):
-    """Resources main handler function"""
+def nodes(event, context):
+    """Nodes main handler function"""
     db_result = {
         'POST': handle_post,
         'GET': handle_get,
@@ -55,3 +55,4 @@ def handle_delete(event):
     """Handle DELETE (delete) events"""
     result = db.delete(event['pathParameters']['collection'], event['pathParameters']['id'])
     return result
+

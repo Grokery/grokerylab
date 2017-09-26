@@ -19,14 +19,18 @@ def create(collection, body):
     return {'Item': item}
 
 
-def retrieve_multiple(collection, fields=None):
+def retrieve_multiple(collection, fields=None, query=None):
     """Handle read multiple"""
     projection = {'_id': 0}
     if fields is not None:
         fields = fields.split(',')
         for field in fields:
             projection[field.strip()] = 1
-    cursor = db[collection].find({}, projection)
+    if query:
+        dbquery = query.to_dict()
+    else:
+        dbquery = {}
+    cursor = db[collection].find(dbquery, projection)
     results = {"Items": []}
     results["Items"].extend(cursor)
     return results
@@ -63,3 +67,4 @@ def delete(collection, item_id):
         return {"Success": True, "Item": {"id": item_id}}
     else:
         return {"Success": False, "Item": {"id": item_id}}
+

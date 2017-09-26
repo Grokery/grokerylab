@@ -3,6 +3,12 @@
      background-color: #e7ebee;
 }
 
+#filter-input {
+    display: inline-block;
+    width: auto;
+    border: 1px solid #ddd;
+}
+
 #flow {
     margin: 0;
     padding: 0;
@@ -167,7 +173,7 @@ path.link.inactive {
 
 #flow-header-content i {
     font-size: x-large;
-    color: #0271b1;
+    color: #0291E3;
     padding: 10px;
 }
 

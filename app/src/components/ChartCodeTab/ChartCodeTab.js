@@ -4,9 +4,9 @@ import { connect } from 'react-redux'
 import { fetchNode } from '../../actions'
 import IChart from '../IChart/IChart'
 import CodeEditor from '../CodeEditor/CodeEditor'
-import './CodeTab.css'
+import './ChartCodeTab.css'
 
-class CodeTab extends Component {
+class ChartCodeTab extends Component {
   static propTypes = {
     options: PropTypes.object,
     node: PropTypes.object,
@@ -60,14 +60,14 @@ class CodeTab extends Component {
       }
     }
     return (
-      <div className='code-tab'>
+      <div className='chart-code-tab'>
         <div className='code col-md-6'>
           <CodeEditor value={node.code} options={options} onChange={this.updateCode.bind(this)} />
         </div>
         <div className='output col-md-6'>
-          <div className='template-select'>
-            <a href='' onClick={function(){}}><i className="fa fa-play" aria-hidden="true"></i></a>
-          </div>
+          {/*<div className='template-select'>
+            <a href='' onClick={function(){}}><i className="fa fa-edit" aria-hidden="true"></i></a>
+          </div>*/}
           <IChart
             key={node.id}
             id={node.id}
@@ -89,4 +89,4 @@ const mapStateToProps = (state, ownProps) => {
 
 export default connect(mapStateToProps, {
   fetchNode
-})(CodeTab)
+})(ChartCodeTab)

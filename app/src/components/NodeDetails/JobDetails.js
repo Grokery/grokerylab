@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 import { Tabs, Panel } from '../Tabs/Tabs'
 import EditModal from '../EditModal/EditModal'
 import InfoTab from '../InfoTab/InfoTab'
-import CodeTab from '../CodeTab/CodeTab'
+import JobCodeTab from '../JobCodeTab/JobCodeTab'
+import LogsTab from '../LogsTab/LogsTab'
 import './NodeDetails.css'
 
 class JobDetails extends Component {
@@ -20,7 +21,7 @@ class JobDetails extends Component {
       }
   }
   toggleEditDialog(e) {
-    e.preventDefault()
+    if (e) {e.preventDefault()}
     if (this.state.shown) {
       this.setState({shown: false})
     } else {
@@ -36,10 +37,10 @@ class JobDetails extends Component {
             <InfoTab key={params.nodeId} params={params} onUpdate={onUpdate}></InfoTab>
           </Panel>
           <Panel title='Code'>
-            <CodeTab key={params.nodeId} params={params} onUpdate={onUpdate}></CodeTab>
+            <JobCodeTab key={params.nodeId} params={params} onUpdate={onUpdate}></JobCodeTab>
           </Panel>
-          <Panel title='History'>
-            <p></p>
+          <Panel title='Logs'>
+            <LogsTab params={this.props.params}></LogsTab>
           </Panel>
         </Tabs>
         <EditModal title="Edit ETL Job" node={node} onUpdate={this.props.onUpdate} shown={this.state.shown} toggleEditDialog={this.toggleEditDialog.bind(this)}></EditModal>
