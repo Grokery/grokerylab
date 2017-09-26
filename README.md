@@ -3,25 +3,15 @@
     Grok v: To understand deeply and intuitively or by empathy
     Grokery n: A place of deep insight
 
-GrokeryLab is an end-to-end data flow management & exploration platform.
-
-I'm creating it because I want a top level, integrated and transparent platform that makes it easy to:
-
-1. Create and manage big (or small) data pipelines to ingest and process intelligence data
-2. Create beautiful and informative visualizations that are completely integrated into the pipelines
-3. Collaborate with others through all three phases of the intelligence stack: Ingestion, Processization, and Visualization. 
+GrokeryLab is an end-to-end data pipeline management & data exploration platform.
 
 ## Raison d'etre
 
-The central pain point that this product takes to heart is the difficulty of understanding and managing the pedigree of the data flowing through our intelligence systems.
+Provide a top level, integrated and transparent platform that makes it easy to:
 
-Data pedigree is about knowing three things:
+1. Create and manage big (or small) data pipelines to ingest and process intelligence data
+3. Collaborate with others through all three phases of the intelligence stack: Ingestion, Processization, and Visualization. 
 
-1. Where the data came from
-2. What's been done to it, and
-3. Who else uses/knows about it
-
-Knowing these basic facts is essential to knowing weather the data is trustworthy, which is of course vital to making good business decisions.
 
 ## Getting up and running
 
@@ -43,19 +33,17 @@ Then in a new window:
 
 ## Using and contributing
 
-GrokeryLab is licensed under the Apache license because I believe in the power of openness, 
-transparency, and community.
+GrokeryLab is licensed under the Apache license because I believe in the power of openness, transparency, and community.
 
-If you are interested in using this product, feel free! If you would like to contribute, please do! 
-
-You can contact me using the form on the website: [https://grokery.io/#contact](https://grokery.io/#contact)
+I am currently building out my core open source developer team. 
+If you are interested please reach out via the form on the website: [https://grokery.io/#contact](https://grokery.io/#contact)
 
 ## License
 
 GrokeryLab - A dataflow management platform
 
     **Author:**  Dan Hogue (<chmod740@gmail.com>)
-    **Copyright:**  Copyright 2016, Grokery
+    **Copyright:**  Copyright 2017, Grokery
     **License:**  Apache License, Version 2.0
 
 Licensed under the Apache License, Version 2.0 (the "License");
