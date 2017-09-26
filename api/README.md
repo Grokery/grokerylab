@@ -1,6 +1,5 @@
 # GrokeryLab - Api
 
-
 Run local with venv using the provided script or with docker as follows:
 
     docker run -d -p 27017:27017 mongo

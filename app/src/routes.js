@@ -18,10 +18,10 @@ export default <Route path="/" component={App}>
     <Route path="/account" component={Account} /> 
     <Route path="/clouds/:cloudId" component={Cloud}>
       <IndexRoute component={Dataflows}></IndexRoute>
+      <Route path="/clouds/:cloudId/configuration" component={Config} />
       <Route path="/clouds/:cloudId/flow" component={Dataflows} />
       <Route path="/clouds/:cloudId/flow/:nodeId" component={Dataflows} />
       <Route path="/clouds/:cloudId/:collection/:nodeId" component={NodeDetails} />
-      <Route path="/clouds/:cloudId/configuration" component={Config} />
     </Route>
   </Route>
 </Route>

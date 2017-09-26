@@ -6,3 +6,4 @@ uuid==1.30
 pyjwt==1.4.2
 python-dotenv==0.6.1
 pymongo==3.3.1
+passlib==1.7.1
