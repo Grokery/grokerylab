@@ -48,17 +48,18 @@ class D3DataFlow extends Component {
       <div className='D3DataFlow'>
           <div id="flow-header-content" className={this.props.showControls ? '' : 'hidden'}>
             <div>
+                <a id='delete-icon' onClick={this.onDelete.bind(this)} style={{display:'none'}}><i className="fa fa-trash" aria-hidden="true"></i></a>
+                <span id='filter-nodes' style={{display:'none'}}>
+                    <input id="filter-input" className="form-control" />
+                </span>
+                <a onClick={this.toggleFiltereNodes}><i className="fa fa-filter" aria-hidden="true"></i></a>
                 <span id='create-nodes' style={{display:'none'}}>
                     <img className="drag-create-img" role='presentation' src="img/job.png" onMouseDown={this.createNodeDrag.bind(this, this.createJob.bind(this))}/>
                     <img className="drag-create-img" role='presentation' src="img/source.png" onMouseDown={this.createNodeDrag.bind(this, this.createSource.bind(this))}/>
-                    <img className="drag-create-img" role='presentation' src="img/chart.png" onMouseDown={this.createNodeDrag.bind(this, this.createChart.bind(this))}/>
-                    <img className="drag-create-img" role='presentation' src="img/board.png" onMouseDown={this.createNodeDrag.bind(this, this.createBoard.bind(this))}/>
+                    {/* <img className="drag-create-img" role='presentation' src="img/chart.png" onMouseDown={this.createNodeDrag.bind(this, this.createChart.bind(this))}/> */}
+                    {/* <img className="drag-create-img" role='presentation' src="img/board.png" onMouseDown={this.createNodeDrag.bind(this, this.createBoard.bind(this))}/> */}
                 </span>
                 <a onClick={this.toggleCreateNodes}><i className="fa fa-plus" aria-hidden="true"></i></a>
-                <a id='delete-icon' onClick={this.onDelete.bind(this)} style={{display:'none'}}><i className="fa fa-trash" aria-hidden="true"></i></a>
-                
-                {/*<a><i className="fa fa-filter" aria-hidden="true"></i></a>*/}
-            
             </div>
           </div>
         <div id='flow'></div>
@@ -600,7 +601,13 @@ class D3DataFlow extends Component {
       } else {
           document.getElementById('create-nodes').style.display = 'inline'
       }
-    
+  }
+  toggleFiltereNodes() {
+    if (document.getElementById('filter-nodes').style.display === 'inline') {        
+        document.getElementById('filter-nodes').style.display = 'none'
+    } else {
+        document.getElementById('filter-nodes').style.display = 'inline'
+    }
   }
   showDeleteIcon() {
     let icon = document.getElementById('delete-icon')
