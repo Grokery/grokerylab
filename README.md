@@ -11,7 +11,7 @@ I'm creating it because I want a top level, integrated and transparent platform 
 2. Create beautiful and informative visualizations that are completely integrated into the pipelines
 3. Collaborate with others through all three phases of the intelligence stack: Ingestion, Processization, and Visualization. 
 
-## Why?
+## Raison d'etre
 
 The central pain point that this product takes to heart is the difficulty of understanding and managing the pedigree of the data flowing through our intelligence systems.
 
