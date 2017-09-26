@@ -30,7 +30,6 @@ def retrieve_multiple(collection, fields=None, query=None):
         dbquery = query.to_dict()
     else:
         dbquery = {}
-    print(dbquery)
     cursor = db[collection].find(dbquery, projection)
     results = {"Items": []}
     results["Items"].extend(cursor)
@@ -68,3 +67,4 @@ def delete(collection, item_id):
         return {"Success": True, "Item": {"id": item_id}}
     else:
         return {"Success": False, "Item": {"id": item_id}}
+

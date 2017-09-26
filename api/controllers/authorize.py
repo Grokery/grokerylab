@@ -7,27 +7,24 @@ def authorize(event, context):
     """Authorize requests"""
     try:
         decoded = jwt.decode(event["authorizationToken"], settings.JWT_SECRET_KEY)
+        
+        # TODO Logic to check if user is allowed to access specific requested endpoint/method (for example, user may be allowed to GET but not PUT)
+        
         response = {
-            "principalId": decoded['sub'],
             "policyDocument": {
-                "Version": "2012-10-17",
                 "Statement": [{
-                    "Action": "execute-api:Invoke",
                     "Effect": "Allow",
-                    "Resource": "arn:aws:execute-api:*:*:*/*/*"
+                    "Resource": event['endpoint_method']
                 }]
-            }
+                }
         }
         return response
     except InvalidTokenError as err:
         response = {
-            "principalId": "chmod740@gmail.com",
             "policyDocument": {
-                "Version": "2012-10-17",
                 "Statement": [{
-                    "Action":"execute-api:Invoke",
                     "Effect":"Deny",
-                    "Resource":event['methodArn']
+                    "Resource":event['endpoint_method']
                 }]
             }
         }

@@ -26,8 +26,10 @@ def before_request():
             token = request.headers.get('Authorization', '')
             if not token:
                 return "", 401
+            # TODO Get actual endpoint to pass to authorize func
             event = {
-                "methodArn": request.method,
+                "endpoint": "ENDPOINTHERE",
+                "method": request.method,
                 "authorizationToken": token
             }
             response = controllers.authorize(event, None)
@@ -46,14 +48,20 @@ def after_request(response):
 @app.route("/")
 def hello_world():
     """Hello World"""
-    return "Hello World"
+    return "Hello World. Im alive!"
 
+
+@app.route("/authenticate")
+def authenticate():
+    """Authenticate user and return token"""
+    # TODO check db for user profile and return jwt token
+    return "Not implemented!"
 
 @app.route("/history", methods=["GET"])
 @app.route("/history/<collection>", methods=["GET", "POST"])
 @app.route("/history/<collection>/<item_id>", methods=["GET"])
 def history(collection=None, item_id=None):
-    """Handles CRUD calls"""
+    """Handles CRUD calls for history items"""
     try:
         event = {
             "httpMethod": request.method,
@@ -70,7 +78,7 @@ def history(collection=None, item_id=None):
 @app.route("/nodes/<collection>", methods=["GET", "POST"])
 @app.route("/nodes/<collection>/<item_id>", methods=["GET", "PUT", "DELETE"])
 def nodes(collection, item_id=None):
-    """Handles CRUD calls"""
+    """Handles CRUD calls for nodes"""
     try:
         event = {
             "httpMethod": request.method,

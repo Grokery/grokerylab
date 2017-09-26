@@ -55,3 +55,4 @@ def handle_delete(event):
     """Handle DELETE (delete) events"""
     result = db.delete(event['pathParameters']['collection'], event['pathParameters']['id'])
     return result
+
