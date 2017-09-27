@@ -19,9 +19,8 @@ export default class SourceForm extends Component {
         <label>Data Source Type</label>
         <select id="type" className="form-control" value={node.type} onChange={this.onChange.bind(this)}>
           <option>-- choose type --</option>
-          <option>MySql</option>
-          <option>MongoDB</option>
-          <option>AWS S3</option>
+          <option value="File">File</option>
+          <option value="MySql Table">MySql Table</option>
         </select>
       </form>
     )

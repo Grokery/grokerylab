@@ -19,8 +19,7 @@ export default class ChartForm extends Component {
         <label>Chart Type</label>
         <select id="type" className="form-control" value={node.type} onChange={this.onChange.bind(this)}>
           <option>-- choose type --</option>
-          <option>HTML</option>
-          <option>C3</option>
+          <option value="HTML">HTML</option>
         </select>
       </form>
     )

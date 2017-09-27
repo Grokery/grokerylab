@@ -20,8 +20,7 @@ export default class JobForm extends Component {
         <select id="type" className="form-control" value={node.type ? node.type : ""} onChange={this.onChange.bind(this)}>
           <option>-- choose type --</option>
           <option value="Shell Script">Shell Script</option>
-          <option value="Stored Procedure">Stored Procedure</option>
-          <option value="AWS Data Pipline">AWS Data Pipline</option>
+          <option value="MySql Script">MySql Script</option>
         </select>
       </form>
     )

@@ -56,8 +56,8 @@ class D3DataFlow extends Component {
                 <span id='create-nodes' style={{display:'none'}}>
                     <img className="drag-create-img" role='presentation' src="img/job.png" onMouseDown={this.createNodeDrag.bind(this, this.createJob.bind(this))}/>
                     <img className="drag-create-img" role='presentation' src="img/source.png" onMouseDown={this.createNodeDrag.bind(this, this.createSource.bind(this))}/>
-                    {/* <img className="drag-create-img" role='presentation' src="img/chart.png" onMouseDown={this.createNodeDrag.bind(this, this.createChart.bind(this))}/> */}
-                    {/* <img className="drag-create-img" role='presentation' src="img/board.png" onMouseDown={this.createNodeDrag.bind(this, this.createBoard.bind(this))}/> */}
+                    <img className="drag-create-img" role='presentation' src="img/chart.png" onMouseDown={this.createNodeDrag.bind(this, this.createChart.bind(this))}/>
+                    <img className="drag-create-img" role='presentation' src="img/board.png" onMouseDown={this.createNodeDrag.bind(this, this.createBoard.bind(this))}/>
                 </span>
                 <a onClick={this.toggleCreateNodes}><i className="fa fa-plus" aria-hidden="true"></i></a>
             </div>

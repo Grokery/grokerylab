@@ -77,7 +77,7 @@ class CloudSection extends Component {
           </Modal>
         </div>
         <div className='cloud-section-quicklinks'>
-          <Gallery itemSize='medium' colorClass='dark' images={false} items={this.getCloudLinks(cloudid, cloud)} params={{}}></Gallery>
+          {/* <Gallery itemSize='medium' colorClass='dark' images={false} items={this.getCloudLinks(cloudid, cloud)} params={{}}></Gallery> */}
         </div>
         <hr />
       </div>

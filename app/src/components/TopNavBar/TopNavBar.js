@@ -25,7 +25,7 @@ class TopNavBar extends Component {
     }
     getCloudName() {
         const { getSessionInfo } = this.props
-        let cloudName = "GLab"
+        let cloudName = "GrokeryLab"
         if (
             getSessionInfo() && 
             getSessionInfo()['selectedCloud']
