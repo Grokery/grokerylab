@@ -51,11 +51,19 @@ def hello_world():
     return "Hello World. Im alive!"
 
 
-@app.route("/authenticate")
+@app.route("/authenticate", methods=["POST"])
 def authenticate():
     """Authenticate user and return token"""
-    # TODO check db for user profile and return jwt token
-    return "Not implemented!"
+    try:
+        event = {
+            "httpMethod": request.method,
+            "body": request.data
+        }
+        response = controllers.authenticate(event, None)
+        return Response(response=response["body"], status=200, mimetype="application/json")
+    except Exception, ex:
+        print ex.message
+        return "Internal Server Error", 500
 
 @app.route("/history", methods=["GET"])
 @app.route("/history/<collection>", methods=["GET", "POST"])

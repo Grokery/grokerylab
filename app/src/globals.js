@@ -41,17 +41,19 @@ export const getQueryParamByName = function(name, url) {
 
 // Authentication and authorization constants
 export const AUTH_ENABLED = true
-export const AUTH_URL = "https://hst1vasy9i.execute-api.us-west-2.amazonaws.com/dev/authenticate" 
+// export const AUTH_URL = "https://hst1vasy9i.execute-api.us-west-2.amazonaws.com/dev/authenticate" 
+export const AUTH_URL = "http://localhost:5000/authenticate" 
 
 // Default API 
 export const DEFAULT_SESSION_INFO = {
-    "username": "yourusername@domain.com",
+    "username": "admin@fakedomian.com",
+    "name":"admin",
     "clouds": {
         "local": {
             "name": "Localhost",
             "id": "local",
             "type": "local",
-            "url": "http://localhost:5000/dev"
+            "url": "http://localhost:5000"
         }
     },
     "token": "disabled"

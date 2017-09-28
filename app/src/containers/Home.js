@@ -9,8 +9,8 @@ import '../styles/Home.css'
 
 class Home extends Component {
   static propTypes = {
-    username: PropTypes.string.isRequired,
-    clouds: PropTypes.object.isRequired
+    username: PropTypes.string,
+    clouds: PropTypes.object
   }
   constructor(props) {
     super(props)
@@ -49,7 +49,7 @@ class Home extends Component {
       "name": "Hello World",
       "id": "helloworld",
       "type": "local",
-      "url": "http://localhost:5000/dev"
+      "url": "http://localhost:5000"
     }
     let options = {
       lineNumbers: false,
@@ -86,7 +86,7 @@ class Home extends Component {
       <div className='page-content home'>
         <div>
           <div className='user-section'>
-            <h1>Hi {username.split('@')[0]}</h1>
+            {/* <h1>Hi {username.split('@')[0]}</h1> */}
           </div>
           <div className='cloud-sections'>
             {this.getCloudSections()}

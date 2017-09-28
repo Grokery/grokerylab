@@ -35,12 +35,20 @@ def authorize(event, context):
 def authenticate(event, context):
     """Authenticate user"""
     body = json.loads(event['body'])
-
     # TODO: Get user info from db
     # user = admin, password = admin
     user = {
-        "username":"admin",
-        "password":"$pbkdf2-sha256$29000$WSsF4FyLkfJeCwGA8N47xw$mmWO01EaKq6PGcJRbAcpApD3qV2bVRUmz0CI4vyvzkw"
+        "username":"admin@fakedomain.com",
+        "name":"admin",
+        "password":"$pbkdf2-sha256$29000$WSsF4FyLkfJeCwGA8N47xw$mmWO01EaKq6PGcJRbAcpApD3qV2bVRUmz0CI4vyvzkw",
+        "clouds": {
+            "local": {
+                "name": "Localhost",
+                "id": "local",
+                "type": "local",
+                "url": "http://localhost:5000"
+            }
+        }
     }
 
     if pbkdf2_sha256.verify(body['password'], user['password']):
