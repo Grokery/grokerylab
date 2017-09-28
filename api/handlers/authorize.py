@@ -3,7 +3,7 @@ import datetime
 import simplejson as json
 from passlib.hash import pbkdf2_sha256
 
-from common import settings
+from database import settings
 
 def authorize(event, context):
     """Authorize requests"""
@@ -35,12 +35,16 @@ def authorize(event, context):
 def authenticate(event, context):
     """Authenticate user"""
     body = json.loads(event['body'])
-    # TODO: Get user info from db
+
     # user = admin, password = admin
+    # TODO: Get user info from db
     user = {
         "username":"admin@fakedomain.com",
         "name":"admin",
         "password":"$pbkdf2-sha256$29000$WSsF4FyLkfJeCwGA8N47xw$mmWO01EaKq6PGcJRbAcpApD3qV2bVRUmz0CI4vyvzkw",
+        "permissions":{
+
+        },
         "clouds": {
             "local": {
                 "name": "Localhost",

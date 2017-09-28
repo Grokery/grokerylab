@@ -1,9 +1,9 @@
 """DataFlowService"""
 
 import logging
-from common import settings
 import simplejson as json
-from common import mongodb as db
+from database import settings
+from database import mongodb as db
 
 log = logging.getLogger()
 log.setLevel(logging.DEBUG)
