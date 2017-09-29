@@ -2,8 +2,7 @@
 
 import logging
 import simplejson as json
-from database import settings
-from database import mongodb as db
+from database import db
 
 log = logging.getLogger()
 log.setLevel(logging.DEBUG)

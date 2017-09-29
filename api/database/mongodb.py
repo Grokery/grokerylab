@@ -1,12 +1,11 @@
 """MongoDB"""
 
+import os
 import uuid
-import settings
-
 from pymongo import MongoClient
 
-client = MongoClient(settings.MONGODB_HOST)
-db = client[settings.MONGODB_DB_NAME]
+client = MongoClient(os.environ.get('MONGODB_HOST'))
+db = client[os.environ.get('MONGODB_DB_NAME')]
 
 
 def create(collection, body):
@@ -67,4 +66,3 @@ def delete(collection, item_id):
         return {"Success": True, "Item": {"id": item_id}}
     else:
         return {"Success": False, "Item": {"id": item_id}}
-

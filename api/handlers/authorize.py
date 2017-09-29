@@ -1,14 +1,14 @@
+import os
 import jwt
 import datetime
 import simplejson as json
 from passlib.hash import pbkdf2_sha256
 
-from database import settings
 
 def authorize(event, context):
     """Authorize requests"""
     try:
-        jwt.decode(event["authorizationToken"], settings.JWT_SECRET_KEY)
+        jwt.decode(event["authorizationToken"], os.environ.get('JWT_SECRET_KEY'))
         # TODO Logic to check if user is allowed to access specific requested endpoint/method
         # (for example, user may be allowed to GET but not PUT)
         response = {
@@ -72,7 +72,7 @@ def authenticate(event, context):
             ]
         }
 
-        user['token'] = jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm='HS256')
+        user['token'] = jwt.encode(payload, os.environ.get('JWT_SECRET_KEY'), algorithm='HS256')
         return {
             "statusCode": 200,
             "headers": {"Access-Control-Allow-Origin" : "*"},

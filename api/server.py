@@ -1,13 +1,17 @@
 """Server.py"""
 
-from flask import Flask, request, Response, json
+import os
+from os.path import join, dirname
+from dotenv import load_dotenv
+
+load_dotenv(join(dirname(__file__), '.env'))
+
+from flask import Flask, request
+
+app = Flask(__name__)
 
 import handlers
 import routes
-
-AUTH_ENABLED = False
-
-app = Flask(__name__)
 
 
 @app.before_request
@@ -23,20 +27,18 @@ def before_request():
         if 'ACCESS_CONTROL_REQUEST_HEADERS' in reqheaders:
             resheads['Access-Control-Allow-Headers'] = reqheaders['ACCESS_CONTROL_REQUEST_HEADERS']
         return response
-    else:
-        if AUTH_ENABLED:
-            token = request.headers.get('Authorization', '')
-            if not token:
-                return "", 401
-            # TODO Get actual endpoint to pass to authorize func
-            event = {
-                "endpoint": "ENDPOINTHERE",
-                "method": request.method,
-                "authorizationToken": token
-            }
-            response = handlers.authorize(event, None)
-            if response['policyDocument']['Statement'][0]['Effect'] is not "Allow":
-                return "", 401
+    elif os.environ.get('AUTH_ENABLED'):
+        token = request.headers.get('Authorization', '')
+        if not token:
+            return "unauthorized", 401
+        event = {
+            "path": request.path,
+            "method": request.method,
+            "authorizationToken": token
+        }
+        response = handlers.authorize(event, None)
+        if response['policyDocument']['Statement'][0]['Effect'] is not "Allow":
+            return "unauthorized", 401
 
 
 @app.after_request
@@ -51,4 +53,4 @@ routes.init(app)
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", debug=True)
+    app.run(host=os.environ.get('DEBUG'), debug=os.environ.get('DEBUG'))
