@@ -1,7 +1,9 @@
 """Init imports"""
 
-from handlers.nodes import nodes
-from handlers.history import history
-from handlers.authorize import authorize
-from handlers.authorize import authenticate
-from handlers.dataflowservice import dataflowservice
+from handlers.authorization import authenticate
+from handlers.authorization import authorize
+
+from handlers.resources import main as resources
+from handlers.history import history # depricated
+
+from handlers.dataflowservice import main as dataflowservice

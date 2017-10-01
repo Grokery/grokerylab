@@ -8,18 +8,16 @@ client = MongoClient(os.environ.get('MONGODB_HOST'))
 db = client[os.environ.get('MONGODB_DB_NAME')]
 
 
-def create(collection, body):
-    """Handle create"""
-    item = body
-    item['collection'] = collection
+def create(item):
+    """Create new object in db"""
     item['id'] = str(uuid.uuid4())
-    db[collection].insert_one(item)
+    db[item['collection']].insert_one(item)
     del item['_id']
     return {'Item': item}
 
 
 def retrieve_multiple(collection, fields=None, query=None):
-    """Handle read multiple"""
+    """Read items from db"""
     projection = {'_id': 0}
     if fields is not None:
         fields = fields.split(',')
@@ -36,7 +34,7 @@ def retrieve_multiple(collection, fields=None, query=None):
 
 
 def retrieve(collection, item_id, fields=None):
-    """Handle read single item"""
+    """Read single item from db"""
     projection = {'_id': 0}
     if fields is not None:
         fields = fields.split(',')
@@ -46,21 +44,19 @@ def retrieve(collection, item_id, fields=None):
     return {"Item": item}
 
 
-def update(collection, item_id, body):
-    """Handle update"""
-    update_values = body
-    update_values['collection'] = collection
-    update_values['id'] = item_id
-    current_values = db[collection].find_one({'id': item_id})
+def update(item):
+    """Update item in db"""
+    update_values = item
+    current_values = db[item['collection']].find_one({'id': item['id']})
     for key in update_values:
         current_values[key] = update_values[key]
-    db[collection].update_one({'id': item_id}, {'$set': current_values}, upsert=False)
+    db[item['collection']].update_one({'id': item['id']}, {'$set': current_values}, upsert=False)
     del current_values['_id']
     return {"Item": current_values}
 
 
 def delete(collection, item_id):
-    """Handle delete item"""
+    """Delete item from db"""
     result = db[collection].remove({'id': item_id})
     if result['ok']:
         return {"Success": True, "Item": {"id": item_id}}

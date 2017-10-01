@@ -7,6 +7,7 @@ from database import db
 log = logging.getLogger()
 log.setLevel(logging.DEBUG)
 
+# TODO: collapse history into resources handler
 
 def history(event, context):
     """History main handler function"""
@@ -33,7 +34,6 @@ def handle_post(event):
 
 def handle_get(event):
     """Handle GET (read) events"""
-    print(event)
     if not event['pathParameters']['collection']:
         collections = ['comments']
         results = []

@@ -3,16 +3,16 @@
 import os
 from os.path import join, dirname
 from dotenv import load_dotenv
-
-load_dotenv(join(dirname(__file__), '.env'))
-
 from flask import Flask, request
-
-app = Flask(__name__)
 
 import handlers
 import routes
 
+load_dotenv(join(dirname(__file__), '.env'))
+
+# TODO init logging
+
+app = Flask(__name__)
 
 @app.before_request
 def before_request():
@@ -29,15 +29,19 @@ def before_request():
         return response
     elif os.environ.get('AUTH_ENABLED'):
         token = request.headers.get('Authorization', '')
-        if not token:
-            return "unauthorized", 401
-        event = {
-            "path": request.path,
-            "method": request.method,
-            "authorizationToken": token
-        }
-        response = handlers.authorize(event, None)
-        if response['policyDocument']['Statement'][0]['Effect'] is not "Allow":
+        if token:
+            response = handlers.authorize({
+                "path": request.path,
+                "method": request.method,
+                "authorizationToken": token
+            }, None)
+            if response['policyDocument']['Statement'][0]['Effect'] is not "Allow":
+                return "unauthorized", 401
+        elif not token and "authenticate" in request.path and request.method == "POST":
+            return routes.make_response({
+                "body": request.data
+            }, handlers.authenticate)
+        else:
             return "unauthorized", 401
 
 
@@ -53,4 +57,4 @@ routes.init(app)
 
 
 if __name__ == "__main__":
-    app.run(host=os.environ.get('DEBUG'), debug=os.environ.get('DEBUG'))
+    app.run(host=os.environ.get('FLASK_HOST'), debug=os.environ.get('DEBUG'))

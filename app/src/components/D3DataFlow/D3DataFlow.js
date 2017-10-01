@@ -46,21 +46,17 @@ class D3DataFlow extends Component {
   render() {
     return (
       <div className='D3DataFlow'>
-          <div id="flow-header-content" className={this.props.showControls ? '' : 'hidden'}>
-            <div>
-                <a id='delete-icon' onClick={this.onDelete.bind(this)} style={{display:'none'}}><i className="fa fa-trash" aria-hidden="true"></i></a>
-                <span id='filter-nodes' style={{display:'none'}}>
-                    <input id="filter-input" className="form-control" />
-                </span>
-                <a onClick={this.toggleFiltereNodes}><i className="fa fa-filter" aria-hidden="true"></i></a>
-                <span id='create-nodes' style={{display:'none'}}>
-                    <img className="drag-create-img" role='presentation' src="img/job.png" onMouseDown={this.createNodeDrag.bind(this, this.createJob.bind(this))}/>
-                    <img className="drag-create-img" role='presentation' src="img/source.png" onMouseDown={this.createNodeDrag.bind(this, this.createSource.bind(this))}/>
-                    <img className="drag-create-img" role='presentation' src="img/chart.png" onMouseDown={this.createNodeDrag.bind(this, this.createChart.bind(this))}/>
-                    <img className="drag-create-img" role='presentation' src="img/board.png" onMouseDown={this.createNodeDrag.bind(this, this.createBoard.bind(this))}/>
-                </span>
-                <a onClick={this.toggleCreateNodes}><i className="fa fa-plus" aria-hidden="true"></i></a>
-            </div>
+        <div id="flow-header-content" className={this.props.showControls ? '' : 'hidden'}>
+            <span id='create-nodes' style={{display:'none'}}>
+                <img className="drag-create-img" role='presentation' src="img/job.png" onMouseDown={this.createNodeDrag.bind(this, this.createJob.bind(this))}/>
+                <img className="drag-create-img" role='presentation' src="img/source.png" onMouseDown={this.createNodeDrag.bind(this, this.createSource.bind(this))}/>
+                <img className="drag-create-img" role='presentation' src="img/chart.png" onMouseDown={this.createNodeDrag.bind(this, this.createChart.bind(this))}/>
+                <img className="drag-create-img" role='presentation' src="img/board.png" onMouseDown={this.createNodeDrag.bind(this, this.createBoard.bind(this))}/>
+            </span>
+            <input type="submit" className="icon-btn" value="&#xf067;" onClick={this.toggleCreateNodes} />
+            <input id='delete-icon' type="submit" className="icon-btn" value="&#xf014;" onClick={this.onDelete.bind(this)} style={{display:'none'}}/>
+            <input className="filter-input"/>
+            <input className="icon-btn filter-icon" type="submit" onClick={this.toggleFilteredNodes} value="&#xf0b0;" />
           </div>
         <div id='flow'></div>
       </div>
@@ -602,12 +598,8 @@ class D3DataFlow extends Component {
           document.getElementById('create-nodes').style.display = 'inline'
       }
   }
-  toggleFiltereNodes() {
-    if (document.getElementById('filter-nodes').style.display === 'inline') {        
-        document.getElementById('filter-nodes').style.display = 'none'
-    } else {
-        document.getElementById('filter-nodes').style.display = 'inline'
-    }
+  toggleFilteredNodes() {
+
   }
   showDeleteIcon() {
     let icon = document.getElementById('delete-icon')
@@ -800,6 +792,7 @@ class D3DataFlow extends Component {
         this.d3state.dragNode = false
         window.onmouseup = null
         cb(this.d3state.mouseLocation)
+        this.toggleCreateNodes()
       }.bind(this)
   }
   createJob(xy) {

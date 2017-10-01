@@ -8,24 +8,30 @@ from passlib.hash import pbkdf2_sha256
 def authorize(event, context):
     """Authorize requests"""
     try:
-        jwt.decode(event["authorizationToken"], os.environ.get('JWT_SECRET_KEY'))
+        decoded = jwt.decode(event["authorizationToken"], os.environ.get('JWT_SECRET_KEY'))
         # TODO Logic to check if user is allowed to access specific requested endpoint/method
         # (for example, user may be allowed to GET but not PUT)
         response = {
+            "principalId": decoded['sub'],
             "policyDocument": {
+                "Version": "2012-10-17",
                 "Statement": [{
+                    "Action": "execute-api:Invoke",
                     "Effect": "Allow",
-                    "Resource": event['endpoint_method']
+                    "Resource": "arn:aws:execute-api:*:*:*/*/*"
                 }]
-                }
+            }
         }
         return response
     except jwt.InvalidTokenError as err:
         response = {
+            "principalId": "chmod740@gmail.com",
             "policyDocument": {
+                "Version": "2012-10-17",
                 "Statement": [{
+                    "Action":"execute-api:Invoke",
                     "Effect":"Deny",
-                    "Resource":event['endpoint_method']
+                    "Resource":"arn:aws:execute-api:*:*:*/*/*"
                 }]
             }
         }
@@ -61,14 +67,13 @@ def authenticate(event, context):
         accountId = "*"
         apiId = "*"
         stage = "*"
+        # TODO: add permission scopes
         payload = {
             'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=8),
             'iss': 'localhost',
             'sub': user['username'],
             'scopes': [
-                {
-                    'Effect': 'Allow',
-                }
+                {}
             ]
         }
 
@@ -80,7 +85,7 @@ def authenticate(event, context):
         }
     else:
         return {
-            "statusCode": 404,
+            "statusCode": 403,
             "headers": {"Access-Control-Allow-Origin" : "*"},
-            "body": ""
+            "body": "Invalid credentials"
         }

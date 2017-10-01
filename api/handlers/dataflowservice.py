@@ -9,7 +9,7 @@ log.setLevel(logging.DEBUG)
 
 PROJECTION = "id, collection, title, upstream, downstream, x, y, type, type_abrev"
 
-def dataflowservice(event, context):
+def main(event, context):
     """DataFlowService main handler method"""
 
     if "query" in event:
