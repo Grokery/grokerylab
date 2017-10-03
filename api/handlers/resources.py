@@ -11,16 +11,16 @@ logger = logging.getLogger()
 def main(event, context):
     """Resources main handler method"""
 
-    if context and context['db']:
+    if context and "db" in context:
         db = context['db']
-    if context and context['models']:
+    if context and "models" in context:
         models = context['models']
-    if context and context['logger']:
+    if context and "logger" in context:
         logger = context['logger']
 
     collection = event['pathParameters']['collection']
     # TODO: instaiate model that can validate input
-    event['item'] = models.get_model(collection, event['body'])
+    #event['item'] = models.get_model(collection, event['body'])
 
     result = {
         'POST': get_create_handler(collection),

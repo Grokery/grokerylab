@@ -27,7 +27,7 @@ def before_request():
         if 'ACCESS_CONTROL_REQUEST_HEADERS' in reqheaders:
             resheads['Access-Control-Allow-Headers'] = reqheaders['ACCESS_CONTROL_REQUEST_HEADERS']
         return response
-    elif os.environ.get('AUTH_ENABLED'):
+    elif os.environ.get('AUTH_ENABLED') == "True":
         token = request.headers.get('Authorization', '')
         if token:
             response = handlers.authorize({
