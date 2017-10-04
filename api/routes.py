@@ -10,7 +10,7 @@ logger = logging.getLogger()
 
 def init(app):
     """Initualize routes"""
-        
+
     @app.route("/")
     def hello_world():
         """Hello World"""
@@ -18,7 +18,10 @@ def init(app):
 
     @app.route("/authenticate", methods=["POST"])
     def authenticate():
-        """"""
+        """Authenticate user.
+
+            Expects: {"username":String,"password":String} in body
+        """
         return make_response({
             "httpMethod": request.method,
             "body": request.data
@@ -28,7 +31,7 @@ def init(app):
     @app.route("/history/<collection>", methods=["GET", "POST"])
     @app.route("/history/<collection>/<item_id>", methods=["GET"])
     def history(collection=None, item_id=None):
-        """"""
+        """Depricated"""
         return make_response({
             "httpMethod": request.method,
             "pathParameters": {"collection": collection, "id": item_id},
@@ -36,10 +39,10 @@ def init(app):
             "body": request.data
         }, handlers.history)
 
-    @app.route("/nodes/<collection>", methods=["GET", "POST"])
-    @app.route("/nodes/<collection>/<item_id>", methods=["GET", "PUT", "DELETE"])
+    @app.route("/resources/<collection>", methods=["GET", "POST"])
+    @app.route("/resources/<collection>/<item_id>", methods=["GET", "PUT", "DELETE"])
     def resources(collection, item_id=None):
-        """"""
+        """Handles CRUD operations on atomic objects"""
         return make_response({
             "httpMethod": request.method,
             "pathParameters": {"collection": collection, "id": item_id},
@@ -65,6 +68,5 @@ def make_response(event, handler):
     except Exception as ex:
         # TODO handle important exception types seprately
         # TODO retern debug info if DEBUG
-        logger.debug(ex)
+        # logger.debug(ex)
         return "Internal Server Error", 500
-    
