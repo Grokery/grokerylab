@@ -57,4 +57,4 @@ routes.init(app)
 
 
 if __name__ == "__main__":
-    app.run(host=os.environ.get('FLASK_HOST'), debug=os.environ.get('DEBUG'))
+    app.run(host=os.environ.get('FLASK_HOST'), debug=os.environ.get('DEBUG')=="True")

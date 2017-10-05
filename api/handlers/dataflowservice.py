@@ -4,13 +4,21 @@ import logging
 import simplejson as json
 from database import db
 
-log = logging.getLogger()
-log.setLevel(logging.DEBUG)
+logger = logging.getLogger()
 
 PROJECTION = "id, collection, title, upstream, downstream, x, y, type, type_abrev"
 
 def main(event, context):
     """DataFlowService main handler method"""
+
+    global db
+
+    if context and "db" in context:
+        db = context['db']
+    if context and "models" in context:
+        models = context['models']
+    if context and "logger" in context:
+        logger = context['logger']
 
     if "query" in event:
         query = event['query']

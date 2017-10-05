@@ -4,13 +4,22 @@ import logging
 import simplejson as json
 from database import db
 
-log = logging.getLogger()
-log.setLevel(logging.DEBUG)
+logger = logging.getLogger()
 
 # TODO: collapse history into resources handler
 
 def history(event, context):
     """History main handler function"""
+
+    global db
+
+    if context and "db" in context:
+        db = context['db']
+    if context and "models" in context:
+        models = context['models']
+    if context and "logger" in context:
+        logger = context['logger']
+
     db_result = {
         'POST': handle_post,
         'GET': handle_get

@@ -11,6 +11,8 @@ logger = logging.getLogger()
 def main(event, context):
     """Resources main handler method"""
 
+    global db
+
     if context and "db" in context:
         db = context['db']
     if context and "models" in context:

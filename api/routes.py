@@ -63,10 +63,10 @@ def init(app):
 
 def make_response(event, handler):
     """Make API response"""
-    try:
-        return Response(response=handler(event, {})["body"], status=200, mimetype="application/json")
-    except Exception as ex:
-        # TODO handle important exception types seprately
-        # TODO retern debug info if DEBUG
-        # logger.debug(ex)
-        return "Internal Server Error", 500
+    # try:
+    return Response(response=handler(event, {})["body"], status=200, mimetype="application/json")
+    # except Exception as ex:
+    #     # TODO handle important exception types seprately
+    #     # TODO retern debug info if DEBUG
+    #     # logger.debug(ex)
+    #     return "Internal Server Error", 500

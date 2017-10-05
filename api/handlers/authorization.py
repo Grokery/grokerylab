@@ -1,12 +1,25 @@
 import os
 import jwt
 import datetime
+import logging
 import simplejson as json
 from passlib.hash import pbkdf2_sha256
+from database import db
 
+logger = logging.getLogger()
 
 def authorize(event, context):
     """Authorize requests"""
+
+    global db
+
+    if context and "db" in context:
+        db = context['db']
+    if context and "models" in context:
+        models = context['models']
+    if context and "logger" in context:
+        logger = context['logger']
+
     try:
         decoded = jwt.decode(event["authorizationToken"], os.environ.get('JWT_SECRET_KEY'))
         # TODO Logic to check if user is allowed to access specific requested endpoint/method

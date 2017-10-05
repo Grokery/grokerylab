@@ -8,15 +8,16 @@ class MongoDatabase(object):
     """Mongo database connector"""
     db = None
 
-    def __init__(self):
+    def _get_db(self):
         if not self.db:
             client = MongoClient(os.environ.get('MONGODB_HOST'))
             self.db = client[os.environ.get('MONGODB_DB_NAME')]
+        return self.db
 
     def create(self, item):
         """Create new object in db"""
         item['id'] = str(uuid.uuid4())
-        self.db[item['collection']].insert_one(item)
+        self._get_db()[item['collection']].insert_one(item)
         del item['_id']
         return {'Item': item}
 
@@ -32,7 +33,7 @@ class MongoDatabase(object):
             dbquery = query.to_dict()
         else:
             dbquery = {}
-        cursor = self.db[collection].find(dbquery, projection)
+        cursor = self._get_db()[collection].find(dbquery, projection)
         results = {"Items": []}
         results["Items"].extend(cursor)
         return results
@@ -45,24 +46,24 @@ class MongoDatabase(object):
             fields = fields.split(',')
             for field in fields:
                 projection[field.strip()] = 1
-        item = self.db[collection].find_one({'id': item_id}, projection)
+        item = self._get_db()[collection].find_one({'id': item_id}, projection)
         return {"Item": item}
 
 
     def update(self, item):
         """Update item in db"""
         update_values = item
-        current_values = self.db[item['collection']].find_one({'id': item['id']})
+        current_values = self._get_db()[item['collection']].find_one({'id': item['id']})
         for key in update_values:
             current_values[key] = update_values[key]
-        self.db[item['collection']].update_one({'id': item['id']}, {'$set': current_values}, upsert=False)
+        self._get_db()[item['collection']].update_one({'id': item['id']}, {'$set': current_values}, upsert=False)
         del current_values['_id']
         return {"Item": current_values}
 
 
     def delete(self, collection, item_id):
         """Delete item from db"""
-        result = self.db[collection].remove({'id': item_id})
+        result = self._get_db()[collection].remove({'id': item_id})
         if result['ok']:
             return {"Success": True, "Item": {"id": item_id}}
         else:
