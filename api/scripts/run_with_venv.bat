@@ -2,7 +2,7 @@
 
 virtualenv .venv
 
-.venv/Scripts/activate.bat
+.venv/Scripts/activate
 
 pip install -r requirements.txt
 

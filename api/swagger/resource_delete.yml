@@ -1,0 +1,5 @@
+Handles delete requests
+---
+responses:
+  200:
+    description: object

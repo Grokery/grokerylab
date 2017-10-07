@@ -1,0 +1,5 @@
+Handles update requests
+---
+responses:
+  200:
+    description: object

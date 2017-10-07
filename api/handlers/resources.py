@@ -2,9 +2,9 @@
 
 import logging
 import simplejson as json
-from database import db
 
 import models
+from database import db
 
 logger = logging.getLogger()
 

@@ -1,0 +1,5 @@
+Get dataflow nodes
+---
+responses:
+  200:
+    description: List of node objects

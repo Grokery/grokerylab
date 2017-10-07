@@ -4,6 +4,7 @@ import os
 from os.path import join, dirname
 from dotenv import load_dotenv
 from flask import Flask, request
+from flasgger import Swagger
 
 import handlers
 import routes
@@ -13,6 +14,21 @@ load_dotenv(join(dirname(__file__), '.env'))
 # TODO init logging
 
 app = Flask(__name__)
+
+app.config['SWAGGER'] = {
+    "swagger_version": "2.0",
+    "title": "GrokeryLab",
+    "specs": [
+        {
+            "version": "0.0.1",
+            "title": "GrokeryLab Api v0",
+            "endpoint": 'v0_spec',
+            "description": "Grokerylab is an integrated data flow management platform",
+            "route": '/v0/spec'
+        }
+    ]
+}
+swagger = Swagger(app)
 
 @app.before_request
 def before_request():

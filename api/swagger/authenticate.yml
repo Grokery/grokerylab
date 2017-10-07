@@ -1,0 +1,6 @@
+Authenticate user with username and password
+Expects: {"username":String,"password":String} in body
+---
+responses:
+  200:
+    description: User object

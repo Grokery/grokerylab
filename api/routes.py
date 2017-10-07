@@ -1,72 +1,104 @@
-""""""
+"""TODO add docstring"""
+import os
 import logging
 from flask import request, Response
+from flasgger import swag_from
 
 import handlers
 
+# TODO proper logging
 logger = logging.getLogger()
 
 # TODO clean up / design good api routes and document with swagger
+# https://github.com/rochacbruno/flasgger
 
 def init(app):
     """Initualize routes"""
+    app.add_url_rule('/', 'hello', view_func=hello)
 
-    @app.route("/")
-    def hello_world():
-        """Hello World"""
-        return "Hello World. Im alive!"
+    # API Routes
+    app.add_url_rule('/authenticate', 'authenticate', view_func=authenticate, methods=["POST"])
+    app.add_url_rule('/resources/<collection>', 'resources', view_func=resources, methods=["GET", "POST"])
+    app.add_url_rule('/resources/<collection>/<item_id>', 'resource', view_func=resource, methods=["GET", "PUT", "DELETE"])
+    app.add_url_rule('/dataflowservice', 'dataflowservice', view_func=dataflowservice, methods=["GET"])
 
-    @app.route("/authenticate", methods=["POST"])
-    def authenticate():
-        """Authenticate user.
-
-            Expects: {"username":String,"password":String} in body
-        """
-        return make_response({
-            "httpMethod": request.method,
-            "body": request.data
-        }, handlers.authenticate)
-
-    @app.route("/history", methods=["GET"])
-    @app.route("/history/<collection>", methods=["GET", "POST"])
-    @app.route("/history/<collection>/<item_id>", methods=["GET"])
-    def history(collection=None, item_id=None):
-        """Depricated"""
-        return make_response({
-            "httpMethod": request.method,
-            "pathParameters": {"collection": collection, "id": item_id},
-            "query": request.args,
-            "body": request.data
-        }, handlers.history)
-
-    @app.route("/resources/<collection>", methods=["GET", "POST"])
-    @app.route("/resources/<collection>/<item_id>", methods=["GET", "PUT", "DELETE"])
-    def resources(collection, item_id=None):
-        """Handles CRUD operations on atomic objects"""
-        return make_response({
-            "httpMethod": request.method,
-            "pathParameters": {"collection": collection, "id": item_id},
-            "query": request.args,
-            "body": request.data
-        }, handlers.resources)
+    # Deprecated Routes
+    app.add_url_rule("/history", 'history', view_func=history, methods=["GET"])
+    app.add_url_rule("/history/<collection>", 'history', view_func=history, methods=["GET", "POST"])
+    app.add_url_rule("/history/<collection>/<item_id>", 'history', view_func=history, methods=["GET"])
 
 
-    @app.route("/dataflowservice", methods=["GET"])
-    def dataflowservice():
-        """"""
-        return make_response({
-            "httpMethod": request.method,
-            "pathParameters": None,
-            "query": request.args,
-            "body": None
-        }, handlers.dataflowservice)
+def hello():
+    """Hello World"""
+    return "Hello World. Im alive!"
+
+
+def todo():
+    """Todo placeholder"""
+    return "Not Implemented"
+
+
+@swag_from('swagger/authenticate.yml')
+def authenticate():
+    """Authenticates user"""
+    return make_response({
+        "httpMethod": request.method,
+        "body": request.data
+    }, handlers.authenticate)
+
+@swag_from('swagger/resources_get.yml', endpoint='resources', methods=['GET'])
+@swag_from('swagger/resources_post.yml', endpoint='resources', methods=['POST'])
+def resources(collection, item_id=None):
+    """Handles CRUD operations on atomic objects"""
+    return make_response({
+        "httpMethod": request.method,
+        "pathParameters": {"collection": collection, "id": item_id},
+        "query": request.args,
+        "body": request.data
+    }, handlers.resources)
+
+@swag_from('swagger/resource_get.yml', endpoint='resource', methods=['GET'])
+@swag_from('swagger/resource_put.yml', endpoint='resource', methods=['PUT'])
+@swag_from('swagger/resource_delete.yml', endpoint='resource', methods=['DELETE'])
+def resource(collection, item_id=None):
+    """Handles CRUD operations on atomic objects"""
+    return make_response({
+        "httpMethod": request.method,
+        "pathParameters": {"collection": collection, "id": item_id},
+        "query": request.args,
+        "body": request.data
+    }, handlers.resources)
+
+@swag_from('swagger/dataflowservice.yml')
+def dataflowservice():
+    """"""
+    return make_response({
+        "httpMethod": request.method,
+        "pathParameters": None,
+        "query": request.args,
+        "body": None
+    }, handlers.dataflowservice)
+
+# TODO remove this
+def history(collection=None, item_id=None):
+    """Depricated"""
+    return make_response({
+        "httpMethod": request.method,
+        "pathParameters": {"collection": collection, "id": item_id},
+        "query": request.args,
+        "body": request.data
+    }, handlers.history)
+
 
 def make_response(event, handler):
     """Make API response"""
-    # try:
-    return Response(response=handler(event, {})["body"], status=200, mimetype="application/json")
-    # except Exception as ex:
-    #     # TODO handle important exception types seprately
-    #     # TODO retern debug info if DEBUG
-    #     # logger.debug(ex)
-    #     return "Internal Server Error", 500
+    if os.environ.get('DEBUG') == "True":
+        return Response(response=handler(event, {})["body"], status=200, mimetype="application/json")
+    else:
+        try:
+            return Response(response=handler(event, {})["body"], status=200, mimetype="application/json")
+        except Exception as ex:
+            # TODO handle important exception types seprately
+            # TODO retern debug info if DEBUG
+            # logger.debug(ex)
+            return "Internal Server Error", 500

@@ -1,0 +1,5 @@
+Handles create requests
+---
+responses:
+  200:
+    description: object
