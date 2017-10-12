@@ -30,6 +30,8 @@ app.config['SWAGGER'] = {
 }
 swagger = Swagger(app)
 
+routes.init(app)
+
 @app.before_request
 def before_request():
     """CORS"""
@@ -67,9 +69,6 @@ def after_request(response):
     if request.method != 'OPTIONS' and 'Origin' in request.headers:
         response.headers['Access-Control-Allow-Origin'] = request.headers['Origin']
     return response
-
-
-routes.init(app)
 
 
 if __name__ == "__main__":

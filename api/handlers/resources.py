@@ -4,6 +4,8 @@ import logging
 import simplejson as json
 
 import models
+import connectors
+from common.actions import DID_CREATE, DID_READ, DID_UPDATE, DID_DELETE
 from database import db
 
 logger = logging.getLogger()
@@ -20,15 +22,11 @@ def main(event, context):
     if context and "logger" in context:
         logger = context['logger']
 
-    collection = event['pathParameters']['collection']
-    # TODO: instaiate model that can validate input
-    #event['item'] = models.get_model(collection, event['body'])
-
     result = {
-        'POST': get_create_handler(collection),
-        'GET': get_read_handler(collection),
-        'PUT':  get_update_handler(collection),
-        'DELETE': get_delete_handler(collection),
+        'POST': create,
+        'GET': read,
+        'PUT':  update,
+        'DELETE': delete,
     }[event['httpMethod']](event)
 
     return {
@@ -41,62 +39,44 @@ def main(event, context):
         }
 
 
-def get_create_handler(collection):
-    """Get create handler based on object type"""
-    # TODO: change strings to enum pulled from models
-    return {
-        "eventx": default_create # example
-    }.get(collection, default_create)
-
-
-def default_create(event):
-    """Handle basic create event (POST)"""
-    item = json.loads(event['body']) # TODO get model from event
+def create(event):
+    """Handle create event (POST)"""
+    # TODO: instaiate model that can validate input
+    #event['item'] = models.get_model(collection, event['body'])
+    item = json.loads(event['body'])
     item['collection'] = event['pathParameters']['collection']
     result = db.create(item)
+    connectors.notify(DID_CREATE, request=event, result=result)
     return result
 
 
-def get_read_handler(collection):
-    """Get read handler based on object type"""
-    return {
-    }.get(collection, default_read)
-
-
-def default_read(event):
-    """Handle basic read (GET) event"""
+def read(event):
+    """Handle read (GET) event"""
     # TODO handle projections
     if 'id' in event['pathParameters'] and event['pathParameters']['id'] is not None:
         result = db.retrieve(event['pathParameters']['collection'], event['pathParameters']['id'])
+        connectors.notify(DID_READ, request=event, result=result)
     else:
         # TODO: handle paging
         result = db.retrieve_multiple(event['pathParameters']['collection'])
     return result
 
 
-def get_update_handler(collection):
-    """Get update handler based on object type"""
-    return {
-    }.get(collection, default_update)
-
-
-def default_update(event):
+def update(event):
     """Handle update (PUT) events"""
+    # TODO: instaiate model that can validate input
+    #event['item'] = models.get_model(collection, event['body'])
     item = json.loads(event['body'])
     item['collection'] = event['pathParameters']['collection']
     item['id'] = event['pathParameters']['id']
     result = db.update(item)
+    connectors.notify(DID_UPDATE, request=event, result=result)
     return result
 
 
-def get_delete_handler(collection):
-    """Get update handler based on object type"""
-    return {
-    }.get(collection, default_delete)
-
-
-def default_delete(event):
+def delete(event):
     """Handle DELETE (delete) events"""
     result = db.delete(event['pathParameters']['collection'], event['pathParameters']['id'])
+    connectors.notify(DID_DELETE, request=event, result=result)
     return result
 

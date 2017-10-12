@@ -8,3 +8,4 @@ python-dotenv==0.6.1
 pymongo==3.3.1
 passlib==1.7.1
 flasgger==0.8.0
+pypubsub==3.3.0
