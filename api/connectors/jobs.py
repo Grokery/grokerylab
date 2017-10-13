@@ -3,15 +3,24 @@
 import simplejson as json
 from pubsub import pub
 
-from common import actions
+from common import actions, jobtypes
 from __init__ import register
 
 
-def hello(request, result):
-    print(json.dumps(request))
-    print(json.dumps(result))
+def handleAction(request, result):
+    if request['pathParameters']['collection'] != 'jobs':
+        return
+
+    jobtype = request
+    {
+        jobtypes.AWS_DATAPIPELINE: aws_datapipeline,
+    }[event[jobtype]](request, result)
 
 
-register(hello, actions.DID_CREATE)
-register(hello, actions.DID_UPDATE)
-register(hello, actions.DID_DELETE)
+register(handleAction, actions.DID_CREATE)
+register(handleAction, actions.DID_UPDATE)
+register(handleAction, actions.DID_DELETE)
+
+
+def aws_datapipeline():
+    print("aws_datapipleine called")

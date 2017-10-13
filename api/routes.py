@@ -18,8 +18,10 @@ def init(app):
 
     # API Routes
     app.add_url_rule('/authenticate', 'authenticate', view_func=authenticate, methods=["POST"])
+
     app.add_url_rule('/resources/<collection>', 'resources', view_func=resources, methods=["GET", "POST"])
     app.add_url_rule('/resources/<collection>/<item_id>', 'resource', view_func=resource, methods=["GET", "PUT", "DELETE"])
+
     app.add_url_rule('/dataflowservice', 'dataflowservice', view_func=dataflowservice, methods=["GET"])
 
     # Deprecated Routes

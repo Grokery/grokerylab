@@ -53,7 +53,9 @@ def before_request():
                 "method": request.method,
                 "authorizationToken": token
             }, None)
-            if response['policyDocument']['Statement'][0]['Effect'] is not "Allow":
+            if response['policyDocument']['Statement'][0]['Effect'] is "Allow":
+                pass
+            else:
                 return "unauthorized", 401
         elif not token and "authenticate" in request.path and request.method == "POST":
             return routes.make_response({
