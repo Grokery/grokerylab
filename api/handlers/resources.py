@@ -5,7 +5,7 @@ import simplejson as json
 
 import models
 import connectors
-from common.actions import DID_CREATE, DID_READ, DID_UPDATE, DID_DELETE
+from common.actions import DID_CREATE, WILL_READ, DID_UPDATE, DID_DELETE
 from database import db
 
 logger = logging.getLogger()
@@ -41,11 +41,12 @@ def main(event, context):
 
 def create(event):
     """Handle create event (POST)"""
-    # TODO: instaiate model that can validate input
-    #event['item'] = models.get_model(collection, event['body'])
-    item = json.loads(event['body'])
-    item['collection'] = event['pathParameters']['collection']
-    result = db.create(item)
+    collection = event['pathParameters']['collection']
+    jsondata = json.loads(event['body'])
+    jsondata['collection'] = collection
+    model = models.get_model(collection, jsondata)
+    model.validate()
+    result = db.create(model.json())
     connectors.notify(DID_CREATE, request=event, result=result)
     return result
 
@@ -54,8 +55,8 @@ def read(event):
     """Handle read (GET) event"""
     # TODO handle projections
     if 'id' in event['pathParameters'] and event['pathParameters']['id'] is not None:
+        connectors.notify(WILL_READ, request=event)
         result = db.retrieve(event['pathParameters']['collection'], event['pathParameters']['id'])
-        connectors.notify(DID_READ, request=event, result=result)
     else:
         # TODO: handle paging
         result = db.retrieve_multiple(event['pathParameters']['collection'])
@@ -64,12 +65,13 @@ def read(event):
 
 def update(event):
     """Handle update (PUT) events"""
-    # TODO: instaiate model that can validate input
-    #event['item'] = models.get_model(collection, event['body'])
-    item = json.loads(event['body'])
-    item['collection'] = event['pathParameters']['collection']
-    item['id'] = event['pathParameters']['id']
-    result = db.update(item)
+    collection = event['pathParameters']['collection']
+    jsondata = json.loads(event['body'])
+    jsondata['collection'] = collection
+    jsondata['id'] = event['pathParameters']['id']
+    model = models.get_model(collection, jsondata)
+    model.validate()
+    result = db.update(model.json())
     connectors.notify(DID_UPDATE, request=event, result=result)
     return result
 
@@ -79,4 +81,3 @@ def delete(event):
     result = db.delete(event['pathParameters']['collection'], event['pathParameters']['id'])
     connectors.notify(DID_DELETE, request=event, result=result)
     return result
-
