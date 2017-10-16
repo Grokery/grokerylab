@@ -1,18 +1,24 @@
 """Resource base class"""
 
-from common import collections
+import simplejson as json
 
 class Base():
-    """Base class"""
-    jsondata = {}
+    """Base Class"""
+    data = {}
 
-    def __init__(self, jsondata):
-        self.jsondata = jsondata
+    def __init__(self, data):
+        if not isinstance(data, dict):
+            raise Exception("Invalid initalization data to model. Expected dict")
+        self.data = data
 
-    def json(self):
+    def jsonify(self):
         """To json function"""
-        return self.jsondata
+        return self.data
+
+    def serialize(self):
+        """Serialize to json string"""
+        return json.dumps(self.jsonify())
 
     def validate(self):
         """Validate required fields and throw exception on error"""
-        assert self.jsondata['collection'] in collections
+        raise NotImplementedError()

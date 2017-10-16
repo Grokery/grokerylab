@@ -1,4 +1,5 @@
 """TODO add docstring"""
+
 import os
 import logging
 from flask import request, Response
@@ -9,19 +10,15 @@ import handlers
 # TODO proper logging
 logger = logging.getLogger()
 
-# TODO clean up / design good api routes and document with swagger
-# https://github.com/rochacbruno/flasgger
-
 def init(app):
     """Initualize routes"""
     app.add_url_rule('/', 'hello', view_func=hello)
 
     # API Routes
     app.add_url_rule('/authenticate', 'authenticate', view_func=authenticate, methods=["POST"])
-
+    app.add_url_rule('/definitions/<collection>', 'definitions', view_func=definitions, methods=["GET"])
     app.add_url_rule('/resources/<collection>', 'resources', view_func=resources, methods=["GET", "POST"])
     app.add_url_rule('/resources/<collection>/<item_id>', 'resource', view_func=resource, methods=["GET", "PUT", "DELETE"])
-
     app.add_url_rule('/dataflowservice', 'dataflowservice', view_func=dataflowservice, methods=["GET"])
 
     # Deprecated Routes
@@ -47,6 +44,16 @@ def authenticate():
         "httpMethod": request.method,
         "body": request.data
     }, handlers.authenticate)
+
+# TODO add swagger docs
+def definitions(collection):
+    """Handles requests for global definitions"""
+    return make_response({
+        "httpMethod": request.method,
+        "pathParameters": {"collection": collection},
+        "query": request.args,
+        "body": request.data
+    }, handlers.definitions)
 
 @swag_from('swagger/resources_get.yml', endpoint='resources', methods=['GET'])
 @swag_from('swagger/resources_post.yml', endpoint='resources', methods=['POST'])

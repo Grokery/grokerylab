@@ -1,4 +1,4 @@
-"""TODO: add docstrings"""
+"""API Resource Actions"""
 
 DID_CREATE = "did-create"
 WILL_READ = "will-read"

@@ -46,7 +46,7 @@ def create(event):
     jsondata['collection'] = collection
     model = models.get_model(collection, jsondata)
     model.validate()
-    result = db.create(model.json())
+    result = db.create(model.jsonify())
     connectors.notify(DID_CREATE, request=event, result=result)
     return result
 

@@ -1,9 +1,9 @@
-"""User"""
+"""Run"""
 
 from models.base import Base
 
-class User(Base):
-    """User Model"""
+class Run(Base):
+    """Run Model"""
 
     def validate(self):
         """Validate required fields and throw exception on error"""
