@@ -1,8 +1,5 @@
-"""Common definitions"""
+"""Common functionality and definitions"""
 
-def enum_2_json(enum):
-    """Enum to json"""
-    items = {}
-    for k, obj in enum.__members__.iteritems():
-        items[k] = obj.value
-    return items
+from enum2json import enum2json
+from actiontypes import ActionTypes
+from definitions import *

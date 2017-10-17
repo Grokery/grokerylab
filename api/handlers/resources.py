@@ -1,11 +1,11 @@
-"""Nodes"""
+"""Resources"""
 
 import logging
 import simplejson as json
 
 import models
 import connectors
-from common.actions import DID_CREATE, WILL_READ, DID_UPDATE, DID_DELETE
+from common import ActionTypes
 from database import db
 
 logger = logging.getLogger()
@@ -22,7 +22,7 @@ def main(event, context):
     if context and "logger" in context:
         logger = context['logger']
 
-    result = {
+    response = {
         'POST': create,
         'GET': read,
         'PUT':  update,
@@ -35,7 +35,7 @@ def main(event, context):
             "Access-Control-Allow-Origin" : "*",
             "Access-Control-Allow-Credentials" : True
         },
-        "body": json.dumps(result)
+        "body": json.dumps(response)
         }
 
 
@@ -44,23 +44,23 @@ def create(event):
     collection = event['pathParameters']['collection']
     jsondata = json.loads(event['body'])
     jsondata['collection'] = collection
-    model = models.get_model(collection, jsondata)
-    model.validate()
-    result = db.create(model.jsonify())
-    connectors.notify(DID_CREATE, request=event, result=result)
-    return result
+    event['model'] = models.get_model(collection, jsondata)
+    event['model'].validate()
+    response = db.create(event['model'].jsonify())
+    connectors.notify(ActionTypes.DID_CREATE.name, event=event, response=response)
+    return response
 
 
 def read(event):
     """Handle read (GET) event"""
     # TODO handle projections
     if 'id' in event['pathParameters'] and event['pathParameters']['id'] is not None:
-        connectors.notify(WILL_READ, request=event)
-        result = db.retrieve(event['pathParameters']['collection'], event['pathParameters']['id'])
+        connectors.notify(ActionTypes.WILL_READ.name, event=event)
+        response = db.retrieve(event['pathParameters']['collection'], event['pathParameters']['id'])
     else:
         # TODO: handle paging
-        result = db.retrieve_multiple(event['pathParameters']['collection'])
-    return result
+        response = db.retrieve_multiple(event['pathParameters']['collection'])
+    return response
 
 
 def update(event):
@@ -69,15 +69,19 @@ def update(event):
     jsondata = json.loads(event['body'])
     jsondata['collection'] = collection
     jsondata['id'] = event['pathParameters']['id']
-    model = models.get_model(collection, jsondata)
-    model.validate()
-    result = db.update(model.json())
-    connectors.notify(DID_UPDATE, request=event, result=result)
-    return result
+    event['model'] = models.get_model(collection, jsondata)
+    event['model'].validate()
+    response = db.update(event['model'].jsonify())
+    connectors.notify(ActionTypes.DID_UPDATE.name, event=event, response=response)
+    return response
 
 
 def delete(event):
     """Handle DELETE (delete) events"""
-    result = db.delete(event['pathParameters']['collection'], event['pathParameters']['id'])
-    connectors.notify(DID_DELETE, request=event, result=result)
-    return result
+    item = db.retrieve(event['pathParameters']['collection'], event['pathParameters']['id'])
+    if item is None:
+        raise Exception("Not Found")
+    event['model'] = models.get_model(event['pathParameters']['collection'], item)
+    response = db.delete(event['pathParameters']['collection'], event['pathParameters']['id'])
+    connectors.notify(ActionTypes.DID_DELETE.name, event=event, response=response)
+    return response

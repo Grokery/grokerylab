@@ -16,7 +16,8 @@ def init(app):
 
     # API Routes
     app.add_url_rule('/authenticate', 'authenticate', view_func=authenticate, methods=["POST"])
-    app.add_url_rule('/definitions/<collection>', 'definitions', view_func=definitions, methods=["GET"])
+    app.add_url_rule('/definitions', 'definition', view_func=definition, methods=["GET"])
+    app.add_url_rule('/definitions/<definitiontype>', 'definitions', view_func=definitions, methods=["GET"])
     app.add_url_rule('/resources/<collection>', 'resources', view_func=resources, methods=["GET", "POST"])
     app.add_url_rule('/resources/<collection>/<item_id>', 'resource', view_func=resource, methods=["GET", "PUT", "DELETE"])
     app.add_url_rule('/dataflowservice', 'dataflowservice', view_func=dataflowservice, methods=["GET"])
@@ -46,11 +47,21 @@ def authenticate():
     }, handlers.authenticate)
 
 # TODO add swagger docs
-def definitions(collection):
+def definitions(definitiontype):
     """Handles requests for global definitions"""
     return make_response({
         "httpMethod": request.method,
-        "pathParameters": {"collection": collection},
+        "pathParameters": {"definitiontype": definitiontype},
+        "query": request.args,
+        "body": request.data
+    }, handlers.definitions)
+
+# TODO add swagger docs
+def definition():
+    """Handles requests for global definitions"""
+    return make_response({
+        "httpMethod": request.method,
+        "pathParameters": {},
         "query": request.args,
         "body": request.data
     }, handlers.definitions)

@@ -54,6 +54,8 @@ class MongoDatabase(object):
         """Update item in db"""
         update_values = item
         current_values = self._get_db()[item['collection']].find_one({'id': item['id']})
+        if current_values is None:
+            raise Exception("Item with id '"+item['id']+"' not found in collection '"+item['collection']+"'")
         for key in update_values:
             current_values[key] = update_values[key]
         self._get_db()[item['collection']].update_one({'id': item['id']}, {'$set': current_values}, upsert=False)

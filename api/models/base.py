@@ -11,6 +11,9 @@ class Base():
             raise Exception("Invalid initalization data to model. Expected dict")
         self.data = data
 
+    def get_type(self):
+        return self.data.get('type', '')
+
     def jsonify(self):
         """To json function"""
         return self.data
@@ -21,4 +24,5 @@ class Base():
 
     def validate(self):
         """Validate required fields and throw exception on error"""
-        raise NotImplementedError()
+        # raise NotImplementedError()
+        pass

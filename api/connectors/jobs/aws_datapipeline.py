@@ -2,36 +2,36 @@
 """Logic for AWS DataPipeline"""
 
 from connectors import register
-from common.actions import DID_CREATE, DID_UPDATE, DID_DELETE
-from common.resource_types import AWS_DATAPIPELINE
+from common import ActionTypes
+from common import JobTypes
 
-register(handle_create, DID_CREATE)
-register(handle_update, DID_UPDATE)
-register(handle_delete, DID_DELETE)
-
-
-def handle_create(event, result):
+def handle_create(event, response):
     """Create pipeline in aws"""
-    if event['item'].get_type() != AWS_DATAPIPELINE:
+    if event['model'].get_type() != JobTypes.AWS_DATAPIPELINE.name:
         return
 
     # TODO add logic to create datapipline in aws when created locally
     print("create aws datapipleine")
 
 
-def handle_update(event, result):
+def handle_update(event, response):
     """Update pipeline in aws"""
-    if event['item'].get_type() != AWS_DATAPIPELINE:
+    if event['model'].get_type() != JobTypes.AWS_DATAPIPELINE.name:
         return
 
     # TODO add logic to update datapipline in aws when updated locally
     print("updateing datapipline")
 
 
-def handle_delete(event, result):
+def handle_delete(event, response):
     """Delete pipeline in aws"""
-    if event['item'].get_type() != AWS_DATAPIPELINE:
+    if event['model'].get_type() != JobTypes.AWS_DATAPIPELINE.name:
         return
 
     # TODO add logic to delete datapipline in aws when deleted locally
     print("deleting datapipline")
+
+
+register(handle_create, ActionTypes.DID_CREATE.name)
+register(handle_update, ActionTypes.DID_UPDATE.name)
+register(handle_delete, ActionTypes.DID_DELETE.name)
