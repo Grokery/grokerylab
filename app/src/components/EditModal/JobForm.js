@@ -14,16 +14,24 @@ class JobForm extends Component {
     }
     this.props.onUpdate(updates)
   }
+  getOptions() {
+    const { lookups } = this.props
+    var items = []
+    if (lookups.jobtypes) {
+      items = lookups.jobtypes.map(function(item, index) {
+        return <option key={index} value={item.name}>{item.description}</option>
+      })
+    }
+    return items
+  }
   render() {
-    let { lookups, node } = this.props
-    console.log(lookups.jobtypes)
+    let { node } = this.props
     return (
       <form>
         <label>ETL Job Type</label>
         <select id="type" className="form-control" value={node.type ? node.type : ""} onChange={this.onChange.bind(this)}>
           <option>-- choose type --</option>
-          <option value="Shell Script">Shell Script</option>
-          <option value="MySql Script">MySql Script</option>
+          {this.getOptions()}
         </select>
       </form>
     )

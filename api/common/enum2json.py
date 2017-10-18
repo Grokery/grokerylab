@@ -2,7 +2,7 @@
 
 def enum2json(enum):
     """Enum to json"""
-    items = {}
+    items = []
     for k, obj in enum.__members__.iteritems():
-        items[k] = obj.value
+        items.append({"name":k, "description":obj.value})
     return items
