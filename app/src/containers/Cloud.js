@@ -2,13 +2,14 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { setSelectedCloud } from '../authentication'
-import { fetchNodes, clearNodes } from '../actions'
+import { fetchNodes, clearNodes, fetchLookupData } from '../actions'
 
 class Cloud extends Component {
   static propTypes = {
     cloudId: PropTypes.string.isRequired,
     fetchNodes: PropTypes.func.isRequired,
-    clearNodes: PropTypes.func.isRequired
+    clearNodes: PropTypes.func.isRequired,
+    fetchLookupData: PropTypes.func.isRequired
   }
   render() {
     const { cloudId } = this.props
@@ -22,9 +23,10 @@ class Cloud extends Component {
     )
   }
   componentDidMount(){
-    const { fetchNodes, clearNodes } = this.props
+    const { fetchNodes, clearNodes, fetchLookupData } = this.props
     clearNodes()
     fetchNodes()
+    fetchLookupData()
   }
 }
 
@@ -36,5 +38,6 @@ const mapStateToProps = (state, ownProps) => {
 
 export default connect(mapStateToProps, {
   fetchNodes,
-  clearNodes
+  clearNodes,
+  fetchLookupData
 })(Cloud)
