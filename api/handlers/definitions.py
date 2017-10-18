@@ -7,20 +7,18 @@ from common import definitions
 
 def main(event, context):
     """Lookup data handler"""
+
+    lookups = {
+        'cloudtypes': enum2json(definitions.CloudTypes),
+        'resourcetypes': enum2json(definitions.ResourceTypes),
+        'jobtypes': enum2json(definitions.JobTypes),
+        'sourcetypes': enum2json(definitions.SourceTypes)
+    }
+
     if 'definitiontype' not in event['pathParameters']:
-        result = {'definitiontypes': [
-            "cloudtypes",
-            "resourcetypes",
-            "jobtypes",
-            "sourcetypes"
-        ]}
+        result = lookups
     else:
-        result = {
-            'cloudtypes': enum2json(definitions.CloudTypes),
-            'resourcetypes': enum2json(definitions.ResourceTypes),
-            'jobtypes': enum2json(definitions.JobTypes),
-            'sourcetypes': enum2json(definitions.SourceTypes)
-        }.get(event['pathParameters']['definitiontype'], )
+        result = lookups.get(event['pathParameters']['definitiontype'])
 
     return {
         "statusCode": 200,
@@ -29,4 +27,4 @@ def main(event, context):
             "Access-Control-Allow-Credentials" : True
         },
         "body": json.dumps(result)
-        }
+    }
