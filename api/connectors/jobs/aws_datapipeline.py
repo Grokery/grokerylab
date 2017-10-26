@@ -8,13 +8,15 @@ from connectors import register
 from common import ActionTypes
 from common import JobTypes
 
-def handle_create(event, response):
+def handle_create(event, response=None):
     """Create datapipeline in AWS. Put definition if provided. Returns pipeline id"""
     if event['model'].get_type() != JobTypes.AWS_DATAPIPELINE.name:
         return
 
     # TODO add logic to create datapipline in aws when created locally
     print("create aws datapipleine")
+
+    print(event['model'].data)
 
     client=None
     name=None
@@ -28,29 +30,24 @@ def handle_create(event, response):
     if not unique_id:
         unique_id = str(int(time.time()))
 
-    result = client.create_pipeline(
-        name=name,
-        uniqueId=unique_id
-    )
-    pipeline_id = result['pipelineId']
+    print(client)
+    print(name)
+    print(unique_id)
 
-    if pipline_def:
-        put_response = put_definition(pipeline_id, pipline_def, client)
+    # result = client.create_pipeline(
+    #     name=name,
+    #     uniqueId=unique_id
+    # )
+    # pipeline_id = result['pipelineId']
+
+    # if pipline_def:
+    #     put_response = put_definition(pipeline_id, pipline_def, client)
 
     # update obj in db with pipeline id
     # {"pipeline_id": pipeline_id, "put_response": put_response}
 
 
-def handle_read(event, response):
-    """Update local pipeline info"""
-    if event['model'].get_type() != JobTypes.AWS_DATAPIPELINE.name:
-        return
-
-    # TODO add logic to update local datapipline info
-    print("updateing local datapipline info")
-
-
-def handle_update(event, response):
+def handle_update(event, response=None):
     """Update pipeline in aws"""
     if event['model'].get_type() != JobTypes.AWS_DATAPIPELINE.name:
         return
@@ -58,17 +55,19 @@ def handle_update(event, response):
     # TODO add logic to update datapipline in aws when updated locally
     print("updateing datapipline")
 
-    pipeline_id = ""
-    pipeline_def = ""
+    print(event['model'].data)
 
-    client.put_pipeline_definition(
-        pipelineId=pipeline_id,
-        pipelineObjects=pipline_def,
-        parameterValues={}
-    )
+    # pipeline_id = ""
+    # pipeline_def = ""
+
+    # client.put_pipeline_definition(
+    #     pipelineId=pipeline_id,
+    #     pipelineObjects=pipline_def,
+    #     parameterValues={}
+    # )
 
 
-def handle_delete(event, response):
+def handle_delete(event, response=None):
     """Delete pipeline in aws"""
     if event['model'].get_type() != JobTypes.AWS_DATAPIPELINE.name:
         return
@@ -78,7 +77,6 @@ def handle_delete(event, response):
 
 
 register(handle_create, ActionTypes.DID_CREATE.name)
-register(handle_read, ActionTypes.WILL_READ.name)
 register(handle_update, ActionTypes.DID_UPDATE.name)
 register(handle_delete, ActionTypes.DID_DELETE.name)
 

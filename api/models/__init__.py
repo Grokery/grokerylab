@@ -1,16 +1,15 @@
 """TODO"""
 
+from models import jobs
 from models.base import Base
-from models.board import Board
-from models.chart import Chart
-from models.event import Event
-from models.flow import Flow
-from models.job import Job 
-from models.run import Run 
-from models.source import Source 
-from models.user import User 
+from models.source import Source
+from common.definitions import *
 
 
-def get_model(collection, jsondata):
-    """TODO use collection to instiate proper object type"""
-    return Base(jsondata)
+def get_model(collection, jsondata={}):
+    """Use collection to instiate proper object type"""
+
+    return {
+        ResourceTypes.JOBS.value: jobs.get_job_model(jsondata.get('type','')),
+        ResourceTypes.SOURCES.value: Source
+    }.get(collection, Base)(jsondata)

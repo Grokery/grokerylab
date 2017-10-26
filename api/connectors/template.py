@@ -5,7 +5,7 @@ from common import ActionTypes
 from common import SourceTypes
 
 
-def handle_create(event, response):
+def handle_create(event, response=None):
     """Create s3 data source in AWS"""
     if event['model'].get_type() != SourceTypes.AWS_S3.name:
         return
@@ -14,7 +14,7 @@ def handle_create(event, response):
     print("create aws s3 data source")
 
 
-def handle_read(event, response):
+def handle_read(event, response=None):
     """Update local info for s3 data source"""
     if event['model'].get_type() != SourceTypes.AWS_S3.name:
         return
@@ -23,7 +23,7 @@ def handle_read(event, response):
     print("pudate local info for aws s3 data source")
 
 
-def handle_update(event, response):
+def handle_update(event, response=None):
     """Create s3 data source in AWS"""
     if event['model'].get_type() != SourceTypes.AWS_S3.name:
         return
@@ -32,7 +32,7 @@ def handle_update(event, response):
     print("create aws s3 data source")
 
 
-def handle_delete(event, response):
+def handle_delete(event, response=None):
     """Create s3 data source in AWS"""
     if event['model'].get_type() != SourceTypes.AWS_S3.name:
         return

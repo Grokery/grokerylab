@@ -19,7 +19,7 @@ class JobForm extends Component {
     var items = []
     if (lookups.jobtypes) {
       items = lookups.jobtypes.map(function(item, index) {
-        return <option key={index} value={item.name}>{item.description}</option>
+        return <option key={index} value={item.description}>{item.description}</option>
       })
     }
     return items

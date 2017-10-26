@@ -41,13 +41,13 @@ def main(event, context):
 
 def create(event):
     """Handle create event (POST)"""
-    collection = event['pathParameters']['collection']
     jsondata = json.loads(event['body'])
-    jsondata['collection'] = collection
-    event['model'] = models.get_model(collection, jsondata)
+    jsondata['collection'] = event['pathParameters']['collection']
+    event['model'] = models.get_model(jsondata['collection'])
+    event['model'].initialize(jsondata)
     event['model'].validate()
     response = db.create(event['model'].jsonify())
-    connectors.notify(ActionTypes.DID_CREATE.name, event=event, response=response)
+    # connectors.notify(ActionTypes.DID_CREATE.name, event=event, response=response)
     return response
 
 
@@ -55,7 +55,6 @@ def read(event):
     """Handle read (GET) event"""
     # TODO handle projections
     if 'id' in event['pathParameters'] and event['pathParameters']['id'] is not None:
-        connectors.notify(ActionTypes.WILL_READ.name, event=event)
         response = db.retrieve(event['pathParameters']['collection'], event['pathParameters']['id'])
     else:
         # TODO: handle paging
@@ -65,23 +64,32 @@ def read(event):
 
 def update(event):
     """Handle update (PUT) events"""
-    collection = event['pathParameters']['collection']
     jsondata = json.loads(event['body'])
-    jsondata['collection'] = collection
+    jsondata['collection'] = event['pathParameters']['collection']
     jsondata['id'] = event['pathParameters']['id']
-    event['model'] = models.get_model(collection, jsondata)
+    event['model'] = models.get_model(jsondata['collection'], jsondata)
+
+    existing = db.retrieve(jsondata['collection'], jsondata['id'])['Item']
+    existing = models.get_model(existing['collection'], existing)
+    if event['model'].get_type() != existing.get_type():
+        # TODO fire notification event to update item logs
+        existing.transition_to(event['model'])
+        event['model'].transition_from(existing)
+
+    print(event['model'].data['collection'] + ":" + event['model'].data['type'])
+
     event['model'].validate()
     response = db.update(event['model'].jsonify())
-    connectors.notify(ActionTypes.DID_UPDATE.name, event=event, response=response)
+    # connectors.notify(ActionTypes.DID_UPDATE.name, event=event, response=response)
     return response
 
 
 def delete(event):
     """Handle DELETE (delete) events"""
-    item = db.retrieve(event['pathParameters']['collection'], event['pathParameters']['id'])
-    if item is None:
-        raise Exception("Not Found")
-    event['model'] = models.get_model(event['pathParameters']['collection'], item)
+    result = db.retrieve(event['pathParameters']['collection'], event['pathParameters']['id'])
+    if result is not None:
+        event['model'] = models.get_model(event['pathParameters']['collection'], result['Item'])
+        event['model'].decomission()
     response = db.delete(event['pathParameters']['collection'], event['pathParameters']['id'])
-    connectors.notify(ActionTypes.DID_DELETE.name, event=event, response=response)
+    # connectors.notify(ActionTypes.DID_DELETE.name, event=event, response=response)
     return response
