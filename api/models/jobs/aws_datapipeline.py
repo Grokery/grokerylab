@@ -8,7 +8,7 @@ from models.jobs.job import Job
 from common import JobTypes
 
 class AWS_DataPipelineJob(Job):
-    """TODO"""
+    """Handles logic for AWS Datapipeline jobs"""
 
     def handle_create(event, response=None):
         """Create datapipeline in AWS. Put definition if provided. Returns pipeline id"""

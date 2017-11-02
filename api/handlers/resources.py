@@ -41,10 +41,12 @@ def main(event, context):
 
 def create(event):
     """Handle create event (POST)"""
-    jsondata = json.loads(event['body'])
-    jsondata['collection'] = event['pathParameters']['collection']
-    event['model'] = models.get_model(jsondata['collection'])
-    event['model'].initialize(jsondata)
+    body = json.loads(event['body'])
+    body['collection'] = event['pathParameters']['collection']
+    if 'subtype' not in body:
+        body['subtype'] = ""
+    event['model'] = models.get_model(body['collection'], body['subtype'])
+    event['model'].initialize(body)
     event['model'].validate()
     response = db.create(event['model'].jsonify())
     # connectors.notify(ActionTypes.DID_CREATE.name, event=event, response=response)
@@ -64,19 +66,23 @@ def read(event):
 
 def update(event):
     """Handle update (PUT) events"""
-    jsondata = json.loads(event['body'])
-    jsondata['collection'] = event['pathParameters']['collection']
-    jsondata['id'] = event['pathParameters']['id']
-    event['model'] = models.get_model(jsondata['collection'], jsondata)
+    body = json.loads(event['body'])
+    body['id'] = event['pathParameters']['id']
+    body['collection'] = event['pathParameters']['collection']
+    if 'subtype' not in body:
+        body['subtype'] = ""
+    event['model'] = models.get_model(body['collection'], body['subtype'], body)
 
-    existing = db.retrieve(jsondata['collection'], jsondata['id'])['Item']
-    existing = models.get_model(existing['collection'], existing)
-    if event['model'].get_type() != existing.get_type():
+    existing = db.retrieve(body['collection'], body['id'])['Item']
+    if 'subtype' not in existing:
+        existing['subtype'] = ""
+    existing = models.get_model(existing['collection'], existing['subtype'], existing)
+    if event['model'].get_subtype() != existing.get_subtype():
         # TODO fire notification event to update item logs
         existing.transition_to(event['model'])
         event['model'].transition_from(existing)
 
-    print(event['model'].data['collection'] + ":" + event['model'].data['type'])
+    print("validateing - " + event['model'].data['collection'] + ":" + event['model'].get_subtype())
 
     event['model'].validate()
     response = db.update(event['model'].jsonify())

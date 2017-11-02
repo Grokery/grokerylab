@@ -2,44 +2,72 @@
 
 import simplejson as json
 
-class Base():
+class Base(object):
     """Base Class"""
-    data = {}
+    data = {
+        "id": "",
+        "collection": "",
+        "subtype": ""
+    }
 
     def __init__(self, data=None):
         if data is None:
             return
-        if not isinstance(data, dict):
-            raise Exception("Invalid initalization data to model. Expected dict")
         self.initialize(data)
 
     def initialize(self, data=None):
+        """Initialize model with data and validate
+
+        @param data: initialization data
+
+        """
         print("initializeing self (base): " + str(self.__class__))
-        self.data = data
+        if data is not None:
+            if not isinstance(data, dict):
+                raise Exception("Invalid initalization data. Expected object of type dict")
+            self.data = data
+        self.validate()
+
+    def decomission(self):
+        """Clean up logic before delete, Should always be called before deleting"""
+        print("decomissioning self: " + str(self.__class__))
+        pass
 
     def transition_to(self, other):
+        """Transition logic called on old subtype. Should always be called when updating from one subtype to another
+
+        @param other: object of new subtype
+
+        """
         print("transitioning from: " + str(self.__class__))
         pass
 
     def transition_from(self, other):
+        """Transition logic called on new subtype. Should always be called when updating from one subtype to another
+
+        @param other: object of old subtype
+
+        """
         print("transitioning to: " + str(other.__class__))
         pass
 
-    def decomission(self):
-        print("decomissioning self: " + str(self.__class__))
-        pass
-
-    def get_type(self):
-        return self.data.get('type', '')
+    def get_subtype(self):
+        """Returns subtype of object or empty"""
+        return self.data.get('subtype', '')
 
     def jsonify(self):
-        """To json function"""
+        """Return data as json"""
         return self.data
 
     def serialize(self):
-        """Serialize to json string"""
+        """Return data as serialized json string"""
         return json.dumps(self.jsonify())
 
     def validate(self):
         """Validate required fields and throw exception on error"""
-        pass
+        if not "id" in self.data:
+            raise Exception("'id' field is required")
+        if not "collection" in self.data:
+            raise Exception("'collection' field is required")
+        if not "subtype" in self.data:
+            raise Exception("'subtype' field is required")

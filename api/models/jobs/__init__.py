@@ -1,12 +1,14 @@
 
-from models.jobs import job
-from models.jobs import aws_datapipeline
-from common.definitions import *
+from models.jobs.job import Job
+from models.jobs.aws_datapipeline import AWS_DataPipelineJob
+from common.definitions import JobTypes
 
 
-def get_job_model(job_type=None):
-    """Use job_type to instiate proper object type"""
-    print("get_job_model for type: " + job_type)
+def get_job_model(subtype):
+    """Use subtype to select proper object class or use generic Job"""
+    print("init job model for subtype: " + subtype)
+    print("JobTypes.AWS_DATAPIPELINE.name == subtype")
+    print(JobTypes.AWS_DATAPIPELINE.name == subtype)
     return {
-        JobTypes.AWS_DATAPIPELINE.value: aws_datapipeline.AWS_DataPipelineJob,
-    }.get(job_type, job.Job)
+        JobTypes.AWS_DATAPIPELINE.name: AWS_DataPipelineJob,
+    }.get(subtype, Job)
