@@ -1,5 +1,6 @@
 """Resource base class"""
 
+import logging
 import simplejson as json
 
 class Base(object):
@@ -21,16 +22,15 @@ class Base(object):
         @param data: initialization data
 
         """
-        print("initializeing self (base): " + str(self.__class__))
+        logging.debug("Initializeing: " + str(self.__class__))
         if data is not None:
             if not isinstance(data, dict):
                 raise Exception("Invalid initalization data. Expected object of type dict")
             self.data = data
-        self.validate()
 
     def decomission(self):
         """Clean up logic before delete, Should always be called before deleting"""
-        print("decomissioning self: " + str(self.__class__))
+        logging.debug("Decomissioning self: " + str(self.__class__))
         pass
 
     def transition_to(self, other):
@@ -39,7 +39,7 @@ class Base(object):
         @param other: object of new subtype
 
         """
-        print("transitioning from: " + str(self.__class__))
+        logging.debug("Transitioning from: " + str(self.__class__))
         pass
 
     def transition_from(self, other):
@@ -48,7 +48,7 @@ class Base(object):
         @param other: object of old subtype
 
         """
-        print("transitioning to: " + str(other.__class__))
+        logging.debug("Transitioning to: " + str(other.__class__))
         pass
 
     def get_subtype(self):
@@ -65,6 +65,7 @@ class Base(object):
 
     def validate(self):
         """Validate required fields and throw exception on error"""
+        logging.debug("Validating: " + str(self.__class__))
         if not "id" in self.data:
             raise Exception("'id' field is required")
         if not "collection" in self.data:

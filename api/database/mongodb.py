@@ -33,7 +33,7 @@ class MongoDatabase(object):
             dbquery = query.to_dict()
         else:
             dbquery = {}
-        cursor = self._get_db()[collection].find(dbquery, projection)
+        cursor = self._get_db()[collection.lower()].find(dbquery, projection)
         results = {"Items": []}
         results["Items"].extend(cursor)
         return results
@@ -46,26 +46,26 @@ class MongoDatabase(object):
             fields = fields.split(',')
             for field in fields:
                 projection[field.strip()] = 1
-        item = self._get_db()[collection].find_one({'id': item_id}, projection)
+        item = self._get_db()[collection.lower()].find_one({'id': item_id}, projection)
         return {"Item": item}
 
 
     def update(self, item):
         """Update item in db"""
         update_values = item
-        current_values = self._get_db()[item['collection']].find_one({'id': item['id']})
+        current_values = self._get_db()[item['collection'].lower()].find_one({'id': item['id']})
         if current_values is None:
             raise Exception("Item with id '"+item['id']+"' not found in collection '"+item['collection']+"'")
         for key in update_values:
             current_values[key] = update_values[key]
-        self._get_db()[item['collection']].update_one({'id': item['id']}, {'$set': current_values}, upsert=False)
+        self._get_db()[item['collection'].lower()].update_one({'id': item['id']}, {'$set': current_values}, upsert=False)
         del current_values['_id']
         return {"Item": current_values}
 
 
     def delete(self, collection, item_id):
         """Delete item from db"""
-        result = self._get_db()[collection].remove({'id': item_id})
+        result = self._get_db()[collection.lower()].remove({'id': item_id})
         if result['ok']:
             return {"Success": True, "Item": {"id": item_id}}
         else:

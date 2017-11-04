@@ -8,7 +8,6 @@ import connectors
 from common import ActionTypes
 from database import db
 
-logger = logging.getLogger()
 
 def main(event, context):
     """Resources main handler method"""
@@ -43,13 +42,10 @@ def create(event):
     """Handle create event (POST)"""
     body = json.loads(event['body'])
     body['collection'] = event['pathParameters']['collection']
-    if 'subtype' not in body:
-        body['subtype'] = ""
-    event['model'] = models.get_model(body['collection'], body['subtype'])
+    event['model'] = models.get_model(body['collection'], body.get('subtype', ''))
     event['model'].initialize(body)
     event['model'].validate()
     response = db.create(event['model'].jsonify())
-    # connectors.notify(ActionTypes.DID_CREATE.name, event=event, response=response)
     return response
 
 
@@ -68,25 +64,17 @@ def update(event):
     """Handle update (PUT) events"""
     body = json.loads(event['body'])
     body['id'] = event['pathParameters']['id']
-    body['collection'] = event['pathParameters']['collection']
-    if 'subtype' not in body:
-        body['subtype'] = ""
-    event['model'] = models.get_model(body['collection'], body['subtype'], body)
+    body['collection'] = event['pathParameters']['collection'].upper()
+    event['model'] = models.get_model(body['collection'], body.get('subtype',''), body)
 
     existing = db.retrieve(body['collection'], body['id'])['Item']
-    if 'subtype' not in existing:
-        existing['subtype'] = ""
-    existing = models.get_model(existing['collection'], existing['subtype'], existing)
+    existing = models.get_model(existing['collection'], existing.get('subtype',''), existing)
     if event['model'].get_subtype() != existing.get_subtype():
-        # TODO fire notification event to update item logs
         existing.transition_to(event['model'])
         event['model'].transition_from(existing)
 
-    print("validateing - " + event['model'].data['collection'] + ":" + event['model'].get_subtype())
-
     event['model'].validate()
     response = db.update(event['model'].jsonify())
-    # connectors.notify(ActionTypes.DID_UPDATE.name, event=event, response=response)
     return response
 
 
@@ -97,5 +85,4 @@ def delete(event):
         event['model'] = models.get_model(event['pathParameters']['collection'], result['Item'])
         event['model'].decomission()
     response = db.delete(event['pathParameters']['collection'], event['pathParameters']['id'])
-    # connectors.notify(ActionTypes.DID_DELETE.name, event=event, response=response)
     return response

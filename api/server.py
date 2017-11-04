@@ -1,6 +1,7 @@
 """Server.py"""
 
 import os
+import logging
 from os.path import join, dirname
 from dotenv import load_dotenv
 from flask import Flask, request
@@ -11,7 +12,7 @@ import routes
 
 load_dotenv(join(dirname(__file__), '.env'))
 
-# TODO init logging
+logging.basicConfig(format='%(asctime)s:%(levelname)s: %(message)s', level=logging.DEBUG)
 
 app = Flask(__name__)
 

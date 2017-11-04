@@ -1,20 +1,20 @@
 """Common definitions.
-    These are made available as json lookup data via the API as the lengua franca of common types etc.
+    These are made available as json lookup data via the API
 """
 
 from enum import Enum
 
 class ResourceTypes(Enum):
-    JOBS = 'jobs'
-    SOURCES = 'datasources'
-    CHARTS = 'charts'
-    BOARDS = 'dashboards'
-    RUNS = 'jobruns'
-    USERS = 'users'
-    EVENTS = 'events'
-    COMMENTS = 'comments'
-    LOGS = "logs"
-    LOGLINES = "loglines"
+    JOBS = 'Jobs'
+    DATASOURCES = 'Datasources'
+    CHARTS = 'Charts'
+    DASHBOARDS = 'Dashboards'
+    JOBRUNS = 'Jobruns'
+    USERS = 'Users'
+    EVENTS = 'Events'
+    COMMENTS = 'Comments'
+    LOGS = "Logs"
+    LOGLINES = "Loglines"
 
 class JobTypes(Enum):
     AWS_KINESIS = "AWS Kinesis"

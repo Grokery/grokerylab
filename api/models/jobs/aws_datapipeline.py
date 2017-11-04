@@ -3,6 +3,7 @@
 
 import time
 import boto3
+import logging
 
 from models.jobs.job import Job
 from common import JobTypes
