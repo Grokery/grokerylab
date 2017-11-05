@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { fetchNode } from '../../actions'
+import { RESOURCES } from '../../globals.js'
 import ContentEditable from '../ContentEditable/ContentEditable'
 import Comments from '../Comments/Comments'
 import ChartInfo from './ChartInfo'
@@ -11,17 +12,18 @@ import './InfoTab.css'
 
 class InfoTab extends Component {
   static propTypes = {
+    lookups: PropTypes.object,
     node: PropTypes.object,
     onUpdate: PropTypes.func.isRequired,
     fetchNode: PropTypes.func.isRequired
   }
   getItemDetailSection() {
     const { node, params } = this.props
-    if (node.collection === "charts") {
+    if (node.collection === RESOURCES.CHARTS) {
         return (<ChartInfo node={node} params={params}></ChartInfo>)
-    } else if (node.collection === "datasources") {
+    } else if (node.collection === RESOURCES.DATASOURCES) {
         return (<SourceInfo node={node} params={params}></SourceInfo>)
-    } else if (node.collection === "jobs") {
+    } else if (node.collection === RESOURCES.JOBS) {
         return (<JobInfo node={node} params={params}></JobInfo>)
     }  else {
         return (<div></div>)
@@ -32,6 +34,17 @@ class InfoTab extends Component {
   }
   handleDescriptionChange(e) {
       this.props.onUpdate({'description': e.target.value})
+  }
+  getSubtypeName(node) {
+    const { lookups } = this.props
+    console.log(lookups)
+    switch (node.collection) {
+        case RESOURCES.JOBS:
+            return lookups.jobtypes[node.subtype] ? lookups.jobtypes[node.subtype].description : "Job Placeholder"
+        case RESOURCES.DATASOURCES:
+            return lookups.sourcetypes[node.subtype] ? lookups.sourcetypes[node.subtype].description : "Source Placeholder"
+    }
+    return ""
   }
   render() {
     const { node, params } = this.props
@@ -47,7 +60,7 @@ class InfoTab extends Component {
             </div>
             <div className='col-md-6'>
                 <div className='node-info'>
-                    <div className='col-md-6'><label>Type: </label> {node.type}</div>
+                    <div className='col-md-6'><label>SubType: </label> {this.getSubtypeName(node)}</div>
                     <div className='col-md-6'><label>Owner: </label> {node.owner}</div>
                     {/* Maybe make component to handle collection and type specific fields */}
                 </div>
@@ -64,7 +77,8 @@ class InfoTab extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    node: state.nodes[ownProps.params.nodeId]
+    node: state.nodes[ownProps.params.nodeId],
+    lookups: state.lookups
   }
 }
 

@@ -12,7 +12,8 @@ def main(event, context):
         'cloudtypes': enum2json(definitions.CloudTypes),
         'resourcetypes': enum2json(definitions.ResourceTypes),
         'jobtypes': enum2json(definitions.JobTypes),
-        'sourcetypes': enum2json(definitions.SourceTypes)
+        'sourcetypes': enum2json(definitions.SourceTypes),
+        'charttypes': enum2json(definitions.ChartTypes)
     }
 
     if 'definitiontype' not in event['pathParameters']:

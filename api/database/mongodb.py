@@ -17,7 +17,7 @@ class MongoDatabase(object):
     def create(self, item):
         """Create new object in db"""
         item['id'] = str(uuid.uuid4())
-        self._get_db()[item['collection']].insert_one(item)
+        self._get_db()[item['collection'].lower()].insert_one(item)
         del item['_id']
         return {'Item': item}
 

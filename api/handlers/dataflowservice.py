@@ -37,7 +37,7 @@ def main(event, context):
             "body": json.dumps({"Items": items})
         }
 
-    types = ['jobs', 'datasources', 'charts', 'dashboards']
+    types = ['JOBS', 'DATASOURCES', 'CHARTS', 'DASHBOARDS']
     items = {}
     for resource_type in types:
         response = db.retrieve_multiple(resource_type, PROJECTION)

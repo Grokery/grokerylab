@@ -65,3 +65,16 @@ export const APPSTATUS = {
     BUSY: "busy",
     ERROR: "error"
 }
+
+export const RESOURCES = {
+    JOBS: "JOBS",
+    DATASOURCES: "DATASOURCES",
+    CHARTS: "CHARTS",
+    DASHBOARDS: "DASHBOARDS",
+    JOBRUNS: "JOBRUNS",
+    USERS: "USERS",
+    EVENTS: "EVENTS",
+    COMMENTS: "COMMENTS",
+    LOGS: "LOGS",
+    LOGLINES: "LOGLINES"
+}

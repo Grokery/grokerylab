@@ -4,7 +4,6 @@ import logging
 import simplejson as json
 
 import models
-import connectors
 from common import ActionTypes
 from database import db
 
@@ -18,8 +17,8 @@ def main(event, context):
         db = context['db']
     if context and "models" in context:
         models = context['models']
-    if context and "logger" in context:
-        logger = context['logger']
+    if context and "logging" in context:
+        logging = context['logging']
 
     response = {
         'POST': create,
@@ -42,10 +41,9 @@ def create(event):
     """Handle create event (POST)"""
     body = json.loads(event['body'])
     body['collection'] = event['pathParameters']['collection']
-    event['model'] = models.get_model(body['collection'], body.get('subtype', ''))
-    event['model'].initialize(body)
-    event['model'].validate()
-    response = db.create(event['model'].jsonify())
+    model = models.get_model(body['collection'], body.get('subtype', ''), body)
+    model.validate()
+    response = db.create(model.jsonify())
     return response
 
 
@@ -65,24 +63,26 @@ def update(event):
     body = json.loads(event['body'])
     body['id'] = event['pathParameters']['id']
     body['collection'] = event['pathParameters']['collection'].upper()
-    event['model'] = models.get_model(body['collection'], body.get('subtype',''), body)
+    model = models.get_model(body['collection'], body.get('subtype', ''), body)
 
     existing = db.retrieve(body['collection'], body['id'])['Item']
-    existing = models.get_model(existing['collection'], existing.get('subtype',''), existing)
-    if event['model'].get_subtype() != existing.get_subtype():
-        existing.transition_to(event['model'])
-        event['model'].transition_from(existing)
+    existing = models.get_model(existing['collection'], existing.get('subtype', ''), existing)
+    if model.get_subtype() != existing.get_subtype():
+        existing.transition_to(model)
+        model.transition_from(existing)
 
-    event['model'].validate()
-    response = db.update(event['model'].jsonify())
+    model.validate()
+    response = db.update(model.jsonify())
     return response
 
 
 def delete(event):
     """Handle DELETE (delete) events"""
-    result = db.retrieve(event['pathParameters']['collection'], event['pathParameters']['id'])
+    collection = event['pathParameters']['collection']
+    item_id = event['pathParameters']['id']
+    result = db.retrieve(collection, item_id)
     if result is not None:
-        event['model'] = models.get_model(event['pathParameters']['collection'], result['Item'])
-        event['model'].decomission()
-    response = db.delete(event['pathParameters']['collection'], event['pathParameters']['id'])
+        model = models.get_model(collection, "", result['Item'])
+        model.decomission()
+    response = db.delete(collection, item_id)
     return response

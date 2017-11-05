@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { fetchNode } from '../../actions'
+import { RESOURCES } from '../../globals.js'
 import './IChart.css'
 
 class IChart extends Component {
@@ -36,7 +37,7 @@ class IChart extends Component {
     }
     componentDidMount() {
         const { fetchNode, id } = this.props
-        fetchNode('charts', id)
+        fetchNode(RESOURCES.CHARTS, id)
         this._render()
     }
     componentDidUpdate() {

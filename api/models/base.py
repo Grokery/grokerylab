@@ -30,26 +30,25 @@ class Base(object):
 
     def decomission(self):
         """Clean up logic before delete, Should always be called before deleting"""
-        logging.debug("Decomissioning self: " + str(self.__class__))
-        pass
+        logging.debug("Decomissioning: " + str(self.__class__))
 
     def transition_to(self, other):
-        """Transition logic called on old subtype. Should always be called when updating from one subtype to another
+        """Transition logic called on old subtype. Should always be called
+        when updating from one subtype to another
 
         @param other: object of new subtype
 
         """
         logging.debug("Transitioning to: " + str(other.__class__))
-        pass
 
     def transition_from(self, other):
-        """Transition logic called on new subtype. Should always be called when updating from one subtype to another
+        """Transition logic called on new subtype. Should always be called when
+        updating from one subtype to another
 
         @param other: object of old subtype
 
         """
         logging.debug("Transitioning from: " + str(other.__class__))
-        pass
 
     def get_subtype(self):
         """Returns subtype of object or empty"""
@@ -65,10 +64,10 @@ class Base(object):
 
     def validate(self):
         """Validate required fields and throw exception on error"""
-        logging.debug("Validating: " + str(self.__class__))
+        logging.debug("Validating required Base fields: " + str(self.__class__))
         if not "id" in self.data:
-            raise Exception("'id' field is required")
+            self.data['subtype'] = ""
         if not "collection" in self.data:
             raise Exception("'collection' field is required")
         if not "subtype" in self.data:
-            raise Exception("'subtype' field is required")
+            self.data['subtype'] = ""

@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { history } from '../../index.js'
 import { setD3State, createNode, updateNode, deleteNode } from '../../actions'
 import { getSessionInfo } from '../../authentication'
+import { RESOURCES } from '../../globals.js'
 import d3 from 'd3'
 import './D3DataFlow.css'
 
@@ -336,7 +337,7 @@ class D3DataFlow extends Component {
     // draw  
     newGs.append("path")
         .attr('d', function(d) {
-        if (d.collection==="jobs") {
+        if (d.collection===RESOURCES.JOBS) {
             return "M 28.5 4.4" +
                 "c 1.3 -2.44 4.6 -4.4 7.36 -4.4" +
                 "h 88" +
@@ -350,13 +351,13 @@ class D3DataFlow extends Component {
                 "l -27.3 -51.16" +
                 "c -1.3 -2.44 -1.3 -6.4 0 -8.83" +
                 "z";
-        } else if (d.collection==="datasources") {
+        } else if (d.collection===RESOURCES.DATASOURCES) {
             return "M 16 120" +
                 "c -8.83 0 -16 -26.87 -16 -60 0 -33.14 7.17 -60 16 -60" +
                 "h 128" +
                 "c 8.84 0 16 26.86 16 60 0 33.13 -7.16 60 -16 60" +
                 "z";
-        } else if (d.collection==="charts") {
+        } else if (d.collection===RESOURCES.CHARTS) {
             return "M 16 120" +
                 "c -8.83 0 -16 -26.87 -16 -60 0 -33.14 7.17 -60 16 -60" +
                 "h 108" +
@@ -366,7 +367,7 @@ class D3DataFlow extends Component {
                 "l -27.3 51.17" +
                 "c -1.3 2.45 -4.6 4.43-7.35 4.43" +
                 "z";
-        } else if (d.collection==="dashboards") {
+        } else if (d.collection===RESOURCES.DASHBOARDS) {
             return "M 0 5" +
                 "c 0 -2.77 2.23 -5 5 -5" +
                 "h 150" +
@@ -397,13 +398,13 @@ class D3DataFlow extends Component {
             .attr("dy", graph.d3state.shapeHeight/2+8)
             .attr("dx", graph.d3state.shapeWidth/2)
         el.text(function (d) {
-            if (d.collection === "jobs") {
+            if (d.collection === RESOURCES.JOBS) {
                 return d.type_abrev ? d.type_abrev : 'Job'
-            } else if (d.collection === "datasources") {
+            } else if (d.collection === RESOURCES.DATASOURCES) {
                 return d.type_abrev ? d.type_abrev : 'Source'
-            } else if (d.collection === "charts") {
+            } else if (d.collection === RESOURCES.CHARTS) {
                 return d.type_abrev ? d.type_abrev : 'Chart'
-            } else if (d.collection === "dashboards") {
+            } else if (d.collection === RESOURCES.DASHBOARDS) {
                 return d.type_abrev ? d.type_abrev : 'Board'
             } else {
                 return ""
@@ -429,13 +430,13 @@ class D3DataFlow extends Component {
     //           .attr("dx", graph.d3state.shapeWidth / 2)
     //           .attr('font-family', 'FontAwesome')
     //       el.text(function(d) {
-    //           if (d.collection==="jobs") {
+    //           if (d.collection===RESOURCES.JOBS) {
     //               return "\uf121"
-    //           } else if (d.collection==="datasources") {
+    //           } else if (d.collection===RESOURCES.DATASOURCES) {
     //               return "\uf1c0"
-    //           } else if (d.collection==="charts") {
+    //           } else if (d.collection===RESOURCES.CHARTS) {
     //               return "\uf201"
-    //           } else if (d.collection==="dashboards") {
+    //           } else if (d.collection===RESOURCES.DASHBOARDS) {
     //               return "\uf009"
     //           } else {
     //               return ""
@@ -797,7 +798,9 @@ class D3DataFlow extends Component {
   }
   createJob(xy) {
       this.createNode({
-        collection: "jobs",
+        id: 0,
+        collection: RESOURCES.JOBS,
+        subtype: "",
         title: "New Job",
         description: "Default description",
         upstream: [],
@@ -808,7 +811,9 @@ class D3DataFlow extends Component {
   }
   createSource(xy) {
       this.createNode({
-        collection: "datasources",
+        id: 0,
+        collection: RESOURCES.DATASOURCES,
+        subtype: "",
         title: "New Source",
         description: "Default description",
         upstream: [],
@@ -819,7 +824,9 @@ class D3DataFlow extends Component {
   }
   createChart(xy) {
       this.createNode({
-        collection: "charts",
+        id: 0,
+        collection: RESOURCES.CHARTS,
+        subtype: "",
         title: "New Chart",
         description: "Default description",
         upstream: [],
@@ -830,7 +837,9 @@ class D3DataFlow extends Component {
   }
   createBoard(xy) {
       this.createNode({
-        collection: "dashboards",
+        id: 0,
+        collection: RESOURCES.DASHBOARDS,
+        subtype: "",
         title: "New Board",
         description: "Default description",
         upstream: [],

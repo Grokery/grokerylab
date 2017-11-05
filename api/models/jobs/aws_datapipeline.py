@@ -11,21 +11,27 @@ from common import JobTypes, overrides
 class AWS_DataPipelineJob(Job):
     """Handles logic for AWS Datapipeline jobs"""
 
-    # @overrides(Job)
-    # def initialize(self, data=None):
-    #     super(AWS_DataPipelineJob, self).initialize(data)
+    @overrides(Job)
+    def initialize(self, data=None):
+        super(AWS_DataPipelineJob, self).initialize(data)
 
-    # @overrides(Job)
-    # def transition_to(self, other):
-    #     super(AWS_DataPipelineJob, self).transition_to(other)
+    @overrides(Job)
+    def transition_to(self, other):
+        super(AWS_DataPipelineJob, self).transition_to(other)
 
-    # @overrides(Job)
-    # def transition_from(self, other):
-    #     super(AWS_DataPipelineJob, self).transition_from(other)
+    @overrides(Job)
+    def transition_from(self, other):
+        super(AWS_DataPipelineJob, self).transition_from(other)
 
-    # @overrides(Job)
-    # def decomission(self):
-    #     super(AWS_DataPipelineJob, self).decomission()
+    @overrides(Job)
+    def decomission(self):
+        super(AWS_DataPipelineJob, self).decomission()
+
+    @overrides(Job)
+    def validate(self):
+        """Validate required fields and throw exception on error"""
+        super(AWS_DataPipelineJob, self).validate()
+        logging.debug("Validating required AWS_DataPipelineJob fields")
 
     def handle_create(self, event, response=None):
         """Create datapipeline in AWS. Put definition if provided. Returns pipeline id"""

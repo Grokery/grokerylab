@@ -32,6 +32,9 @@ class SourceTypes(Enum):
     AWS_REDSHIFT = "AWS RedShift"
     AZURE_DATALAKE_STORE = "Azure DataLake Store"
 
+class ChartTypes(Enum):
+    HTML = "HTML"
+
 class CloudTypes(Enum):
     LOCAL = "Local"
     AWS = "AWS"

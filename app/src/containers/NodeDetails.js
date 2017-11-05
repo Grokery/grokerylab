@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { updateQueryParam } from '../globals.js'
 import { updateNode } from '../actions'
 import { history } from '../index.js'
+import { RESOURCES } from '../globals.js'
 import D3DataFlow from '../components/D3DataFlow/D3DataFlow'
 import JobDetails from '../components/NodeDetails/JobDetails'
 import SourceDetails from '../components/NodeDetails/SourceDetails'
@@ -78,7 +79,7 @@ class NodeDetails extends Component {
   getCollectionComponent() {
     // THOUGHT: could use the factory pattern here
     const { params} = this.props
-    if (params.collection === 'jobs') {
+    if (params.collection === RESOURCES.JOBS) {
       return (<JobDetails 
         params={params} 
         close={this.close.bind(this)}
@@ -86,7 +87,7 @@ class NodeDetails extends Component {
         onUpdate={this.onUpdate.bind(this)} 
         toggleNodeDetailsPain={this.toggleNodeDetailsPain}
       ></JobDetails>)
-    } else if (params.collection === 'datasources') {
+    } else if (params.collection === RESOURCES.DATASOURCES) {
       return (<SourceDetails 
         params={params} 
         close={this.close.bind(this)}
@@ -94,7 +95,7 @@ class NodeDetails extends Component {
         onUpdate={this.onUpdate.bind(this)} 
         toggleNodeDetailsPain={this.toggleNodeDetailsPain}>
       </SourceDetails>)
-    } else if (params.collection === 'charts') {
+    } else if (params.collection === RESOURCES.CHARTS) {
       return (<ChartDetails 
         params={params} 
         close={this.close.bind(this)}
@@ -102,7 +103,7 @@ class NodeDetails extends Component {
         onUpdate={this.onUpdate.bind(this)} 
         toggleNodeDetailsPain={this.toggleNodeDetailsPain}
       ></ChartDetails>)
-    } else if (params.collection === 'dashboards') {
+    } else if (params.collection === RESOURCES.DASHBOARDS) {
       return (<BoardDetails 
         params={params} 
         close={this.close.bind(this)}
