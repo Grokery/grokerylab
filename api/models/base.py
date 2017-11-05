@@ -39,7 +39,7 @@ class Base(object):
         @param other: object of new subtype
 
         """
-        logging.debug("Transitioning from: " + str(self.__class__))
+        logging.debug("Transitioning to: " + str(other.__class__))
         pass
 
     def transition_from(self, other):
@@ -48,7 +48,7 @@ class Base(object):
         @param other: object of old subtype
 
         """
-        logging.debug("Transitioning to: " + str(other.__class__))
+        logging.debug("Transitioning from: " + str(other.__class__))
         pass
 
     def get_subtype(self):

@@ -6,20 +6,36 @@ import boto3
 import logging
 
 from models.jobs.job import Job
-from common import JobTypes
+from common import JobTypes, overrides
 
 class AWS_DataPipelineJob(Job):
     """Handles logic for AWS Datapipeline jobs"""
 
-    def handle_create(event, response=None):
+    # @overrides(Job)
+    # def initialize(self, data=None):
+    #     super(AWS_DataPipelineJob, self).initialize(data)
+
+    # @overrides(Job)
+    # def transition_to(self, other):
+    #     super(AWS_DataPipelineJob, self).transition_to(other)
+
+    # @overrides(Job)
+    # def transition_from(self, other):
+    #     super(AWS_DataPipelineJob, self).transition_from(other)
+
+    # @overrides(Job)
+    # def decomission(self):
+    #     super(AWS_DataPipelineJob, self).decomission()
+
+    def handle_create(self, event, response=None):
         """Create datapipeline in AWS. Put definition if provided. Returns pipeline id"""
         if event['model'].get_type() != JobTypes.AWS_DATAPIPELINE.name:
             return
 
         # TODO add logic to create datapipline in aws when created locally
-        print("create aws datapipleine")
+        logging.debug("create aws datapipleine")
 
-        print(event['model'].data)
+        logging.debug(event['model'].data)
 
         client=None
         name=None
@@ -33,9 +49,9 @@ class AWS_DataPipelineJob(Job):
         if not unique_id:
             unique_id = str(int(time.time()))
 
-        print(client)
-        print(name)
-        print(unique_id)
+        logging.debug(client)
+        logging.debug(name)
+        logging.debug(unique_id)
 
         # result = client.create_pipeline(
         #     name=name,
@@ -49,15 +65,15 @@ class AWS_DataPipelineJob(Job):
         # update obj in db with pipeline id
         # {"pipeline_id": pipeline_id, "put_response": put_response}
 
-    def handle_update(event, response=None):
+    def handle_update(self, event, response=None):
         """Update pipeline in aws"""
         if event['model'].get_type() != JobTypes.AWS_DATAPIPELINE.name:
             return
 
         # TODO add logic to update datapipline in aws when updated locally
-        print("updateing datapipline")
+        logging.debug("updateing datapipline")
 
-        print(event['model'].data)
+        logging.debug(event['model'].data)
 
         # pipeline_id = ""
         # pipeline_def = ""
@@ -68,21 +84,21 @@ class AWS_DataPipelineJob(Job):
         #     parameterValues={}
         # )
 
-    def handle_delete(event, response=None):
+    def handle_delete(self, event, response=None):
         """Delete pipeline in aws"""
         if event['model'].get_type() != JobTypes.AWS_DATAPIPELINE.name:
             return
 
         # TODO add logic to delete datapipline in aws when deleted locally
-        print("deleting datapipline")
+        logging.debug("deleting datapipline")
 
-    def activate(pipeline_id, client=None):
+    def activate(self, pipeline_id, client=None):
         """Activate pipeline"""
         if not client:
             client = boto3.client('datapipeline')
         return client.activate_pipeline(pipelineId=pipeline_id)
 
-    def list_pipelines(marker='', client=None):
+    def list_pipelines(self, marker='', client=None):
         """Get list of pipelines"""
         if not client:
             client = boto3.client('datapipeline')
