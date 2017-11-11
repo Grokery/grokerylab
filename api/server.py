@@ -25,7 +25,7 @@ app.config['SWAGGER'] = {
             "title": "GrokeryLab Api v0",
             "endpoint": 'v0_spec',
             "description": "Grokerylab is an integrated data flow management platform",
-            "route": '/v0/spec'
+            "route": "/v0/spec"
         }
     ]
 }
@@ -38,16 +38,14 @@ def before_request():
     """CORS"""
     if request.method == 'OPTIONS':
         response = app.make_default_options_response()
-        resheads = response.headers
-        reqheaders = request.headers
-        resheads['Access-Control-Allow-Origin'] = reqheaders['Origin']
-        resheads['Access-Control-Allow-Methods'] = reqheaders['Access-Control-Request-Method']
-        resheads['Access-Control-Max-Age'] = "10"
-        if 'ACCESS_CONTROL_REQUEST_HEADERS' in reqheaders:
-            resheads['Access-Control-Allow-Headers'] = reqheaders['ACCESS_CONTROL_REQUEST_HEADERS']
+        response.headers['Access-Control-Allow-Origin'] = request.headers['Origin']
+        response.headers['Access-Control-Allow-Methods'] = request.headers['Access-Control-Request-Method']
+        response.headers['Access-Control-Max-Age'] = "10"
+        if 'ACCESS_CONTROL_REQUEST_HEADERS' in request.headers:
+            response.headers['Access-Control-Allow-Headers'] = request.headers['ACCESS_CONTROL_REQUEST_HEADERS']
         return response
     elif os.environ.get('AUTH_ENABLED') == "True":
-        token = request.headers.get('Authorization', '')
+        token = request.headers.get('Authorization', None)
         if token:
             response = handlers.authorize({
                 "path": request.path,

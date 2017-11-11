@@ -12,25 +12,29 @@ class Base(object):
     }
 
     def __init__(self, data=None):
+        logging.debug("init class: " + str(self.__class__) +' id: '+ str(self.data['id']))
         if data is None:
             return
-        self.initialize(data)
-
-    def initialize(self, data=None):
-        """Initialize model with data and validate
-
-        @param data: initialization data
-
-        """
-        logging.debug("Initializeing: " + str(self.__class__))
         if data is not None:
             if not isinstance(data, dict):
                 raise Exception("Invalid initalization data. Expected object of type dict")
             self.data = data
 
+    def initialize(self, data=None):
+        """Set up logic on create. Should always be called on create"""
+        logging.debug("Initializing: " + str(self.__class__))
+
     def decomission(self):
-        """Clean up logic before delete, Should always be called before deleting"""
+        """Tear down logic before delete. Should always be called before deleting"""
         logging.debug("Decomissioning: " + str(self.__class__))
+
+    def prepare_read(self):
+        """Generate calculated fields, gather additional data, etc in preparation for read"""
+        logging.debug("Reading: " + str(self.__class__))
+
+    def prepare_update(self):
+        """Update foreign as necessary on update local"""
+        logging.debug("Reading: " + str(self.__class__))
 
     def transition_to(self, other):
         """Transition logic called on old subtype. Should always be called

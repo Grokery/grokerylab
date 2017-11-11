@@ -21,10 +21,10 @@ def main(event, context):
         logging = context['logging']
 
     response = {
-        'POST': create,
-        'GET': read,
-        'PUT':  update,
-        'DELETE': delete,
+        "POST": create,
+        "GET": read,
+        "PUT":  update,
+        "DELETE": delete,
     }[event['httpMethod']](event)
 
     return {
@@ -41,7 +41,8 @@ def create(event):
     """Handle create event (POST)"""
     body = json.loads(event['body'])
     body['collection'] = event['pathParameters']['collection']
-    model = models.get_model(body['collection'], body.get('subtype', ''), body)
+    model = models.get_model(body['collection'], body.get('subtype',''), body)
+    model.initialize()
     model.validate()
     response = db.create(model.jsonify())
     return response
@@ -50,8 +51,11 @@ def create(event):
 def read(event):
     """Handle read (GET) event"""
     # TODO handle projections
-    if 'id' in event['pathParameters'] and event['pathParameters']['id'] is not None:
-        response = db.retrieve(event['pathParameters']['collection'], event['pathParameters']['id'])
+    if "id" in event['pathParameters'] and event['pathParameters']['id'] is not None:
+        item = db.retrieve(event['pathParameters']['collection'], event['pathParameters']['id'])['Item']
+        item = models.get_model(item['collection'], item.get('subtype', ''), item)
+        item.prepare_read()
+        response = {"Item": item.jsonify()}
     else:
         # TODO: handle paging
         response = db.retrieve_multiple(event['pathParameters']['collection'])
@@ -63,14 +67,15 @@ def update(event):
     body = json.loads(event['body'])
     body['id'] = event['pathParameters']['id']
     body['collection'] = event['pathParameters']['collection'].upper()
-    model = models.get_model(body['collection'], body.get('subtype', ''), body)
+    model = models.get_model(body['collection'], body.get('subtype',''), body)
 
-    existing = db.retrieve(body['collection'], body['id'])['Item']
-    existing = models.get_model(existing['collection'], existing.get('subtype', ''), existing)
+    item = db.retrieve(body['collection'], body['id'])['Item']
+    existing = models.get_model(item['collection'], item.get('subtype',''), item)
     if model.get_subtype() != existing.get_subtype():
         existing.transition_to(model)
         model.transition_from(existing)
 
+    model.prepare_update()
     model.validate()
     response = db.update(model.jsonify())
     return response
@@ -81,8 +86,10 @@ def delete(event):
     collection = event['pathParameters']['collection']
     item_id = event['pathParameters']['id']
     result = db.retrieve(collection, item_id)
-    if result is not None:
-        model = models.get_model(collection, "", result['Item'])
-        model.decomission()
+    if result is None:
+        raise Exception("Item not Found")
+    item = result['Item']
+    model = models.get_model(item['collection'], item.get('subtype',''), item)
+    model.decomission()
     response = db.delete(collection, item_id)
     return response

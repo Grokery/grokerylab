@@ -1,4 +1,4 @@
-"""TODO add docstring"""
+"""routes.py"""
 
 import os
 import logging
@@ -6,9 +6,6 @@ from flask import request, Response
 from flasgger import swag_from
 
 import handlers
-
-# TODO proper logging
-logger = logging.getLogger()
 
 def init(app):
     """Initualize routes"""
@@ -30,7 +27,7 @@ def init(app):
 
 def hello():
     """Hello World"""
-    return "Hello World. Im alive!"
+    return "Hi"
 
 
 def todo():
@@ -120,5 +117,5 @@ def make_response(event, handler):
         except Exception as ex:
             # TODO handle important exception types seprately
             # TODO retern debug info if DEBUG
-            # logger.debug(ex)
+            logging.debug(ex)
             return "Internal Server Error", 500
