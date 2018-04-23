@@ -7,10 +7,14 @@
 *dist
 *data
 *node_modules
-.idea/
+.settings
+.classpath
+.project
+.idea
+.vscode
 *.iml
 env.*.js
 .DS_Store
 *package-lock.json
 builds
-.vscode
+target
