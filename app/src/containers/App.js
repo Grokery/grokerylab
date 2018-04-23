@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { resetErrorMessage } from '../actions'
-import { setSelectedCloud } from '../authentication'
 
 class App extends Component {
   static propTypes = {
@@ -11,7 +10,6 @@ class App extends Component {
   }
   render() {
     const { children } = this.props
-    setSelectedCloud('')
     return (
       <div>
         <div>

@@ -26,9 +26,9 @@ class CloudSection extends Component {
     }
   }
   getCloudIcon(cloud){
-    if (cloud.type === 'aws'){
+    if (cloud.type === 'AWS'){
       return 'img/aws.png'
-    } else if (cloud.type === 'azure') {
+    } else if (cloud.type === 'AZURE') {
       return 'img/azure.png'
     } else {
       return 'img/local.png'
@@ -60,7 +60,7 @@ class CloudSection extends Component {
         <div className='cloud-section-header'>
           <a href={'#/clouds/' + cloudid} className='cloud-title'>
             <img src={this.getCloudIcon(cloud)} className='cloud-icon' role="presentation"/>
-            {cloud.name}
+            {cloud.title}
           </a>
           <a href='#' onClick={this.toggleEditDialog.bind(this)}><i className='fa fa-cog pull-right cloud-edit-icon'/></a>
           <Modal shown={this.state.shown}>
@@ -77,7 +77,7 @@ class CloudSection extends Component {
           </Modal>
         </div>
         <div className='cloud-section-quicklinks'>
-          {/* <Gallery itemSize='medium' colorClass='dark' images={false} items={this.getCloudLinks(cloudid, cloud)} params={{}}></Gallery> */}
+          <Gallery itemSize='medium' colorClass='light' images={false} items={this.getCloudLinks(cloudid, cloud)} params={{}}></Gallery>
         </div>
         <hr />
       </div>

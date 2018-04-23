@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { history } from '../../index.js'
 import { setD3State, createNode, updateNode, deleteNode } from '../../actions'
-import { getSessionInfo } from '../../authentication'
+import { getSelectedCloudName } from '../../authentication'
+import { RESOURCES } from '../../globals.js'
 import d3 from 'd3'
 import './D3DataFlow.css'
 
@@ -27,6 +28,13 @@ Svg
 
 */
 
+var nodeShapes = {
+    1: "Fat",
+    2: "Flat",
+    "Fat": 1,
+    "Flat": 2
+}
+
 class D3DataFlow extends Component {
   static propTypes = {
     setD3State: PropTypes.func.isRequired,
@@ -41,7 +49,8 @@ class D3DataFlow extends Component {
     height: PropTypes.number,
     zoomOnHighlight: PropTypes.bool,
     singleClickNav: PropTypes.bool,
-    colored: PropTypes.bool
+    colored: PropTypes.bool,
+    nodeShape: PropTypes.number
   }
   render() {
     return (
@@ -50,8 +59,8 @@ class D3DataFlow extends Component {
             <span id='create-nodes' style={{display:'none'}}>
                 <img className="drag-create-img" role='presentation' src="img/job.png" onMouseDown={this.createNodeDrag.bind(this, this.createJob.bind(this))}/>
                 <img className="drag-create-img" role='presentation' src="img/source.png" onMouseDown={this.createNodeDrag.bind(this, this.createSource.bind(this))}/>
-                <img className="drag-create-img" role='presentation' src="img/chart.png" onMouseDown={this.createNodeDrag.bind(this, this.createChart.bind(this))}/>
-                <img className="drag-create-img" role='presentation' src="img/board.png" onMouseDown={this.createNodeDrag.bind(this, this.createBoard.bind(this))}/>
+                {/* <img className="drag-create-img" role='presentation' src="img/chart.png" onMouseDown={this.createNodeDrag.bind(this, this.createChart.bind(this))}/>
+                <img className="drag-create-img" role='presentation' src="img/board.png" onMouseDown={this.createNodeDrag.bind(this, this.createBoard.bind(this))}/> */}
             </span>
             <input type="submit" className="icon-btn" value="&#xf067;" onClick={this.toggleCreateNodes} />
             <input id='delete-icon' type="submit" className="icon-btn" value="&#xf014;" onClick={this.onDelete.bind(this)} style={{display:'none'}}/>
@@ -66,6 +75,7 @@ class D3DataFlow extends Component {
     // ************************
     // Set up D3 state
     // ************************
+    var nodeShape = this.props.nodeShape ? this.props.nodeShape : 2
     this.d3state = {
         width: this.getWindowWidth(),
         height: this.getWindowHeight(),
@@ -93,8 +103,21 @@ class D3DataFlow extends Component {
         dblClickPathTimeout: false,
         selectedClass: "selected",
         shapeGClass: "conceptG",
-        shapeWidth: 160,
-        shapeHeight: 120,
+        nodeShape: nodeShape,
+        shapeWidth: function() {
+            if (nodeShape === nodeShapes.Fat) {
+                return 160
+            } else if (nodeShape === nodeShapes.Flat) {
+                return 250
+            }
+        }(),
+        shapeHeight: function() {
+            if (nodeShape === nodeShapes.Fat) {
+                return 120
+            } else if (nodeShape === nodeShapes.Flat) {
+                return 50
+            }
+        }(),
         xgridSize: 1,
         ygridSize: 1,
         mouseLocation: [0,0],
@@ -129,9 +152,9 @@ class D3DataFlow extends Component {
     //     .attr('y', '0')
     //     .attr('fill','transparent')
     //     .attr('stroke', 'black')
-    //     .attr('stroke-width',1)
-    //     .attr('width' , 1000)
-    //     .attr('height', 1000)
+    //     .attr('stroke-width', 1)
+    //     .attr('width' , 250)
+    //     .attr('height', 50)
 
     // define temp line displayed when shift dragging between shapes
     this.dragLine = this.svgG.append('svg:path')
@@ -202,6 +225,8 @@ class D3DataFlow extends Component {
     window.onresize = function() {
         this.updateWindow(this.svg)
     }.bind(this) 
+    this.renderD3()
+    this.centerAndFitFlow()
   }
   componentWillReceiveProps(nextProps) {
       let doCenterAndFit = false
@@ -220,15 +245,12 @@ class D3DataFlow extends Component {
     let graph = this
     let d3state = this.d3state
     const { selectedNodeId, nodes, colored } = this.props
-    if (Object.keys(nodes).length === 0) {
-        return
-    }
+
     if (selectedNodeId){
         d3state.selectedNodes[selectedNodeId]  = nodes[selectedNodeId]
     }
     d3state.width = this.getWindowWidth()
     d3state.height = this.getWindowHeight()
-    
     
     // *****************
     // Build node and edge lists and set min and max x and y
@@ -250,13 +272,13 @@ class D3DataFlow extends Component {
         if (!node.upstream){node.upstream = []}
         if (!node.downstream){node.downstream = []}
         node.downstream.forEach(function(dnode){
-            if (nodes[dnode.id]) {
-                edgeList.push({ source: node, target: nodes[dnode.id] })
+            if (nodes[dnode.guid]) {
+                edgeList.push({ source: node, target: nodes[dnode.guid] })
             }
         })
         nodeList.push(node)
-        if (d3state.selectedNodes[node.id]) {
-            d3state.selectedNodes[node.id] = node
+        if (d3state.selectedNodes[node.guid]) {
+            d3state.selectedNodes[node.guid] = node
         }
     })
     // Add padding to account for shape width & height
@@ -270,7 +292,7 @@ class D3DataFlow extends Component {
     // Render paths
     // ****************
     graph.paths = graph.paths.data(edgeList, function(d) {
-        return String(d.source.id) + "+" + String(d.target.id)
+        return String(d.source.guid) + "+" + String(d.target.guid)
     })
 
     // update existing
@@ -283,7 +305,7 @@ class D3DataFlow extends Component {
         .append("path")
         .style('marker-end', 'url(#mark-end-arrow)')
         .classed("link", true)
-        .attr('id', function(d) { return "n" + d.source.id + d.target.id })
+        .attr('id', function(d) { return "n" + d.source.guid + d.target.guid })
         .attr("d", function(d) { return graph.buildPathStr(d) })
         .on("mousedown", function(d) { graph.pathMouseDown.call(graph, d) })
         .on("mouseup", function(d) { graph.pathMouseUp.call(graph, d) })
@@ -295,7 +317,7 @@ class D3DataFlow extends Component {
     // *****************
     // Render shapes
     // ****************
-    graph.shapes = graph.shapes.data(nodeList, function(d) { return d.id })
+    graph.shapes = graph.shapes.data(nodeList, function(d) { return d.guid })
     
     // update existing
     this.shapes.attr("transform", function(d) {
@@ -309,10 +331,10 @@ class D3DataFlow extends Component {
     
     // bind actions
     newGs.classed(d3state.shapeGClass, true)
-    .attr('id', function(d) { return "n" + d.id })
+    .attr('id', function(d) { return "n" + d.guid })
     .attr('class', function(d) { 
         let colorclass = colored ? ' colored' : ''
-        return d3state.shapeGClass + " " + d.collection + "-node" + colorclass
+        return d3state.shapeGClass + " " + d.collection.toLowerCase() + "-node" + colorclass
     })
     .attr("transform", function(d) {
         let tr = "translate(" + (Math.round(d.x / d3state.xgridSize) * d3state.xgridSize)
@@ -326,101 +348,21 @@ class D3DataFlow extends Component {
         graph.shapeMouseUp(d)
     })
     .on("mouseover", function(d) {
-        d3.select(".tip-" + d.id).classed("hidden", false)
+        d3.select(".tip-" + d.guid).classed("hidden", false)
     })
     .on("mouseout", function(d) {
-        d3.select(".tip-" + d.id).classed("hidden", true)
+        d3.select(".tip-" + d.guid).classed("hidden", true)
     })
     .call(this.drag)
 
     // draw  
+    var self = this
     newGs.append("path")
-        .attr('d', function(d) {
-        if (d.collection==="jobs") {
-            return "M 28.5 4.4" +
-                "c 1.3 -2.44 4.6 -4.4 7.36 -4.4" +
-                "h 88" +
-                "c 2.76 0 6.05 1.96 7.35 4.4" +
-                "l 27.3 51.17" +
-                "c 1.3 2.45 1.3 6.4 0 8.84" +
-                "l -27.3 51.17" +
-                "c -1.3 2.45 -4.6 4.43-7.35 4.43" +
-                "h -88" +
-                "c -2.77 0 -6.06 -1.98 -7.36 -4.42" +
-                "l -27.3 -51.16" +
-                "c -1.3 -2.44 -1.3 -6.4 0 -8.83" +
-                "z";
-        } else if (d.collection==="datasources") {
-            return "M 16 120" +
-                "c -8.83 0 -16 -26.87 -16 -60 0 -33.14 7.17 -60 16 -60" +
-                "h 128" +
-                "c 8.84 0 16 26.86 16 60 0 33.13 -7.16 60 -16 60" +
-                "z";
-        } else if (d.collection==="charts") {
-            return "M 16 120" +
-                "c -8.83 0 -16 -26.87 -16 -60 0 -33.14 7.17 -60 16 -60" +
-                "h 108" +
-                "c 2.76 0 6.05 1.96 7.35 4.4" +
-                "l 27.3 51.17" +
-                "c 1.3 2.45 1.3 6.4 0 8.84" +
-                "l -27.3 51.17" +
-                "c -1.3 2.45 -4.6 4.43-7.35 4.43" +
-                "z";
-        } else if (d.collection==="dashboards") {
-            return "M 0 5" +
-                "c 0 -2.77 2.23 -5 5 -5" +
-                "h 150" +
-                "c 2.76 0 5 2.23 5 5" +
-                "v 110" +
-                "c 0 2.76 -2.24 5 -5 5" +
-                "h -150" +
-                "c -2.77 0 -5 -2.24 -5 -5" +
-                "z";
-        } else {
-            return "M 0 5" +
-                "c 0 -2.77 2.23 -5 5 -5" +
-                "h 150" +
-                "c 2.76 0 5 2.23 5 5" +
-                "v 110" +
-                "c 0 2.76 -2.24 5 -5 5" +
-                "h -150" +
-                "c -2.77 0 -5 -2.24 -5 -5" +
-                "z";
-        }
-    })
+        .attr('d', self.getNodeShape())
 
     // add content
-    newGs.each(function() {
-        let gEl = d3.select(this)
-        let el = gEl.append("text")
-            .attr("class", "node-text")
-            .attr("dy", graph.d3state.shapeHeight/2+8)
-            .attr("dx", graph.d3state.shapeWidth/2)
-        el.text(function (d) {
-            if (d.collection === "jobs") {
-                return d.type_abrev ? d.type_abrev : 'Job'
-            } else if (d.collection === "datasources") {
-                return d.type_abrev ? d.type_abrev : 'Source'
-            } else if (d.collection === "charts") {
-                return d.type_abrev ? d.type_abrev : 'Chart'
-            } else if (d.collection === "dashboards") {
-                return d.type_abrev ? d.type_abrev : 'Board'
-            } else {
-                return ""
-            }
-        })
-    })
 
-    // newGs.each(function(){
-    //     d3.select(this).append("text")
-    //         .attr("class", function (d) {
-    //                 return "hidden tooltiptext tip-" + d.id
-    //         })
-    //         .text(function (d) {
-    //                 return d.title
-    //         })
-    // })
-
+    // set node icons
     //   newGs.each(function() {
     //       let gEl = d3.select(this)
     //       let el = gEl.append("text")
@@ -429,13 +371,13 @@ class D3DataFlow extends Component {
     //           .attr("dx", graph.d3state.shapeWidth / 2)
     //           .attr('font-family', 'FontAwesome')
     //       el.text(function(d) {
-    //           if (d.collection==="jobs") {
+    //           if (d.collection===RESOURCES.JOBS) {
     //               return "\uf121"
-    //           } else if (d.collection==="datasources") {
+    //           } else if (d.collection===RESOURCES.DATASOURCES) {
     //               return "\uf1c0"
-    //           } else if (d.collection==="charts") {
+    //           } else if (d.collection===RESOURCES.CHARTS) {
     //               return "\uf201"
-    //           } else if (d.collection==="dashboards") {
+    //           } else if (d.collection===RESOURCES.DASHBOARDS) {
     //               return "\uf009"
     //           } else {
     //               return ""
@@ -443,20 +385,24 @@ class D3DataFlow extends Component {
     //       })
     //   })
 
-    //   newGs.each(function(){
-    //       let gEl = d3.select(this);
-    //       let el = gEl.append("text")
-    //           .attr("dy", graph.d3state.shapeHeight / 2 + 12)
-    //           .attr("dx", graph.d3state.shapeWidth / 2)
-    //       el.text(function (d){
-    //           let maxlen = 17;
-    //           if (d.title.length <= maxlen) {
-    //               return d.title;
-    //           } else {
-    //               return d.title.substring(0, maxlen) + '...';
-    //           }
-    //       });
-    //   });
+    // set node tool tips
+    // newGs.each(function(){
+    //     d3.select(this).append("text")
+    //         .attr("class", function (d) {
+    //                 return "hidden tooltiptext tip-" + d.guid
+    //         })
+    //         .text(function (d) {
+    //                 return d.title
+    //         })
+    // })
+
+    newGs.each(function() {
+        let gEl = d3.select(this)
+        let el = gEl.append("text")
+            .attr("dy", graph.d3state.shapeHeight / 2 + 8)
+            .attr("dx", graph.d3state.shapeWidth / 2)
+        el.text(self.getNodeContent())
+    })
 
     // remove old
     this.shapes.exit().remove();
@@ -466,7 +412,149 @@ class D3DataFlow extends Component {
 
     //this.props.setD3State(d3state)
   }
-  getWindowWidth(){
+  getNodeShape() {
+    let d3state = this.d3state
+    if (d3state.nodeShape === nodeShapes.Fat) {
+        return function(d) {
+            if (d.collection===RESOURCES.JOBS) {
+                return "M 28.5 4.4" +
+                    "c 1.3 -2.44 4.6 -4.4 7.36 -4.4" +
+                    "h 88" +
+                    "c 2.76 0 6.05 1.96 7.35 4.4" +
+                    "l 27.3 51.17" +
+                    "c 1.3 2.45 1.3 6.4 0 8.84" +
+                    "l -27.3 51.17" +
+                    "c -1.3 2.45 -4.6 4.43-7.35 4.43" +
+                    "h -88" +
+                    "c -2.77 0 -6.06 -1.98 -7.36 -4.42" +
+                    "l -27.3 -51.16" +
+                    "c -1.3 -2.44 -1.3 -6.4 0 -8.83" +
+                    "z";
+            } else if (d.collection===RESOURCES.DATASOURCES) {
+                return "M 16 120" +
+                    "c -8.83 0 -16 -26.87 -16 -60 0 -33.14 7.17 -60 16 -60" +
+                    "h 128" +
+                    "c 8.84 0 16 26.86 16 60 0 33.13 -7.16 60 -16 60" +
+                    "z";
+            } else if (d.collection===RESOURCES.CHARTS) {
+                return "M 16 120" +
+                    "c -8.83 0 -16 -26.87 -16 -60 0 -33.14 7.17 -60 16 -60" +
+                    "h 108" +
+                    "c 2.76 0 6.05 1.96 7.35 4.4" +
+                    "l 27.3 51.17" +
+                    "c 1.3 2.45 1.3 6.4 0 8.84" +
+                    "l -27.3 51.17" +
+                    "c -1.3 2.45 -4.6 4.43-7.35 4.43" +
+                    "z";
+            } else if (d.collection===RESOURCES.DASHBOARDS) {
+                return "M 0 5" +
+                    "c 0 -2.77 2.23 -5 5 -5" +
+                    "h 150" +
+                    "c 2.76 0 5 2.23 5 5" +
+                    "v 110" +
+                    "c 0 2.76 -2.24 5 -5 5" +
+                    "h -150" +
+                    "c -2.77 0 -5 -2.24 -5 -5" +
+                    "z";
+            } else {
+                return "M 0 5" +
+                    "c 0 -2.77 2.23 -5 5 -5" +
+                    "h 150" +
+                    "c 2.76 0 5 2.23 5 5" +
+                    "v 110" +
+                    "c 0 2.76 -2.24 5 -5 5" +
+                    "h -150" +
+                    "c -2.77 0 -5 -2.24 -5 -5" +
+                    "z";
+            }
+        }
+    } else if (d3state.nodeShape === nodeShapes.Flat) {
+        return function(d) {
+            if (d.collection===RESOURCES.JOBS) {
+                return "M 10 5" +
+                    "c 1.3 -2.44 4.6 -4.4 7.36 -4.4" +
+                    "h 220" +
+                    "c 2.76 0 6.05 1.96 7.35 4.4" +
+                    "l 10 16.2" +
+                    "c 1.3 2.45 1.3 6.4 0 8.84" +
+                    "l -10 16.2" +
+                    "c -1.3 2.45 -4.6 4.43-7.35 4.43" +
+                    "h -220" +
+                    "c -2.77 0 -6.06 -1.98 -7.36 -4.42" +
+                    "l -10 -16.2" +
+                    "c -1.3 -2.44 -1.3 -6.4 0 -8.83" +
+                    "l 10 -16.2";
+            } else if (d.collection===RESOURCES.DATASOURCES) {
+                return "M 8 50" +
+                    "c -8 0 -8 -25 -8 -25" +
+                    "c 0 -25 8 -25 8 -25" +
+                    "h 234" +
+                    "c 8 0 8 25 8 25" +
+                    "c 0 25 -8 25 -8 25" +
+                    "h -234";
+            } else if (d.collection===RESOURCES.CHARTS) {
+                return "M 8 50" +
+                    "c -8 0 -8 -25 -8 -25" +
+                    "c 0 -25 8 -25 8 -25" +
+                    "h 234" +
+                    "c 2.76 0 6.05 1.96 7.35 4.4" +
+                    "l 10 16.2" +
+                    "c 1.3 2.45 1.3 6.4 0 8.84" +
+                    "l -10 16.2" +
+                    "c -1.3 2.45 -4.6 4.43-7.35 4.43" +
+                    "h -234";
+            } else if (d.collection===RESOURCES.DASHBOARDS) {
+                return "M 0 4" +
+                    "c 0 -2 2 -4 4 -4" +
+                    "h 242" +
+                    "c 2 0 4 2 4 4" +
+                    "v 42" +
+                    "c 0 2 -2  4 -4 4" +
+                    "h -242" +
+                    "c -2 0 -4 -2 -4 -4" +
+                    "v -42";
+            } else {
+                return "M 0 4" +
+                    "c 0 -2 2 -4 4 -4" +
+                    "h 242" +
+                    "c 2 0 4 2 4 4" +
+                    "v 42" +
+                    "c 0 2 -2  4 -4 4" +
+                    "h -242" +
+                    "c -2 0 -4 -2 -4 -4" +
+                    "v -42";
+            }
+        }
+    }
+  }
+  getNodeContent() {
+    let d3state = this.d3state
+    if (d3state.nodeShape === nodeShapes.Fat) {
+        return function (d) {
+            if (d.collection === RESOURCES.JOBS) {
+                return d.type_abrev ? d.type_abrev : 'Job'
+            } else if (d.collection === RESOURCES.DATASOURCES) {
+                return d.type_abrev ? d.type_abrev : 'Source'
+            } else if (d.collection === RESOURCES.CHARTS) {
+                return d.type_abrev ? d.type_abrev : 'Chart'
+            } else if (d.collection === RESOURCES.DASHBOARDS) {
+                return d.type_abrev ? d.type_abrev : 'Board'
+            } else {
+                return ""
+            }
+        }
+    } else if (d3state.nodeShape === nodeShapes.Flat) {
+        return function (d) {
+            let maxlen = 22;
+            if (d.title.length <= maxlen) {
+                return d.title;
+            } else {
+                return d.title.substring(0, maxlen) + '...';
+            }
+        }
+    }
+  }
+  getWindowWidth() {
     const { width } = this.props
     if (!width) {
         const docEl = document.documentElement
@@ -475,7 +563,7 @@ class D3DataFlow extends Component {
     }
     return width
   }
-  getWindowHeight(){
+  getWindowHeight() {
     const { height } = this.props
     if (!height) {
         const docEl = document.documentElement
@@ -552,17 +640,17 @@ class D3DataFlow extends Component {
       if (this.d3state.drawEdge) {
           this.dragLine.attr('d', this.buildDragLineStr(d))
       } else {
-        if (Object.keys(this.d3state.selectedNodes).length > 0 && this.d3state.selectedNodes[d.id]) {
-        Object.keys(this.d3state.selectedNodes).forEach(function(id) {
-            let node = this.d3state.selectedNodes[id]
+        if (Object.keys(this.d3state.selectedNodes).length > 0 && this.d3state.selectedNodes[d.guid]) {
+        Object.keys(this.d3state.selectedNodes).forEach(function(guid) {
+            let node = this.d3state.selectedNodes[guid]
             node.x += d3.event.dx
             node.y += d3.event.dy
-            this.d3state.changedNodes[node.id] = node
+            this.d3state.changedNodes[node.guid] = node
           }.bind(this))
         } else {
             d.x += d3.event.dx
             d.y += d3.event.dy
-            this.d3state.changedNodes[d.id] = d
+            this.d3state.changedNodes[d.guid] = d
         }
         this.renderD3()
       }
@@ -587,7 +675,7 @@ class D3DataFlow extends Component {
       } else {
         this.clearAllSelection()
         this.d3state.selectedEdge = d
-        d3.select('#n' + d.source.id + d.target.id).classed(this.d3state.selectedClass, true)
+        d3.select('#n' + d.source.guid + d.target.guid).classed(this.d3state.selectedClass, true)
         this.showDeleteIcon()
       }
   }
@@ -599,7 +687,6 @@ class D3DataFlow extends Component {
       }
   }
   toggleFilteredNodes() {
-
   }
   showDeleteIcon() {
     let icon = document.getElementById('delete-icon')
@@ -614,16 +701,16 @@ class D3DataFlow extends Component {
       }
   }
   addNodeToSelected(d) {
-    this.d3state.selectedNodes[d.id] = d
+    this.d3state.selectedNodes[d.guid] = d
     if (Object.keys(this.d3state.selectedNodes).length > 1) {
-        history.push("/clouds/"+ getSessionInfo()['selectedCloud'].id + "/flow")
+        history.push("/clouds/"+ getSelectedCloudName() + "/flow")
     }
     this.selectNodes(this.d3state.selectedNodes)
   }
   removeNodeFromSelected(d) {
-    delete this.d3state.selectedNodes[d.id]
+    delete this.d3state.selectedNodes[d.guid]
     if (Object.keys(this.d3state.selectedNodes).length < 1) {
-        history.push("/clouds/"+ getSessionInfo()['selectedCloud'].id + "/flow")
+        history.push("/clouds/"+ getSelectedCloudName() + "/flow")
     }
     this.selectNodes(this.d3state.selectedNodes)
   }
@@ -633,9 +720,9 @@ class D3DataFlow extends Component {
         this.d3state.selectedNodes = nodes
         this.paths.classed('inactive', true)
         this.shapes.classed('inactive', true)
-        Object.keys(nodes).forEach(function(id) {
-            d3.select("#n" + id).classed(this.d3state.selectedClass, true)
-            this.highlightFlow(nodes[id])
+        Object.keys(nodes).forEach(function(guid) {
+            d3.select("#n" + guid).classed(this.d3state.selectedClass, true)
+            this.highlightFlow(nodes[guid])
         }.bind(this))
         this.showDeleteIcon()
       }
@@ -658,7 +745,7 @@ class D3DataFlow extends Component {
   highlightFlow(d) {
       const { zoomOnHighlight } = this.props
 
-      d3.select("#n" + d.id).classed('inactive', false)
+      d3.select("#n" + d.guid).classed('inactive', false)
       this.highlightUpstream(d)
       this.highlightDownstream(d)
 
@@ -683,9 +770,9 @@ class D3DataFlow extends Component {
 
       if (!d.upstream) { return }
       d.upstream.forEach(function(node){
-          d3.select('#n' + node.id).classed('inactive', false);
-          d3.select('#n' + node.id + d.id).classed('inactive', false);
-          this.highlightUpstream(nodes[node.id]);
+          d3.select('#n' + node.guid).classed('inactive', false);
+          d3.select('#n' + node.guid + d.guid).classed('inactive', false);
+          this.highlightUpstream(nodes[node.guid]);
       }.bind(this))
   }
   highlightDownstream(d) {
@@ -700,9 +787,9 @@ class D3DataFlow extends Component {
 
       if (!d.upstream) { return }
       d.downstream.forEach(function(node) {
-          d3.select('#n' + node.id).classed('inactive', false);
-          d3.select('#n' + d.id + node.id).classed('inactive', false);
-          this.highlightDownstream(nodes[node.id]);
+          d3.select('#n' + node.guid).classed('inactive', false);
+          d3.select('#n' + d.guid + node.guid).classed('inactive', false);
+          this.highlightDownstream(nodes[node.guid]);
       }.bind(this))
   }
   shapeMouseDown(d) {
@@ -716,29 +803,28 @@ class D3DataFlow extends Component {
   }
   shapeMouseUp(d) {
       let d3state = this.d3state;
-      let sessionInfo = getSessionInfo()
 
       if (d3state.drawEdge) {
           d3state.drawEdge = false
           this.dragLine.classed("hidden", true)
-          if (d3state.mouseDownNode.id !== d.id) {
-            d.upstream.push({"collection":d3state.mouseDownNode.collection,"id":d3state.mouseDownNode.id})
-            d3state.mouseDownNode.downstream.push({"collection":d.collection,"id":d.id})
-            d3state.changedNodes[d.id] = d
-            d3state.changedNodes[d3state.mouseDownNode.id] = d3state.mouseDownNode
+          if (d3state.mouseDownNode.guid !== d.guid) {
+            d.upstream.push({"collection":d3state.mouseDownNode.collection,"guid":d3state.mouseDownNode.guid})
+            d3state.mouseDownNode.downstream.push({"collection":d.collection,"guid":d.guid})
+            d3state.changedNodes[d.guid] = d
+            d3state.changedNodes[d3state.mouseDownNode.guid] = d3state.mouseDownNode
             this.onUpdateNodes(d3state.changedNodes)
           }
       } else if (d3state.dragging) {
           d3state.dragging = false
           this.onUpdateNodes(d3state.changedNodes)
       } else if (d3state.dblClickNodeTimeout) {
-          history.push("/clouds/"+ sessionInfo['selectedCloud'].id + "/" + d.collection + "/" + d.id + "?flow=open")
+          history.push("/clouds/"+ getSelectedCloudName() + "/" + d.collection.toLowerCase() + "/" + d.guid + "?flow=open")
       } else {
         if (this.props.singleClickNav) {
             this.clearAllSelection()
-            history.push("/clouds/"+ sessionInfo['selectedCloud'].id + "/" + d.collection + "/" + d.id + "?flow=open")
+            history.push("/clouds/"+ getSelectedCloudName() + "/" + d.collection.toLowerCase() + "/" + d.guid + "?flow=open")
         } else {
-            if (this.d3state.selectedNodes[d.id]) {
+            if (this.d3state.selectedNodes[d.guid]) {
                 this.removeNodeFromSelected(d)
             } else {
                 this.addNodeToSelected(d)
@@ -757,7 +843,6 @@ class D3DataFlow extends Component {
   }
   svgMouseUp() {
       var d3state = this.d3state
-      let sessionInfo = getSessionInfo()
 
       if (!d3state.graphMouseDown) {
           if (d3state.drawEdge) {
@@ -768,10 +853,10 @@ class D3DataFlow extends Component {
           d3state.justScaleTransGraph = false
       } else if (d3state.dblClickSVGTimeout) {
           this.clearAllSelection()
-          history.push("/clouds/"+ sessionInfo['selectedCloud'].id + "/flow")
+          history.push("/clouds/"+ getSelectedCloudName() + "/flow")
       } else {
           this.clearAllSelection()
-          history.push("/clouds/"+ sessionInfo['selectedCloud'].id + "/flow")
+          history.push("/clouds/"+ getSelectedCloudName() + "/flow")
           d3state.dblClickSVGTimeout = true
           setTimeout(function() {
               d3state.dblClickSVGTimeout = false
@@ -797,7 +882,8 @@ class D3DataFlow extends Component {
   }
   createJob(xy) {
       this.createNode({
-        collection: "jobs",
+        collection: RESOURCES.JOBS,
+        subType: "GENERIC",
         title: "New Job",
         description: "Default description",
         upstream: [],
@@ -808,7 +894,8 @@ class D3DataFlow extends Component {
   }
   createSource(xy) {
       this.createNode({
-        collection: "datasources",
+        collection: RESOURCES.DATASOURCES,
+        subType: "GENERIC",
         title: "New Source",
         description: "Default description",
         upstream: [],
@@ -819,7 +906,8 @@ class D3DataFlow extends Component {
   }
   createChart(xy) {
       this.createNode({
-        collection: "charts",
+        collection: RESOURCES.CHARTS,
+        subtype: "GENERIC",
         title: "New Chart",
         description: "Default description",
         upstream: [],
@@ -830,7 +918,8 @@ class D3DataFlow extends Component {
   }
   createBoard(xy) {
       this.createNode({
-        collection: "dashboards",
+        collection: RESOURCES.DASHBOARDS,
+        subtype: "GENERIC",
         title: "New Board",
         description: "Default description",
         upstream: [],
@@ -857,17 +946,17 @@ class D3DataFlow extends Component {
       let d3state = this.d3state
       let source = edge.source
       let target = edge.target
-      source.downstream = source.downstream.filter(function(n) { return n.id !== target.id; })
-      target.upstream = target.upstream.filter(function(n) { return n.id !== source.id })
-      d3state.changedNodes[source.id] = source
-      d3state.changedNodes[target.id] = target
+      source.downstream = source.downstream.filter(function(n) { return n.guid !== target.guid; })
+      target.upstream = target.upstream.filter(function(n) { return n.guid !== source.guid })
+      d3state.changedNodes[source.guid] = source
+      d3state.changedNodes[target.guid] = target
       this.onUpdateNodes(d3state.changedNodes)
   }
   onDelete() {
       if (Object.keys(this.d3state.selectedNodes).length > 0) {
         if (confirm("Confirm delete node(s)?" ) === true) {
-            Object.keys(this.d3state.selectedNodes).forEach(function(id) {
-                let node = this.d3state.selectedNodes[id]
+            Object.keys(this.d3state.selectedNodes).forEach(function(guid) {
+                let node = this.d3state.selectedNodes[guid]
                 this.props.deleteNode(node.collection, node, null)
             }.bind(this))
             this.clearAllSelection()

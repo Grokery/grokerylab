@@ -1,0 +1,240 @@
+
+.D3DataFlow {
+     background-color: #e7ebee;
+}
+
+#flow {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none
+}
+
+.flow-overlay {
+    fill: none;
+    stroke-width: 1px
+}
+
+#mark-end-arrow {
+    fill: #373F48;
+    stroke: #373F48;
+}
+
+
+/* Nodes */
+g {
+    fill: #fff;
+    stroke: #373F48;
+    stroke-width: 2;
+}
+
+g.undefined {
+    fill: #e7ebee;
+    stroke: #373F48;
+}
+
+g:hover {
+    stroke: #d62728;
+    stroke-width: 2;
+} 
+
+g.selected {
+    stroke: #d62728;
+    stroke-width: 3;
+} 
+
+g.selected:hover {
+    stroke: #d62728;
+    stroke-width: 4;
+} 
+
+g.colored.charts-node,
+g.colored.jobs-node {
+    fill: #ff9233;
+    stroke: #ff9233;
+    stroke-width: 0;
+}
+
+g.colored.datasources-node,
+g.colored.dashboards-node {
+    fill: #0271b1;
+    stroke: #0271b1;
+    stroke-width: 0; 
+}
+
+g.colored:hover {
+    fill: white;
+    stroke: #d62728;
+    stroke-width: 2;
+} 
+
+g.colored.selected {
+    fill: white;
+    stroke: #d62728;
+    stroke-width: 3;
+} 
+
+g.colored.selected:hover {
+    fill: white;
+    stroke: #d62728;
+    stroke-width: 4;
+} 
+
+
+/* Text / Icons */
+g text {
+    font-size: 30px;
+    font-weight: 100;
+    text-anchor: middle;
+    pointer-events: none;
+    fill: #373F48;
+    stroke: #373F48;
+    stroke-width: 1;
+}
+
+g.colored text {
+    fill: #fff;
+    stroke: #fff;
+}
+
+g.colored:hover text,
+g.colored.selected text,
+g.colored.selected:hover text {
+    fill: #373F48;
+    stroke: #373F48;
+}
+
+g text.node-icon {
+    font-size: 24px;
+    font-weight: 100;
+    text-anchor: middle;
+    pointer-events: none;
+    fill: #373F48;
+}
+
+g.colored text.node-icon {
+    font-size:24px;
+    font-weight: 100;
+    text-anchor: middle;
+    pointer-events: none;
+    fill: white;
+    stroke-width: 0;
+}
+
+
+/* Edges */
+path.link {
+    fill: none;
+    stroke: #373F48;
+    stroke-width: 3px;
+    cursor: default;
+}
+
+path.link:hover {
+    stroke: #d62728;
+}
+
+path.link.selected {
+    stroke: #d62728;
+    stroke-width: 4px;
+}
+
+path.link.selected:hover {
+    stroke: #d62728;
+    stroke-width: 4px;
+}
+
+
+/*  */
+g.inactive,
+g.inactive text,
+path.link.inactive {
+    opacity: .1
+}
+
+
+/*  */
+#flow-header-content {
+    padding-top: 5px;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+#flow-header-content input:focus {
+    outline: none;
+}
+
+#flow-header-content .drag-create-img {
+    height: 32px;
+    margin-bottom: 2px;
+    margin-right: 4px;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.create-icon {
+    display: inline;
+}
+
+.filter-nodes {
+    display: inline;
+}
+
+.filter-input {
+    margin:0;
+	height:35px;
+    border:none;
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-radius: 4px 0 0 4px;
+}
+
+.icon-btn {
+    border: none;
+    font-family: FontAwesome;
+    background-color: transparent;
+    font-size: inherit;
+    color: #0291E3;
+}
+
+.filter-icon {
+    height: 35px;
+    background-color:white;    
+	margin: 0;
+    padding: 0;
+    margin-right: 5px;
+	padding-right: 5px;
+    border: none;
+	border-right: 1px solid #ccc;
+	border-radius: 0px 4px 4px 0px;
+	border-top: 1px solid #ccc;
+	padding-left: 5px;
+	border-bottom: 1px solid #ccc;
+    color: #0291E3;
+    font-size: inherit;
+}
+
+g.colored:hover text.tooltiptext,
+g.colored.selected text.tooltiptext,
+g.colored.selected:hover text.tooltiptext  {
+    fill: #373F48;
+    stroke: #373F48;
+    font-size: 68px;
+    stroke-width: 2;
+}
+
+#mousexy,
+#graphxy {
+    padding-left: 10px;
+    padding-right: 10px;
+}

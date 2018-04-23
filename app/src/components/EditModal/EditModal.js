@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Modal from '../Modal/Modal'
 import { Tabs, Panel } from '../Tabs/Tabs'
+import { RESOURCES } from '../../globals.js'
 import CodeEditor from '../CodeEditor/CodeEditor'
 import JobForm from './JobForm'
 import SourceForm from './SourceForm'
@@ -50,13 +51,13 @@ class EditModal extends Component {
     if (!node) {
       return <div></div>
     }
-    if (node.collection === "jobs") {
+    if (node.collection === RESOURCES.JOBS) {
       return (<JobForm node={node} onUpdate={this.props.onUpdate}></JobForm>)
-    } else if (node.collection === "datasources") {
+    } else if (node.collection === RESOURCES.DATASOURCES) {
       return (<SourceForm node={node} onUpdate={this.props.onUpdate}></SourceForm>)
-    } else if (node.collection === "charts") {
+    } else if (node.collection === RESOURCES.CHARTS) {
       return (<ChartForm node={node} onUpdate={this.props.onUpdate}></ChartForm>)
-    } else if (node.collection === "jobs") {
+    } else if (node.collection === RESOURCES.JOBS) {
       return (<BoardForm node={node} onUpdate={this.props.onUpdate}></BoardForm>)
     } else {
       return <div></div>

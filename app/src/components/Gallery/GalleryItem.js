@@ -1,23 +1,27 @@
 import React, { Component } from 'react'
 
 export default class GalleryItem extends Component {
-  getHref(){
+  getHref() {
     const { item, params } = this.props
     if (item.url) {
       return item.url
     } else if (params && item.collection && item.id) {
-      return '#/clouds/'+params.cloudId+'/'+item.collection+'/'+item.id
+      return '#/clouds/'+params.cloudName+'/'+item.collection+'/'+item.id
     } else {
       return ''
     }
   }
-  getImageSrc() {
+  getImage() {
     const { item, images } = this.props
-    let src = ''
+    let img = null
     if (images) {
-      src = item.preview ? item.preview : 'img/600x350white.png'
-    }
-    return src
+      if (item.preview) {
+        img = (<img className="thumbnail img-responsive" src={item.preview} role="presentation"></img>)
+      } else {
+        img = (<img className="thumbnail img-responsive" src={'img/600x350white.png'} role="presentation"></img>)
+      }
+    } 
+    return img
   }
   render() {
     const { item, itemSize } = this.props
@@ -34,7 +38,7 @@ export default class GalleryItem extends Component {
             <span className='hidden results-item-filter-text'>{item.title + ' ' + item.description}</span>
             <h4 className='gallery-item-title'>{item.title}</h4>
             <div className='gallery-item-preview'>
-              <img className="thumbnail img-responsive" src={this.getImageSrc()} role="presentation"></img>
+              {this.getImage()}
             </div>
           </div>
         </a>

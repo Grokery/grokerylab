@@ -7,7 +7,7 @@ class Blank extends Component {
       <div className='page-content'>
         <p>(Blank page)</p>
         {/*<pre>
-          {this.props.params.cloudId}
+          {this.props.params.cloudName}
         </pre>
         <pre>
           {this.props.params.nodeId}

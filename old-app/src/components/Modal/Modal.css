@@ -1,0 +1,7 @@
+.modal.in {
+    display: block
+}
+
+.modal {
+    display: none
+}

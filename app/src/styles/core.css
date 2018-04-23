@@ -53,7 +53,7 @@ pre {
 .sidebar-page {
   position: absolute;
   right:0;
-  left:0;
+  left:64px;
   top:50px;
   bottom:0;
 }

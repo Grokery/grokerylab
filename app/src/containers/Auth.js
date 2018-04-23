@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { authenticate, isAuthenticated, disAuthenticate } from '../authentication'
 import { history } from '../index.js'
-import { AUTH_ENABLED } from "../globals.js"
 import '../styles/Auth.css'
 
 class Auth extends Component {
@@ -14,9 +13,7 @@ class Auth extends Component {
   }
   componentWillMount() {
     const { isAuthenticated, disAuthenticate} = this.props
-    if (!AUTH_ENABLED) {
-      history.push("/")
-    } else if (isAuthenticated()){
+    if (isAuthenticated()){
       disAuthenticate()
       history.push("/")
     }

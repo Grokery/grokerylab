@@ -1,6 +1,5 @@
 
 export const d3state = (state = {}, action) => {
-    // console.log(action)
     return state
 }
 

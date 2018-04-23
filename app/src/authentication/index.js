@@ -1,4 +1,4 @@
-import { AUTH_URL } from "../globals.js"
+import { GROKERY_API } from "../globals.js"
 import { history } from '../index.js'
 
 export const setRedirectUrl = (url) => {
@@ -23,7 +23,7 @@ export const setSessionInfo = (sessionInfo) => {
 
 export const isAuthenticated = () => {
     let sessionInfo = getSessionInfo()
-    if (sessionInfo && sessionInfo.token){
+    if (sessionInfo && sessionInfo.accountToken){
         return true
     }
     return false
@@ -36,7 +36,7 @@ export const authenticate = (user, pass) => {
         headers: new Headers({'Content-Type':'application/json'}),
         body: JSON.stringify({username: user, password: pass})
     }
-    return fetch(AUTH_URL, params)
+    return fetch(GROKERY_API+"/auth/signin", params)
         .then(response =>
             response.json().then(json => {
                 if (!response.ok) {
@@ -58,10 +58,32 @@ export const disAuthenticate = () => {
     delete sessionStorage.sessionInfo
 }
 
-export const setSelectedCloud = (cloudId) => {
-    let sessionInfo = getSessionInfo()
-    if (sessionInfo && sessionInfo['clouds']) {
-        sessionInfo['selectedCloud'] = sessionInfo['clouds'][cloudId]
-        sessionStorage.setItem("sessionInfo", JSON.stringify(sessionInfo))
-    }
+export const getAccountToken = () => {
+    return getSessionInfo()['accountToken']
+}
+
+export const setSelectedCloudName = (name) => {
+    sessionStorage.setItem("selectedCloudName", name)
+}
+
+export const getSelectedCloudName = () => {
+    return sessionStorage.getItem("selectedCloudName")
+}
+
+export const getSelectedCloudId = () => {
+    return getSessionInfo()['clouds'][getSelectedCloudName()]['cloudId']
+}
+
+export const getSelectedCloudUrl = () => {
+    return getSessionInfo()['clouds'][getSelectedCloudName()]['url']
+}
+
+export const getSelectedCloudToken = () => {
+    return getSessionInfo()['clouds'][getSelectedCloudName()]['cloudToken']
+}
+
+export const setBaseUrlForCloudName = (name, url) => {
+    var sessionInfo = getSessionInfo()
+    sessionInfo['clouds'][name]['url'] = url
+    setSessionInfo(sessionInfo)
 }

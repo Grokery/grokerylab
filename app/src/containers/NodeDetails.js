@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { updateQueryParam } from '../globals.js'
 import { updateNode } from '../actions'
 import { history } from '../index.js'
+import { RESOURCES } from '../globals.js'
 import D3DataFlow from '../components/D3DataFlow/D3DataFlow'
 import JobDetails from '../components/NodeDetails/JobDetails'
 import SourceDetails from '../components/NodeDetails/SourceDetails'
@@ -18,7 +19,7 @@ class NodeDetails extends Component {
   }
   close() {
     const { params } = this.props
-    history.push("/clouds/"+ params.cloudId + "/flow/"+ params.nodeId +"?center-and-fit=true")
+    history.push("/clouds/"+ params.cloudName + "/flow/"+ params.nodeId +"?center-and-fit=true")
   }
   getRightMenuOptions(){
     const { toggleNodeDetailsPain, close } = this.props
@@ -41,6 +42,7 @@ class NodeDetails extends Component {
           zoomOnHighlight={false}
           singleClickNav={true}
           colored={false}
+          nodeShape={2}
           query={location.query}
         ></D3DataFlow>
         <div id='node-details-pain' className='node-details' style={{'top':'0px'}}>
@@ -71,14 +73,15 @@ class NodeDetails extends Component {
     window.scrollTo(0,0)
   }
   onUpdate(nodeData) {
-    const { updateNode, params } = this.props
-    nodeData.id = params.nodeId
+    const { updateNode, params, node } = this.props
+    nodeData.guid = node.guid
+    nodeData.subType = node.subType
     updateNode(params.collection, nodeData)
   }
   getCollectionComponent() {
     // THOUGHT: could use the factory pattern here
-    const { params} = this.props
-    if (params.collection === 'jobs') {
+    const { params, node } = this.props
+    if (params.collection === RESOURCES.JOBS.toLowerCase()) {
       return (<JobDetails 
         params={params} 
         close={this.close.bind(this)}
@@ -86,7 +89,7 @@ class NodeDetails extends Component {
         onUpdate={this.onUpdate.bind(this)} 
         toggleNodeDetailsPain={this.toggleNodeDetailsPain}
       ></JobDetails>)
-    } else if (params.collection === 'datasources') {
+    } else if (params.collection === RESOURCES.DATASOURCES.toLowerCase()) {
       return (<SourceDetails 
         params={params} 
         close={this.close.bind(this)}
@@ -94,7 +97,7 @@ class NodeDetails extends Component {
         onUpdate={this.onUpdate.bind(this)} 
         toggleNodeDetailsPain={this.toggleNodeDetailsPain}>
       </SourceDetails>)
-    } else if (params.collection === 'charts') {
+    } else if (params.collection === RESOURCES.CHARTS.toLowerCase()) {
       return (<ChartDetails 
         params={params} 
         close={this.close.bind(this)}
@@ -102,7 +105,7 @@ class NodeDetails extends Component {
         onUpdate={this.onUpdate.bind(this)} 
         toggleNodeDetailsPain={this.toggleNodeDetailsPain}
       ></ChartDetails>)
-    } else if (params.collection === 'dashboards') {
+    } else if (params.collection === RESOURCES.DASHBOARDS.toLowerCase()) {
       return (<BoardDetails 
         params={params} 
         close={this.close.bind(this)}
@@ -115,7 +118,9 @@ class NodeDetails extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  return {}
+  return {
+    node: state.nodes[ownProps.params.nodeId]
+  }
 }
 
 export default connect(mapStateToProps, {

@@ -1,4 +1,4 @@
-import { CALL_API } from '../middleware/api'
+import { CALL_CLOUD_API } from '../middleware/api'
 
 
 //--------------------------------
@@ -9,7 +9,7 @@ export const FETCHLOGS_FAILURE = 'FETCHLOGS_FAILURE'
 
 export const fetchLogs = (nodeid, cb) => (dispatch, getState) => {
     dispatch({
-        [CALL_API]: {
+        [CALL_CLOUD_API]: {
             types: [FETCHLOGS_REQUEST, FETCHLOGS_SUCCESS, FETCHLOGS_FAILURE],
             endpoint: '/history?referenceid='+nodeid,
             method: 'GET',
@@ -26,7 +26,7 @@ export const APPENDLOGS_FAILURE = 'APPENDLOGS_FAILURE'
 
 export const appendLogItem = (collection, item, cb) => (dispatch, getState) => {
     dispatch({
-        [CALL_API]: {
+        [CALL_CLOUD_API]: {
             types: [APPENDLOGS_REQUEST, APPENDLOGS_SUCCESS, APPENDLOGS_FAILURE],
             endpoint: '/history/' + collection,
             method: 'POST',
