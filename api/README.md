@@ -12,20 +12,34 @@ Major components:
 
 
 ## Building and running locally
+Check out this project code and execute below commands:
 
-Checkout grokerylab-api-core and run:
-
-```bash
-> mvn install
+```json
+{
+  "accountId": "246ba083-0de3-4a2d-b20b-dc3a7ddcfe22",
+  "users": [
+    {
+      "username": "yourSuperAdminEmail@email.com"
+    }
+  ]
+}
 ```
 
-Check out this project code and execute below commands:
+```json
+{
+  "accountId": "246ab083-0dd1-4a2e-b02b-dc3a7ddcfe67",
+  "accountRole": "admin",
+  "name": "Super Admin",
+  "password": "$2a$12$tD.M2ZN7.PRV7SmypCob4erEF8NrecVSY4b8b.xUgyw85uFRqivY2",
+  "username": "yourSuperAdminEmail@email.com"
+}
+```
 
 ```bash
 > cp environments/example.env.config environments/dev.env.config
 ```
 
-Edit new env config as necessary
+Edit new env config as necessary, then build and run with cmds:
 
 ```bash
 > mvn package

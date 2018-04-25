@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import io.grokery.lab.api.admin.models.submodels.UserRef;
-import io.grokery.lab.api.common.StringsHelper;
+import io.grokery.lab.api.common.Common;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
@@ -117,22 +117,22 @@ public class Cloud implements Serializable {
 	}
 
 	public void assertIsValidForCreate() throws InvalidInputException {
-		if (StringsHelper.isNullOrEmpty(this.getCloudId())) {
+		if (Common.isNullOrEmpty(this.getCloudId())) {
 			throw new InvalidInputException("CloudId is a required field");
 		}
-		if (StringsHelper.isNullOrEmpty(this.getAccountId())) {
+		if (Common.isNullOrEmpty(this.getAccountId())) {
 			throw new InvalidInputException("AccountId is a required field");
 		}
-		if (StringsHelper.isNullOrEmpty(this.getCloudType())) {
+		if (Common.isNullOrEmpty(this.getCloudType())) {
 			throw new InvalidInputException("CloudType is a required field");
 		}
-		if (StringsHelper.isNullOrEmpty(this.getName())) {
+		if (Common.isNullOrEmpty(this.getName())) {
 			throw new InvalidInputException("Name is a required field");
 		}
-		if (StringsHelper.isNullOrEmpty(this.getTitle())) {
+		if (Common.isNullOrEmpty(this.getTitle())) {
 			throw new InvalidInputException("Title is a required field");
 		}
-		if (StringsHelper.isNullOrEmpty(this.getUrl())) {
+		if (Common.isNullOrEmpty(this.getUrl())) {
 			throw new InvalidInputException("Url is a required field");
 		}
 		if (this.getUsers() == null || getUsers().size() < 1) {

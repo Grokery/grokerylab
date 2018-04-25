@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import io.grokery.lab.api.admin.models.submodels.CloudRef;
 import io.grokery.lab.api.admin.models.submodels.UserRef;
-import io.grokery.lab.api.common.StringsHelper;
+import io.grokery.lab.api.common.Common;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
@@ -80,10 +80,10 @@ public class Account implements Serializable {
 	}
 
 	public void assertIsValidForCreate() throws InvalidInputException {
-		if (StringsHelper.isNullOrEmpty(this.getAccountId())) {
+		if (Common.isNullOrEmpty(this.getAccountId())) {
 			throw new InvalidInputException("AccountId is a required field");
 		}
-		if (StringsHelper.isNullOrEmpty(this.getType())) {
+		if (Common.isNullOrEmpty(this.getType())) {
 			throw new InvalidInputException("Type is a required field");
 		}
 	}

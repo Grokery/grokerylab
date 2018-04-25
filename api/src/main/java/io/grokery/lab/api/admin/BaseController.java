@@ -14,6 +14,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig.Build
 import io.grokery.lab.api.common.ContextCredentialProvider;
 import io.grokery.lab.api.common.GrokeryContext;
 import io.grokery.lab.api.common.StageTableNameResolver;
+import io.grokery.lab.api.common.Common;
 
 public class BaseController {
 
@@ -22,11 +23,10 @@ public class BaseController {
 	protected final ObjectMapper objectMapper;
 	
 	public BaseController() {
-		// TODO throw better error if these are null or empty
 		GrokeryContext context = new GrokeryContext();
-		context.awsAccessKeyId = System.getenv("DYNAMODB_ACCESS_KEY_ID");
-		context.awsSecretKey = System.getenv("DYNAMODB_SECRET_KEY");
-		context.awsRegion = System.getenv("DYNAMODB_REGION");
+		context.awsAccessKeyId = Common.getRequiredEnv("DYNAMODB_ACCESS_KEY_ID");
+		context.awsSecretKey = Common.getRequiredEnv("DYNAMODB_SECRET_KEY");
+		context.awsRegion = Common.getRequiredEnv("DYNAMODB_REGION");
 		
 		AmazonDynamoDB dynamoClient = AmazonDynamoDBClientBuilder.standard()
 				.withCredentials(new ContextCredentialProvider(context))

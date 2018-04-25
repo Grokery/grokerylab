@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.grokery.lab.api.admin.models.submodels.CloudAccess;
-import io.grokery.lab.api.common.StringsHelper;
+import io.grokery.lab.api.common.Common;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
@@ -13,7 +13,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 @DynamoDBTable(tableName = "grokery-api-users-{STAGE}")
-public class User implements Serializable{
+public class User implements Serializable {
 
 	static final long serialVersionUID = 1L;
 
@@ -107,19 +107,19 @@ public class User implements Serializable{
 	}
 
 	public void assertIsValidForCreate() throws InvalidInputException {
-		if (StringsHelper.isNullOrEmpty(this.getUsername())) {
+		if (Common.isNullOrEmpty(this.getUsername())) {
 			throw new InvalidInputException("Username is a required field");
 		}
-		if (StringsHelper.isNullOrEmpty(this.getPassword())) {
+		if (Common.isNullOrEmpty(this.getPassword())) {
 			throw new InvalidInputException("Password is a required field");
 		}
-		if (StringsHelper.isNullOrEmpty(this.getName())) {
+		if (Common.isNullOrEmpty(this.getName())) {
 			throw new InvalidInputException("Name is a required field");
 		}
-		if (StringsHelper.isNullOrEmpty(this.getAccountId())) {
+		if (Common.isNullOrEmpty(this.getAccountId())) {
 			throw new InvalidInputException("AccountId is a required field");
 		}
-		if (StringsHelper.isNullOrEmpty(this.getAccountRole())) {
+		if (Common.isNullOrEmpty(this.getAccountRole())) {
 			throw new InvalidInputException("AccountRole is a required field");
 		}
 	}

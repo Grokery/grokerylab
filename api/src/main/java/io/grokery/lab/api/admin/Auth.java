@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import io.grokery.lab.api.admin.models.submodels.CloudAccess;
 import io.grokery.lab.api.admin.models.User;
 import io.grokery.lab.api.admin.models.submodels.CloudCredentials;
+import io.grokery.lab.api.common.Common;
 import io.grokery.lab.api.common.DigitalPiglet;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
 import io.grokery.lab.api.common.exceptions.NotAuthorizedException;
@@ -41,7 +42,8 @@ public class Auth extends BaseController {
 		} catch (InvalidInputException | NotAuthorizedException e) {
 			throw e;
 		} catch (Throwable t) {
-			throw new NotAuthorizedException();
+			logger.error(t.getMessage());
+			throw new NotAuthorizedException("Error authorizing user");
 		}
 
 		// Make and set account access token
@@ -76,12 +78,15 @@ public class Auth extends BaseController {
 	private User getAndValidateUser(Map<String, Object> request) throws InvalidInputException, NotAuthorizedException {
 		String username = request.get("username").toString();
 		String password = request.get("password").toString();
-		if (username == null || password == null || username.equals("") || password.equals("")) {
+		if (Common.isNullOrEmpty(username) || Common.isNullOrEmpty(password)) {
 			throw new InvalidInputException("Please submit a valid username and password");
 		}
 		User user = dynamo.load(User.class, username);
+		if (user == null ) {
+			throw new NotAuthorizedException("User not found or password not match");
+		}
 		String passFromDb = user.getPassword();
-		if (user == null || !BCrypt.checkpw(password, passFromDb)) { 
+		if (!BCrypt.checkpw(password, passFromDb)) { 
 			throw new NotAuthorizedException("User not found or password not match");
 		}
 		return user;

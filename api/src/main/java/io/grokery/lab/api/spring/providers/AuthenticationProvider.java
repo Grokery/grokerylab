@@ -43,28 +43,14 @@ public class AuthenticationProvider {
 			return Response.status(Status.OK).entity(response).build();
 		} catch (InvalidInputException e) {
 			LOGGER.error(e.message);
-			return Response.status(Status.BAD_REQUEST).entity(e).build();
+			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
 		} catch (NotAuthorizedException e) {
 			LOGGER.error(e.message);
-			return Response.status(Status.UNAUTHORIZED).entity(e).build();
+			return Response.status(Status.UNAUTHORIZED).entity(e.getMessage()).build();
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			return Response.status(Status.UNAUTHORIZED).entity(e.getMessage()).build();
 		}
 	}
-
-	// @POST
-	// @Path("/resetpass")	
-	// @ApiOperation(value = "Reset password")  
-	// public Response resetpass(@ApiParam Map<String, Object> req) {
-	// 	LOGGER.info("POST: {}/resetpass", apiVersion);
-	// 	try {
-	// 		Map<String,Object> response = Auth.getInstance().resetpass(req);
-	// 		return Response.status(Status.OK).entity(response).build();
-	// 	} catch (InvalidInputException e) {
-	// 		LOGGER.error(e.message);
-	// 		return Response.status(Status.BAD_REQUEST).entity(e).build();
-	// 	} catch (NotAuthorizedException e) {
-	// 		LOGGER.error(e.message);
-	// 		return Response.status(Status.UNAUTHORIZED).entity(e).build();
-	// 	}
-	// }
 
 }
