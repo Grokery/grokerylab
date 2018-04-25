@@ -24,9 +24,9 @@ public class BaseController {
 	
 	public BaseController() {
 		GrokeryContext context = new GrokeryContext();
-		context.awsAccessKeyId = Common.getRequiredEnv("DYNAMODB_ACCESS_KEY_ID");
-		context.awsSecretKey = Common.getRequiredEnv("DYNAMODB_SECRET_KEY");
-		context.awsRegion = Common.getRequiredEnv("DYNAMODB_REGION");
+		context.awsAccessKeyId = Common.getRequiredEnv("AWS_ACCESS_KEY_ID");
+		context.awsSecretKey = Common.getRequiredEnv("AWS_SECRET_KEY");
+		context.awsRegion = Common.getRequiredEnv("AWS_REGION");
 		
 		AmazonDynamoDB dynamoClient = AmazonDynamoDBClientBuilder.standard()
 				.withCredentials(new ContextCredentialProvider(context))
