@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 import io.grokery.lab.api.admin.Users;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
 import io.grokery.lab.api.common.exceptions.NotAuthorizedException;
-import io.grokery.lab.api.common.exceptions.NotFoundException;
 import io.grokery.lab.api.admin.models.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

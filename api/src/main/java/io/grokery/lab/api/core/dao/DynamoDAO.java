@@ -22,6 +22,7 @@ import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.model.ResourceNotFoundException;
 import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
 
+import io.grokery.lab.api.common.ContextCredentialProvider;
 import io.grokery.lab.api.common.GrokeryContext;
 import io.grokery.lab.api.common.exceptions.NotFoundException;
 
