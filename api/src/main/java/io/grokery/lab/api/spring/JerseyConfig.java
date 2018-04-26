@@ -1,5 +1,6 @@
 package io.grokery.lab.api.spring;
 
+import io.grokery.lab.api.spring.providers.AccountsProvider;
 import io.grokery.lab.api.spring.providers.AuthenticationProvider;
 import io.grokery.lab.api.spring.providers.CloudsProvider;
 import io.grokery.lab.api.spring.providers.UsersProvider;
@@ -50,6 +51,7 @@ public class JerseyConfig extends ResourceConfig {
 
 	private void registerEndpoints() {
 		this.register(AuthenticationProvider.class);
+		this.register(AccountsProvider.class);
 		this.register(CloudsProvider.class);
 		this.register(UsersProvider.class);
 		this.register(DefinitionsProvider.class);

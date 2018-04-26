@@ -1,10 +1,10 @@
 package io.grokery.lab.api.spring.providers;
 
+import javax.websocket.server.PathParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -15,36 +15,36 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import io.grokery.lab.api.admin.Users;
+import io.grokery.lab.api.admin.Accounts;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
 import io.grokery.lab.api.common.exceptions.NotAuthorizedException;
-import io.grokery.lab.api.admin.models.User;
+import io.grokery.lab.api.admin.models.Account;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.util.Map;
 
 @Component
-@Path("/users")
+@Path("/accounts")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-@Api(value = "Users", produces = "application/json")
-public class UsersProvider {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(UsersProvider.class);
+@Api(value = "Accounts", produces = "application/json")
+public class AccountsProvider {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(AccountsProvider.class);
 
 	@Value("${info.api.version}")
 	private String apiVersion;
-	
+
 	@POST
-	@Path("/")	
-	@ApiOperation(value = "Create User", response = User.class)  
-	public Response signin(
+	@Path("/")
+	@ApiOperation(value = "Create Account", response = Account.class)
+	public Response create(
 		@HeaderParam("Authorization") String auth,
 		@ApiParam Map<String, Object> req) {
-		LOGGER.info("POST: {}/users", apiVersion);
+		LOGGER.info("POST: {}/accounts", apiVersion);
 		try {
-			Map<String,Object> response = Users.getInstance().create(auth, req);
+			Map<String,Object> response = Accounts.getInstance().create(auth, req);
 			return Response.status(Status.OK).entity(response).build();
 		} catch (InvalidInputException e) {
 			LOGGER.error(e.message);
@@ -58,14 +58,14 @@ public class UsersProvider {
 	}
 
 	@GET
-	@Path("/{userId}")
-	@ApiOperation(value = "Get User", response = User.class)
+	@Path("/{accountId}")
+	@ApiOperation(value = "Get Account", response = Account.class)
 	public Response retreive(
 		@HeaderParam("Authorization") String auth,
-		@ApiParam @PathParam("userId") String userId) {
-		LOGGER.info("POST: {}/users/<userId>", apiVersion);
+		@ApiParam @PathParam("accountId") String accountId) {
+		LOGGER.info("POST: {}/accounts/<accountid>", apiVersion);
 		try {
-			Map<String,Object> response = Users.getInstance().retrieve(auth, userId);
+			Map<String,Object> response = Accounts.getInstance().retrieve(auth, accountId);
 			return Response.status(Status.OK).entity(response).build();
 		} catch (NotAuthorizedException e) {
 			LOGGER.error(e.message);
