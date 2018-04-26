@@ -1,16 +1,17 @@
 package io.grokery.lab.api.spring;
 
-import javax.annotation.PostConstruct;
-import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.server.wadl.internal.WadlResource;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import io.grokery.lab.api.spring.providers.AuthenticationProvider;
 import io.grokery.lab.api.spring.providers.CloudsProvider;
 import io.grokery.lab.api.spring.providers.UsersProvider;
 import io.grokery.lab.api.spring.providers.DefinitionsProvider;
 import io.grokery.lab.api.spring.providers.ResourcesProvider;
 import io.grokery.lab.api.spring.providers.DataflowServiceProvider;
+
+import javax.annotation.PostConstruct;
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.server.wadl.internal.WadlResource;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
 import io.swagger.jaxrs.listing.SwaggerSerializers;
@@ -54,6 +55,7 @@ public class JerseyConfig extends ResourceConfig {
 		this.register(DefinitionsProvider.class);
 		this.register(ResourcesProvider.class);
 		this.register(DataflowServiceProvider.class);
+		this.register(CORSFilter.class);
 		this.register(WadlResource.class);
 	}
 

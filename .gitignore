@@ -18,3 +18,4 @@ env.*.js
 *package-lock.json
 builds
 target
+api/docker/*.jar
