@@ -3,14 +3,7 @@
     Grok v: To understand deeply and intuitively or by empathy
     Grokery n: A place of deep insight
 
-GrokeryLab is an end-to-end data pipeline management & data exploration platform.
-
-## Raison d'etre
-
-Provide a top level, integrated and transparent platform that makes it easy to:
-
-1. Create and manage big (or small) data pipelines to ingest and process intelligence data
-3. Collaborate with others through all three phases of the intelligence stack: Ingestion, Processization, and Visualization. 
+GrokeryLab is an end-to-end data pipeline management platform.
 
 
 ## Getting up and running
@@ -40,7 +33,7 @@ If you are interested please reach out via the form on the website: [https://gro
 
 ## License
 
-GrokeryLab - A dataflow management platform
+GrokeryLab - A data pipeline management platform
 
     **Author:**  Dan Hogue (<chmod740@gmail.com>)
     **Copyright:**  Copyright 2017, Grokery
