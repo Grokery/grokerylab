@@ -9,7 +9,7 @@ class SourceInfo extends Component {
     params: PropTypes.object
   }
   render() {
-    const { node, params } = this.props
+    const { node } = this.props
     if (!node) { return <div></div> }
     return (
       <div>

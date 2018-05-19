@@ -2,21 +2,22 @@ import * as ActionTypes from '../actions'
 import _ from 'lodash'
 
 export const nodes = (state = {}, action) => {
+    var newState = state
     if (action.type === ActionTypes.FETCHNODES_SUCCESS) {
-        return _.merge({}, state, action.response.Items)
+        newState = action.response
     } else if (action.type === ActionTypes.FETCHNODE_SUCCESS || 
         action.type === ActionTypes.CREATENODE_SUCCESS || 
         action.type === ActionTypes.UPDATENODE_SUCCESS) {
         let foo = Object.assign({}, state)
-        foo[action.response.Item.id] = action.response.Item
-        return foo
+        foo[action.response.guid] = action.response
+        newState = foo
     } else if (action.type === ActionTypes.DELETEENODE_SUCCESS) {
         let foo = Object.assign({}, state)
-        delete foo[action.response.Item.id]
-        return foo
+        delete foo[action.response.guid]
+        newState = foo
     } else if (action.type === ActionTypes.CLEAR_NODES) {
-        return {}
+        newState = {}
     } 
-    return state
+    return newState
 }
 

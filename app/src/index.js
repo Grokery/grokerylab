@@ -1,9 +1,10 @@
 import React from 'react'
-import { Provider } from 'react-redux'
-import { syncHistoryWithStore } from 'react-router-redux'
 import { render } from 'react-dom'
+import { Provider } from 'react-redux'
 import { useRouterHistory, Router } from 'react-router'
+import { syncHistoryWithStore } from 'react-router-redux'
 import { createHashHistory } from 'react-router/node_modules/history'
+import routes from './routes'
 import './styles/core.css'
 
 // Set up redux store
@@ -13,12 +14,11 @@ export const store = configureStore()
 // Set up router history
 const appHistory = useRouterHistory(createHashHistory)()
 export const history = syncHistoryWithStore(appHistory, store)
+
+// This hooks into the navigation event and scrolls page to top 
 history.listen((location) => {
   window.scrollTo(0,0)
 })
-
-// Set up routes
-import routes from './routes'
 
 // Render root
 render(

@@ -1,40 +1,55 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { setSelectedCloud } from '../authentication'
-import { fetchNodes, clearNodes } from '../actions'
+import { getSessionInfo, setBaseUrlForCloudName, setSelectedCloudName } from '../authentication'
+import { fetchNodes, clearNodes, fetchLookupData, fetchCloud } from '../actions'
+import SideNavBar from '../components/SideNavBar/SideNavBar'
 
 class Cloud extends Component {
   static propTypes = {
-    cloudId: PropTypes.string.isRequired,
+    fetchCloud: PropTypes.func.isRequired,
+    cloudName: PropTypes.string.isRequired,
     fetchNodes: PropTypes.func.isRequired,
-    clearNodes: PropTypes.func.isRequired
+    clearNodes: PropTypes.func.isRequired,
+    fetchLookupData: PropTypes.func.isRequired
   }
   render() {
-    const { cloudId } = this.props
-    setSelectedCloud(cloudId)
+    const { cloudName } = this.props
     return (
       <div>
+        <SideNavBar cloudName={cloudName}></SideNavBar>
         <div className='sidebar-page'>
           {this.props.children}
         </div>
       </div>
     )
   }
-  componentDidMount(){
-    const { fetchNodes, clearNodes } = this.props
-    clearNodes()
+  setCloudBaseUrlCallBack(json) {
+    const { cloudName, fetchNodes, fetchLookupData } = this.props
+    setBaseUrlForCloudName(cloudName, json['url'])
     fetchNodes()
+    fetchLookupData()
+  }
+  componentDidMount() {
+    const { cloudName, clearNodes, fetchCloud } = this.props
+    setSelectedCloudName(cloudName)
+    clearNodes()
+    fetchCloud(
+      getSessionInfo()['clouds'][cloudName]['cloudId'], 
+      this.setCloudBaseUrlCallBack.bind(this)
+    )
   }
 }
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    cloudId: ownProps.params.cloudId
+    cloudName: ownProps.params.cloudName
   }
 }
 
 export default connect(mapStateToProps, {
+  fetchCloud,
   fetchNodes,
-  clearNodes
+  clearNodes,
+  fetchLookupData
 })(Cloud)

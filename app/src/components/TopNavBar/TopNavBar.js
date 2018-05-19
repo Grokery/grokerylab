@@ -1,14 +1,14 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { AUTH_ENABLED } from '../../globals'
 import { isAuthenticated, getSessionInfo } from '../../authentication'
 import StatusIndicator from '../StatusIndicator/StatusIndicator'
 import './TopNavBar.css'
 
 class TopNavBar extends Component {
     static propTypes = {
-        isAuthenticated: PropTypes.func.isRequired
+        isAuthenticated: PropTypes.func.isRequired,
+        cloudName: PropTypes.string
     }
     HasClass(element, cls) {
         return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
@@ -24,20 +24,16 @@ class TopNavBar extends Component {
         }
     }
     getCloudName() {
-        const { getSessionInfo } = this.props
-        let cloudName = "GrokeryLab"
-        if (
-            getSessionInfo() && 
-            getSessionInfo()['selectedCloud']
-        ) {
-            cloudName += " | " + getSessionInfo()['selectedCloud'].name
+        const { getSessionInfo, cloudName } = this.props
+        let cloudTitle = "GrokeryLab"
+        if (getSessionInfo() && getSessionInfo()['clouds'] && getSessionInfo()['clouds'][cloudName]) {
+            cloudTitle += " | " + getSessionInfo()['clouds'][cloudName].title
         }
-        return cloudName
+        return cloudTitle
     }
     render() {
         const { isAuthenticated } = this.props
         let showRightNav = isAuthenticated() ? "" : "hidden"
-        let showAccount = AUTH_ENABLED ? "" : "hidden"
         return (
             <nav id='top-nav-wrapper' className='navbar navbar-default navbar-fixed-top' role='navigation'>
                 <div id='top-menu-wrapper'>
@@ -48,7 +44,7 @@ class TopNavBar extends Component {
                     </div>
                     <ul id='top-right-nav-options' className={'nav navbar-top-links navbar-right pull-right '+showRightNav}>
                         <StatusIndicator></StatusIndicator>
-                        <li id='nav-dropdown' className={showAccount}>
+                        <li id='nav-dropdown'>
                             <a className='dropdown-toggle' onClick={(e) => this.ToggleDropDown(e)}>
                                 <i className='fa fa-user fa-fw' style={{'pointerEvents':'none'}}></i>
                                 <i className='fa fa-caret-down' style={{'pointerEvents':'none'}}></i>

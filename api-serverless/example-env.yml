@@ -1,0 +1,11 @@
+
+default_env: &common
+  API_VERSION: v0
+
+dev:
+  <<: *common
+  DYNAMODB_TABLE_NAME: 'grokerylab-api-users-dev'
+
+prod:
+  <<: *common
+  DYNAMODB_TABLE_NAME: 'grokerylab-api-users-prod'

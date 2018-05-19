@@ -1,24 +1,23 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { setRedirectUrl, isAuthenticated, setSessionInfo } from '../authentication'
+import { setRedirectUrl, isAuthenticated } from '../authentication'
 import { history } from '../index.js'
 import TopNavBar from '../components/TopNavBar/TopNavBar'
-import { AUTH_ENABLED, DEFAULT_SESSION_INFO } from "../globals.js"
 
 class AuthGateway extends Component {
   static propTypes = {
     isAuthenticated: PropTypes.func.isRequired,
     currentURL: PropTypes.string.isRequired,
     setRedirectUrl: PropTypes.func.isRequired,
-    setSessionInfo: PropTypes.func.isRequired
+    cloudName: PropTypes.string
   }
   render() {
-    const { isAuthenticated, children } = this.props
-    if (isAuthenticated() || !AUTH_ENABLED) {
+    const { isAuthenticated, cloudName, children } = this.props
+    if (isAuthenticated()) {
       return (
         <div className='page-content-wrapper'>
-          <TopNavBar></TopNavBar>
+          <TopNavBar cloudName={cloudName}></TopNavBar>
           {children}
         </div>
         )
@@ -27,16 +26,10 @@ class AuthGateway extends Component {
     }
   }
   componentDidMount() {
-    const { isAuthenticated, setRedirectUrl, currentURL, setSessionInfo } = this.props
-    if (AUTH_ENABLED) {
-      if (!isAuthenticated()) {
-        setRedirectUrl(currentURL)
-        history.push("/signin")
-      }
-    } else {
-      if (!isAuthenticated()) {
-        setSessionInfo(DEFAULT_SESSION_INFO)
-      }
+    const { isAuthenticated, setRedirectUrl, currentURL } = this.props
+    if (!isAuthenticated()) {
+      setRedirectUrl(currentURL)
+      history.push("/signin")
     }
   }
 }
@@ -46,10 +39,8 @@ const mapStateToProps = (state, ownProps) => {
     currentURL: ownProps.location.pathname,
     setRedirectUrl: setRedirectUrl,
     isAuthenticated: isAuthenticated,
-    setSessionInfo: setSessionInfo
+    cloudName: ownProps.params.cloudName
   }
 }
 
-export default connect(mapStateToProps, {
-
-})(AuthGateway)
+export default connect(mapStateToProps, {})(AuthGateway)

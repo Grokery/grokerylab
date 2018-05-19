@@ -39,15 +39,15 @@ class Home extends Component {
   getCloudSections() {
     const { clouds } = this.props
     let sections = []
-    Object.keys(clouds).forEach(function(cloudid) {
-      let cloud = clouds[cloudid]
+    Object.keys(clouds).forEach(function(name) {
+      let cloud = clouds[name]
       sections.push(   
-        <CloudSection key={cloudid} cloudid={cloudid} cloud={cloud}></CloudSection>
+        <CloudSection key={name} cloudid={name} cloud={cloud}></CloudSection>
       )
     })
     let newCloudDef = {
-      "name": "Hello World",
-      "id": "helloworld",
+      "title": "Hello World",
+      "name": "helloworld",
       "type": "local",
       "url": "http://localhost:5000"
     }
@@ -78,15 +78,12 @@ class Home extends Component {
     return sections
   }
   render() {
-    let { username } = this.props
-    if (!username) {
-      username = ""
-    }
+    let { name } = this.props
     return (
       <div className='page-content home'>
         <div>
           <div className='user-section'>
-            {/* <h1>Hi {username.split('@')[0]}</h1> */}
+            {<h1>Hi {name}</h1>}
           </div>
           <div className='cloud-sections'>
             {this.getCloudSections()}
@@ -101,12 +98,12 @@ const mapStateToProps = (state, ownProps) => {
   let sessionInfo = getSessionInfo()
   if (!sessionInfo) {
     sessionInfo = {
-      username: "",
+      name: "",
       clouds:{}
     }
   }
   return {
-    username: sessionInfo['name'],
+    name: sessionInfo['name'],
     clouds: sessionInfo['clouds']
   }
 }

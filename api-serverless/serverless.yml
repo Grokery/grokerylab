@@ -1,0 +1,102 @@
+# For full config options, check the docs: docs.serverless.com
+
+service: grokerylab-api
+
+custom:
+    apiversion: v0
+    urlBase: /api/${self:custom.apiversion}
+
+provider:
+  name: aws
+  runtime: java8
+  region: ${file(env.yml):awsRegion}
+  profile: ${file(env.yml):awsProfile}
+  environment: ${file(env.yml):${opt:stage}}
+
+package:
+  artifact: target/grokerylab-api-serverless-aws-0.1.0.jar
+
+functions:
+  router:
+    description: Grokery API router
+    handler: io.grokery.lab.api.serverless.aws.Router
+    timeout: 30
+    events:
+      - http:
+          path: ${self:custom.urlBase}/auth/signin
+          method: post
+          cors: true
+      - http:
+          path: ${self:custom.urlBase}/auth/resetpass
+          method: post
+          cors: true
+          
+      - http:
+          path: ${self:custom.urlBase}/accounts
+          method: post
+          cors: true
+
+      - http:
+          path: ${self:custom.urlBase}/users
+          method: post
+          cors: true
+      - http:
+          path: ${self:custom.urlBase}/users/{username}
+          method: get
+          cors: true
+      - http:
+          path: ${self:custom.urlBase}/users/{username}
+          method: put
+          cors: true
+      - http:
+          path: ${self:custom.urlBase}/users/{username}
+          method: delete
+          cors: true
+
+      - http:
+          path: ${self:custom.urlBase}/clouds
+          method: post
+          cors: true
+      - http:
+          path: ${self:custom.urlBase}/clouds/{cloudId}
+          method: get
+          cors: true
+      - http:
+          path: ${self:custom.urlBase}/clouds/{cloudId}
+          method: put
+          cors: true
+      - http:
+          path: ${self:custom.urlBase}/clouds/{cloudId}
+          method: delete
+          cors: true
+
+      - http:
+          path: ${self:custom.urlBase}/clouds/{cloudId}/resources/{collection}
+          method: post
+          cors: true
+      - http:
+          path: ${self:custom.urlBase}/clouds/{cloudId}/resources/{collection}
+          method: get
+          cors: true
+      - http:
+          path: ${self:custom.urlBase}/clouds/{cloudId}/resources/{collection}/{guid}
+          method: get
+          cors: true
+      - http:
+          path: ${self:custom.urlBase}/clouds/{cloudId}/resources/{collection}/{guid}
+          method: put
+          cors: true
+      - http:
+          path: ${self:custom.urlBase}/clouds/{cloudId}/resources/{collection}/{guid}
+          method: delete
+          cors: true
+
+      - http:
+          path: ${self:custom.urlBase}/clouds/{cloudId}/dataflowservice
+          method: get
+          cors: true
+
+      - http:
+          path: ${self:custom.urlBase}/clouds/{cloudId}/definitionservice
+          method: get
+          cors: true

@@ -1,6 +1,0 @@
-Handles read requests
-No paging yet so ...
----
-responses:
-  200:
-    description: object

@@ -53,14 +53,24 @@ g.selected:hover {
     stroke-width: 4;
 } 
 
-g.colored.charts-node,
 g.colored.jobs-node {
     fill: #ff9233;
     stroke: #ff9233;
     stroke-width: 0;
 }
 
-g.colored.datasources-node,
+g.colored.charts-node {
+    fill: #ff9233;
+    stroke: #ff9233;
+    stroke-width: 0;
+}
+
+g.colored.datasources-node {
+    fill: #0271b1;
+    stroke: #0271b1;
+    stroke-width: 0; 
+}
+
 g.colored.dashboards-node {
     fill: #0271b1;
     stroke: #0271b1;
@@ -88,8 +98,7 @@ g.colored.selected:hover {
 
 /* Text / Icons */
 g text {
-    font-size: 30px;
-    font-weight: 100;
+    font-size: 20px;
     text-anchor: middle;
     pointer-events: none;
     fill: #373F48;
@@ -100,6 +109,8 @@ g text {
 g.colored text {
     fill: #fff;
     stroke: #fff;
+    stroke-width: 0;
+    font-weight: 100;
 }
 
 g.colored:hover text,

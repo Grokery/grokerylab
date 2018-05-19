@@ -5,13 +5,13 @@ import { getSessionInfo } from '../authentication'
 
 class CloudHome extends Component {
   static propTypes = {
-    cloudId: PropTypes.string.isRequired,
+    cloudName: PropTypes.string.isRequired,
     cloudInfo: PropTypes.object.isRequired
   }
   render() {
     const { cloudInfo } = this.props
     return (
-      <div className='page-content padded'>
+      <div className='page-content padded sidebar-page'>
         <h1>{cloudInfo.name}</h1>
         {this.props.children}
       </div>
@@ -22,8 +22,8 @@ class CloudHome extends Component {
 const mapStateToProps = (state, ownProps) => {
   let sessionInfo = getSessionInfo()
   return {
-    cloudId: ownProps.params.cloudId,
-    cloudInfo: sessionInfo['clouds'][ownProps.params.cloudId]
+    cloudName: ownProps.params.cloudName,
+    cloudInfo: sessionInfo['clouds'][ownProps.params.cloudName]
   }
 }
 

@@ -10,6 +10,8 @@ import './NodeDetails.css'
 
 class SourceDetails extends Component {
   static propTypes = {
+    params: PropTypes.object.isRequired,
+    node: PropTypes.object.isRequired,
     toggleNodeDetailsPain: PropTypes.func.isRequired,
     onUpdate: PropTypes.func.isRequired
   }

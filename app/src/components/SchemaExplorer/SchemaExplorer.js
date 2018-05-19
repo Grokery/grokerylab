@@ -9,7 +9,6 @@ class SchemaExplorer extends Component {
     }
     render() {
         if (this.props.datasource){
-            // console.log(this.props.datasource.id)
         }
         return (
             <div className='schema-explorer'>
