@@ -4,7 +4,6 @@ service: grokerylab-api
 
 custom:
     apiversion: v0
-    stage: ${opt:stage}
     urlBase: /api/${self:custom.apiversion}
 
 provider:
@@ -12,7 +11,7 @@ provider:
   runtime: java8
   region: ${file(env.yml):awsRegion}
   profile: ${file(env.yml):awsProfile}
-  environment: ${file(env.yml):${self:custom.stage}}
+  environment: ${file(env.yml):${opt:stage}}
 
 package:
   artifact: target/grokerylab-api-serverless-aws-0.1.0.jar

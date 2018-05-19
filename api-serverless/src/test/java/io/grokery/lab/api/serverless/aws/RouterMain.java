@@ -14,11 +14,11 @@ public class RouterMain {
 		// req = authenticateReq();
 		// req = createAccountReq();
 		// req = createUserReq();
-		req = createCloudReq();
+		// req = createCloudReq();
 
-		ApiGatewayResponse res = router.handleRequest(req, null);
-		System.out.println(res.getStatusCode());
-		System.out.println(res.getBody());
+		// ApiGatewayResponse res = router.handleRequest(req, null);
+		// System.out.println(res.getStatusCode());
+		// System.out.println(ress.getBody());
 	}
 
 	public static ApiGatewayRequest authenticateReq() {

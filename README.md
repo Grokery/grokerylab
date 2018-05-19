@@ -29,7 +29,7 @@ Then in a new window:
 GrokeryLab is licensed under the Apache license because I believe in the power of openness, transparency, and community.
 
 I am currently building out my core open source developer team. 
-If you are interested please reach out via the form on the website: [https://grokery.io/#contact](https://grokery.io/#contact)
+If you are interested please reach out to me via chmod740@gmail.com
 
 ## License
 
