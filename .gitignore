@@ -19,3 +19,5 @@ env.*.js
 builds
 target
 api/docker/*.jar
+.serverless
+env.yml

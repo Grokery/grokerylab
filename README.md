@@ -12,24 +12,15 @@ Clone repo and set up env vars:
 
     git clone https://github.com/Grokery/grokerylab.git
     cd grokerylab
-    cp api/common/.env-example api/common/.env
 
-Edit env vars as necessary, then run API with:
 
-    ./api/run_with_venv.sh (or run_with_venv.bat)
-
-Then in a new window:
-
-    cd app
-    npm install
-    npm start
 
 ## Using and contributing
 
 GrokeryLab is licensed under the Apache license because I believe in the power of openness, transparency, and community.
 
-I am currently building out my core open source developer team. 
-If you are interested please reach out to me via chmod740@gmail.com
+If you are interested in contributing please reach out to me via chmod740@gmail.com
+
 
 ## License
 
