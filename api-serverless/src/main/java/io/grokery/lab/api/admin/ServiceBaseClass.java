@@ -71,13 +71,13 @@ public class ServiceBaseClass {
 
 	private AmazonDynamoDB getDynamoDbClient() {
 		GrokeryContext context = new GrokeryContext();
-		context.awsAccessKeyId = CommonUtils.getRequiredEnv("AWS_ACCESS_KEY_ID");
-		context.awsSecretKey = CommonUtils.getRequiredEnv("AWS_SECRET_KEY");
-		context.awsRegion = CommonUtils.getRequiredEnv("AWS_REGION");
+		context.awsAccessKeyId = CommonUtils.getRequiredEnv("API_HOST_AWS_ACCESS_KEY_ID");
+		context.awsSecretKey = CommonUtils.getRequiredEnv("API_HOST_AWS_SECRET_KEY");
+		context.awsRegion = CommonUtils.getRequiredEnv("API_HOST_AWS_REGION");
 		
 		AmazonDynamoDB dynamoClient = AmazonDynamoDBClientBuilder.standard()
 				.withCredentials(new ContextCredentialUtil(context))
-				.withRegion(Regions.valueOf(context.awsRegion))
+				.withRegion(context.awsRegion)
 				.build();
 
 		return dynamoClient;

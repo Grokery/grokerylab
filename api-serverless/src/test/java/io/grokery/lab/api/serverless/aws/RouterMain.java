@@ -76,7 +76,7 @@ public class RouterMain {
 	 * https://stackoverflow.com/questions/318239/how-do-i-set-environment-variables-from-java
 	 * Example usage:
 	 * Map<String, String> envSettingsForTest = new HashMap<String, String>();
-	 * envSettingsForTest.put("AWS_REGION","US_WEST_2");
+	 * envSettingsForTest.put("API_HOST_AWS_REGION","US_WEST_2");
 	 * RouterTests.setEnvs(envSettingsForTest);
 	 */
 	@SuppressWarnings({ "unchecked" })

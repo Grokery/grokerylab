@@ -20,7 +20,7 @@ functions:
   router:
     description: Grokery API router
     handler: io.grokery.lab.api.serverless.aws.Router
-    timeout: 30
+    timeout: 300
     events:
       - http:
           path: ${self:custom.urlBase}/auth/signin

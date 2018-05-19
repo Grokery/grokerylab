@@ -91,27 +91,18 @@ public class ApiGatewayRequest {
 	}
 
 	public String getHeader(String key) throws Exception {
+		return getHeader(key, null);
+	}
+
+	public String getHeader(String key, String defaultVal) {
 		if (headers != null) {
-			String value = headers.getOrDefault(key, null);
-			if (value == null) {
-				throw new InvalidInputException("Expected headers value for key '" + key + "'");
-			}
-			return value;
-		} else {
-			throw new Exception();
+			return headers.getOrDefault(key, defaultVal);
 		}
+		return defaultVal;
 	}
 
 	public String getPathValue(String key) throws Exception {
-		if (pathParameters != null) {
-			String value = pathParameters.getOrDefault(key, null);
-			if (value == null) {
-				throw new InvalidInputException("Expected path parameter value for key '" + key + "'");
-			}
-			return value;
-		} else {
-			throw new Exception();
-		}
+		return getPathValue(key, null);
 	}
 
 	public String getPathValue(String key, String defaultVal) {
