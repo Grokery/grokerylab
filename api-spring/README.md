@@ -21,8 +21,14 @@ Check out this project code and execute below commands:
 Edit new env config as necessary, then build and run with cmds:
 
 ```bash
-> mvn package
-> java -jar target/grokery-io-lab-0.1.0-SNAPSHOT.jar
+> ./dockerbuild.sh
+> ./dockerrun.sh
+```
+
+If you want to run on your local machine you can also
+
+```bash
+./run.sh
 ```
 
 ## Test
