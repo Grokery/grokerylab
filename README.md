@@ -6,15 +6,6 @@
 GrokeryLab is an end-to-end data pipeline management platform.
 
 
-## Getting up and running
-
-Clone repo and set up env vars:
-
-    git clone https://github.com/Grokery/grokerylab.git
-    cd grokerylab
-
-
-
 ## Using and contributing
 
 GrokeryLab is licensed under the Apache license because I believe in the power of openness, transparency, and community.

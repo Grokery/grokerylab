@@ -9,9 +9,9 @@ custom:
 provider:
   name: aws
   runtime: java8
-  region: ${file(env.yml):awsRegion}
-  profile: ${file(env.yml):awsProfile}
-  environment: ${file(env.yml):${opt:stage}}
+  region: ${file(environments/env.yml):awsRegion}
+  profile: ${file(environments/env.yml):awsProfile}
+  environment: ${file(environments/env.yml):${opt:stage}}
 
 package:
   artifact: target/grokerylab-api-serverless-aws-0.1.0.jar

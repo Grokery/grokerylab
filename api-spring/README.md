@@ -4,37 +4,15 @@ GrokeryLab RESTful API
 
 Major components:
 
-- [Spring Boot](http://projects.spring.io/spring-boot/) - The foundation of our web app
-- [Jersey](https://jersey.java.net/) - The JAX-RS reference implementation for building RESTful web services
-- [Swagger](https://github.com/swagger-api/swagger-ui) - The de-facto API documentation framework
+- [Spring Boot](http://projects.spring.io/spring-boot/)
+- [Jersey](https://jersey.java.net/)
+- [Swagger](https://github.com/swagger-api/swagger-ui)
 - Spring Boot Test Framework (spring-boot-starter-test) with Junit, Hamcrest
 - [Rest Assured](https://github.com/rest-assured/rest-assured)
 
 
 ## Building and running locally
 Check out this project code and execute below commands:
-
-```json
-{
-  "accountId": "246ba083-0de3-4a2d-b20b-dc3a7ddcfe22",
-  "users": [
-    {
-      "userId": "246ab083-0dd1-4a2e-b02b-dc3a7ddcfe67",
-      "username": "superAdmin@email.com"
-    }
-  ]
-}
-```
-
-```json
-{
-  "accountId": "246ab083-0dd1-4a2e-b02b-dc3a7ddcfe67",
-  "accountRole": "superAdmin",
-  "name": "Super Admin",
-  "password": "$2a$12$tD.M2ZN7.PRV7SmypCob4erEF8NrecVSY4b8b.xUgyw85uFRqivY2",
-  "username": "superAdmins@email.com"
-}
-```
 
 ```bash
 > cp environments/example.env.config environments/dev.env.config
@@ -62,6 +40,11 @@ Available at:
 ```web
 http://localhost:8000/
 ```
+
+## Notes 
+
+The /core, /common, and /admin code folders in src are identicial to those in the api-serverless project. I've been copy replaceing them to the other project whenever I modify them. I had them in another library project but debuging was a pain and yeah. There's probably a better way but havn't got around to it.
+
 
 ## Other Helpful notes
 
