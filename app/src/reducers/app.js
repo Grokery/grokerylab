@@ -1,5 +1,5 @@
 import * as ActionTypes from '../actions'
-import { APPSTATUS } from "../globals.js"
+import { APPSTATUS } from "../common.js"
 
 export const appStatus = (state = APPSTATUS.OK, action) => {
     if (action.type === ActionTypes.FETCHNODES_REQUEST || 

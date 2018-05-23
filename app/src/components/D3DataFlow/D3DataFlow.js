@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { history } from '../../index.js'
 import { setD3State, createNode, updateNode, deleteNode } from '../../actions'
 import { getSelectedCloudName } from '../../authentication'
-import { RESOURCES } from '../../globals.js'
+import { RESOURCES } from '../../common.js'
 import d3 from 'd3'
 import './D3DataFlow.css'
 

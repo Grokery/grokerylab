@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { fetchNode } from '../../actions'
-import { RESOURCES } from '../../globals.js'
+import { RESOURCES } from '../../common.js'
 import './IChart.css'
 
 class IChart extends Component {

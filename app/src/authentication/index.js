@@ -1,4 +1,4 @@
-import { GROKERY_API } from "../globals.js"
+import { GROKERY_API } from "../config.js"
 import { history } from '../index.js'
 
 export const setRedirectUrl = (url) => {

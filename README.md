@@ -1,14 +1,23 @@
 # GrokeryLab
 
     Grok v: To understand deeply and intuitively or by empathy
-    Grokery n: A place of deep insight
 
 GrokeryLab is an end-to-end data pipeline management platform.
 
 
-## Using and contributing
+## Usage
 
-GrokeryLab is licensed under the Apache license because I believe in the power of openness, transparency, and community.
+The GrokeyLab rest api can be run as a Java Spring app in a Docker container, or serverlessly in AWS using ApiGateway and Lambda. 
+You can find instructions for running the api in the respective modes in the /api-spring and /api-serverless folders README files.
+
+The GrokeyLab ui is a Javascript/React project and can likewise be run either in a Docker container or serverlessly. 
+
+Once you've got the api and app running, you can initialize the required superadmin user with the initSuperuser.sh script found in the /scripts folder.
+
+Finaly, use the superadmin account credentials you created in the last step and the createAccount.sh script to create a normal account and admin user that you can use to login via the app ui. 
+
+
+## Contributng
 
 If you are interested in contributing please reach out to me via chmod740@gmail.com
 

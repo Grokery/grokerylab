@@ -1,6 +1,6 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
-import { APPSTATUS } from '../../globals'
+import { APPSTATUS } from '../../common.js'
 import { connect } from 'react-redux'
 import './StatusIndicator.css'
 

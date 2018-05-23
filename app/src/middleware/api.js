@@ -2,7 +2,7 @@
 // Middleware for calling REST api endpoints
 //------------------------------------------------
 
-import { GROKERY_API } from "../globals.js"
+import { GROKERY_API } from "../config.js"
 import { getAccountToken, getSelectedCloudUrl, getSelectedCloudToken } from '../authentication'
 
 const callApi = (endpoint, method, data, token, callback) => {

@@ -1,6 +1,6 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
-import { getQueryParamByName, updateQueryParam } from '../../globals.js'
+import { getQueryParamByName, updateQueryParam } from '../../common.js'
 import './Tabs.css'
 
 export class Tabs extends Component {
