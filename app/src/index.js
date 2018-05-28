@@ -5,7 +5,6 @@ import { useRouterHistory, Router } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 import { createHashHistory } from 'react-router/node_modules/history'
 import routes from './routes'
-import './styles/core.css'
 
 // Set up redux store
 import configureStore from './store/configureStore'
