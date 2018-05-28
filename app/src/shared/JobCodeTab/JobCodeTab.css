@@ -1,0 +1,92 @@
+
+.job-code-tab .ReactCodeMirror .CodeMirror {
+    height: auto;
+}
+
+.job-code-tab .ReactCodeMirror .CodeMirror .CodeMirror-scroll {
+    min-height: 800px;
+}
+
+.job-code-tab .col {
+    padding: 0;
+}
+
+.job-code-tab .code {
+    padding: 0;
+    border-right: 3px solid #e7ebee;
+}
+
+.job-code-tab .run-button {
+    font-size: 24px;
+    background-color: white;
+    padding-left: 9px;
+    padding-top: 9px;
+}
+
+.job-code-tab .output-select {
+    padding: 5px;
+}
+
+.job-code-tab .run-logs pre {
+    border: none;
+}
+
+
+/* The switch - the box around the slider */
+.job-code-tab .switch {
+    position: relative;
+    display: inline-block;
+    width: 46px;
+    height: 26px;
+}
+
+/* Hide default HTML checkbox */
+.job-code-tab .switch input {display:none;}
+
+/* The slider */
+.job-code-tab .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.job-code-tab .slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.job-code-tab  input:checked + .slider {
+    background-color: #0291E3;
+}
+
+.job-code-tab input:focus + .slider {
+    box-shadow: 0 0 1px #0291E3;
+}
+
+.job-code-tab input:checked + .slider:before {
+    -webkit-transform: translateX(20px);
+    -ms-transform: translateX(20px);
+    transform: translateX(20px);
+}
+
+/* Rounded sliders */
+.job-code-tab .slider.round {
+    border-radius: 25px;
+}
+
+.job-code-tab .slider.round:before {
+    border-radius: 50%;
+}

@@ -1,0 +1,23 @@
+
+.data-code-tab .ReactCodeMirror .CodeMirror {
+    height: auto;
+}
+
+.data-code-tab .ReactCodeMirror .CodeMirror .CodeMirror-scroll {
+    min-height: 800px;
+}
+
+.data-code-tab .col-md-6 {
+    padding: 0;
+    border-right: 3px solid #e7ebee;
+}
+
+.data-code-tab .template-select {
+    font-size: 24px;
+    position: absolute;
+    left: -42px;
+    z-index: 1000;
+    background-color: white;
+    padding-left: 10px;
+    padding-right: 5px;
+}

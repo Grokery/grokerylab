@@ -1,0 +1,20 @@
+
+
+.schema-explorer .schema {
+    border-right: lightgray solid 1px;
+}
+
+.schema-explorer .details {
+    /*border-top: lightgray solid 1px;
+    border-bottom: lightgray solid 1px;
+    border-right: lightgray solid 1px;*/
+}
+
+.schema-explorer ul {
+    list-style: none;
+    padding: 0;
+}
+
+.schema-explorer .schema-items .selected {
+    background-color: lightgray;
+}
