@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import D3DataFlow from '../shared/D3DataFlow/D3DataFlow'
+import D3DataFlow from '../../shared/D3DataFlow/D3DataFlow'
 
 class Dataflows extends Component {
   render() {

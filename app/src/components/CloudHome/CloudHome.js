@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { getSessionInfo } from '../authentication'
+import { getSessionInfo } from '../../authentication'
 
 class CloudHome extends Component {
   static propTypes = {
@@ -13,6 +13,9 @@ class CloudHome extends Component {
     return (
       <div className='page-content padded sidebar-page'>
         <h1>{cloudInfo.name}</h1>
+        <p>counts badges (sources, jobs, users)</p>
+        {/* <p>alerts/messages</p> */}
+        <p>activity log</p>
         {this.props.children}
       </div>
     )

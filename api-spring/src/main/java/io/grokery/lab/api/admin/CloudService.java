@@ -41,16 +41,12 @@ public class CloudService extends ServiceBaseClass {
 		try {
 			Claims claims = DigitalPiglet.parseJWT(auth);
 			user = dynamo.load(User.class, User.hashKey, claims.get("userId").toString());
-			if (!user.getAccountId().equals(requestBody.get("accountId").toString())) {
-				throw new NotAuthorizedException("You do not have permission to create a cloud for this account. Please contact an account admin to request access.");
-			}
-        } catch (NotAuthorizedException e) {
-			throw e;
 		} catch (Throwable e) {
 			throw new NotAuthorizedException();
 		}
 
 		Cloud cloud = objectMapper.convertValue(requestBody, Cloud.class);
+		cloud.setAccountId(user.getAccountId());
 		cloud.getUsers().add(new UserRef(user.getUserId()));
 		cloud.assertIsValidForCreate();
 

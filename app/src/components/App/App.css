@@ -113,3 +113,8 @@ h1 {
 .ReactCodeMirror .CodeMirror {
     height: auto;
 }
+
+.form-help-text {
+  font-size: small;
+  color: #4C5763
+}

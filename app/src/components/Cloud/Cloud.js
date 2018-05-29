@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { getSessionInfo, setBaseUrlForCloudName, setSelectedCloudName } from '../authentication'
-import { fetchNodes, clearNodes, fetchLookupData, fetchCloud } from '../store/actions'
-import SideNavBar from '../shared/SideNavBar/SideNavBar'
+import { getSessionInfo, setBaseUrlForCloudName, setSelectedCloudName } from '../../authentication'
+import { fetchNodes, clearNodes, fetchLookupData, fetchCloud } from '../../store/actions'
+import SideNavBar from '../../shared/SideNavBar/SideNavBar'
 
 class Cloud extends Component {
   static propTypes = {
