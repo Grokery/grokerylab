@@ -2,6 +2,25 @@ import { CALL_GROKERY_API } from '../middleware/api'
 
 //--------------------------------
 
+export const CREATEECLOUD_REQUEST = 'CREATEECLOUD_REQUEST'
+export const CREATECLOUD_SUCCESS = 'CREATECLOUD_SUCCESS'
+export const CREATECLOUD_FAILURE = 'CREATECLOUD_FAILURE'
+
+export const createCloud = (data, cb) => (dispatch, getState) => {
+    console.log(data)
+    dispatch({
+        [CALL_GROKERY_API]: {
+            types: [CREATEECLOUD_REQUEST, CREATECLOUD_SUCCESS, CREATECLOUD_FAILURE],
+            endpoint: '/clouds',
+            method: 'POST',
+            data: data,
+            callback: cb
+        }
+    })
+}
+
+//--------------------------------
+
 export const FETCHCLOUD_REQUEST = 'FETCHCLOUD_REQUEST'
 export const FETCHCLOUD_SUCCESS = 'FETCHCLOUD_SUCCESS'
 export const FETCHCLOUD_FAILURE = 'FETCHCLOUD_FAILURE'
@@ -29,24 +48,6 @@ export const fetchCloud = (cloudId, cb) => (dispatch, getState) => {
 //             types: [UPDATECLOUD_REQUEST, UPDATECLOUD_SUCCESS, UPDATECLOUD_FAILURE],
 //             endpoint: '/clouds/1/resources/' + collection + "/" + node.id,
 //             method: 'PUT',
-//             data: node,
-//             callback: cb
-//         }
-//     })
-// }
-
-// //--------------------------------
-
-// export const CREATEECLOUD_REQUEST = 'CREATEECLOUD_REQUEST'
-// export const CREATECLOUD_SUCCESS = 'CREATECLOUD_SUCCESS'
-// export const CREATECLOUD_FAILURE = 'CREATECLOUD_FAILURE'
-
-// export const createNode = (collection, node, cb) => (dispatch, getState) => {
-//     dispatch({
-//         [CALL_CLOUD_API]: {
-//             types: [CREATEECLOUD_REQUEST, CREATECLOUD_SUCCESS, CREATECLOUD_FAILURE],
-//             endpoint: '/clouds/1/resources/' + collection,
-//             method: 'POST',
 //             data: node,
 //             callback: cb
 //         }
