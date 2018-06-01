@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 import './Modal.css'
 
-class Modal extends Component {
+export default class Modal extends Component {
   static propTypes = {
-    shown: PropTypes.bool,
+    shown: PropTypes.bool.isRequired
   }
   render() {
     const { shown } = this.props
@@ -20,9 +19,3 @@ class Modal extends Component {
     )
   }
 }
-
-const mapStateToProps = (state, ownProps) => {
-  return {}
-}
-
-export default connect(mapStateToProps, {})(Modal)

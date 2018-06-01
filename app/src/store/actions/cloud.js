@@ -7,7 +7,6 @@ export const CREATECLOUD_SUCCESS = 'CREATECLOUD_SUCCESS'
 export const CREATECLOUD_FAILURE = 'CREATECLOUD_FAILURE'
 
 export const createCloud = (data, cb) => (dispatch, getState) => {
-    console.log(data)
     dispatch({
         [CALL_GROKERY_API]: {
             types: [CREATEECLOUD_REQUEST, CREATECLOUD_SUCCESS, CREATECLOUD_FAILURE],

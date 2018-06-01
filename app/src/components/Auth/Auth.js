@@ -21,7 +21,7 @@ class Auth extends Component {
   onSubmit(event) {
     event.preventDefault()
     const { authenticate } = this.props
-    let username = document.getElementsByName('email')[0].value
+    let username = document.getElementsByName('username')[0].value
     let password = document.getElementsByName('password')[0].value
     authenticate(username, password)
   }
@@ -40,7 +40,7 @@ class Auth extends Component {
                     <form role="form" onSubmit={this.onSubmit.bind(this)}>
                       <fieldset>
                         <div className="form-group">
-                          <input className="form-control" name="email" type="text" />
+                          <input className="form-control" name="username" type="text" />
                       </div>
                       <div className="form-group">
                         <input className="form-control" name="password" type="password" />

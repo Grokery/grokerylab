@@ -36,10 +36,10 @@ class CloudSection extends Component {
   }
   getCloudLinks(cloudid, cloud) {
     let links = []
-    links.push({
-        title: 'Data Flow',
-        url: '#/clouds/' + cloudid,
-      })
+    // links.push({
+    //     title: 'Data Flow',
+    //     url: '#/clouds/' + cloudid,
+    //   })
     if (cloud.links) {
       cloud.links.forEach(function(link){
         links.push(link)
@@ -62,7 +62,7 @@ class CloudSection extends Component {
             <img src={this.getCloudIcon(cloud)} className='cloud-icon' role="presentation"/>
             {cloud.title}
           </a>
-          <a href='#' onClick={this.toggleEditDialog.bind(this)}><i className='fa fa-pencil pull-right cloud-edit-icon'/></a>
+          {/* <a href='#' onClick={this.toggleEditDialog.bind(this)}><i className='fa fa-pencil pull-right cloud-edit-icon'/></a> */}
           <Modal shown={this.state.shown}>
             <div className="modal-header">
               <button type="button" className="close" onClick={this.toggleEditDialog.bind(this)} aria-label="Close"><span aria-hidden="true">&times;</span></button>

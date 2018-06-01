@@ -87,3 +87,10 @@ export const setBaseUrlForCloudName = (name, url) => {
     sessionInfo['clouds'][name]['url'] = url
     setSessionInfo(sessionInfo)
 }
+
+export const addNewCloudToSession = (cloud) => {
+    var sessionInfo = getSessionInfo()
+    sessionInfo['clouds'][cloud['name']] = cloud
+    setSessionInfo(sessionInfo)
+    history.replace("/")
+}

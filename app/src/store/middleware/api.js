@@ -21,11 +21,11 @@ const callApi = (endpoint, method, data, token, callback) => {
     return fetch(endpoint, params)
         .then(response =>
             response.json().then(json => {
+                if (typeof(callback) === 'function') {
+                    callback(response, json)
+                }
                 if (!response.ok) {
                     return Promise.reject(json)
-                }
-                if (typeof(callback) === 'function') {
-                    callback(json)
                 }
                 return json
             })

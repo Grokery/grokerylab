@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { getSessionInfo } from '../../authentication'
 import CloudSection from '../../shared/CloudSection/CloudSection'
-import CreateCloudSection from './CreateCloudSection'
+import CreateCloudModel from './CreateCloudModel'
 import './Home.css'
 
 class Home extends Component {
@@ -25,22 +25,18 @@ class Home extends Component {
         <CloudSection key={name} cloudid={name} cloud={clouds[name]} />
       )
     })
-    sections.push(
-      <CreateCloudSection key="createnew" />
-    )
     return sections
   }
   render() {
     let { username } = this.props
     return (
-      <div className='page-content home'>
-        <div>
-          <div className='user-section'>
-            {<h1>Hi {username}</h1>}
-          </div>
-          <div className='cloud-sections'>
-            {this.getCloudSections()}
-          </div>
+      <div id='Home' className='page-content home'>
+        <div className='user-section'>
+          {<h1>Hi {username}</h1>}
+        </div>
+        <CreateCloudModel key="createnew" />
+        <div className='cloud-sections'>
+          {this.getCloudSections()}
         </div>
       </div>
     )

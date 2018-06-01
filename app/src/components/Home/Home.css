@@ -1,3 +1,9 @@
+
+#new-cloud-btn {
+  font-size: large;
+  color: #0291E3;
+}
+
 /* TODO move next to container */
 .home .user-section {
   float:left;
