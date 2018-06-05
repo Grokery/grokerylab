@@ -1,6 +1,5 @@
 package io.grokery.lab.api.spring.providers;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.Consumes;

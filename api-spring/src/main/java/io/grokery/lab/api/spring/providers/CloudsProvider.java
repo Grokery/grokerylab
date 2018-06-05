@@ -1,10 +1,11 @@
 package io.grokery.lab.api.spring.providers;
 
-import javax.websocket.server.PathParam;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -63,9 +64,27 @@ public class CloudsProvider {
 	public Response retreive(
 		@HeaderParam("Authorization") String auth,
 		@ApiParam @PathParam("cloudId") String cloudId) {
-		LOGGER.info("POST: {}/clouds/<cloudid>", apiVersion);
+		LOGGER.info("GET: {}/clouds/<cloudid>", apiVersion);
 		try {
 			Map<String,Object> response = CloudService.getInstance().retrieve(auth, cloudId);
+			return Response.status(Status.OK).entity(response).build();
+		} catch (NotAuthorizedException e) {
+			LOGGER.error(e.message);
+			return Response.status(Status.UNAUTHORIZED).entity(e).build();
+		} catch (Exception e) {
+			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e).build();
+		}
+	}
+
+	@DELETE
+	@Path("/{cloudId}")
+	@ApiOperation(value = "Get Cloud", response = Cloud.class)
+	public Response delete(
+		@HeaderParam("Authorization") String auth,
+		@ApiParam @PathParam("cloudId") String cloudId) {
+		LOGGER.info("DELETE: {}/clouds/<cloudId>", apiVersion);
+		try {
+			Map<String,Object> response = CloudService.getInstance().delete(auth, cloudId);
 			return Response.status(Status.OK).entity(response).build();
 		} catch (NotAuthorizedException e) {
 			LOGGER.error(e.message);

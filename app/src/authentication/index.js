@@ -94,3 +94,10 @@ export const addNewCloudToSession = (cloud) => {
     setSessionInfo(sessionInfo)
     history.replace("/")
 }
+
+export const removeCloudFromSession = (cloudName) => {
+    var sessionInfo = getSessionInfo()
+    delete sessionInfo['clouds'][cloudName]
+    setSessionInfo(sessionInfo)
+    history.replace("/")
+}

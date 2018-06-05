@@ -1,5 +1,6 @@
 package io.grokery.lab.api.admin;
 
+import java.util.List;
 import java.util.Map;
 
 import io.grokery.lab.api.admin.models.Account;
@@ -9,6 +10,7 @@ import io.grokery.lab.api.admin.models.submodels.CloudAccess;
 import io.grokery.lab.api.admin.models.submodels.CloudCredentials;
 import io.grokery.lab.api.admin.models.submodels.CloudRef;
 import io.grokery.lab.api.admin.models.submodels.UserRef;
+import io.grokery.lab.api.admin.types.AccountRole;
 import io.grokery.lab.api.common.DigitalPiglet;
 import io.grokery.lab.api.common.errors.NotImplementedError;
 import io.grokery.lab.api.common.exceptions.NotAuthorizedException;
@@ -40,6 +42,10 @@ public class CloudService extends ServiceBaseClass {
 		User user = null;
 		try {
 			Claims claims = DigitalPiglet.parseJWT(auth);
+			String accountRole = claims.get("accountRole").toString();
+			if (AccountRole.valueOf(accountRole) != AccountRole.ADMIN) {
+				throw new NotAuthorizedException("Admin role required to create new cloud");
+			}
 			user = dynamo.load(User.class, User.hashKey, claims.get("userId").toString());
 		} catch (Throwable e) {
 			throw new NotAuthorizedException();
@@ -102,8 +108,50 @@ public class CloudService extends ServiceBaseClass {
 		throw new NotImplementedError();
 	}
 	
-	public Map<String, Object> delete(String auth, String cloudId) {
-		throw new NotImplementedError();
+	public Map<String, Object> delete(String auth, String cloudId) throws NotAuthorizedException, NotFoundException {
+		User user = null;
+		Cloud cloud = null;
+		try {
+			Claims claims = DigitalPiglet.parseJWT(auth);
+			user = dynamo.load(User.class, User.hashKey, claims.get("userId").toString());
+			if (user == null) {
+				throw new NotFoundException("User not found");
+			}
+			cloud = dynamo.load(Cloud.class, Cloud.hashKey, cloudId);
+			if (cloud == null) {
+				throw new NotFoundException("Cloud not found");
+			}
+			List<UserRef> cloudUsers = cloud.getUsers();
+			if (cloudUsers != null && !cloudUsers.contains(new UserRef(claims.get("userId").toString()))) {
+				throw new NotAuthorizedException("You do not have access to this cloud. Please request access from an admin.");
+			}
+			String accountRole = claims.get("accountRole").toString();
+			if (AccountRole.valueOf(accountRole) != AccountRole.ADMIN) {
+				throw new NotAuthorizedException("Admin role required to delete cloud");
+			}
+        } catch (NotAuthorizedException e) {
+			throw e;
+		} catch (NotFoundException e) {
+			throw e;
+		} catch (Throwable e) {
+			throw new NotAuthorizedException();
+		}
+
+		Account account = dynamo.load(Account.class, Account.hashKey, cloud.getAccountId());
+		account.getClouds().remove(new CloudRef(cloudId));
+		dynamo.save(account);
+
+		for (UserRef userRef : cloud.getUsers()) {
+			user = dynamo.load(User.class, User.hashKey, userRef.getUserId());
+			user.getClouds().remove(cloud.getName());
+			dynamo.save(user);
+		}
+
+		dynamo.delete(cloud);
+
+		@SuppressWarnings("unchecked")
+		Map<String, Object> response = objectMapper.convertValue(cloud, Map.class);
+		return response;
 	}
 	
 }

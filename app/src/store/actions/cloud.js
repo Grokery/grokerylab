@@ -53,19 +53,19 @@ export const fetchCloud = (cloudId, cb) => (dispatch, getState) => {
 //     })
 // }
 
-// //--------------------------------
+//--------------------------------
 
-// export const DELETEECLOUD_REQUEST = 'DELETEECLOUD_REQUEST'
-// export const DELETEECLOUD_SUCCESS = 'DELETEECLOUD_SUCCESS'
-// export const DELETEECLOUD_FAILURE = 'DELETEECLOUD_FAILURE'
+export const DELETEECLOUD_REQUEST = 'DELETEECLOUD_REQUEST'
+export const DELETEECLOUD_SUCCESS = 'DELETEECLOUD_SUCCESS'
+export const DELETEECLOUD_FAILURE = 'DELETEECLOUD_FAILURE'
 
-// export const deleteNode = (collection, node, cb) => (dispatch, getState) => {
-//     dispatch({
-//         [CALL_CLOUD_API]: {
-//             types: [DELETEECLOUD_REQUEST, DELETEECLOUD_SUCCESS, DELETEECLOUD_FAILURE],
-//             endpoint: '/clouds/1/resources/' + collection + "/" + node.id,
-//             method: 'DELETE',
-//             callback: cb
-//         }
-//     })
-// }
+export const deleteCloud = (cloudId, cb) => (dispatch, getState) => {
+    dispatch({
+        [CALL_GROKERY_API]: {
+            types: [DELETEECLOUD_REQUEST, DELETEECLOUD_SUCCESS, DELETEECLOUD_FAILURE],
+            endpoint: '/clouds/' + cloudId,
+            method: 'DELETE',
+            callback: cb
+        }
+    })
+}
