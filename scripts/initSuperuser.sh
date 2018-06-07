@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# This script will walk you through the process of createing a superadmin user for 
+# a newly installed system.
+
 echo "Please enter apiUrl (default: http://localhost:8000/api/v0):"
 read apiUrl
 apiUrl=${apiUrl:-"http://localhost:8000/api/v0"}

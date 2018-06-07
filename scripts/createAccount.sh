@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# This script will walk you through creating a new account.
+
 echo "Please enter apiUrl (default: http://localhost:8000/api/v0):"
 read apiUrl
 apiUrl=${apiUrl:-"http://localhost:8000/api/v0"}
