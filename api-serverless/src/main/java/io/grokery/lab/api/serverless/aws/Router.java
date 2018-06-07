@@ -87,7 +87,7 @@ public class Router implements RequestHandler<ApiGatewayRequest, ApiGatewayRespo
 
 	private ApiGatewayResponse resetPass(String resource, ApiGatewayRequest req) throws Exception {
 		if (req.getHttpMethod().equals("POST")) {
-			// TODO
+			// TODO impliment method
 		} 
 		throw new NotImplementedError();
 	}

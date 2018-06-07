@@ -40,8 +40,10 @@ public class AccountService extends ServiceBaseClass {
 			// allow create superadmin account during system initialization
 			Map<String, Object> checkResult = validateSuperAdminAccountInitialization(requestBody);
 			if (checkResult != null) {
+				logger.info("Returning super admin account for super admin user creation");
 				return checkResult;
 			}
+			logger.info("Creating super admin user account");
 		} else {
 			try {
 				Claims claims = DigitalPiglet.parseJWT(auth);

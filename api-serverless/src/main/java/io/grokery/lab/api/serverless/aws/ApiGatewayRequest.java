@@ -6,8 +6,6 @@ import java.util.HashMap;
 import org.apache.log4j.Logger;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.grokery.lab.api.common.exceptions.InvalidInputException;
-
 public class ApiGatewayRequest {
 	
 	private static final Logger LOGGER = Logger.getLogger(ApiGatewayRequest.class);

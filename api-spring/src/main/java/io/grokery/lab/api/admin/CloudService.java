@@ -69,9 +69,11 @@ public class CloudService extends ServiceBaseClass {
 		creds.setAwsSecretKey(DigitalPiglet.makePiglet(creds.getAwsSecretKey(), rawPass));
 		user.getClouds().put(cloud.getName(), access);
 
+		logger.info("Saving new cloud and cloud references for account and user");
 		dynamo.save(cloud);
 		dynamo.save(account);
 		dynamo.save(user);
+		logger.info("Finished saving");
 
 		Cloud created = dynamo.load(Cloud.class, Cloud.hashKey, cloud.getCloudId());
 		if (created == null) {

@@ -8,8 +8,8 @@ import java.util.Map;
 public class RouterMain { 
 
   public static void main(String[] args) {
-		Router router = new Router();
-		ApiGatewayRequest req = null;
+		// Router router = new Router();
+		// ApiGatewayRequest req = null;
 
 		// req = authenticateReq();
 		// req = createAccountReq();
