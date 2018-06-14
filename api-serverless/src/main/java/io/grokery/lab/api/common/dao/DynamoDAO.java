@@ -33,11 +33,11 @@ import io.grokery.lab.api.common.exceptions.NotFoundException;
 public class DynamoDAO implements DAO {
 
 	private static final Logger logger = LoggerFactory.getLogger(DynamoDAO.class);
-	
+
 	private GrokeryContext context;
 	private static volatile DynamoDAO instance;
 	private Table table;
-	
+
 	public static DAO getInstance(GrokeryContext context) {
 		logger.info("get dynamo dao instance");
 		synchronized (DynamoDAO.class) {
@@ -47,13 +47,13 @@ public class DynamoDAO implements DAO {
 		}
 		return instance;
 	}
-	
+
 	public DynamoDAO(GrokeryContext context) {
 		logger.info("init new dynamo dao instance");
 		this.context = context;
 		init();
 	}
-	
+
 	public void init() {
 		DynamoDB client = null;
 
@@ -63,27 +63,27 @@ public class DynamoDAO implements DAO {
 				.build());
 
 		table = client.getTable(context.dynamoTableName);
-		
+
 		// Check that table exists by calling describe
 		try {
 			table.describe();
 		} catch (ResourceNotFoundException e) {
-			
+
 			List<KeySchemaElement> keySchema = new ArrayList<KeySchemaElement>();
 			keySchema.add(new KeySchemaElement("resourceType", KeyType.HASH));
 			keySchema.add(new KeySchemaElement("resourceId", KeyType.RANGE));
-			
+
 			List<AttributeDefinition> attrDefs = new ArrayList<AttributeDefinition>();
 			attrDefs.add(new AttributeDefinition("resourceType", ScalarAttributeType.S));
 			attrDefs.add(new AttributeDefinition("resourceId", ScalarAttributeType.S));
-			
+
 			// TODO  make throughput configurable by env var
 			ProvisionedThroughput tput = new ProvisionedThroughput(new Long(10), new Long(10));
-			
+
 			client.createTable(context.dynamoTableName, keySchema, attrDefs, tput);
 		}
 	}
-	
+
 	public Map<String, Object> create(String resourceType, String resourceId, Map<String, Object> item) {
 		Item dbItem = new Item();
 		dbItem.withString("resourceType", resourceType);
@@ -137,13 +137,13 @@ public class DynamoDAO implements DAO {
             );
 
 		Map<String, Object> result = new HashMap<String, Object>();
-		ArrayList<Map<String, Object>> items = new ArrayList<Map<String, Object>>();
         Iterator<Item> iterator = scanResults.iterator();
         while (iterator.hasNext()) {
         	Item item = iterator.next();
-            items.add((Map<String, Object>)item.get("item"));
+			Map<String, Object> obj = (Map<String, Object>)item.get("item");
+			result.put(obj.get("guid").toString(), obj);
         }
-        
+
 		return result;
 	}
 

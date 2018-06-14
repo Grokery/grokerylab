@@ -8,16 +8,15 @@ import org.slf4j.LoggerFactory;
 
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
 
-public class DefinitionService {
-	
+public class LookupService {
+
 	private static final Logger logger = LoggerFactory.getLogger(DataflowService.class);
 
-    public static Map<String, Object> getLookups() 
+    public static Map<String, Object> getLookups()
         throws InvalidInputException {
         logger.info("getalookups called");
         Map<String, Object> results = new HashMap<String, Object>();
-        
 		return results;
 	}
-		
+
 }
