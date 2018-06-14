@@ -5,15 +5,15 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.grokery.lab.api.common.GrokeryContext;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
+import io.grokery.lab.api.common.CloudContext;
 import io.grokery.lab.api.common.dao.DAOFactory;
 
 public class DataflowService {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(DataflowService.class);
 
-    public static Map<String, Object> getNodesForFlow(GrokeryContext context) 
+    public static Map<String, Object> getNodesForFlow(CloudContext context)
         throws InvalidInputException {
 
         logger.info("getNodesForFlow called");
@@ -23,8 +23,8 @@ public class DataflowService {
         // for (Map<String, Object> node : result) {
         //     result.put(node.get("guid").toString(), node);
         // }
-        
+
 		return result;
 	}
-		
+
 }

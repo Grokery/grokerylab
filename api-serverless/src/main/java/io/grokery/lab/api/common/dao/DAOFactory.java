@@ -1,10 +1,10 @@
 package io.grokery.lab.api.common.dao;
 
-import io.grokery.lab.api.common.GrokeryContext;
+import io.grokery.lab.api.common.CloudContext;
 
 public class DAOFactory {
-    
-    public static DAO getDAO(GrokeryContext context){
+
+    public static DAO getDAO(CloudContext context){
 		DAOType resourcesDb = DAOType.valueOf(context.daoType);
 		switch(resourcesDb) {
 			case DYNAMODB:

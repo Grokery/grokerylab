@@ -23,8 +23,8 @@ import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.model.ResourceNotFoundException;
 import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
 
+import io.grokery.lab.api.common.CloudContext;
 import io.grokery.lab.api.common.ContextCredentialUtil;
-import io.grokery.lab.api.common.GrokeryContext;
 import io.grokery.lab.api.common.exceptions.NotFoundException;
 
 /**
@@ -34,21 +34,21 @@ public class DynamoDAO implements DAO {
 
 	private static final Logger logger = LoggerFactory.getLogger(DynamoDAO.class);
 
-	private GrokeryContext context;
+	private CloudContext context;
 	private static volatile DynamoDAO instance;
 	private Table table;
 
-	public static DAO getInstance(GrokeryContext context) {
+	public static DAO getInstance(CloudContext context) {
 		logger.info("get dynamo dao instance");
 		synchronized (DynamoDAO.class) {
-			if(instance == null || !context.equals(context)) {
+			if(instance == null || !instance.context.equals(context)) {
 				instance = new DynamoDAO(context);
 			}
 		}
 		return instance;
 	}
 
-	public DynamoDAO(GrokeryContext context) {
+	public DynamoDAO(CloudContext context) {
 		logger.info("init new dynamo dao instance");
 		this.context = context;
 		init();
@@ -77,7 +77,7 @@ public class DynamoDAO implements DAO {
 			attrDefs.add(new AttributeDefinition("resourceType", ScalarAttributeType.S));
 			attrDefs.add(new AttributeDefinition("resourceId", ScalarAttributeType.S));
 
-			// TODO  make throughput configurable by env var
+			// TODO make throughput configurable by env var
 			ProvisionedThroughput tput = new ProvisionedThroughput(new Long(10), new Long(10));
 
 			client.createTable(context.dynamoTableName, keySchema, attrDefs, tput);

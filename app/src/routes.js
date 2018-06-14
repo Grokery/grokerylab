@@ -15,11 +15,11 @@ import Jobs from './components/Jobs/Jobs'
 import Settings from './components/Settings/Settings'
 
 export default <Route path='/' component={App}>
-  <Route path='/signin' component={Auth} /> 
-  <Route path='/signout' component={Auth} /> 
+  <Route path='/signin' component={Auth} />
+  <Route path='/signout' component={Auth} />
   <Route component={AuthGateway}>
     <IndexRoute component={Home} />
-    <Route path='/account' component={Account} /> 
+    <Route path='/account' component={Account} />
     <Route path='/clouds/:cloudName' component={Cloud}>
       <IndexRoute component={CloudHome}></IndexRoute>
       <Route path='/clouds/:cloudName/datasources' component={Sources} />

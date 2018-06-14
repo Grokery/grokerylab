@@ -17,9 +17,9 @@ import com.amazonaws.services.dynamodbv2.model.ResourceNotFoundException;
 import com.amazonaws.services.dynamodbv2.util.TableUtils;
 import com.amazonaws.services.dynamodbv2.util.TableUtils.TableNeverTransitionedToStateException;
 
+import io.grokery.lab.api.common.CloudContext;
 import io.grokery.lab.api.common.CommonUtils;
 import io.grokery.lab.api.common.ContextCredentialUtil;
-import io.grokery.lab.api.common.GrokeryContext;
 import io.grokery.lab.api.common.MapperUtil;
 import io.grokery.lab.api.common.StageTableNameUtil;
 
@@ -28,11 +28,11 @@ public class ServiceBaseClass {
 
 	protected static final Logger logger = LoggerFactory.getLogger(ServiceBaseClass.class);
 	private static final Long THROUGHPUT = new Long(5);
-	
+
 	protected final DynamoDBMapper dynamo;
 	protected final ObjectMapper objectMapper;
 
-	
+
 	public ServiceBaseClass() {
 		dynamo = this.getDynamoDbMapper(this.getDynamoDbClient());
 		objectMapper = MapperUtil.getInstance();
@@ -41,7 +41,7 @@ public class ServiceBaseClass {
 	public ServiceBaseClass(final Class<?> klass) {
 		AmazonDynamoDB dynamoClient = this.getDynamoDbClient();
 		dynamo = this.getDynamoDbMapper(dynamoClient);
-		
+
 		CreateTableRequest request = dynamo.generateCreateTableRequest(klass);
 		request.setProvisionedThroughput(new ProvisionedThroughput(THROUGHPUT, THROUGHPUT));
 		if (request.getGlobalSecondaryIndexes() != null) {
@@ -69,11 +69,11 @@ public class ServiceBaseClass {
 	}
 
 	private AmazonDynamoDB getDynamoDbClient() {
-		GrokeryContext context = new GrokeryContext();
+		CloudContext context = new CloudContext();
 		context.awsAccessKeyId = CommonUtils.getRequiredEnv("API_HOST_AWS_ACCESS_KEY_ID");
 		context.awsSecretKey = CommonUtils.getRequiredEnv("API_HOST_AWS_SECRET_KEY");
 		context.awsRegion = CommonUtils.getRequiredEnv("API_HOST_AWS_REGION");
-		
+
 		AmazonDynamoDB dynamoClient = AmazonDynamoDBClientBuilder.standard()
 				.withCredentials(new ContextCredentialUtil(context))
 				.withRegion(context.awsRegion)

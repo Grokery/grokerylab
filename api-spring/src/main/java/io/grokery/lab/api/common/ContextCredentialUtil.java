@@ -5,14 +5,12 @@ import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 
-import io.grokery.lab.api.common.GrokeryContext;
-
 public class ContextCredentialUtil implements AWSCredentialsProvider {
-   
+
     private String AccessKeyId;
     private String SecretKey;
-    
-    public ContextCredentialUtil(GrokeryContext context) {
+
+    public ContextCredentialUtil(CloudContext context) {
 		this.AccessKeyId = context.awsAccessKeyId;
 		this.SecretKey = context.awsSecretKey;
     }

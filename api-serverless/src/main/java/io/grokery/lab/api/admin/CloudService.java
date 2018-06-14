@@ -13,6 +13,7 @@ import io.grokery.lab.api.admin.models.submodels.UserRef;
 import io.grokery.lab.api.admin.types.AccountRole;
 import io.grokery.lab.api.common.DigitalPiglet;
 import io.grokery.lab.api.common.errors.NotImplementedError;
+import io.grokery.lab.api.common.exceptions.InvalidInputException;
 import io.grokery.lab.api.common.exceptions.NotAuthorizedException;
 import io.grokery.lab.api.common.exceptions.NotFoundException;
 
@@ -28,7 +29,7 @@ public class CloudService extends ServiceBaseClass {
 	public CloudService () {
 		super(Cloud.class);
 	}
-	
+
 	public static CloudService getInstance() {
         synchronized (CloudService.class) {
             if (instance == null) {
@@ -37,7 +38,7 @@ public class CloudService extends ServiceBaseClass {
         }
         return instance;
     }
-	
+
 	public Map<String, Object> create(String auth, Map<String, Object> requestBody) throws Exception {
 		User user = null;
 		try {
@@ -56,12 +57,18 @@ public class CloudService extends ServiceBaseClass {
 		cloud.getUsers().add(new UserRef(user.getUserId()));
 		cloud.assertIsValidForCreate();
 
+		Cloud existing = dynamo.load(Cloud.class, Cloud.hashKey, cloud.getName());
+		if (existing != null) {
+			throw new InvalidInputException("Duplicate cloud name");
+		}
+
 		Account account = dynamo.load(Account.class, Account.hashKey, cloud.getAccountId());
 		account.getClouds().add(new CloudRef(cloud.getCloudId()));
 
 		CloudAccess access = objectMapper.convertValue(requestBody.get("adminAccess"), CloudAccess.class);
 		access.setCloudId(cloud.getCloudId());
 		access.setTitle(cloud.getTitle());
+		access.setName(cloud.getName());
 		CloudCredentials creds = access.getCredentials();
 		creds.setCloudRole("admin");
 		String rawPass = requestBody.get("password").toString();
@@ -100,7 +107,7 @@ public class CloudService extends ServiceBaseClass {
 		} catch (Throwable e) {
 			throw new NotAuthorizedException();
 		}
-        
+
 		@SuppressWarnings("unchecked")
 		Map<String, Object> response = objectMapper.convertValue(cloud, Map.class);
 		return response;
@@ -109,7 +116,7 @@ public class CloudService extends ServiceBaseClass {
     public Map<String, Object> update(String auth, String cloudId, Map<String, Object> requestBody) {
 		throw new NotImplementedError();
 	}
-	
+
 	public Map<String, Object> delete(String auth, String cloudId) throws NotAuthorizedException, NotFoundException {
 		User user = null;
 		Cloud cloud = null;
@@ -155,5 +162,5 @@ public class CloudService extends ServiceBaseClass {
 		Map<String, Object> response = objectMapper.convertValue(cloud, Map.class);
 		return response;
 	}
-	
+
 }

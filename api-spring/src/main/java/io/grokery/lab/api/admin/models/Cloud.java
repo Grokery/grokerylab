@@ -30,7 +30,7 @@ public class Cloud implements Serializable {
 	private String description;
     private String url;
 	private List<UserRef> users;
-	
+
 	public Cloud() {
 		cloudId = UUID.randomUUID().toString();
 		users = new ArrayList<UserRef>();
@@ -41,7 +41,7 @@ public class Cloud implements Serializable {
 		return hashKey;
 	}
 	public void setHashKey(String hashKey) {
-		
+
 	}
 
 	@DynamoDBRangeKey
@@ -68,7 +68,7 @@ public class Cloud implements Serializable {
 		this.cloudType = cloudType;
 	}
 
-    @DynamoDBAttribute
+    @DynamoDBIndexRangeKey(localSecondaryIndexName="name")
 	public String getName() {
 		return name;
 	}
@@ -91,7 +91,7 @@ public class Cloud implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
     @DynamoDBAttribute
 	public String getUrl() {
 		return url;

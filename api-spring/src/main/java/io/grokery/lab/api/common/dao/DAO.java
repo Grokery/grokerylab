@@ -15,7 +15,7 @@ public interface DAO {
      * @param Map<String, Object> item to create
      * @return Map<String, Object> item as created
      */
-	Map<String, Object> create(String resourceType, String resourceId, Map<String, Object> item);
+    Map<String, Object> create(String resourceType, String resourceId, Map<String, Object> item);
 
     /**
      * Updates item's (root level) key value pairs
@@ -23,7 +23,7 @@ public interface DAO {
      * @param String resourceId
      * @param Map<String, Object> key value map of (root level) keys to update
      * @return Map<String, Object> item as updated
-     * @throws NotFoundException 
+     * @throws NotFoundException
      */
     Map<String, Object> update(String resourceType, String resourceId, Map<String, Object> values) throws NotFoundException;
 
@@ -32,7 +32,7 @@ public interface DAO {
      * @param String resourceType
      * @param String resourceId
      * @return Map<String, Object> item
-     * @throws NotFoundException 
+     * @throws NotFoundException
      */
     Map<String, Object> delete(String resourceType, String resourceId) throws NotFoundException;
 
@@ -41,7 +41,7 @@ public interface DAO {
      * @param String resourceType
      * @param String resourceId
      * @return Map<String, Object> item
-     * @throws NotFoundException 
+     * @throws NotFoundException
      */
     Map<String, Object> retrieve(String resourceType, String resourceId) throws NotFoundException;
 
@@ -53,5 +53,5 @@ public interface DAO {
      * @return Map<String, Object> containing result size, last id scanned, and list of results
      */
     Map<String, Object> retrieve(String resourceType, Map<String, String> filter, String startId);
-    
+
 }

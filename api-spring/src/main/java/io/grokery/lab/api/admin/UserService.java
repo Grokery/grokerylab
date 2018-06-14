@@ -33,13 +33,13 @@ public class UserService extends ServiceBaseClass {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 	private static volatile UserService instance;
-	
+
 	private static final long JWT_TIMEOUT = 28800000;
 
 	public UserService() {
 		super(User.class);
 	}
-	
+
 	public static UserService getInstance() {
         synchronized (UserService.class) {
             if (instance == null) {
@@ -48,7 +48,7 @@ public class UserService extends ServiceBaseClass {
         }
         return instance;
     }
-	
+
 	public Map<String, Object> create(String auth, Map<String, Object> requestBody) throws Exception {
 
 		User user = objectMapper.convertValue(requestBody, User.class);
@@ -86,7 +86,7 @@ public class UserService extends ServiceBaseClass {
 		if (dynamo.load(User.class, User.hashKey, user.getUsername()) != null) {
 			throw new InvalidInputException("Invalid username");
 		}
-		
+
 		user.assertIsValidForCreate();
 
 		Account account = dynamo.load(Account.class, Account.hashKey, user.getAccountId());
@@ -94,11 +94,11 @@ public class UserService extends ServiceBaseClass {
 			throw new InvalidInputException("Invalid accountId");
 		}
 		account.getUsers().add(new UserRef(user.getUserId()));
-		
+
 		// Hash password
 		// TODO handle salt generation properly
 		user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12)));
-		
+
 		// Save and verify
 		dynamo.save(user);
 		dynamo.save(account);
@@ -116,7 +116,7 @@ public class UserService extends ServiceBaseClass {
 		Map<String, Object> response = objectMapper.convertValue(created, Map.class);
 		return response;
 	}
-	
+
 	public Map<String, Object> retrieve(String auth, String username) throws NotFoundException, NotAuthorizedException {
 
 		try {
@@ -145,7 +145,7 @@ public class UserService extends ServiceBaseClass {
 		// TODO check if password updating and handle (update cloud credential)
 		throw new NotImplementedError();
 	}
-	
+
 	public Map<String, Object> delete(String auth, String username) {
 		throw new NotImplementedError();
 	}
@@ -183,11 +183,12 @@ public class UserService extends ServiceBaseClass {
 			cloudClaims.put("awsAccessKeyId", DigitalPiglet.parsePiglet(creds.getAwsAccessKeyId(), rawPass));
 			cloudClaims.put("awsSecretKey", DigitalPiglet.parsePiglet(creds.getAwsSecretKey(), rawPass));
 			cloudClaims.put("awsRegion", creds.getAwsRegion());
+			cloudClaims.put("cloudName", cloudAccess.getName());
 			cloudClaims.put("cloudRole", creds.getCloudRole());
 			cloudAccess.setCloudToken(DigitalPiglet.makeJWT(cloudClaims, JWT_TIMEOUT));
 			cloudAccess.setCredentials(null);
 		}
-		
+
 		@SuppressWarnings("unchecked")
 		Map<String, Object> response = objectMapper.convertValue(user, Map.class);
 		return response;
@@ -202,7 +203,7 @@ public class UserService extends ServiceBaseClass {
 
 		User user = getUserByUsername(username);
 		String passFromDb = user.getPassword();
-		if (!BCrypt.checkpw(password, passFromDb)) { 
+		if (!BCrypt.checkpw(password, passFromDb)) {
 			throw new NotAuthorizedException("User not found or password not match");
 		}
 			return user;
@@ -218,7 +219,7 @@ public class UserService extends ServiceBaseClass {
 			.withConsistentRead(false)
 			.withKeyConditionExpression("hashKey = :hk and username = :v1")
 			.withExpressionAttributeValues(eav);
-			
+
 		List<User> results =  dynamo.query(User.class, queryExpression);
 		if (results == null || results.size() == 0) {
 			throw new NotAuthorizedException("User not found or password not match");

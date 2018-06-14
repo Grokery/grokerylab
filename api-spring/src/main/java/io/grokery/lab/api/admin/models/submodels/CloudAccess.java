@@ -14,16 +14,17 @@ public class CloudAccess implements Serializable {
 
 	private String cloudId;
 	private String title;
+	private String name;
 	private CloudCredentials credentials;
 	private List<CloudLink> links;
 
 	// Not stored in DB
 	private String cloudToken;
-	
+
 	public CloudAccess() {
 		links = new ArrayList<CloudLink>();
 	}
-	
+
 	@DynamoDBAttribute(attributeName = "cloudId")
 	public String getCloudId() {
 		return cloudId;
@@ -41,6 +42,15 @@ public class CloudAccess implements Serializable {
 		this.title = title;
 	}
 
+	@DynamoDBAttribute(attributeName = "name")
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	// not stored in db
 	public String getCloudToken() {
 		return cloudToken;
@@ -48,7 +58,7 @@ public class CloudAccess implements Serializable {
 	public void setCloudToken(String cloudToken) {
 		this.cloudToken = cloudToken;
 	}
-	
+
 	@DynamoDBAttribute(attributeName = "credentials")
 	public CloudCredentials getCredentials() {
 		return credentials;
@@ -56,7 +66,7 @@ public class CloudAccess implements Serializable {
 	public void setCredentials(CloudCredentials credentials) {
 		this.credentials = credentials;
 	}
-	
+
 	@DynamoDBAttribute(attributeName = "links")
 	public List<CloudLink> getLinks() {
 		return links;

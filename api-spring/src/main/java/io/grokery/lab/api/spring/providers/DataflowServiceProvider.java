@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import io.grokery.lab.api.common.GrokeryContext;
+import io.grokery.lab.api.common.CloudContext;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
 import io.grokery.lab.api.common.exceptions.NotAuthorizedException;
 import io.grokery.lab.api.core.DataflowService;
@@ -36,16 +36,16 @@ public class DataflowServiceProvider {
 
 	@Value("${info.api.version}")
 	private String apiVersion;
-	
+
 	@GET
-	@Path("")	
-	@ApiOperation(value = "Get nodes", response = Object.class)  
+	@Path("")
+	@ApiOperation(value = "Get nodes", response = Object.class)
 	public Response get(
 		@HeaderParam("Authorization") String authorization,
 		@ApiParam @PathParam("cloudId") String cloudId)  {
 		LOGGER.info("{}/clouds/{}/dataflowservice", apiVersion, cloudId);
 		try {
-			GrokeryContext context = new GrokeryContext(authorization);
+			CloudContext context = new CloudContext(authorization);
 			Map<String,Object> results = DataflowService.getNodesForFlow(context);
 			return Response.status(Status.OK).entity(results).build();
 		} catch (NotAuthorizedException e) {
@@ -56,5 +56,5 @@ public class DataflowServiceProvider {
 			return Response.status(Status.BAD_REQUEST).entity(e).build();
 		}
 	}
-	
+
 }
