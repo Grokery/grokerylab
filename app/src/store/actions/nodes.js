@@ -1,5 +1,4 @@
 import { CALL_CLOUD_API } from '../middleware/api'
-import { getSelectedCloudId } from '../../authentication'
 
 //--------------------------------
 
@@ -11,7 +10,7 @@ export const fetchNodes = (cb) => (dispatch, getState) => {
     dispatch({
         [CALL_CLOUD_API]: {
             types: [FETCHNODES_REQUEST, FETCHNODES_SUCCESS, FETCHNODES_FAILURE],
-            endpoint: '/clouds/' + getSelectedCloudId() + '/dataflowservice',
+            endpoint: '/dataflowservice',
             method: 'GET',
             callback: cb
         }

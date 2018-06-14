@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { getSessionInfo, setBaseUrlForCloudName, setSelectedCloudName } from '../../authentication'
+import { getSelectedCloudId, setBaseUrlForCloudName, setSelectedCloudName } from '../../authentication'
 import { fetchNodes, clearNodes, fetchLookupData, fetchCloud } from '../../store/actions'
 import SideNavBar from '../../shared/SideNavBar/SideNavBar'
 
@@ -27,17 +27,14 @@ class Cloud extends Component {
   setCloudBaseUrlCallBack(json) {
     const { cloudName, fetchNodes, fetchLookupData } = this.props
     setBaseUrlForCloudName(cloudName, json['url'])
-    fetchNodes()
     fetchLookupData()
+    fetchNodes()
   }
   componentDidMount() {
     const { cloudName, clearNodes, fetchCloud } = this.props
     setSelectedCloudName(cloudName)
+    fetchCloud(getSelectedCloudId(), this.setCloudBaseUrlCallBack.bind(this))
     clearNodes()
-    fetchCloud(
-      getSessionInfo()['clouds'][cloudName]['cloudId'], 
-      this.setCloudBaseUrlCallBack.bind(this)
-    )
   }
 }
 

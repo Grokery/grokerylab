@@ -1,5 +1,4 @@
 import { CALL_CLOUD_API } from '../middleware/api'
-import { getSelectedCloudId } from '../../authentication'
 
 
 //--------------------------------
@@ -12,7 +11,7 @@ export const fetchLookupData = (cb) => (dispatch, getState) => {
     dispatch({
         [CALL_CLOUD_API]: {
             types: [FETCHLOOKUPS_REQUEST, FETCHLOOKUPS_SUCCESS, FETCHLOOKUPS_FAILURE],
-            endpoint: '/clouds/' + getSelectedCloudId() + '/definitionservice',
+            endpoint: '/lookups',
             method: 'GET',
             callback: cb
         }

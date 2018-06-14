@@ -92,7 +92,7 @@ public class CloudService extends ServiceBaseClass {
 			if (cloud == null) {
 				throw new NotFoundException();
 			}
-			if (!cloud.getUsers().contains(new UserRef(claims.getSubject()))) {
+			if (!cloud.getUsers().contains(new UserRef(claims.get("userId").toString()))) {
                 throw new NotAuthorizedException("You do not have read access to this cloud. Please request access from an admin for this cloud.");
             }
         } catch (NotAuthorizedException e) {

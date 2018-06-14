@@ -4,7 +4,7 @@ import io.grokery.lab.api.spring.providers.AccountsProvider;
 import io.grokery.lab.api.spring.providers.AuthenticationProvider;
 import io.grokery.lab.api.spring.providers.CloudsProvider;
 import io.grokery.lab.api.spring.providers.UsersProvider;
-import io.grokery.lab.api.spring.providers.DefinitionsProvider;
+import io.grokery.lab.api.spring.providers.LookupProvider;
 import io.grokery.lab.api.spring.providers.ResourcesProvider;
 import io.grokery.lab.api.spring.providers.DataflowServiceProvider;
 
@@ -54,7 +54,7 @@ public class JerseyConfig extends ResourceConfig {
 		this.register(AccountsProvider.class);
 		this.register(CloudsProvider.class);
 		this.register(UsersProvider.class);
-		this.register(DefinitionsProvider.class);
+		this.register(LookupProvider.class);
 		this.register(ResourcesProvider.class);
 		this.register(DataflowServiceProvider.class);
 		this.register(CORSFilter.class);

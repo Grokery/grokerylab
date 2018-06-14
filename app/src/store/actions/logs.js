@@ -11,7 +11,7 @@ export const fetchLogs = (nodeid, cb) => (dispatch, getState) => {
     dispatch({
         [CALL_CLOUD_API]: {
             types: [FETCHLOGS_REQUEST, FETCHLOGS_SUCCESS, FETCHLOGS_FAILURE],
-            endpoint: '/history?referenceid='+nodeid,
+            endpoint: '/logs?referenceid='+nodeid,
             method: 'GET',
             callback: cb
         }
@@ -28,7 +28,7 @@ export const appendLogItem = (collection, item, cb) => (dispatch, getState) => {
     dispatch({
         [CALL_CLOUD_API]: {
             types: [APPENDLOGS_REQUEST, APPENDLOGS_SUCCESS, APPENDLOGS_FAILURE],
-            endpoint: '/history/' + collection,
+            endpoint: '/logs/' + collection,
             method: 'POST',
             data: item,
             callback: cb

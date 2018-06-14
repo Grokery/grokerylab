@@ -15,15 +15,15 @@ class Comments extends Component {
     }
     componentDidMount() {
         const { fetchLogs, nodeId } = this.props
-        fetchLogs(nodeId)
+        // fetchLogs(nodeId)
     }
     getComments() {
         let lis = []
         this.props.comments.forEach(function(comment) {
             let date = new Date(comment.datetime)
             let options = {
-                weekday: "long", year: "numeric", month: "short",  
-                day: "numeric", hour: "2-digit", minute: "2-digit" 
+                weekday: "long", year: "numeric", month: "short",
+                day: "numeric", hour: "2-digit", minute: "2-digit"
             }
             lis.push((
                 <li key={comment.id} className='left clearfix'>
@@ -63,7 +63,7 @@ class Comments extends Component {
                         <input id='comment-input' type='text' className='form-control input-sm' placeholder='Add comment ....' />
                     </form>
                     <span className='input-group-btn'>
-                        <button id='btn-chat' className='btn btn-primary btn-sm' onClick={this.onSubmit.bind(this)}>Send</button>    
+                        <button id='btn-chat' className='btn btn-primary btn-sm' onClick={this.onSubmit.bind(this)}>Send</button>
                     </span>
                 </div>
                 <div className='panel-body'>

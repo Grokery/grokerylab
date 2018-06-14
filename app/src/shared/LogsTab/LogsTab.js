@@ -13,7 +13,7 @@ class LogsTab extends Component {
     }
     componentDidMount() {
         const { fetchLogs, params } = this.props
-        fetchLogs(params.nodeId)
+        // fetchLogs(params.nodeId)
     }
     getLogs() {
         let lis = []
