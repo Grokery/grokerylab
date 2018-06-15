@@ -1,6 +1,7 @@
 package io.grokery.lab.api.common.dao;
 
 import io.grokery.lab.api.common.CloudContext;
+import io.grokery.lab.api.common.errors.NotImplementedError;
 
 public class DAOFactory {
 
@@ -10,11 +11,11 @@ public class DAOFactory {
 			case DYNAMODB:
 				return DynamoDAO.getInstance(context);
 			case MONGODB:
-				throw new Error("MONGODB not implemented");
+				throw new NotImplementedError("MONGODB not implemented");
 			case DOCUMENTDB:
-				throw new Error("DOCUMENTDB not implemented");
+				throw new NotImplementedError("DOCUMENTDB not implemented");
 			default:
-				throw new Error("Unknown context setting for 'RESOURCES_DB'");
+				throw new Error("Unknown context setting for 'daoType'");
 		}
     }
 

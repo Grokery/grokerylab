@@ -14,8 +14,10 @@ public class LookupService {
 
     public static Map<String, Object> getLookups()
         throws InvalidInputException {
+
         logger.info("getalookups called");
         Map<String, Object> results = new HashMap<String, Object>();
+
 		return results;
 	}
 

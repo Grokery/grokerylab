@@ -3,9 +3,6 @@ package io.grokery.lab.api.common.dao;
 import io.grokery.lab.api.common.exceptions.NotFoundException;
 import java.util.Map;
 
-/**
- * Defines the basic operations that a data access object is expected to have
- */
 public interface DAO {
 
     /**
@@ -46,12 +43,10 @@ public interface DAO {
     Map<String, Object> retrieve(String resourceType, String resourceId) throws NotFoundException;
 
     /**
-     * Retrieve resource items as paged results
+     * Retrieve resource items by type
      * @param String resourceType
-     * @param Map<String, String> filter
-     * @param String startId
-     * @return Map<String, Object> containing result size, last id scanned, and list of results
+     * @return Map<String, Object> containing results keyed on resourceId
      */
-    Map<String, Object> retrieve(String resourceType, Map<String, String> filter, String startId);
+    Map<String, Object> retrieve(String resourceType);
 
 }

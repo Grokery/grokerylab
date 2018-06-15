@@ -7,16 +7,12 @@ import java.util.Map;
 public class CloudContext {
 
 	public String daoType = "";
-
 	public String dynamoTableName = "";
-
 	public String awsAccessKeyId = "";
 	public String awsSecretKey = "";
 	public String awsRegion = "";
 
-	public CloudContext() {
-
-	}
+	public CloudContext() {}
 
 	public CloudContext(String auth) throws NotAuthorizedException {
 		try {

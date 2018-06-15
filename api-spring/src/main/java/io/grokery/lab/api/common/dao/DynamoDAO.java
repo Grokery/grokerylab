@@ -27,9 +27,6 @@ import io.grokery.lab.api.common.CloudContext;
 import io.grokery.lab.api.common.ContextCredentialUtil;
 import io.grokery.lab.api.common.exceptions.NotFoundException;
 
-/**
- * Implements data access interface for DynamoDAO.
- */
 public class DynamoDAO implements DAO {
 
 	private static final Logger logger = LoggerFactory.getLogger(DynamoDAO.class);
@@ -55,18 +52,15 @@ public class DynamoDAO implements DAO {
 	}
 
 	public void init() {
-		DynamoDB client = null;
-
-		client = new DynamoDB(AmazonDynamoDBClientBuilder.standard()
+		 DynamoDB client = new DynamoDB(AmazonDynamoDBClientBuilder.standard()
 				.withCredentials(new ContextCredentialUtil(context))
 				.withRegion(Regions.valueOf(context.awsRegion))
 				.build());
 
-		table = client.getTable(context.dynamoTableName);
+		this.table = client.getTable(context.dynamoTableName);
 
-		// Check that table exists by calling describe
 		try {
-			table.describe();
+			this.table.describe();
 		} catch (ResourceNotFoundException e) {
 
 			List<KeySchemaElement> keySchema = new ArrayList<KeySchemaElement>();
@@ -77,7 +71,6 @@ public class DynamoDAO implements DAO {
 			attrDefs.add(new AttributeDefinition("resourceType", ScalarAttributeType.S));
 			attrDefs.add(new AttributeDefinition("resourceId", ScalarAttributeType.S));
 
-			// TODO make throughput configurable by env var
 			ProvisionedThroughput tput = new ProvisionedThroughput(new Long(10), new Long(10));
 
 			client.createTable(context.dynamoTableName, keySchema, attrDefs, tput);
@@ -126,9 +119,8 @@ public class DynamoDAO implements DAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Map<String, Object> retrieve(String resourceType, Map<String, String> filter, String startId) {
-        // TODO implement query
-		// TODO implement pagination (pre scan for index?)
+	public Map<String, Object> retrieve(String resourceType) {
+
 		ItemCollection<ScanOutcome> scanResults = table.scan(
         	null, // Filter expression
             null, // ProjectionExpression
@@ -137,7 +129,7 @@ public class DynamoDAO implements DAO {
             );
 
 		Map<String, Object> result = new HashMap<String, Object>();
-        Iterator<Item> iterator = scanResults.iterator();
+		Iterator<Item> iterator = scanResults.iterator();
         while (iterator.hasNext()) {
         	Item item = iterator.next();
 			Map<String, Object> obj = (Map<String, Object>)item.get("item");

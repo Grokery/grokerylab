@@ -6,11 +6,11 @@ import org.apache.log4j.Logger;
 
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
 import io.grokery.lab.api.common.exceptions.NotAuthorizedException;
-import io.grokery.lab.api.common.GrokeryContext;
+import io.grokery.lab.api.common.CloudContext;
 import io.grokery.lab.api.common.errors.NotImplementedError;
 import io.grokery.lab.api.common.exceptions.NotFoundException;
 import io.grokery.lab.api.core.DataflowService;
-import io.grokery.lab.api.core.DefinitionService;
+import io.grokery.lab.api.core.LookupService;
 import io.grokery.lab.api.core.ResourcesService;
 import io.grokery.lab.api.admin.AccountService;
 import io.grokery.lab.api.admin.CloudService;
@@ -30,35 +30,35 @@ public class Router implements RequestHandler<ApiGatewayRequest, ApiGatewayRespo
 
 			LOGGER.info(String.format("%s: %s", req.getHttpMethod(), resource));
 
-			if (resource.matches("/api/v[0-9]+/auth/signin")) 
+			if (resource.matches("/api/v[0-9]+/auth/signin"))
 				return signin(resource, req);
-			else if (resource.matches("/api/v[0-9]+/auth/resetpass")) 
+			else if (resource.matches("/api/v[0-9]+/auth/resetpass"))
 				return resetPass(resource, req);
-			
-			else if (resource.matches("/api/v[0-9]+/accounts")) 
+
+			else if (resource.matches("/api/v[0-9]+/accounts"))
 				return handleAccounts(resource, req);
-			else if (resource.matches("/api/v[0-9]+/accounts/\\{accountId\\}")) 
+			else if (resource.matches("/api/v[0-9]+/accounts/\\{accountId\\}"))
 				return handleAccount(resource, req);
 
-			else if (resource.matches("/api/v[0-9]+/users")) 
+			else if (resource.matches("/api/v[0-9]+/users"))
 				return handleUsers(resource, req);
-			else if (resource.matches("/api/v[0-9]+/users/\\{username\\}")) 
+			else if (resource.matches("/api/v[0-9]+/users/\\{username\\}"))
 				return handleUser(resource, req);
-			
-			else if (resource.matches("/api/v[0-9]+/clouds")) 
+
+			else if (resource.matches("/api/v[0-9]+/clouds"))
 				return handleClouds(resource, req);
-			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}")) 
+			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}"))
 				return handleCloud(resource, req);
 
-			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}/resources/\\{collection\\}")) 
+			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}/resources/\\{collection\\}"))
 				return handleResources(resource, req);
-			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}/resources/\\{collection\\}/\\{guid\\}")) 
+			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}/resources/\\{collection\\}/\\{guid\\}"))
 				return handleResource(resource, req);
 
-			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}/dataflowservice")) 
+			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}/dataflowservice"))
 				return handleDataflowService(resource, req);
 
-			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}/definitionservice")) 
+			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}/lookups"))
 				return handleDefinitionService(resource, req);
 
 			throw new NotImplementedError();
@@ -81,25 +81,25 @@ public class Router implements RequestHandler<ApiGatewayRequest, ApiGatewayRespo
 		if (req.getHttpMethod().equals("POST")) {
 			Map<String, Object> res = UserService.getInstance().authenticate(req.getBody());
 			return ApiGatewayResponse.make(200, res);
-		} 
+		}
 		throw new NotImplementedError();
 	}
 
 	private ApiGatewayResponse resetPass(String resource, ApiGatewayRequest req) throws Exception {
 		if (req.getHttpMethod().equals("POST")) {
 			// TODO impliment method
-		} 
+		}
 		throw new NotImplementedError();
 	}
 
 	private ApiGatewayResponse handleAccounts(String resource, ApiGatewayRequest req) throws Exception {
 		final String auth = req.getHeader("Authorization");
 		final String method = req.getHttpMethod();
-		
+
 		if (method.equals("POST")) {
 			return ApiGatewayResponse.make(200, AccountService.getInstance().create(auth, req.getBody()));
-		} 
-		
+		}
+
 		throw new NotImplementedError();
 	}
 
@@ -115,18 +115,18 @@ public class Router implements RequestHandler<ApiGatewayRequest, ApiGatewayRespo
 		} else if (method.equals("DELETE")) {
 			return ApiGatewayResponse.make(200, AccountService.getInstance().delete(auth, accountId));
 		}
-		
+
 		throw new NotImplementedError();
 	}
 
 	private ApiGatewayResponse handleUsers(String resource, ApiGatewayRequest req) throws Exception {
 		final String auth = req.getHeader("Authorization");
 		final String method = req.getHttpMethod();
-		
+
 		if (method.equals("POST")) {
 			return ApiGatewayResponse.make(200, UserService.getInstance().create(auth, req.getBody()));
-		} 
-		
+		}
+
 		throw new NotImplementedError();
 	}
 
@@ -142,7 +142,7 @@ public class Router implements RequestHandler<ApiGatewayRequest, ApiGatewayRespo
 		} else if (method.equals("DELETE")) {
 			return ApiGatewayResponse.make(200, UserService.getInstance().delete(auth, username));
 		}
-		
+
 		throw new NotImplementedError();
 	}
 
@@ -161,7 +161,7 @@ public class Router implements RequestHandler<ApiGatewayRequest, ApiGatewayRespo
 		final String auth = req.getHeader("Authorization");
 		final String cloudId = req.getPathValue("cloudId");
 		final String method = req.getHttpMethod();
-		
+
 		if (method.equals("GET")){
 			return ApiGatewayResponse.make(200, CloudService.getInstance().retrieve(auth, cloudId));
 		} else if (method.equals("PUT")) {
@@ -174,21 +174,21 @@ public class Router implements RequestHandler<ApiGatewayRequest, ApiGatewayRespo
 	}
 
 	private ApiGatewayResponse handleResources(String resource, ApiGatewayRequest req) throws Exception {
-		final GrokeryContext gcxt = new GrokeryContext(req.getHeader("Authorization"));
+		final CloudContext gcxt = new CloudContext(req.getHeader("Authorization"));
 		final String method = req.getHttpMethod();
 		final String collection = req.getPathValue("collection");
 
 		if (method.equals("POST")) {
 			return ApiGatewayResponse.make(200, ResourcesService.create(req.getBody(), gcxt));
 		} else if (method.equals("GET")) {
-			return ApiGatewayResponse.make(200, ResourcesService.readMultiple(collection, "", 0, 100, gcxt));
+			return ApiGatewayResponse.make(200, ResourcesService.readMultiple(collection, gcxt));
 		}
 
 		throw new NotImplementedError();
 	}
 
 	private ApiGatewayResponse handleResource(String resource, ApiGatewayRequest req) throws Exception {
-		final GrokeryContext gcxt = new GrokeryContext(req.getHeader("Authorization"));
+		final CloudContext gcxt = new CloudContext(req.getHeader("Authorization"));
 		final String method = req.getHttpMethod();
 		final String collection = req.getPathValue("collection");
 		final String id = req.getPathValue("guid");
@@ -208,7 +208,7 @@ public class Router implements RequestHandler<ApiGatewayRequest, ApiGatewayRespo
 	}
 
 	private ApiGatewayResponse handleDataflowService(String resource, ApiGatewayRequest req) throws Exception {
-		final GrokeryContext gcxt = new GrokeryContext(req.getHeader("Authorization"));
+		final CloudContext gcxt = new CloudContext(req.getHeader("Authorization"));
 		final String method = req.getHttpMethod();
 
 		if (method.equals("GET")) {
@@ -219,11 +219,10 @@ public class Router implements RequestHandler<ApiGatewayRequest, ApiGatewayRespo
 	}
 
 	private ApiGatewayResponse handleDefinitionService(String resource, ApiGatewayRequest req) throws Exception {
-		// final GrokeryContext gcxt = new GrokeryContext(req.getHeader("Authorization"));
 		final String method = req.getHttpMethod();
 
 		if (method.equals("GET")) {
-			return ApiGatewayResponse.make(200, DefinitionService.getLookups());
+			return ApiGatewayResponse.make(200, LookupService.getLookups());
 		}
 
 		throw new NotImplementedError();

@@ -11,7 +11,6 @@ import io.grokery.lab.api.common.CloudContext;
 import io.grokery.lab.api.common.dao.DAO;
 import io.grokery.lab.api.common.dao.DAOFactory;
 import io.grokery.lab.api.core.resources.Resource;
-import io.grokery.lab.api.core.resources.ResourceTypes;
 
 public class ResourcesService {
 
@@ -63,14 +62,10 @@ public class ResourcesService {
 
 	public static Map<String, Object> readMultiple(
 			String collection,
-			String query,
-			int pageNum,
-			int pageSize,
 			CloudContext context) throws InvalidInputException {
+
 		logger.info("read multiple resource");
-		// TODO projections
-		ResourceTypes t = ResourceTypes.valueOf(collection.toUpperCase());
-		return DAOFactory.getDAO(context).retrieve(t.toString(), null, null);
+		return DAOFactory.getDAO(context).retrieve(collection.toUpperCase());
 	}
 
 }

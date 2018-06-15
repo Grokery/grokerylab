@@ -17,12 +17,7 @@ public class DataflowService {
         throws InvalidInputException {
 
         logger.info("getNodesForFlow called");
-        Map<String, Object> result = DAOFactory.getDAO(context).retrieve("JOBS", null, null);
-
-        // Map<String, Object> result = new HashMap<String, Object>();
-        // for (Map<String, Object> node : result) {
-        //     result.put(node.get("guid").toString(), node);
-        // }
+        Map<String, Object> result = DAOFactory.getDAO(context).retrieve("");
 
 		return result;
 	}

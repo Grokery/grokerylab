@@ -12,8 +12,9 @@ import javax.xml.bind.DatatypeConverter;
 
 public class DigitalPiglet {
 
+	// TODO make this a config item
 	private static final String ISSUER = "https://api.grokery.io";
-	// TODO implement dynamic secret string handling
+	// TODO implement dynamic secret string handling. at least make it an env var
 	private static final String SECRET = "yZPnIVTMcHIMnpk3OqgwBe096HERSEOmtgN2Sky3";
 
     public static String makePiglet(String value, String key) {
@@ -21,7 +22,7 @@ public class DigitalPiglet {
 		claims.put("value", value);
 		return makeJWT(claims, 0, key);
 	}
-	
+
 	public static String parsePiglet(String piglet, String key) {
 		Claims claims = parseJWT(piglet, key);
 		return claims.get("value").toString();
@@ -45,7 +46,7 @@ public class DigitalPiglet {
 			.setIssuer(ISSUER)
 			.setIssuedAt(new Date(nowMillis))
 			.signWith(algo, new SecretKeySpec(secretBytes, algo.getJcaName()));
-	 
+
 	    if (ttlMillis > 0) {
 	        builder.setExpiration(new Date(nowMillis + ttlMillis));
 	    }
@@ -55,10 +56,10 @@ public class DigitalPiglet {
 	public static Claims parseJWT(String token) {
 		return parseJWT(token, SECRET);
 	}
-	
+
 	public static Claims parseJWT(String token, String secret) {
 		byte[] secretBytes = DatatypeConverter.parseBase64Binary(secret);
 		return Jwts.parser().setSigningKey(secretBytes).parseClaimsJws(token).getBody();
 	}
-	
+
 }

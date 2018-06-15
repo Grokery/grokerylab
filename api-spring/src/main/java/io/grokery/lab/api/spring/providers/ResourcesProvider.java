@@ -105,9 +105,8 @@ public class ResourcesProvider {
 			@HeaderParam("Authorization") String authorization,
 			@ApiParam @PathParam("cloudId") String cloudId,
 			@ApiParam @PathParam("resourceType") String resourceType,
-			@ApiParam @PathParam("resourceSubType") String resourceSubType,
 			@ApiParam @PathParam("guid") String guid) {
-		LOGGER.info("DELETE: {}/resources/{}/{}/{}", apiVersion, resourceType, resourceSubType, guid);
+		LOGGER.info("DELETE: {}/resources/{}/{}", apiVersion, resourceType, guid);
 		try {
 			CloudContext context = new CloudContext(authorization);
 			Map<String, Object> result = ResourcesService.delete(resourceType, guid, context);
@@ -157,15 +156,11 @@ public class ResourcesProvider {
 			@HeaderParam("Authorization") String authorization,
 			@ApiParam @PathParam("cloudId") String cloudId,
 			@ApiParam @PathParam("resourceType") String resourceType,
-			@DefaultValue("") @QueryParam("query") String query,
-			@DefaultValue("") @QueryParam("projection") String projection,
-			@DefaultValue("0") @QueryParam("pageNum") int pageNum,
-			@DefaultValue("100")@QueryParam("pageSize") int pageSize) {
+			@DefaultValue("") @QueryParam("projection") String projection) {
 		LOGGER.info("GET: {}/resources/{}", apiVersion, resourceType);
 		try {
 			CloudContext context = new CloudContext(authorization);
-			// TODO add cloudId to query by default
-			Map<String, Object> result = ResourcesService.readMultiple(resourceType, query, pageNum, pageSize, context);
+			Map<String, Object> result = ResourcesService.readMultiple(resourceType, context);
 			return Response.status(Status.OK).entity(result).build();
 		} catch (NotAuthorizedException e) {
 			LOGGER.error(e.message);

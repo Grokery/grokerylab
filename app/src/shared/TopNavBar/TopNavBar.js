@@ -10,17 +10,18 @@ class TopNavBar extends Component {
         isAuthenticated: PropTypes.func.isRequired,
         cloudName: PropTypes.string
     }
-    HasClass(element, cls) {
+    hasClass(element, cls) {
         return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
     }
-    ToggleDropDown(e) {
+    closeDropDown() {
+        document.getElementById('nav-dropdown').classList.remove("open")
+    }
+    toggleDropDown() {
         var toggle = document.getElementById('nav-dropdown');
-        if (this.HasClass(toggle, 'open')) {
+        if (this.hasClass(toggle, 'open')) {
             toggle.classList.remove("open")
-            e.target.setAttribute('area-expanded', false)
         } else {
             toggle.classList.add("open")
-            e.target.setAttribute('area-expanded', true)
         }
     }
     getCloudName() {
@@ -45,25 +46,25 @@ class TopNavBar extends Component {
                     <ul id='top-right-nav-options' className={'nav navbar-top-links navbar-right pull-right '+showRightNav}>
                         <StatusIndicator></StatusIndicator>
                         <li id='nav-dropdown'>
-                            <a className='dropdown-toggle' onClick={(e) => this.ToggleDropDown(e)}>
+                            <a className='dropdown-toggle' onClick={() => this.toggleDropDown()}>
                                 <i className='fa fa-user fa-fw' style={{'pointerEvents':'none'}}></i>
                                 <i className='fa fa-caret-down' style={{'pointerEvents':'none'}}></i>
                             </a>
-                            <ul className='dropdown-menu dropdown-user pull-right'>
+                            <ul className='dropdown-menu dropdown-user pull-right' onMouseLeave={() => this.closeDropDown()}>
                                 <li>
-                                    <a href='#/' onClick={(e) => this.ToggleDropDown(e)}>
+                                    <a href='#/'>
                                         <i className='fa fa-home fa-fw'></i>
                                         <span>Home</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href='#/account' onClick={(e) => this.ToggleDropDown(e)}>
+                                    <a href='#/account'>
                                         <i className='fa fa-user fa-fw'></i>
                                         <span>Account</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href='#/signout' onClick={(e) => this.ToggleDropDown(e)}>
+                                    <a href='#/signout'>
                                         <i className='fa fa-sign-out fa-fw'></i>
                                         <span>Sign Out</span>
                                     </a>
