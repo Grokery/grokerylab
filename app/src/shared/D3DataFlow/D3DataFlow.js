@@ -21,7 +21,7 @@ Edge
     click        -> deslect all -> select edge -> highlight edge
 Svg
     click        -> deslect all
-    scroll       -> zoom 
+    scroll       -> zoom
     drag         -> translate (dont deselect)
     rightclick   -> options menu
     shftdrag     -> draw rectangle and select nodes and edges included under rectangle -> deselect all else
@@ -29,10 +29,10 @@ Svg
 */
 
 var nodeShapes = {
-    1: "Fat",
-    2: "Flat",
-    "Fat": 1,
-    "Flat": 2
+    1: 'Fat',
+    2: 'Flat',
+    'Fat': 1,
+    'Flat': 2
 }
 
 class D3DataFlow extends Component {
@@ -53,19 +53,20 @@ class D3DataFlow extends Component {
     nodeShape: PropTypes.number
   }
   render() {
+    let showControls = this.props.showControls ? '' : ' hidden'
     return (
-      <div className='D3DataFlow'>
-        <div id="flow-header-content" className={this.props.showControls ? '' : 'hidden'}>
-            <span id='create-nodes' style={{display:'none'}}>
-                <img className="drag-create-img" role='presentation' src="img/job.png" onMouseDown={this.createNodeDrag.bind(this, this.createJob.bind(this))}/>
-                <img className="drag-create-img" role='presentation' src="img/source.png" onMouseDown={this.createNodeDrag.bind(this, this.createSource.bind(this))}/>
-                {/* <img className="drag-create-img" role='presentation' src="img/chart.png" onMouseDown={this.createNodeDrag.bind(this, this.createChart.bind(this))}/>
-                <img className="drag-create-img" role='presentation' src="img/board.png" onMouseDown={this.createNodeDrag.bind(this, this.createBoard.bind(this))}/> */}
-            </span>
-            <input type="submit" className="icon-btn" value="&#xf067;" onClick={this.toggleCreateNodes} />
-            <input id='delete-icon' type="submit" className="icon-btn" value="&#xf014;" onClick={this.onDelete.bind(this)} style={{display:'none'}}/>
-            <input className="filter-input"/>
-            <input className="icon-btn filter-icon" type="submit" onClick={this.toggleFilteredNodes} value="&#xf0b0;" />
+      <div id='D3DataFlow'>
+        <div className={'flow-header-content' + showControls}>
+            <div id='create-nodes' style={{display:'none'}}>
+                <img className='drag-create-img' role='presentation' src='img/job.png' onMouseDown={this.createNodeDrag.bind(this, this.createJob.bind(this))}/>
+                <img className='drag-create-img' role='presentation' src='img/source.png' onMouseDown={this.createNodeDrag.bind(this, this.createSource.bind(this))}/>
+                {/* <img className='drag-create-img' role='presentation' src='img/chart.png' onMouseDown={this.createNodeDrag.bind(this, this.createChart.bind(this))}/>
+                <img className='drag-create-img' role='presentation' src='img/board.png' onMouseDown={this.createNodeDrag.bind(this, this.createBoard.bind(this))}/> */}
+            </div>
+            <a href='javascript:void(0)' onClick={this.toggleCreateNodes}><i className='fa fa-plus'></i></a>
+            <a id='delete-icon' href='javascript:void(0)' onClick={this.onDelete.bind(this)} style={{display:'none'}}><i className='fa fa-trash'></i></a>
+            <input id='filter-input' className='filter-input' onChange={this.filterNodes.bind(this)}/>
+            <button className='icon-btn filter-icon'><i className='fa fa-filter'></i></button>
           </div>
         <div id='flow'></div>
       </div>
@@ -101,8 +102,8 @@ class D3DataFlow extends Component {
         dblClickSVGTimeout: false,
         dblClickNodeTimeout: false,
         dblClickPathTimeout: false,
-        selectedClass: "selected",
-        shapeGClass: "conceptG",
+        selectedClass: 'selected',
+        shapeGClass: 'conceptG',
         nodeShape: nodeShape,
         shapeWidth: function() {
             if (nodeShape === nodeShapes.Fat) {
@@ -127,9 +128,9 @@ class D3DataFlow extends Component {
     // ************************
     // Set up D3 graph
     // ************************
-    this.svg = d3.select("#flow").append("svg")
-        .attr("width", this.d3state.width)
-        .attr("height", this.d3state.height)
+    this.svg = d3.select('#flow').append('svg')
+        .attr('width', this.d3state.width)
+        .attr('height', this.d3state.height)
 
     // define arrow for edges
     var defs = this.svg.append('svg:defs')
@@ -143,11 +144,11 @@ class D3DataFlow extends Component {
         .append('svg:path')
         .attr('d', 'M0,-5L10,0L0,5')
 
-    this.svgG = this.svg.append("g")
-        .attr("id","graph")
-        .classed("graph", true)
+    this.svgG = this.svg.append('g')
+        .attr('id','graph')
+        .classed('graph', true)
 
-    // this.svgG.append("rect")
+    // this.svgG.append('rect')
     //     .attr('x', '0')
     //     .attr('y', '0')
     //     .attr('fill','transparent')
@@ -163,24 +164,24 @@ class D3DataFlow extends Component {
         .style('marker-end', 'url(#mark-end-arrow)')
 
     // svg nodes (shapes) and edges (paths)
-    this.paths = this.svgG.append("g").selectAll("g")
-    this.shapes = this.svgG.append("g").selectAll("g")
+    this.paths = this.svgG.append('g').selectAll('g')
+    this.shapes = this.svgG.append('g').selectAll('g')
 
     // bind svg actions
-    this.svg.on("mousedown", function(d) {
+    this.svg.on('mousedown', function(d) {
         this.svgMouseDown.call(this, d)
     }.bind(this))
-    .on("mouseup", function(d) {
+    .on('mouseup', function(d) {
         this.svgMouseUp.call(this, d)
     }.bind(this))
     .on('mousemove', function () {
         if (this.d3state.dragNode) {
-            this.d3state.mouseLocation = d3.mouse(d3.select('#graph').node()) 
-            let pagexy = d3.mouse(d3.select('#flow').node()) 
-            let dragNode = document.getElementById("dragnode")
-            dragNode.style.left = pagexy[0] - 15 + "px"
-            dragNode.style.top = pagexy[1] - 15 + "px"
-        } 
+            this.d3state.mouseLocation = d3.mouse(d3.select('#graph').node())
+            let pagexy = d3.mouse(d3.select('#flow').node())
+            let dragNode = document.getElementById('dragnode')
+            dragNode.style.left = pagexy[0] - 15 + 'px'
+            dragNode.style.top = pagexy[1] - 15 + 'px'
+        }
     }.bind(this))
 
     // define drag behavior
@@ -188,23 +189,23 @@ class D3DataFlow extends Component {
         .origin(function(d) {
             return { x: d.x, y: d.y }
         })
-        .on("dragstart", function() {
+        .on('dragstart', function() {
             if (!d3.event.sourceEvent.shiftKey) {
-                d3.select('#flow').style("cursor", "move")
+                d3.select('#flow').style('cursor', 'move')
             }
         })
-        .on("drag", function(args) {
+        .on('drag', function(args) {
             this.d3state.dragging = true
             this.dragmove.call(this, args)
         }.bind(this))
-        .on("dragend", function() {
-            d3.select('#flow').style("cursor", "auto")
+        .on('dragend', function() {
+            d3.select('#flow').style('cursor', 'auto')
         })
 
     // define zoom behavior
     this.zoomSvg = d3.behavior.zoom()
         .scaleExtent([.1, 2])
-        .on("zoom", function() {
+        .on('zoom', function() {
             if (d3.event.sourceEvent.shiftKey) {
                 return false
             } else {
@@ -212,26 +213,26 @@ class D3DataFlow extends Component {
             }
             return true
         }.bind(this))
-        .on("zoomstart", function() {
-            if (!d3.event.sourceEvent.shiftKey) d3.select('#flow').style("cursor", "move")
+        .on('zoomstart', function() {
+            if (!d3.event.sourceEvent.shiftKey) d3.select('#flow').style('cursor', 'move')
         })
-        .on("zoomend", function() {
-            d3.select('#flow').style("cursor", "auto")
+        .on('zoomend', function() {
+            d3.select('#flow').style('cursor', 'auto')
         })
 
-    this.svg.call(this.zoomSvg).on("dblclick.zoom", null)
+    this.svg.call(this.zoomSvg).on('dblclick.zoom', null)
 
     // listen for resize
     window.onresize = function() {
         this.updateWindow(this.svg)
-    }.bind(this) 
+    }.bind(this)
     this.renderD3()
     this.centerAndFitFlow()
   }
   componentWillReceiveProps(nextProps) {
       let doCenterAndFit = false
-      if (Object.keys(this.props.nodes).length === 0 || 
-          this.props.query['center-and-fit'] === "true" ||
+      if (Object.keys(this.props.nodes).length === 0 ||
+          this.props.query['center-and-fit'] === 'true' ||
           this.props.singleClickNav === true) {
           doCenterAndFit = true
       }
@@ -251,7 +252,7 @@ class D3DataFlow extends Component {
     }
     d3state.width = this.getWindowWidth()
     d3state.height = this.getWindowHeight()
-    
+
     // *****************
     // Build node and edge lists and set min and max x and y
     // ****************
@@ -292,72 +293,72 @@ class D3DataFlow extends Component {
     // Render paths
     // ****************
     graph.paths = graph.paths.data(edgeList, function(d) {
-        return String(d.source.guid) + "+" + String(d.target.guid)
+        return String(d.source.guid) + '+' + String(d.target.guid)
     })
 
     // update existing
     graph.paths.style('marker-end', 'url(#mark-end-arrow)')
         .classed(d3state.selectedClass, function(d) { return d === d3state.selectedEdge })
-        .attr("d", function(d) { return graph.buildPathStr(d) })
-    
-    // add new
-    graph.paths.enter() 
-        .append("path")
-        .style('marker-end', 'url(#mark-end-arrow)')
-        .classed("link", true)
-        .attr('id', function(d) { return "n" + d.source.guid + d.target.guid })
-        .attr("d", function(d) { return graph.buildPathStr(d) })
-        .on("mousedown", function(d) { graph.pathMouseDown.call(graph, d) })
-        .on("mouseup", function(d) { graph.pathMouseUp.call(graph, d) })
-    
-    // remove old
-    graph.paths.exit().remove() 
+        .attr('d', function(d) { return graph.buildPathStr(d) })
 
-    
+    // add new
+    graph.paths.enter()
+        .append('path')
+        .style('marker-end', 'url(#mark-end-arrow)')
+        .classed('link', true)
+        .attr('id', function(d) { return 'n' + d.source.guid + d.target.guid })
+        .attr('d', function(d) { return graph.buildPathStr(d) })
+        .on('mousedown', function(d) { graph.pathMouseDown.call(graph, d) })
+        .on('mouseup', function(d) { graph.pathMouseUp.call(graph, d) })
+
+    // remove old
+    graph.paths.exit().remove()
+
+
     // *****************
     // Render shapes
     // ****************
     graph.shapes = graph.shapes.data(nodeList, function(d) { return d.guid })
-    
+
     // update existing
-    this.shapes.attr("transform", function(d) {
-        let tr = "translate(" + (Math.round(d.x / d3state.xgridSize) * d3state.xgridSize)
-        tr += "," + (Math.round(d.y / d3state.ygridSize) * d3state.ygridSize) + ")"
+    this.shapes.attr('transform', function(d) {
+        let tr = 'translate(' + (Math.round(d.x / d3state.xgridSize) * d3state.xgridSize)
+        tr += ',' + (Math.round(d.y / d3state.ygridSize) * d3state.ygridSize) + ')'
         return tr
     })
-    
+
     // add new
-    let newGs = this.shapes.enter().append("g")
-    
+    let newGs = this.shapes.enter().append('g')
+
     // bind actions
     newGs.classed(d3state.shapeGClass, true)
-    .attr('id', function(d) { return "n" + d.guid })
-    .attr('class', function(d) { 
+    .attr('id', function(d) { return 'n' + d.guid })
+    .attr('class', function(d) {
         let colorclass = colored ? ' colored' : ''
-        return d3state.shapeGClass + " " + d.collection.toLowerCase() + "-node" + colorclass
+        return d3state.shapeGClass + ' ' + d.collection.toLowerCase() + '-node' + colorclass
     })
-    .attr("transform", function(d) {
-        let tr = "translate(" + (Math.round(d.x / d3state.xgridSize) * d3state.xgridSize)
-        tr += "," + (Math.round(d.y / d3state.ygridSize) * d3state.ygridSize) + ")"
+    .attr('transform', function(d) {
+        let tr = 'translate(' + (Math.round(d.x / d3state.xgridSize) * d3state.xgridSize)
+        tr += ',' + (Math.round(d.y / d3state.ygridSize) * d3state.ygridSize) + ')'
         return tr
     })
-    .on("mousedown", function(d) {
+    .on('mousedown', function(d) {
         graph.shapeMouseDown(d)
     })
-    .on("mouseup", function(d) {
+    .on('mouseup', function(d) {
         graph.shapeMouseUp(d)
     })
-    .on("mouseover", function(d) {
-        d3.select(".tip-" + d.guid).classed("hidden", false)
+    .on('mouseover', function(d) {
+        d3.select('.tip-' + d.guid).classed('hidden', false)
     })
-    .on("mouseout", function(d) {
-        d3.select(".tip-" + d.guid).classed("hidden", true)
+    .on('mouseout', function(d) {
+        d3.select('.tip-' + d.guid).classed('hidden', true)
     })
     .call(this.drag)
 
-    // draw  
+    // draw
     var self = this
-    newGs.append("path")
+    newGs.append('path')
         .attr('d', self.getNodeShape())
 
     // add content
@@ -365,31 +366,31 @@ class D3DataFlow extends Component {
     // set node icons
     //   newGs.each(function() {
     //       let gEl = d3.select(this)
-    //       let el = gEl.append("text")
-    //           .attr("class", "node-icon")
-    //           .attr("dy", graph.d3state.shapeHeight / 2 + 21)
-    //           .attr("dx", graph.d3state.shapeWidth / 2)
+    //       let el = gEl.append('text')
+    //           .attr('class', 'node-icon')
+    //           .attr('dy', graph.d3state.shapeHeight / 2 + 21)
+    //           .attr('dx', graph.d3state.shapeWidth / 2)
     //           .attr('font-family', 'FontAwesome')
     //       el.text(function(d) {
     //           if (d.collection===RESOURCES.JOBS) {
-    //               return "\uf121"
+    //               return '\uf121'
     //           } else if (d.collection===RESOURCES.DATASOURCES) {
-    //               return "\uf1c0"
+    //               return '\uf1c0'
     //           } else if (d.collection===RESOURCES.CHARTS) {
-    //               return "\uf201"
+    //               return '\uf201'
     //           } else if (d.collection===RESOURCES.DASHBOARDS) {
-    //               return "\uf009"
+    //               return '\uf009'
     //           } else {
-    //               return ""
+    //               return ''
     //           }
     //       })
     //   })
 
     // set node tool tips
     // newGs.each(function(){
-    //     d3.select(this).append("text")
-    //         .attr("class", function (d) {
-    //                 return "hidden tooltiptext tip-" + d.guid
+    //     d3.select(this).append('text')
+    //         .attr('class', function (d) {
+    //                 return 'hidden tooltiptext tip-' + d.guid
     //         })
     //         .text(function (d) {
     //                 return d.title
@@ -398,9 +399,9 @@ class D3DataFlow extends Component {
 
     newGs.each(function() {
         let gEl = d3.select(this)
-        let el = gEl.append("text")
-            .attr("dy", graph.d3state.shapeHeight / 2 + 8)
-            .attr("dx", graph.d3state.shapeWidth / 2)
+        let el = gEl.append('text')
+            .attr('dy', graph.d3state.shapeHeight / 2 + 8)
+            .attr('dx', graph.d3state.shapeWidth / 2)
         el.text(self.getNodeContent())
     })
 
@@ -417,112 +418,112 @@ class D3DataFlow extends Component {
     if (d3state.nodeShape === nodeShapes.Fat) {
         return function(d) {
             if (d.collection===RESOURCES.JOBS) {
-                return "M 28.5 4.4" +
-                    "c 1.3 -2.44 4.6 -4.4 7.36 -4.4" +
-                    "h 88" +
-                    "c 2.76 0 6.05 1.96 7.35 4.4" +
-                    "l 27.3 51.17" +
-                    "c 1.3 2.45 1.3 6.4 0 8.84" +
-                    "l -27.3 51.17" +
-                    "c -1.3 2.45 -4.6 4.43-7.35 4.43" +
-                    "h -88" +
-                    "c -2.77 0 -6.06 -1.98 -7.36 -4.42" +
-                    "l -27.3 -51.16" +
-                    "c -1.3 -2.44 -1.3 -6.4 0 -8.83" +
-                    "z";
+                return 'M 28.5 4.4' +
+                    'c 1.3 -2.44 4.6 -4.4 7.36 -4.4' +
+                    'h 88' +
+                    'c 2.76 0 6.05 1.96 7.35 4.4' +
+                    'l 27.3 51.17' +
+                    'c 1.3 2.45 1.3 6.4 0 8.84' +
+                    'l -27.3 51.17' +
+                    'c -1.3 2.45 -4.6 4.43-7.35 4.43' +
+                    'h -88' +
+                    'c -2.77 0 -6.06 -1.98 -7.36 -4.42' +
+                    'l -27.3 -51.16' +
+                    'c -1.3 -2.44 -1.3 -6.4 0 -8.83' +
+                    'z';
             } else if (d.collection===RESOURCES.DATASOURCES) {
-                return "M 16 120" +
-                    "c -8.83 0 -16 -26.87 -16 -60 0 -33.14 7.17 -60 16 -60" +
-                    "h 128" +
-                    "c 8.84 0 16 26.86 16 60 0 33.13 -7.16 60 -16 60" +
-                    "z";
+                return 'M 16 120' +
+                    'c -8.83 0 -16 -26.87 -16 -60 0 -33.14 7.17 -60 16 -60' +
+                    'h 128' +
+                    'c 8.84 0 16 26.86 16 60 0 33.13 -7.16 60 -16 60' +
+                    'z';
             } else if (d.collection===RESOURCES.CHARTS) {
-                return "M 16 120" +
-                    "c -8.83 0 -16 -26.87 -16 -60 0 -33.14 7.17 -60 16 -60" +
-                    "h 108" +
-                    "c 2.76 0 6.05 1.96 7.35 4.4" +
-                    "l 27.3 51.17" +
-                    "c 1.3 2.45 1.3 6.4 0 8.84" +
-                    "l -27.3 51.17" +
-                    "c -1.3 2.45 -4.6 4.43-7.35 4.43" +
-                    "z";
+                return 'M 16 120' +
+                    'c -8.83 0 -16 -26.87 -16 -60 0 -33.14 7.17 -60 16 -60' +
+                    'h 108' +
+                    'c 2.76 0 6.05 1.96 7.35 4.4' +
+                    'l 27.3 51.17' +
+                    'c 1.3 2.45 1.3 6.4 0 8.84' +
+                    'l -27.3 51.17' +
+                    'c -1.3 2.45 -4.6 4.43-7.35 4.43' +
+                    'z';
             } else if (d.collection===RESOURCES.DASHBOARDS) {
-                return "M 0 5" +
-                    "c 0 -2.77 2.23 -5 5 -5" +
-                    "h 150" +
-                    "c 2.76 0 5 2.23 5 5" +
-                    "v 110" +
-                    "c 0 2.76 -2.24 5 -5 5" +
-                    "h -150" +
-                    "c -2.77 0 -5 -2.24 -5 -5" +
-                    "z";
+                return 'M 0 5' +
+                    'c 0 -2.77 2.23 -5 5 -5' +
+                    'h 150' +
+                    'c 2.76 0 5 2.23 5 5' +
+                    'v 110' +
+                    'c 0 2.76 -2.24 5 -5 5' +
+                    'h -150' +
+                    'c -2.77 0 -5 -2.24 -5 -5' +
+                    'z';
             } else {
-                return "M 0 5" +
-                    "c 0 -2.77 2.23 -5 5 -5" +
-                    "h 150" +
-                    "c 2.76 0 5 2.23 5 5" +
-                    "v 110" +
-                    "c 0 2.76 -2.24 5 -5 5" +
-                    "h -150" +
-                    "c -2.77 0 -5 -2.24 -5 -5" +
-                    "z";
+                return 'M 0 5' +
+                    'c 0 -2.77 2.23 -5 5 -5' +
+                    'h 150' +
+                    'c 2.76 0 5 2.23 5 5' +
+                    'v 110' +
+                    'c 0 2.76 -2.24 5 -5 5' +
+                    'h -150' +
+                    'c -2.77 0 -5 -2.24 -5 -5' +
+                    'z';
             }
         }
     } else if (d3state.nodeShape === nodeShapes.Flat) {
         return function(d) {
             if (d.collection===RESOURCES.JOBS) {
-                return "M 10 5" +
-                    "c 1.3 -2.44 4.6 -4.4 7.36 -4.4" +
-                    "h 220" +
-                    "c 2.76 0 6.05 1.96 7.35 4.4" +
-                    "l 10 16.2" +
-                    "c 1.3 2.45 1.3 6.4 0 8.84" +
-                    "l -10 16.2" +
-                    "c -1.3 2.45 -4.6 4.43-7.35 4.43" +
-                    "h -220" +
-                    "c -2.77 0 -6.06 -1.98 -7.36 -4.42" +
-                    "l -10 -16.2" +
-                    "c -1.3 -2.44 -1.3 -6.4 0 -8.83" +
-                    "l 10 -16.2";
+                return 'M 10 5' +
+                    'c 1.3 -2.44 4.6 -4.4 7.36 -4.4' +
+                    'h 220' +
+                    'c 2.76 0 6.05 1.96 7.35 4.4' +
+                    'l 10 16.2' +
+                    'c 1.3 2.45 1.3 6.4 0 8.84' +
+                    'l -10 16.2' +
+                    'c -1.3 2.45 -4.6 4.43-7.35 4.43' +
+                    'h -220' +
+                    'c -2.77 0 -6.06 -1.98 -7.36 -4.42' +
+                    'l -10 -16.2' +
+                    'c -1.3 -2.44 -1.3 -6.4 0 -8.83' +
+                    'l 10 -16.2';
             } else if (d.collection===RESOURCES.DATASOURCES) {
-                return "M 8 50" +
-                    "c -8 0 -8 -25 -8 -25" +
-                    "c 0 -25 8 -25 8 -25" +
-                    "h 234" +
-                    "c 8 0 8 25 8 25" +
-                    "c 0 25 -8 25 -8 25" +
-                    "h -234";
+                return 'M 8 50' +
+                    'c -8 0 -8 -25 -8 -25' +
+                    'c 0 -25 8 -25 8 -25' +
+                    'h 234' +
+                    'c 8 0 8 25 8 25' +
+                    'c 0 25 -8 25 -8 25' +
+                    'h -234';
             } else if (d.collection===RESOURCES.CHARTS) {
-                return "M 8 50" +
-                    "c -8 0 -8 -25 -8 -25" +
-                    "c 0 -25 8 -25 8 -25" +
-                    "h 234" +
-                    "c 2.76 0 6.05 1.96 7.35 4.4" +
-                    "l 10 16.2" +
-                    "c 1.3 2.45 1.3 6.4 0 8.84" +
-                    "l -10 16.2" +
-                    "c -1.3 2.45 -4.6 4.43-7.35 4.43" +
-                    "h -234";
+                return 'M 8 50' +
+                    'c -8 0 -8 -25 -8 -25' +
+                    'c 0 -25 8 -25 8 -25' +
+                    'h 234' +
+                    'c 2.76 0 6.05 1.96 7.35 4.4' +
+                    'l 10 16.2' +
+                    'c 1.3 2.45 1.3 6.4 0 8.84' +
+                    'l -10 16.2' +
+                    'c -1.3 2.45 -4.6 4.43-7.35 4.43' +
+                    'h -234';
             } else if (d.collection===RESOURCES.DASHBOARDS) {
-                return "M 0 4" +
-                    "c 0 -2 2 -4 4 -4" +
-                    "h 242" +
-                    "c 2 0 4 2 4 4" +
-                    "v 42" +
-                    "c 0 2 -2  4 -4 4" +
-                    "h -242" +
-                    "c -2 0 -4 -2 -4 -4" +
-                    "v -42";
+                return 'M 0 4' +
+                    'c 0 -2 2 -4 4 -4' +
+                    'h 242' +
+                    'c 2 0 4 2 4 4' +
+                    'v 42' +
+                    'c 0 2 -2  4 -4 4' +
+                    'h -242' +
+                    'c -2 0 -4 -2 -4 -4' +
+                    'v -42';
             } else {
-                return "M 0 4" +
-                    "c 0 -2 2 -4 4 -4" +
-                    "h 242" +
-                    "c 2 0 4 2 4 4" +
-                    "v 42" +
-                    "c 0 2 -2  4 -4 4" +
-                    "h -242" +
-                    "c -2 0 -4 -2 -4 -4" +
-                    "v -42";
+                return 'M 0 4' +
+                    'c 0 -2 2 -4 4 -4' +
+                    'h 242' +
+                    'c 2 0 4 2 4 4' +
+                    'v 42' +
+                    'c 0 2 -2  4 -4 4' +
+                    'h -242' +
+                    'c -2 0 -4 -2 -4 -4' +
+                    'v -42';
             }
         }
     }
@@ -540,7 +541,7 @@ class D3DataFlow extends Component {
             } else if (d.collection === RESOURCES.DASHBOARDS) {
                 return d.type_abrev ? d.type_abrev : 'Board'
             } else {
-                return ""
+                return ''
             }
         }
     } else if (d3state.nodeShape === nodeShapes.Flat) {
@@ -578,13 +579,13 @@ class D3DataFlow extends Component {
       var flowEl = document.getElementById('flow');
       var x = window.innerWidth || docEl.clientWidth || flowEl.clientWidth;
       var y = window.innerHeight || docEl.clientHeight || flowEl.clientHeight;
-      svg.attr("width", x).attr("height", y);
+      svg.attr('width', x).attr('height', y);
   }
   centerAndFitFlow() {
     let d3state = this.d3state
     let {highlightedMaxX, highlightedMinX, highlightedMaxY, highlightedMinY} = this.d3state
-    let maxX = highlightedMaxX !== -9999 ? highlightedMaxX : d3state.maxX 
-    let minX = highlightedMinX !== 9999 ? highlightedMinX : d3state.minX 
+    let maxX = highlightedMaxX !== -9999 ? highlightedMaxX : d3state.maxX
+    let minX = highlightedMinX !== 9999 ? highlightedMinX : d3state.minX
     let maxY = highlightedMaxY !== -9999 ? highlightedMaxY : d3state.maxY
     let minY = highlightedMinY !== 9999 ? highlightedMinY : d3state.minY
     let xScale = Math.min(d3state.width / (maxX - minX), .5)
@@ -594,18 +595,18 @@ class D3DataFlow extends Component {
     let y = minY + (maxY - minY) / 2
 
     // // graph 0,0
-    // this.svgG.append("circle")
-    //         .attr("cx", 0)
-    //         .attr("cy", 0)
-    //         .attr("fill", "red")
-    //         .attr("r", 20) 
+    // this.svgG.append('circle')
+    //         .attr('cx', 0)
+    //         .attr('cy', 0)
+    //         .attr('fill', 'red')
+    //         .attr('r', 20)
 
     // // flow center relative to graph 0,0
-    // this.svgG.append("circle")
-    //         .attr("cx", x)
-    //         .attr("cy", y)
-    //         .attr("fill", "green")
-    //         .attr("r", 20) 
+    // this.svgG.append('circle')
+    //         .attr('cx', x)
+    //         .attr('cy', y)
+    //         .attr('fill', 'green')
+    //         .attr('r', 20)
 
     this.translateAndZoomTo(x, y, scale)
   }
@@ -618,23 +619,23 @@ class D3DataFlow extends Component {
       sc = sc ? sc : d3.event.scale;
       this.zoomSvg.translate(tr);
       this.zoomSvg.scale(sc);
-      d3.select(".graph").attr("transform", "translate(" + tr + ") scale(" + sc + ")");
+      d3.select('.graph').attr('transform', 'translate(' + tr + ') scale(' + sc + ')');
   }
   buildDragLineStr(d) {
       var mousexy = d3.mouse(this.svgG.node());
       var mouse = { x: mousexy[0], y: mousexy[1] };
-      var xy2 = mouse.x + "," + mouse.y;
-      var cxy2 = (mouse.x - 100) + "," + mouse.y;
+      var xy2 = mouse.x + ',' + mouse.y;
+      var cxy2 = (mouse.x - 100) + ',' + mouse.y;
 
       var xgrid = this.d3state.xgridSize;
       var ygrid = this.d3state.ygridSize;
       var shapeW = this.d3state.shapeWidth;
       var shapeH = this.d3state.shapeHeight;
       var shape = { x: (Math.round(d.x / xgrid) * xgrid + shapeW), y: (Math.round(d.y / ygrid) * ygrid + shapeH / 2) };
-      var xy1 = shape.x + "," + shape.y;
-      var cxy1 = (shape.x + 100) + "," + shape.y;
+      var xy1 = shape.x + ',' + shape.y;
+      var cxy1 = (shape.x + 100) + ',' + shape.y;
 
-      return 'M' + xy1 + 'C' + cxy1 + " " + cxy2 + " " + xy2;
+      return 'M' + xy1 + 'C' + cxy1 + ' ' + cxy2 + ' ' + xy2;
   }
   dragmove(d) {
       if (this.d3state.drawEdge) {
@@ -680,13 +681,23 @@ class D3DataFlow extends Component {
       }
   }
   toggleCreateNodes() {
-      if (document.getElementById('create-nodes').style.display === 'inline') {        
+      if (document.getElementById('create-nodes').style.display === 'inline') {
           document.getElementById('create-nodes').style.display = 'none'
       } else {
           document.getElementById('create-nodes').style.display = 'inline'
       }
   }
-  toggleFilteredNodes() {
+  filterNodes() {
+    let { nodes } = this.props
+    let filterText = document.getElementById('filter-input').value
+    Object.keys(nodes).forEach(function(key) {
+        let node = nodes[key]
+        if (node.title.toLowerCase().includes(filterText.toLowerCase()) && filterText != '') {
+            this.addNodeToSelected(node)
+        } else {
+            this.removeNodeFromSelected(node)
+        }
+    }.bind(this))
   }
   showDeleteIcon() {
     let icon = document.getElementById('delete-icon')
@@ -703,14 +714,14 @@ class D3DataFlow extends Component {
   addNodeToSelected(d) {
     this.d3state.selectedNodes[d.guid] = d
     if (Object.keys(this.d3state.selectedNodes).length > 1) {
-        history.push("/clouds/"+ getSelectedCloudName() + "/flow")
+        history.push('/clouds/'+ getSelectedCloudName() + '/flow')
     }
     this.selectNodes(this.d3state.selectedNodes)
   }
   removeNodeFromSelected(d) {
     delete this.d3state.selectedNodes[d.guid]
     if (Object.keys(this.d3state.selectedNodes).length < 1) {
-        history.push("/clouds/"+ getSelectedCloudName() + "/flow")
+        history.push('/clouds/'+ getSelectedCloudName() + '/flow')
     }
     this.selectNodes(this.d3state.selectedNodes)
   }
@@ -721,7 +732,7 @@ class D3DataFlow extends Component {
         this.paths.classed('inactive', true)
         this.shapes.classed('inactive', true)
         Object.keys(nodes).forEach(function(guid) {
-            d3.select("#n" + guid).classed(this.d3state.selectedClass, true)
+            d3.select('#n' + guid).classed(this.d3state.selectedClass, true)
             this.highlightFlow(nodes[guid])
         }.bind(this))
         this.showDeleteIcon()
@@ -745,7 +756,7 @@ class D3DataFlow extends Component {
   highlightFlow(d) {
       const { zoomOnHighlight } = this.props
 
-      d3.select("#n" + d.guid).classed('inactive', false)
+      d3.select('#n' + d.guid).classed('inactive', false)
       this.highlightUpstream(d)
       this.highlightDownstream(d)
 
@@ -806,10 +817,10 @@ class D3DataFlow extends Component {
 
       if (d3state.drawEdge) {
           d3state.drawEdge = false
-          this.dragLine.classed("hidden", true)
+          this.dragLine.classed('hidden', true)
           if (d3state.mouseDownNode.guid !== d.guid) {
-            d.upstream.push({"collection":d3state.mouseDownNode.collection,"guid":d3state.mouseDownNode.guid})
-            d3state.mouseDownNode.downstream.push({"collection":d.collection,"guid":d.guid})
+            d.upstream.push({'collection':d3state.mouseDownNode.collection,'guid':d3state.mouseDownNode.guid})
+            d3state.mouseDownNode.downstream.push({'collection':d.collection,'guid':d.guid})
             d3state.changedNodes[d.guid] = d
             d3state.changedNodes[d3state.mouseDownNode.guid] = d3state.mouseDownNode
             this.onUpdateNodes(d3state.changedNodes)
@@ -818,11 +829,11 @@ class D3DataFlow extends Component {
           d3state.dragging = false
           this.onUpdateNodes(d3state.changedNodes)
       } else if (d3state.dblClickNodeTimeout) {
-          history.push("/clouds/"+ getSelectedCloudName() + "/" + d.collection.toLowerCase() + "/" + d.guid + "?flow=open")
+          history.push('/clouds/'+ getSelectedCloudName() + '/' + d.collection.toLowerCase() + '/' + d.guid + '?flow=open')
       } else {
         if (this.props.singleClickNav) {
             this.clearAllSelection()
-            history.push("/clouds/"+ getSelectedCloudName() + "/" + d.collection.toLowerCase() + "/" + d.guid + "?flow=open")
+            history.push('/clouds/'+ getSelectedCloudName() + '/' + d.collection.toLowerCase() + '/' + d.guid + '?flow=open')
         } else {
             if (this.d3state.selectedNodes[d.guid]) {
                 this.removeNodeFromSelected(d)
@@ -847,16 +858,16 @@ class D3DataFlow extends Component {
       if (!d3state.graphMouseDown) {
           if (d3state.drawEdge) {
               d3state.drawEdge = false
-              this.dragLine.classed("hidden", true)
+              this.dragLine.classed('hidden', true)
           }
       } else if (d3state.justScaleTransGraph) {
           d3state.justScaleTransGraph = false
       } else if (d3state.dblClickSVGTimeout) {
           this.clearAllSelection()
-          history.push("/clouds/"+ getSelectedCloudName() + "/flow")
+          history.push('/clouds/'+ getSelectedCloudName() + '/flow')
       } else {
           this.clearAllSelection()
-          history.push("/clouds/"+ getSelectedCloudName() + "/flow")
+          history.push('/clouds/'+ getSelectedCloudName() + '/flow')
           d3state.dblClickSVGTimeout = true
           setTimeout(function() {
               d3state.dblClickSVGTimeout = false
@@ -867,10 +878,10 @@ class D3DataFlow extends Component {
   }
   createNodeDrag(cb, e) {
     let dragNode = e.target.cloneNode(true)
-    dragNode.id = "dragnode"
-    dragNode.style.height = "35px"
-    dragNode.style.position = "absolute"
-    document.getElementById("flow").appendChild(dragNode)
+    dragNode.id = 'dragnode'
+    dragNode.style.height = '35px'
+    dragNode.style.position = 'absolute'
+    document.getElementById('flow').appendChild(dragNode)
     this.d3state.dragNode = true
     window.onmouseup = function(e) {
         dragNode.parentNode.removeChild(dragNode)
@@ -883,9 +894,9 @@ class D3DataFlow extends Component {
   createJob(xy) {
       this.createNode({
         collection: RESOURCES.JOBS,
-        subType: "GENERIC",
-        title: "New Job",
-        description: "Default description",
+        subType: 'GENERIC',
+        title: 'New Job',
+        description: 'Default description',
         upstream: [],
         downstream: [],
         x: xy[0],
@@ -895,9 +906,9 @@ class D3DataFlow extends Component {
   createSource(xy) {
       this.createNode({
         collection: RESOURCES.DATASOURCES,
-        subType: "GENERIC",
-        title: "New Source",
-        description: "Default description",
+        subType: 'GENERIC',
+        title: 'New Source',
+        description: 'Default description',
         upstream: [],
         downstream: [],
         x: xy[0],
@@ -907,9 +918,9 @@ class D3DataFlow extends Component {
   createChart(xy) {
       this.createNode({
         collection: RESOURCES.CHARTS,
-        subtype: "GENERIC",
-        title: "New Chart",
-        description: "Default description",
+        subtype: 'GENERIC',
+        title: 'New Chart',
+        description: 'Default description',
         upstream: [],
         downstream: [],
         x: xy[0],
@@ -919,9 +930,9 @@ class D3DataFlow extends Component {
   createBoard(xy) {
       this.createNode({
         collection: RESOURCES.DASHBOARDS,
-        subtype: "GENERIC",
-        title: "New Board",
-        description: "Default description",
+        subtype: 'GENERIC',
+        title: 'New Board',
+        description: 'Default description',
         upstream: [],
         downstream: [],
         x: xy[0],
@@ -954,7 +965,7 @@ class D3DataFlow extends Component {
   }
   onDelete() {
       if (Object.keys(this.d3state.selectedNodes).length > 0) {
-        if (confirm("Confirm delete node(s)?" ) === true) {
+        if (confirm('Confirm delete node(s)?' ) === true) {
             Object.keys(this.d3state.selectedNodes).forEach(function(guid) {
                 let node = this.d3state.selectedNodes[guid]
                 this.props.deleteNode(node.collection, node, null)
@@ -963,7 +974,7 @@ class D3DataFlow extends Component {
         }
       }
       if (this.d3state.selectedEdge) {
-        if (confirm("Confirm delete edge?") === true) {
+        if (confirm('Confirm delete edge?') === true) {
           this.deleteEdge(this.d3state.selectedEdge)
         }
       }
@@ -975,14 +986,14 @@ class D3DataFlow extends Component {
       var nodeH = this.d3state.shapeHeight;
 
       var target = { x: (Math.round(ed.target.x / xgrid) * xgrid), y: (Math.round(ed.target.y / ygrid) * ygrid + nodeH / 2) };
-      var xy2 = target.x + "," + target.y;
-      var cxy2 = (target.x - 100) + "," + target.y;
+      var xy2 = target.x + ',' + target.y;
+      var cxy2 = (target.x - 100) + ',' + target.y;
 
       var source = { x: (Math.round(ed.source.x / xgrid) * xgrid + nodeW), y: (Math.round(ed.source.y / ygrid) * ygrid + nodeH / 2) };
-      var xy1 = source.x + "," + source.y;
-      var cxy1 = (source.x + 100) + "," + source.y;
+      var xy1 = source.x + ',' + source.y;
+      var cxy1 = (source.x + 100) + ',' + source.y;
 
-      return 'M' + xy1 + 'C' + cxy1 + " " + cxy2 + " " + xy2;
+      return 'M' + xy1 + 'C' + cxy1 + ' ' + cxy2 + ' ' + xy2;
   }
 }
 

@@ -5,7 +5,7 @@ import './NodeFilter.css'
 
 class NodeFilter extends Component {
   static propTypes = {
-    foo: PropTypes.string.isRequired, 
+    foo: PropTypes.string.isRequired,
     bar: PropTypes.object.isRequired,
   }
   constructor(props) {
@@ -58,7 +58,7 @@ class NodeFilter extends Component {
     }
   }
   toggleFiltereNodes() {
-    if (document.getElementById('filter-nodes').style.display === 'inline') {        
+    if (document.getElementById('filter-nodes').style.display === 'inline') {
         document.getElementById('filter-nodes').style.display = 'none'
     } else {
         document.getElementById('filter-nodes').style.display = 'inline'

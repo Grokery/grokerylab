@@ -1,5 +1,5 @@
 
-.D3DataFlow {
+#D3DataFlow {
      background-color: #e7ebee;
 }
 
@@ -41,17 +41,17 @@ g.undefined {
 g:hover {
     stroke: #d62728;
     stroke-width: 2;
-} 
+}
 
 g.selected {
     stroke: #d62728;
     stroke-width: 3;
-} 
+}
 
 g.selected:hover {
     stroke: #d62728;
     stroke-width: 4;
-} 
+}
 
 g.colored.jobs-node {
     fill: #ff9233;
@@ -68,32 +68,32 @@ g.colored.charts-node {
 g.colored.datasources-node {
     fill: #0271b1;
     stroke: #0271b1;
-    stroke-width: 0; 
+    stroke-width: 0;
 }
 
 g.colored.dashboards-node {
     fill: #0271b1;
     stroke: #0271b1;
-    stroke-width: 0; 
+    stroke-width: 0;
 }
 
 g.colored:hover {
     fill: white;
     stroke: #d62728;
     stroke-width: 2;
-} 
+}
 
 g.colored.selected {
     fill: white;
     stroke: #d62728;
     stroke-width: 3;
-} 
+}
 
 g.colored.selected:hover {
     fill: white;
     stroke: #d62728;
     stroke-width: 4;
-} 
+}
 
 
 /* Text / Icons */
@@ -168,73 +168,6 @@ path.link.inactive {
     opacity: .1
 }
 
-
-/*  */
-#flow-header-content {
-    padding-top: 5px;
-    position: absolute;
-    right: 0;
-    top: 0;
-}
-
-#flow-header-content input:focus {
-    outline: none;
-}
-
-#flow-header-content .drag-create-img {
-    height: 32px;
-    margin-bottom: 2px;
-    margin-right: 4px;
-    user-select: none;
-    -moz-user-select: none;
-    -webkit-user-drag: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-}
-
-.create-icon {
-    display: inline;
-}
-
-.filter-nodes {
-    display: inline;
-}
-
-.filter-input {
-    margin:0;
-	height:35px;
-    border:none;
-    border-left: 1px solid #ccc;
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    border-radius: 4px 0 0 4px;
-}
-
-.icon-btn {
-    border: none;
-    font-family: FontAwesome;
-    background-color: transparent;
-    font-size: inherit;
-    color: #0291E3;
-}
-
-.filter-icon {
-    height: 35px;
-    background-color:white;    
-	margin: 0;
-    padding: 0;
-    margin-right: 5px;
-	padding-right: 5px;
-    border: none;
-	border-right: 1px solid #ccc;
-	border-radius: 0px 4px 4px 0px;
-	border-top: 1px solid #ccc;
-	padding-left: 5px;
-	border-bottom: 1px solid #ccc;
-    color: #0291E3;
-    font-size: inherit;
-}
-
 g.colored:hover text.tooltiptext,
 g.colored.selected text.tooltiptext,
 g.colored.selected:hover text.tooltiptext  {
@@ -248,4 +181,69 @@ g.colored.selected:hover text.tooltiptext  {
 #graphxy {
     padding-left: 10px;
     padding-right: 10px;
+}
+
+
+/* Flow Header Content */
+.flow-header-content {
+    padding-top: 5px;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.flow-header-content .fa {
+    font-size: large;
+    margin-right: 10px;
+}
+
+.flow-header-content input:focus {
+    outline: none;
+}
+
+.flow-header-content #create-nodes {
+    margin-right: 10px;
+}
+
+.flow-header-content .drag-create-img {
+    height: 32px;
+    margin-bottom: 2px;
+    margin-right: 4px;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.flow-header-content .filter-input {
+	height:35px;
+    border:none;
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-radius: 4px 0 0 4px;
+    padding-left: 8px;
+    width: 200px;
+}
+
+.flow-header-content .icon-btn .fa {
+    margin-right: 0;
+}
+
+.flow-header-content .filter-icon {
+    height: 35px;
+    background-color:white;
+	margin: 0;
+    padding: 0;
+    margin-right: 5px;
+	padding-right: 5px;
+    border: none;
+	border-right: 1px solid #ccc;
+	border-radius: 0px 4px 4px 0px;
+	border-top: 1px solid #ccc;
+	padding-left: 5px;
+	border-bottom: 1px solid #ccc;
+    color: #0291E3;
+    font-size: inherit;
 }

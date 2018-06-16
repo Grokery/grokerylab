@@ -13,9 +13,6 @@ class TopNavBar extends Component {
     hasClass(element, cls) {
         return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
     }
-    closeDropDown() {
-        document.getElementById('nav-dropdown').classList.remove("open")
-    }
     toggleDropDown() {
         var toggle = document.getElementById('nav-dropdown');
         if (this.hasClass(toggle, 'open')) {
@@ -24,13 +21,8 @@ class TopNavBar extends Component {
             toggle.classList.add("open")
         }
     }
-    getCloudName() {
-        const { getSessionInfo, cloudName } = this.props
-        let cloudTitle = "GrokeryLab"
-        if (getSessionInfo() && getSessionInfo()['clouds'] && getSessionInfo()['clouds'][cloudName]) {
-            cloudTitle += " | " + getSessionInfo()['clouds'][cloudName].title
-        }
-        return cloudTitle
+    closeDropDown() {
+        document.getElementById('nav-dropdown').classList.remove("open")
     }
     render() {
         const { isAuthenticated } = this.props
@@ -38,11 +30,13 @@ class TopNavBar extends Component {
         return (
             <nav id='top-nav-wrapper' className='navbar navbar-default navbar-fixed-top' role='navigation'>
                 <div id='top-menu-wrapper'>
+
                     <div className='navbar-header'>
                         <a id='menu-toggle' className='navbar-brand' href='#'><i className='fa fa-bars'></i></a>
-                        {/* <a className='navbar-brand' href='#'><img src="logo-inverse.png"></img></a> */}
-                        <a className='navbar-brand' href='#'>{this.getCloudName()}</a>
+                        {/* <a className='navbar-brand' href='#'><img src="./logo-inverse.png"></img></a> */}
+                        <a className='navbar-brand' href='#'>GrokeryLab</a>
                     </div>
+
                     <ul id='top-right-nav-options' className={'nav navbar-top-links navbar-right pull-right '+showRightNav}>
                         <StatusIndicator></StatusIndicator>
                         <li id='nav-dropdown'>
@@ -51,27 +45,13 @@ class TopNavBar extends Component {
                                 <i className='fa fa-caret-down' style={{'pointerEvents':'none'}}></i>
                             </a>
                             <ul className='dropdown-menu dropdown-user pull-right' onMouseLeave={() => this.closeDropDown()}>
-                                <li>
-                                    <a href='#/'>
-                                        <i className='fa fa-home fa-fw'></i>
-                                        <span>Home</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href='#/account'>
-                                        <i className='fa fa-user fa-fw'></i>
-                                        <span>Account</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href='#/signout'>
-                                        <i className='fa fa-sign-out fa-fw'></i>
-                                        <span>Sign Out</span>
-                                    </a>
-                                </li>
+                                <li><a href='#/'><i className='fa fa-home fa-fw'></i><span>Home</span></a></li>
+                                <li><a href='#/account'><i className='fa fa-user fa-fw'></i><span>Account</span></a></li>
+                                <li><a href='#/signout'><i className='fa fa-sign-out fa-fw'></i><span>Sign Out</span></a></li>
                             </ul>
                         </li>
                     </ul>
+
                 </div>
             </nav>
         )
