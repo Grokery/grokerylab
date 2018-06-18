@@ -1,12 +1,19 @@
 #top-nav-wrapper {
   margin: 0;
   background-color: #0291E3 !important;
-}
-
-#top-nav-wrapper {
   border: none;
   margin: 0;
   height: 50px
+}
+
+#top-nav-wrapper .navbar-brand {
+  margin: 0;
+  padding: 0;
+}
+
+#top-nav-wrapper .navbar-brand img {
+  height: 50px;
+  margin-left: 20px;
 }
 
 #top-nav-wrapper #top-menu-wrapper a {
@@ -17,8 +24,8 @@
   background-color: #0291E3;
 }
 
-.nav .open>a, 
-.nav .open>a:focus,
+#top-nav-wrapper .nav .open>a,
+#top-nav-wrapper .nav .open>a:focus,
 #top-nav-wrapper #top-menu-wrapper .open>a:hover {
   background-color: #4c5763;
 }
@@ -44,7 +51,7 @@
   margin-top: -1px;
   margin-right: -1px;
   border-radius: 2px;
-  min-width: 200px; 
+  min-width: 200px;
   border: none;
 }
 

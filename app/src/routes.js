@@ -7,7 +7,7 @@ import AuthGateway from './components/AuthGateway/AuthGateway'
 import Home from './components/Home/Home'
 import Account from './components/Account/Account'
 import Cloud from './components/Cloud/Cloud'
-import CloudHome from './components/CloudHome/CloudHome'
+// import CloudHome from './components/CloudHome/CloudHome'
 import Dataflows from './components/Dataflows/Dataflows'
 import NodeDetails from './components/NodeDetails/NodeDetails'
 import Sources from './components/Sources/Sources'
@@ -21,7 +21,7 @@ export default <Route path='/' component={App}>
     <IndexRoute component={Home} />
     <Route path='/account' component={Account} />
     <Route path='/clouds/:cloudName' component={Cloud}>
-      <IndexRoute component={CloudHome}></IndexRoute>
+      <IndexRoute component={Dataflows}></IndexRoute>
       <Route path='/clouds/:cloudName/datasources' component={Sources} />
       <Route path='/clouds/:cloudName/jobs' component={Jobs} />
       <Route path='/clouds/:cloudName/settings' component={Settings} />

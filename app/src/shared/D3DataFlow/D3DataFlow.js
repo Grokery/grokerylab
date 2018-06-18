@@ -57,16 +57,20 @@ class D3DataFlow extends Component {
     return (
       <div id='D3DataFlow'>
         <div className={'flow-header-content' + showControls}>
-            <div id='create-nodes' style={{display:'none'}}>
+            <div id='create-nodes'>
+                <div className="triangle-up"></div>
+                <p>Drag selected node type to canvas:</p>
                 <img className='drag-create-img' role='presentation' src='img/job.png' onMouseDown={this.createNodeDrag.bind(this, this.createJob.bind(this))}/>
                 <img className='drag-create-img' role='presentation' src='img/source.png' onMouseDown={this.createNodeDrag.bind(this, this.createSource.bind(this))}/>
-                {/* <img className='drag-create-img' role='presentation' src='img/chart.png' onMouseDown={this.createNodeDrag.bind(this, this.createChart.bind(this))}/>
-                <img className='drag-create-img' role='presentation' src='img/board.png' onMouseDown={this.createNodeDrag.bind(this, this.createBoard.bind(this))}/> */}
+                <img className='drag-create-img' role='presentation' src='img/chart.png' onMouseDown={this.createNodeDrag.bind(this, this.createChart.bind(this))}/>
+                <img className='drag-create-img' role='presentation' src='img/board.png' onMouseDown={this.createNodeDrag.bind(this, this.createBoard.bind(this))}/>
             </div>
-            <a href='javascript:void(0)' onClick={this.toggleCreateNodes}><i className='fa fa-plus'></i></a>
-            <a id='delete-icon' href='javascript:void(0)' onClick={this.onDelete.bind(this)} style={{display:'none'}}><i className='fa fa-trash'></i></a>
-            <input id='filter-input' className='filter-input' onChange={this.filterNodes.bind(this)}/>
-            <button className='icon-btn filter-icon'><i className='fa fa-filter'></i></button>
+            <a id='delete-icon' href='javascript:void(0)' onClick={this.onDelete.bind(this)}><i className='fa fa-trash'></i></a>
+            <a className="create-btn" href='javascript:void(0)' onClick={this.toggleCreateNodes}><i className='fa fa-plus'></i></a>
+            <div className="node-filter">
+                <input id='filter-input' className='filter-input' onChange={this.filterNodes.bind(this)}/>
+                <i className='fa fa-filter'></i>
+            </div>
           </div>
         <div id='flow'></div>
       </div>
@@ -689,10 +693,12 @@ class D3DataFlow extends Component {
   }
   filterNodes() {
     let { nodes } = this.props
-    let filterText = document.getElementById('filter-input').value
+    let filterText = document.getElementById('filter-input').value.toLowerCase()
     Object.keys(nodes).forEach(function(key) {
         let node = nodes[key]
-        if (node.title.toLowerCase().includes(filterText.toLowerCase()) && filterText != '') {
+        if (node.title.toLowerCase().includes(filterText) &&
+            filterText != '' &&
+            filterText.length > 1) {
             this.addNodeToSelected(node)
         } else {
             this.removeNodeFromSelected(node)

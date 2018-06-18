@@ -186,29 +186,59 @@ g.colored.selected:hover text.tooltiptext  {
 
 /* Flow Header Content */
 .flow-header-content {
-    padding-top: 5px;
+    margin-top: 8px;
+    margin-right: 8px;
     position: absolute;
     right: 0;
     top: 0;
 }
 
-.flow-header-content .fa {
-    font-size: large;
-    margin-right: 10px;
-}
-
-.flow-header-content input:focus {
-    outline: none;
-}
-
 .flow-header-content #create-nodes {
-    margin-right: 10px;
+    position: inherit;
+    top: 40px;
+    background-color: white;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    left: -106.25px;
+    display: none;
+}
+
+.flow-header-content #create-nodes:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: -10px;
+    right: 122px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 10px solid #fff;
+}
+
+.flow-header-content #create-nodes:before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: -11.6px;
+    right: 121px;
+    width: 0;
+    height: 0;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-bottom: 11px solid #ccc;
+}
+
+.flow-header-content .create-btn {
+    float: left;
+    margin: 7px;
+    font-size: 18px;
 }
 
 .flow-header-content .drag-create-img {
     height: 32px;
-    margin-bottom: 2px;
-    margin-right: 4px;
+    margin: 6px;
     user-select: none;
     -moz-user-select: none;
     -webkit-user-drag: none;
@@ -216,34 +246,38 @@ g.colored.selected:hover text.tooltiptext  {
     -ms-user-select: none;
 }
 
+.flow-header-content .drag-create-img:hover {
+    margin-bottom: 0px;
+}
+
+.flow-header-content #delete-icon {
+    display: none;
+    float: left;
+    margin: 6px;
+    font-size: 18px;
+}
+
+.flow-header-content .node-filter {
+    float: left;
+}
+
 .flow-header-content .filter-input {
-	height:35px;
+    height:35px;
     border:none;
     border-left: 1px solid #ccc;
     border-top: 1px solid #ccc;
+    border-right: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
-    border-radius: 4px 0 0 4px;
+    border-radius: 4px 4px 4px 4px;
     padding-left: 8px;
-    width: 200px;
+    padding-right: 26px;
+    width: 240px;
 }
 
-.flow-header-content .icon-btn .fa {
-    margin-right: 0;
-}
-
-.flow-header-content .filter-icon {
-    height: 35px;
-    background-color:white;
-	margin: 0;
-    padding: 0;
-    margin-right: 5px;
-	padding-right: 5px;
-    border: none;
-	border-right: 1px solid #ccc;
-	border-radius: 0px 4px 4px 0px;
-	border-top: 1px solid #ccc;
-	padding-left: 5px;
-	border-bottom: 1px solid #ccc;
+.flow-header-content .node-filter .fa {
     color: #0291E3;
-    font-size: inherit;
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    font-size: 18px;
 }

@@ -22,7 +22,7 @@ class NodeDetails extends Component {
   }
   getRightMenuOptions(){
     const { toggleNodeDetailsPain, close } = this.props
-    return (                    
+    return (
       <div className='btn-group pull-right item-options'>
           <a href='' onClick={this.toggleEditDialog.bind(this)} className='btn btn-default'><i className='fa fa-cog'></i></a>
           <a href='' onClick={toggleNodeDetailsPain} className='btn btn-default'><i className='fa fa-arrows-v'></i></a>
@@ -40,7 +40,7 @@ class NodeDetails extends Component {
           height={flowPreviewHeight}
           zoomOnHighlight={false}
           singleClickNav={true}
-          colored={false}
+          colored={true}
           nodeShape={2}
           query={location.query}
         ></D3DataFlow>
@@ -81,35 +81,35 @@ class NodeDetails extends Component {
     // THOUGHT: could use the factory pattern here
     const { params } = this.props
     if (params.collection === RESOURCES.JOBS.toLowerCase()) {
-      return (<JobDetails 
-        params={params} 
+      return (<JobDetails
+        params={params}
         close={this.close.bind(this)}
         getRightMenuOptions={this.getRightMenuOptions}
-        onUpdate={this.onUpdate.bind(this)} 
+        onUpdate={this.onUpdate.bind(this)}
         toggleNodeDetailsPain={this.toggleNodeDetailsPain}
       ></JobDetails>)
     } else if (params.collection === RESOURCES.DATASOURCES.toLowerCase()) {
-      return (<SourceDetails 
-        params={params} 
+      return (<SourceDetails
+        params={params}
         close={this.close.bind(this)}
         getRightMenuOptions={this.getRightMenuOptions}
-        onUpdate={this.onUpdate.bind(this)} 
+        onUpdate={this.onUpdate.bind(this)}
         toggleNodeDetailsPain={this.toggleNodeDetailsPain}>
       </SourceDetails>)
     } else if (params.collection === RESOURCES.CHARTS.toLowerCase()) {
-      return (<ChartDetails 
-        params={params} 
+      return (<ChartDetails
+        params={params}
         close={this.close.bind(this)}
         getRightMenuOptions={this.getRightMenuOptions}
-        onUpdate={this.onUpdate.bind(this)} 
+        onUpdate={this.onUpdate.bind(this)}
         toggleNodeDetailsPain={this.toggleNodeDetailsPain}
       ></ChartDetails>)
     } else if (params.collection === RESOURCES.DASHBOARDS.toLowerCase()) {
-      return (<BoardDetails 
-        params={params} 
+      return (<BoardDetails
+        params={params}
         close={this.close.bind(this)}
         getRightMenuOptions={this.getRightMenuOptions}
-        onUpdate={this.onUpdate.bind(this)} 
+        onUpdate={this.onUpdate.bind(this)}
         toggleNodeDetailsPain={this.toggleNodeDetailsPain}
       ></BoardDetails>)
     }

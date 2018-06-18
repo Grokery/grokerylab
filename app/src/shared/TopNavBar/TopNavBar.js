@@ -33,8 +33,8 @@ class TopNavBar extends Component {
 
                     <div className='navbar-header'>
                         <a id='menu-toggle' className='navbar-brand' href='#'><i className='fa fa-bars'></i></a>
-                        {/* <a className='navbar-brand' href='#'><img src="./logo-inverse.png"></img></a> */}
-                        <a className='navbar-brand' href='#'>GrokeryLab</a>
+                        <a className='navbar-brand' href='#'><img src="./img/logo-white-on-clear.png"></img></a>
+                        {/* <a className='navbar-brand' href='#'>GrokeryLab</a> */}
                     </div>
 
                     <ul id='top-right-nav-options' className={'nav navbar-top-links navbar-right pull-right '+showRightNav}>

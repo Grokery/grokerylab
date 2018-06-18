@@ -34,16 +34,16 @@ color-scheme {
 html,
 body,
 #root {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-    background-color: #FFF;
-    font-family: "Open Sans", sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #FFF;
+  font-family: "Open Sans", sans-serif;
 }
 
 pre {
-    background-color: #FFF;
+  background-color: #FFF;
 }
 
 .page-content-wrapper {
@@ -67,12 +67,12 @@ pre {
 }
 
 @media(max-width: 767px) {
-    .sidebar {
-        display: none;
-    }
-    .sidebar-page {
-        margin-left: 0;
-    }
+  .sidebar {
+    display: none;
+  }
+  .sidebar-page {
+    margin-left: 0;
+  }
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -92,29 +92,33 @@ h1 {
 
 .btn-primary {
   background-color: #0291E3;
-  border-color: #0291E3; 
+  border-color: #0291E3;
 }
 
 .btn-primary:hover {
   background-color: #0291E3;
-  border-color: #0291E3; 
+  border-color: #0291E3;
 }
 
 
 /* Default modal styles */
 .modal-dialog {
-    min-width: 60%;
+  min-width: 60%;
 }
 
 .modal-body {
-    overflow-y: auto;
+  overflow-y: auto;
 }
 
 .ReactCodeMirror .CodeMirror {
-    height: auto;
+  height: auto;
 }
 
 .form-help-text {
   font-size: small;
   color: #4C5763
+}
+
+*:focus {
+  outline: none !important;
 }

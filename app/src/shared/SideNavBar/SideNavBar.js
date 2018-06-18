@@ -20,12 +20,12 @@ export default class SideNavBar extends Component {
             <div id='side-menu-wrapper' className='navbar-default sidebar' role='navigation'>
                 <div className='sidebar-nav navbar-collapse'>
                     <ul id='side-menu' className='nav'>
-                        <li title="Cloud Home"><a href={basepath+'/'} className="sidebar-link active" onClick={this.setActive}><i className='fa fa-home fa-fw'></i></a></li>
+                        {/* <li title="Cloud Home"><a href={basepath+'/'} className="sidebar-link active" onClick={this.setActive}><i className='fa fa-home fa-fw'></i></a></li> */}
                         {/* <li title="DashBoards"><a href={basepath+'/dashboards'}><i className='fa fa-th-large fa-fw'></i></a></li> */}
                         {/* <li title="Charts"><a href={basepath+'/charts'}><i className='fa fa-bar-chart fa-fw'></i></a></li> */}
                         {/* <li title="Notebooks"><a href={basepath+'/notebooks'}><i className='fa fa-file-code-o fa-fw'></i></a></li> */}
-                        <hr className='sidebar-section-devider'></hr>
-                        <li title="Data Flows"><a href={basepath+'/flows'} className="sidebar-link" onClick={this.setActive}><i className='fa fa-share-alt fa-fw'></i></a></li>
+                        {/* <hr className='sidebar-section-devider'></hr> */}
+                        <li title="Data Flows"><a href={basepath+'/flows'} className="sidebar-link active" onClick={this.setActive}><i className='fa fa-share-alt fa-fw'></i></a></li>
                         <li title="Jobs"><a href={basepath+'/jobs'} className="sidebar-link" onClick={this.setActive}><i className='fa fa-code fa-fw'></i></a></li>
                         <li title="Sources"><a href={basepath+'/datasources'} className="sidebar-link" onClick={this.setActive}><i className='fa fa-database fa-fw'></i></a></li>
                         <hr className='sidebar-section-devider'></hr>

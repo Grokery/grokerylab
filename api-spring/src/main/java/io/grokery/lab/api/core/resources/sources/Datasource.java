@@ -11,13 +11,13 @@ import io.grokery.lab.api.core.resources.ResourceTypes;
 
 /**
  * Contains the fields and logic common to all DataSource types
- * 
+ *
  * @author hogue
  */
 public class Datasource extends Node {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Datasource.class);
-	
+
 	private SourceType subType;
     private UUID templateId;
 
@@ -25,7 +25,7 @@ public class Datasource extends Node {
         super(ResourceTypes.DATASOURCES);
         this.subType = SourceType.GENERIC;
     }
-    
+
     public Datasource(SourceType subType) {
         super(ResourceTypes.DATASOURCES);
         this.subType = subType;
@@ -36,22 +36,22 @@ public class Datasource extends Node {
 		this.subType = subType;
 		this.init(obj);
     }
-    
+
     public void init(Map<String, Object> obj) {
 		// TODO get field values from obj
     }
-	
+
 	public static String getResourceSubTypeName() {
         return "subType";
     }
-    
+
 	public static Datasource getClassInstance(Map<String, Object>  obj) throws InvalidInputException  {
         try {
 			String subTypeStr = obj.get(Datasource.getResourceSubTypeName()).toString();
 			SourceType subType = SourceType.valueOf(subTypeStr);
 			switch (subType) {
 				case GENERIC:
-					return new Datasource();         
+					return new Datasource();
 				case AWSS3BUCKET:
 					return new AWSS3BucketSource();
 				default:
@@ -60,11 +60,11 @@ public class Datasource extends Node {
         } catch (IllegalArgumentException e) {
 			String message = "Unknown APIResourceSubType";
 			LOGGER.error(message, e);
-			throw new InvalidInputException(message);	
+			throw new InvalidInputException(message);
 		} catch (NullPointerException e) {
 			String message = "APIResourceSubType specification required";
 			LOGGER.error(message, e);
-			throw new InvalidInputException(message);	
+			throw new InvalidInputException(message);
         }
 
     }
