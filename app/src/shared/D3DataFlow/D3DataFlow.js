@@ -99,7 +99,6 @@ class D3DataFlow extends Component {
         mouseDownNode: null,
         mouseDownEdge: null,
         dragging: false,
-        justScaleTransGraph: false,
         lastKeyDown: -1,
         drawEdge: false,
         selectedText: null,
@@ -586,7 +585,7 @@ class D3DataFlow extends Component {
       svg.attr('width', x).attr('height', y);
   }
   centerAndFitFlow() {
-    let headerPadding = 65 // allows space for the filter input and create/delete buttons
+    let headerPadding = 70 // allows space for the filter input and create/delete buttons
     let d3state = this.d3state
     let {highlightedMaxX, highlightedMinX, highlightedMaxY, highlightedMinY} = this.d3state
     let maxX = highlightedMaxX !== -9999 ? highlightedMaxX : d3state.maxX
@@ -620,7 +619,6 @@ class D3DataFlow extends Component {
       this.zoom([this.d3state.width / 2 - x * scale, this.d3state.height / 2 - y * scale], scale);
   }
   zoom(tr, sc) {
-      this.d3state.justScaleTransGraph = true;
       tr = tr ? tr : d3.event.translate;
       sc = sc ? sc : d3.event.scale;
       this.zoomSvg.translate(tr);
@@ -722,14 +720,14 @@ class D3DataFlow extends Component {
   addNodeToSelected(d) {
     this.d3state.selectedNodes[d.guid] = d
     if (Object.keys(this.d3state.selectedNodes).length > 1) {
-        history.push('/clouds/'+ getSelectedCloudName() + '/flow')
+        history.push('/clouds/'+ getSelectedCloudName() + '/flows')
     }
     this.selectNodes(this.d3state.selectedNodes)
   }
   removeNodeFromSelected(d) {
     delete this.d3state.selectedNodes[d.guid]
     if (Object.keys(this.d3state.selectedNodes).length < 1) {
-        history.push('/clouds/'+ getSelectedCloudName() + '/flow')
+        history.push('/clouds/'+ getSelectedCloudName() + '/flows')
     }
     this.selectNodes(this.d3state.selectedNodes)
   }
@@ -862,26 +860,20 @@ class D3DataFlow extends Component {
   }
   svgMouseUp() {
       var d3state = this.d3state
-
       if (!d3state.graphMouseDown) {
           if (d3state.drawEdge) {
               d3state.drawEdge = false
               this.dragLine.classed('hidden', true)
           }
-      } else if (d3state.justScaleTransGraph) {
-          d3state.justScaleTransGraph = false
       } else if (d3state.dblClickSVGTimeout) {
           this.clearAllSelection()
-          history.push('/clouds/'+ getSelectedCloudName() + '/flow')
+          history.push('/clouds/'+ getSelectedCloudName() + '/flows')
       } else {
-          this.clearAllSelection()
-          history.push('/clouds/'+ getSelectedCloudName() + '/flow')
           d3state.dblClickSVGTimeout = true
           setTimeout(function() {
               d3state.dblClickSVGTimeout = false
           }, 300)
       }
-
       d3state.graphMouseDown = false;
   }
   createNodeDrag(cb, e) {

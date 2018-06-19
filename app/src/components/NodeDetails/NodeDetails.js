@@ -18,7 +18,7 @@ class NodeDetails extends Component {
   }
   close() {
     const { params } = this.props
-    history.push("/clouds/"+ params.cloudName + "/flow/"+ params.nodeId +"?center-and-fit=true")
+    history.push("/clouds/"+ params.cloudName + "/flows/"+ params.nodeId +"?center-and-fit=true")
   }
   getRightMenuOptions(){
     const { toggleNodeDetailsPain, close } = this.props
