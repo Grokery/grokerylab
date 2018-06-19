@@ -12,7 +12,7 @@ class Sources extends Component {
     var links = []
     if (items.length !== 0) {
       links = items.map(function(item, index) {
-          return (<li key={index}><a href={'#/clouds/'+params.cloudName+'/'+item.collection.toLowerCase()+'/'+item.id}>{item.title}</a></li>)
+          return (<li key={index}><a href={'#/clouds/'+params.cloudName+'/'+item.collection.toLowerCase()+'/'+item.guid}>{item.title}</a></li>)
       })
     }
     return (

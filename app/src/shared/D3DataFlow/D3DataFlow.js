@@ -586,12 +586,14 @@ class D3DataFlow extends Component {
       svg.attr('width', x).attr('height', y);
   }
   centerAndFitFlow() {
+    let headerPadding = 65 // allows space for the filter input and create/delete buttons
     let d3state = this.d3state
     let {highlightedMaxX, highlightedMinX, highlightedMaxY, highlightedMinY} = this.d3state
     let maxX = highlightedMaxX !== -9999 ? highlightedMaxX : d3state.maxX
     let minX = highlightedMinX !== 9999 ? highlightedMinX : d3state.minX
     let maxY = highlightedMaxY !== -9999 ? highlightedMaxY : d3state.maxY
     let minY = highlightedMinY !== 9999 ? highlightedMinY : d3state.minY
+    minY -= headerPadding
     let xScale = Math.min(d3state.width / (maxX - minX), .5)
     let yScale = Math.min(d3state.height / (maxY - minY), .5)
     let scale = Math.min(xScale, yScale)
