@@ -1,4 +1,4 @@
-import * as ActionTypes from '../actions'
+import * as ActionTypes from 'store/actions'
 
 export const logs = (state = [], action) => {
     if (action.type === ActionTypes.FETCHLOGS_SUCCESS) {

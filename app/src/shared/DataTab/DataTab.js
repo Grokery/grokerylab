@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { fetchNode } from '../../store/actions'
-import CodeEditor from '../CodeEditor/CodeEditor'
-// import SchemaExplorer from '../SchemaExplorer/SchemaExplorer'
+import { fetchNode } from 'store/actions'
+import CodeEditor from 'shared/CodeEditor/CodeEditor'
+// import SchemaExplorer from 'shared/SchemaExplorer/SchemaExplorer'
 import './DataTab.css'
 
 class DataTab extends Component {

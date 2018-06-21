@@ -1,4 +1,4 @@
-import * as ActionTypes from '../actions'
+import * as ActionTypes from 'store/actions'
 
 export const nodes = (state = {}, action) => {
     var newState = state

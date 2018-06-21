@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { getSessionInfo } from '../../authentication'
-import { fetchLogs, appendLogItem } from '../../store/actions'
+import { getSessionInfo } from 'authentication'
+import { fetchLogs, appendLogItem } from 'store/actions'
 import './LogsTab.css'
 
 class LogsTab extends Component {

@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getSelectedCloudId, getSelectedCloudName, removeCloudFromSession } from '../../authentication'
-import Loader from '../../shared/Loader/Loader'
-import { deleteCloud } from '../../store/actions'
+import { getSelectedCloudId, getSelectedCloudName, removeCloudFromSession } from 'authentication'
+import Loader from 'shared/Loader/Loader'
+import { deleteCloud } from 'store/actions'
 
 class Settings extends Component {
   constructor(props) {

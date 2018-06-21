@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import Gallery from '../Gallery/Gallery'
-import Modal from '../Modal/Modal'
-import CodeEditor from '../CodeEditor/CodeEditor'
+import Gallery from 'shared/Gallery/Gallery'
+import Modal from 'shared/Modal/Modal'
+import CodeEditor from 'shared/CodeEditor/CodeEditor'
 import './CloudSection.css'
 
 class CloudSection extends Component {
   static propTypes = {
-    cloudid: PropTypes.string.isRequired, 
+    cloudid: PropTypes.string.isRequired,
     cloud: PropTypes.object.isRequired,
   }
   constructor(props) {

@@ -1,8 +1,8 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { isAuthenticated, getSessionInfo } from '../../authentication'
-import StatusIndicator from '../StatusIndicator/StatusIndicator'
+import { isAuthenticated, getSessionInfo } from 'authentication'
+import StatusIndicator from 'shared/StatusIndicator/StatusIndicator'
 import './TopNavBar.css'
 
 class TopNavBar extends Component {

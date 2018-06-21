@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { authenticate, isAuthenticated, disAuthenticate } from '../../authentication'
-import { history } from '../../index.js'
+import { authenticate, isAuthenticated, disAuthenticate } from 'authentication'
+import { history } from 'index'
 import './Auth.css'
 
 class Auth extends Component {
@@ -60,7 +60,7 @@ class Auth extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  return { 
+  return {
     authenticate: authenticate,
     isAuthenticated: isAuthenticated,
     disAuthenticate: disAuthenticate

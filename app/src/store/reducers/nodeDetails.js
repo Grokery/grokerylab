@@ -1,4 +1,4 @@
-import * as ActionTypes from '../actions'
+import * as ActionTypes from 'store/actions'
 
 export const nodeDetails = (state = null, action) => {
     var newState = state

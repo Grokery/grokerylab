@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { fetchNode } from '../../store/actions'
+import { fetchNode } from 'store/actions'
 import './IChart.css'
 
 class IChart extends Component {

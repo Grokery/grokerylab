@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Tabs, Panel } from '../Tabs/Tabs'
-import EditModal from '../EditModal/EditModal'
-import InfoTab from '../InfoTab/InfoTab'
-import DataTab from '../DataTab/DataTab'
-import LogsTab from '../LogsTab/LogsTab'
+import { Tabs, Panel } from 'shared/Tabs/Tabs'
+import EditModal from 'shared/EditModal/EditModal'
+import InfoTab from 'shared/InfoTab/InfoTab'
+import DataTab from 'shared/DataTab/DataTab'
+import LogsTab from 'shared/LogsTab/LogsTab'
 import './NodeDetails.css'
 
 class SourceDetails extends Component {

@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { fetchNode } from '../../store/actions'
-import IChart from '../IChart/IChart'
-import CodeEditor from '../CodeEditor/CodeEditor'
+import { fetchNode } from 'store/actions'
+import IChart from 'shared/IChart/IChart'
+import CodeEditor from 'shared/CodeEditor/CodeEditor'
 import './ChartCodeTab.css'
 
 class ChartCodeTab extends Component {

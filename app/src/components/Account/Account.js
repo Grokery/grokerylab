@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { getSessionInfo } from '../../authentication'
+import { getSessionInfo } from 'authentication'
 import { connect } from 'react-redux'
 
 class Account extends Component {

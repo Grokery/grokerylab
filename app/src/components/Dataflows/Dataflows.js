@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import D3DataFlow from '../../shared/D3DataFlow/D3DataFlow'
+import D3DataFlow from 'shared/D3DataFlow/D3DataFlow'
 
 class Dataflows extends Component {
   render() {
     const { params, location } = this.props
     return (
       <div className='page-content'>
-        <D3DataFlow 
+        <D3DataFlow
           showControls={true}
           selectedNodeId={params.nodeId}
           zoomOnHighlight={false}

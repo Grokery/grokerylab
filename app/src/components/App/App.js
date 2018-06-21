@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { resetErrorMessage } from '../../store/actions'
+import { resetErrorMessage } from 'store/actions'
 import './App.css'
 
 class App extends Component {

@@ -1,4 +1,4 @@
-import { CALL_GROKERY_API } from '../middleware/api'
+import { CALL_GROKERY_API } from 'store/middleware/api'
 
 //--------------------------------
 

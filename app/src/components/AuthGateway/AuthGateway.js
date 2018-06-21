@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { setRedirectUrl, isAuthenticated } from '../../authentication'
-import { history } from '../../index.js'
-import TopNavBar from '../../shared/TopNavBar/TopNavBar'
+import { setRedirectUrl, isAuthenticated } from 'authentication'
+import { history } from 'index'
+import TopNavBar from 'shared/TopNavBar/TopNavBar'
 
 class AuthGateway extends Component {
   static propTypes = {

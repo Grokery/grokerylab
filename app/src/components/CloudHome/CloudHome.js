@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { getSessionInfo } from '../../authentication'
+import { getSessionInfo } from 'authentication'
 
 class CloudHome extends Component {
   static propTypes = {

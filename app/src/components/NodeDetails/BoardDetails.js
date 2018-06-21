@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Tabs, Panel } from '../Tabs/Tabs'
-import { NODETYPE } from '../../common.js'
-import EditModal from '../EditModal/EditModal'
-import IChart from '../IChart/IChart'
+import { NODETYPE } from 'common'
+import { Tabs, Panel } from 'shared/Tabs/Tabs'
+import EditModal from 'shared/EditModal/EditModal'
+import IChart from 'shared/IChart/IChart'
 import './NodeDetails.css'
 
 class BoardDetails extends Component {

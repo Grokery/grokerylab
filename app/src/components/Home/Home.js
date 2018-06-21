@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { getSessionInfo } from '../../authentication'
-import CloudSection from '../../shared/CloudSection/CloudSection'
+import { getSessionInfo } from 'authentication'
+import CloudSection from 'shared/CloudSection/CloudSection'
 import CreateCloudModel from './CreateCloudModel'
 import './Home.css'
 
@@ -21,7 +21,7 @@ class Home extends Component {
     const { clouds } = this.props
     let sections = []
     Object.keys(clouds).forEach(function(name) {
-      sections.push(   
+      sections.push(
         <CloudSection key={name} cloudid={name} cloud={clouds[name]} />
       )
     })

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import IChart from '../IChart/IChart'
+import IChart from 'shared/IChart/IChart'
 
 class ChartInfo extends Component {
   static propTypes = {

@@ -1,5 +1,5 @@
-import { GROKERY_API } from "../config.js"
-import { history } from '../index.js'
+import { GROKERY_API } from "config"
+import { history } from 'index'
 
 export const setRedirectUrl = (url) => {
     sessionStorage.setItem("redirectUrl", url)
@@ -30,7 +30,7 @@ export const isAuthenticated = () => {
 }
 
 export const authenticate = (user, pass) => {
-    var params = { 
+    var params = {
         method: 'POST',
         mode: 'cors',
         headers: new Headers({'Content-Type':'application/json'}),

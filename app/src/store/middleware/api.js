@@ -2,15 +2,15 @@
 // Middleware for calling REST api endpoints
 //------------------------------------------------
 
-import { GROKERY_API } from "../../config.js"
-import { getAccountToken, getSelectedCloudUrl, getSelectedCloudToken } from '../../authentication'
+import { GROKERY_API } from "config"
+import { getAccountToken, getSelectedCloudUrl, getSelectedCloudToken } from 'authentication'
 
 const callApi = (endpoint, method, data, token, callback) => {
     var myHeaders = new Headers({
         "Content-Type":"application/json"
     })
     myHeaders.append("Authorization", token)
-    var params = { 
+    var params = {
         method: method ? method : "GET",
         headers: myHeaders,
         mode: "cors"
@@ -47,9 +47,9 @@ export const grokeryApi = store => next => action => {
         delete finalAction[CALL_GROKERY_API]
         return finalAction
     }
-    
+
     next(actionWith({ type: requestType }))
-    
+
     const { endpoint, method, data, callback } = callApiActionInfo
     const fullUrl = GROKERY_API + endpoint
     const token = getAccountToken()
@@ -76,15 +76,15 @@ export const cloudApi = store => next => action => {
 
     const { types } = callApiActionInfo
     const [requestType, successType, failureType] = types
-    
+
     const actionWith = data => {
         const finalAction = Object.assign({}, action, data)
         delete finalAction[CALL_CLOUD_API]
         return finalAction
     }
-    
+
     next(actionWith({ type: requestType }))
-    
+
     const { endpoint, method, data, callback } = callApiActionInfo
     const fullUrl = getSelectedCloudUrl() + endpoint
     const token = getSelectedCloudToken()

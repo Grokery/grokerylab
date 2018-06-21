@@ -1,4 +1,4 @@
-import { CALL_CLOUD_API } from '../middleware/api'
+import { CALL_CLOUD_API } from 'store/middleware/api'
 
 
 //--------------------------------

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { NODETYPE } from '../../common.js'
+import { NODETYPE } from 'common'
 
 class Jobs extends Component {
   static propTypes = {

@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { updateQueryParam, NODETYPE } from '../../common.js'
-import { updateNode } from '../../store/actions'
-import { history } from '../../index.js'
-import D3DataFlow from '../../shared/D3DataFlow/D3DataFlow'
-import JobDetails from '../../shared/NodeDetails/JobDetails'
-import SourceDetails from '../../shared/NodeDetails/SourceDetails'
-import ChartDetails from '../../shared/NodeDetails/ChartDetails'
-import BoardDetails from '../../shared/NodeDetails/BoardDetails'
+import { updateQueryParam, NODETYPE } from 'common'
+import { updateNode } from 'store/actions'
+import { history } from 'index'
+import D3DataFlow from 'shared/D3DataFlow/D3DataFlow'
+import JobDetails from './JobDetails'
+import SourceDetails from './SourceDetails'
+import ChartDetails from './ChartDetails'
+import BoardDetails from './BoardDetails'
 
 const flowPreviewHeight = 300
 
