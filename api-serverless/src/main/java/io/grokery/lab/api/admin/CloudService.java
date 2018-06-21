@@ -1,5 +1,6 @@
 package io.grokery.lab.api.admin;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -110,6 +111,16 @@ public class CloudService extends ServiceBaseClass {
 
 		@SuppressWarnings("unchecked")
 		Map<String, Object> response = objectMapper.convertValue(cloud, Map.class);
+
+        // Map<String, Object> subTypes = new HashMap<>();
+        // for (JobType type : JobType.values()) {
+        //     subTypes.put(type.name(), type.getTypeName());
+        // }
+        // for (SourceType type : SourceType.values()) {
+        //     subTypes.put(type.name(), type.getTypeName());
+        // }
+        // response.put("subTypes", subTypes);
+
 		return response;
 	}
 

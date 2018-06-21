@@ -30,7 +30,7 @@ functions:
           path: ${self:custom.urlBase}/auth/resetpass
           method: post
           cors: true
-          
+
       - http:
           path: ${self:custom.urlBase}/accounts
           method: post
@@ -69,34 +69,23 @@ functions:
           path: ${self:custom.urlBase}/clouds/{cloudId}
           method: delete
           cors: true
-
       - http:
-          path: ${self:custom.urlBase}/clouds/{cloudId}/resources/{collection}
+          path: ${self:custom.urlBase}/clouds/{cloudId}/nodes
           method: post
           cors: true
       - http:
-          path: ${self:custom.urlBase}/clouds/{cloudId}/resources/{collection}
+          path: ${self:custom.urlBase}/clouds/{cloudId}/nodes
           method: get
           cors: true
       - http:
-          path: ${self:custom.urlBase}/clouds/{cloudId}/resources/{collection}/{guid}
+          path: ${self:custom.urlBase}/clouds/{cloudId}/nodes/{nodeId}
           method: get
           cors: true
       - http:
-          path: ${self:custom.urlBase}/clouds/{cloudId}/resources/{collection}/{guid}
+          path: ${self:custom.urlBase}/clouds/{cloudId}/nodes/{nodeId}
           method: put
           cors: true
       - http:
-          path: ${self:custom.urlBase}/clouds/{cloudId}/resources/{collection}/{guid}
+          path: ${self:custom.urlBase}/clouds/{cloudId}/nodes/{nodeId}
           method: delete
-          cors: true
-
-      - http:
-          path: ${self:custom.urlBase}/clouds/{cloudId}/dataflowservice
-          method: get
-          cors: true
-
-      - http:
-          path: ${self:custom.urlBase}/clouds/{cloudId}/definitionservice
-          method: get
           cors: true

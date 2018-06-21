@@ -12,7 +12,7 @@ class LogsTab extends Component {
         appendLogItem: PropTypes.func.isRequired
     }
     componentDidMount() {
-        const { fetchLogs, params } = this.props
+        // const { fetchLogs, params } = this.props
         // fetchLogs(params.nodeId)
     }
     getLogs() {
@@ -23,7 +23,7 @@ class LogsTab extends Component {
                     <span className='chat-img pull-left'></span>
                     <div className='chat-body clearfix'>
                         <div className='header'>
-                            <a className='primary-font'>{item.collection.charAt(0).toUpperCase() + item.collection.slice(1)} : {item.user}</a>
+                            <a className='primary-font'>{item.nodeType.charAt(0).toUpperCase() + item.nodeType.slice(1)} : {item.user}</a>
                             <small className='text-muted'><i className='fa fa-clock-o fa-fw'></i>{item.datetime}</small>
                         </div>
                     </div>

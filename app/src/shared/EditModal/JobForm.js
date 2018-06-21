@@ -10,18 +10,18 @@ class JobForm extends Component {
   }
   onChange() {
     let updates = {
-      subtype: document.getElementById('subtype').value
+      subType: document.getElementById('subType').value
     }
     this.props.onUpdate(updates)
   }
   getOptions() {
-    const { lookups } = this.props
+    // const { lookups } = this.props
     var items = []
-    if (lookups.jobtypes) {
-      items = lookups.jobtypes.map(function(item, index) {
-        return <option key={index} value={item.name}>{item.description}</option>
-      })
-    }
+    // if (lookups.jobtypes) {
+    //   Object.keys(lookups.jobtypes).map(function(key, index) {
+    //     items.push(<option key={index} value={key}>{lookups.jobtypes[key]}</option>)
+    //   })
+    // }
     return items
   }
   render() {
@@ -29,7 +29,7 @@ class JobForm extends Component {
     return (
       <form>
         <label>ETL Job Type</label>
-        <select id="subtype" className="form-control" value={node.subtype ? node.subtype : ""} onChange={this.onChange.bind(this)}>
+        <select id="subType" className="form-control" value={node.subType ? node.subType : ""} onChange={this.onChange.bind(this)}>
           <option value="">-- choose type --</option>
           {this.getOptions()}
         </select>
@@ -40,7 +40,7 @@ class JobForm extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    lookups: state.lookups
+    lookups: state.cloudDetails ? state.cloudDetails.lookups : {}
   }
 }
 

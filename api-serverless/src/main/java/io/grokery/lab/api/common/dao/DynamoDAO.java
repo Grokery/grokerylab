@@ -64,12 +64,10 @@ public class DynamoDAO implements DAO {
 		} catch (ResourceNotFoundException e) {
 
 			List<KeySchemaElement> keySchema = new ArrayList<KeySchemaElement>();
-			keySchema.add(new KeySchemaElement("resourceType", KeyType.HASH));
-			keySchema.add(new KeySchemaElement("resourceId", KeyType.RANGE));
+			keySchema.add(new KeySchemaElement("nodeId", KeyType.HASH));
 
 			List<AttributeDefinition> attrDefs = new ArrayList<AttributeDefinition>();
-			attrDefs.add(new AttributeDefinition("resourceType", ScalarAttributeType.S));
-			attrDefs.add(new AttributeDefinition("resourceId", ScalarAttributeType.S));
+			attrDefs.add(new AttributeDefinition("nodeId", ScalarAttributeType.S));
 
 			ProvisionedThroughput tput = new ProvisionedThroughput(new Long(10), new Long(10));
 
@@ -77,49 +75,51 @@ public class DynamoDAO implements DAO {
 		}
 	}
 
-	public Map<String, Object> create(String resourceType, String resourceId, Map<String, Object> item) {
+	public Map<String, Object> create(String nodeId, Map<String, Object> item) {
 		Item dbItem = new Item();
-		dbItem.withString("resourceType", resourceType);
-		dbItem.withString("resourceId", resourceId);
-		dbItem.withMap("item", item);
+		Iterator it = item.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry pair = (Map.Entry)it.next();
+			dbItem.with(pair.getKey().toString(), pair.getValue());
+		}
+		dbItem.withString("nodeId", nodeId);
 		table.putItem(dbItem);
-		return item;
+		return dbItem.asMap();
 	}
 
-	@SuppressWarnings("unchecked")
-	public Map<String, Object> update(String resourceType, String resourceId, Map<String, Object> values) throws NotFoundException {
-		Item dbItem = table.getItem("resourceType", resourceType, "resourceId", resourceId);
+	public Map<String, Object> update(String nodeId, Map<String, Object> values) throws NotFoundException {
+		Item dbItem = table.getItem("nodeId", nodeId);
 		if (dbItem == null) {
 			throw new NotFoundException();
 		}
-		Map<String, Object> item = (Map<String, Object>) dbItem.get("item");
-		item.putAll(values);
-		dbItem.withMap("item", item);
+		Iterator it = values.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry pair = (Map.Entry)it.next();
+			dbItem.with(pair.getKey().toString(), pair.getValue());
+		}
+		dbItem.withString("nodeId", nodeId);
 		table.putItem(dbItem);
-		return item;
+		return dbItem.asMap();
 	}
 
-	@SuppressWarnings("unchecked")
-	public Map<String, Object>  delete(String resourceType, String resourceId) throws NotFoundException {
-		Item dbItem = table.getItem("resourceType", resourceType, "resourceId", resourceId);
+	public Map<String, Object> delete(String nodeId) throws NotFoundException {
+		Item dbItem = table.getItem("nodeId", nodeId);
 		if (dbItem == null) {
 			throw new NotFoundException();
 		}
-		table.deleteItem("resourceType", resourceType, "resourceId", resourceId);
-		return (Map<String, Object>) dbItem.get("item");
+		table.deleteItem("nodeId", nodeId);
+		return dbItem.asMap();
 	}
 
-	@SuppressWarnings("unchecked")
-	public Map<String, Object> retrieve(String resourceType, String resourceId) throws NotFoundException {
-		Item dbItem = table.getItem("resourceType", resourceType, "resourceId", resourceId);
+	public Map<String, Object> retrieve(String nodeId) throws NotFoundException {
+		Item dbItem = table.getItem("nodeId", nodeId);
 		if (dbItem == null) {
 			throw new NotFoundException();
 		}
-		return (Map<String, Object>) dbItem.get("item");
+		return dbItem.asMap();
 	}
 
-	@SuppressWarnings("unchecked")
-	public Map<String, Object> retrieve(String resourceType) {
+	public Map<String, Object> retrieve() {
 
 		ItemCollection<ScanOutcome> scanResults = table.scan(
         	null, // Filter expression
@@ -132,9 +132,8 @@ public class DynamoDAO implements DAO {
 		Iterator<Item> iterator = scanResults.iterator();
         while (iterator.hasNext()) {
         	Item item = iterator.next();
-			Map<String, Object> obj = (Map<String, Object>)item.get("item");
-			result.put(obj.get("guid").toString(), obj);
-        }
+			result.put(item.get("nodeId").toString(), item.asMap());
+		}
 
 		return result;
 	}

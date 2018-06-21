@@ -33,7 +33,7 @@ class TopNavBar extends Component {
 
                     <div className='navbar-header'>
                         <a id='menu-toggle' className='navbar-brand' href='#'><i className='fa fa-bars'></i></a>
-                        <a className='navbar-brand' href='#'><img src="./img/logo-white-on-clear.png"></img></a>
+                        <a className='navbar-brand' href='#'><img alt="Grokery" src="./img/logo-white-on-clear.png"></img></a>
                         {/* <a className='navbar-brand' href='#'>GrokeryLab</a> */}
                     </div>
 

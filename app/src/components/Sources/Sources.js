@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { RESOURCES } from '../../common.js'
+import { NODETYPE } from '../../common.js'
 
 class Sources extends Component {
   static propTypes = {
@@ -12,7 +12,7 @@ class Sources extends Component {
     var links = []
     if (items.length !== 0) {
       links = items.map(function(item, index) {
-          return (<li key={index}><a href={'#/clouds/'+params.cloudName+'/'+item.collection.toLowerCase()+'/'+item.guid}>{item.title}</a></li>)
+          return (<li key={index}><a href={'#/clouds/'+params.cloudName+'/'+item.nodeType.toLowerCase()+'/'+item.nodeId}>{item.title}</a></li>)
       })
     }
     return (
@@ -32,7 +32,7 @@ const mapStateToProps = (state, ownProps) => {
   let sources = []
   Object.keys(state.nodes).forEach(function(key){
     let node = state.nodes[key]
-    if (node.collection === RESOURCES.DATASOURCES){
+    if (node.nodeType === NODETYPE.DATASOURCE){
       sources.push(node)
     }
   })

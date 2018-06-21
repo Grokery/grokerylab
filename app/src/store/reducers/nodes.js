@@ -7,11 +7,11 @@ export const nodes = (state = {}, action) => {
     } else if (action.type === ActionTypes.CREATENODE_SUCCESS ||
         action.type === ActionTypes.UPDATENODE_SUCCESS) {
         let foo = Object.assign({}, state)
-        foo[action.response.guid] = action.response
+        foo[action.response.nodeId] = action.response
         newState = foo
     } else if (action.type === ActionTypes.DELETEENODE_SUCCESS) {
         let foo = Object.assign({}, state)
-        delete foo[action.response.guid]
+        delete foo[action.response.nodeId]
         newState = foo
     } else if (action.type === ActionTypes.CLEAR_NODES) {
         newState = {}

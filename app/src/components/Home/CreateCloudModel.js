@@ -19,7 +19,7 @@ let defaultData = {
     credentials: {
       awsAccessKeyId: '',
       awsSecretKey: '',
-      awsRegion: 'us-west-2',
+      awsRegion: 'US_WEST_2',
       azureKey: ''
     }
   }
@@ -79,7 +79,7 @@ class CreateCloudModel extends Component {
     let { createCloud, addNewCloudToSession } = this.props
     createCloud(this.state.data, function(response, json) {
       this.setState({
-        showModel: false, 
+        showModel: false,
         working: false,
         data: _.cloneDeep(defaultData)
       })

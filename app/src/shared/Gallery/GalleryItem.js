@@ -5,8 +5,8 @@ export default class GalleryItem extends Component {
     const { item, params } = this.props
     if (item.url) {
       return item.url
-    } else if (params && item.collection && item.id) {
-      return '#/clouds/'+params.cloudName+'/'+item.collection+'/'+item.id
+    } else if (params && item.nodeType && item.id) {
+      return '#/clouds/'+params.cloudName+'/'+item.nodeType+'/'+item.id
     } else {
       return ''
     }
@@ -20,7 +20,7 @@ export default class GalleryItem extends Component {
       } else {
         img = (<img className="thumbnail img-responsive" src={'img/600x350white.png'} role="presentation"></img>)
       }
-    } 
+    }
     return img
   }
   render() {

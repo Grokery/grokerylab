@@ -33,11 +33,9 @@ class Users extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  console.log(state)
-  console.log(ownProps)
   var users = []
-  if (state.cloud != null) {
-    users = state.cloud.users
+  if (state.cloudDetails != null) {
+    users = state.cloudDetails ? state.cloudDetails.users : []
   }
   return {
     users: users

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Modal from '../Modal/Modal'
 import { Tabs, Panel } from '../Tabs/Tabs'
-import { RESOURCES } from '../../common.js'
+import { NODETYPE } from '../../common.js'
 import CodeEditor from '../CodeEditor/CodeEditor'
 import JobForm from './JobForm'
 import SourceForm from './SourceForm'
@@ -51,13 +51,13 @@ class EditModal extends Component {
     if (!node) {
       return <div></div>
     }
-    if (node.collection === RESOURCES.JOBS) {
+    if (node.nodeType === NODETYPE.JOB) {
       return (<JobForm node={node} onUpdate={this.props.onUpdate}></JobForm>)
-    } else if (node.collection === RESOURCES.DATASOURCES) {
+    } else if (node.nodeType === NODETYPE.DATASOURCE) {
       return (<SourceForm node={node} onUpdate={this.props.onUpdate}></SourceForm>)
-    } else if (node.collection === RESOURCES.CHARTS) {
+    } else if (node.nodeType === NODETYPE.CHART) {
       return (<ChartForm node={node} onUpdate={this.props.onUpdate}></ChartForm>)
-    } else if (node.collection === RESOURCES.JOBS) {
+    } else if (node.nodeType === NODETYPE.JOB) {
       return (<BoardForm node={node} onUpdate={this.props.onUpdate}></BoardForm>)
     } else {
       return <div></div>
@@ -73,7 +73,7 @@ class EditModal extends Component {
     this.props.toggleEditDialog()
   }
   getNodeJsonForEdit() {
-    let json = Object.assign({}, this.props.node) 
+    let json = Object.assign({}, this.props.node)
     if (!json) {
       json = {}
     }

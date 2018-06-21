@@ -19,7 +19,7 @@ class JobCodeTab extends Component {
   }
   componentDidMount() {
     const { fetchNode, params } = this.props
-    fetchNode(params.collection, params.nodeId)
+    fetchNode(params.nodeId)
   }
   toggleTemplateModal(e) {
     e.preventDefault()
@@ -39,10 +39,10 @@ class JobCodeTab extends Component {
     if (this.debounce){
       clearTimeout(this.debounce)
     }
-    this.debounce = setTimeout(function(){ 
+    this.debounce = setTimeout(function(){
       this.props.onUpdate({
         'code': newCode
-      }) 
+      })
     }.bind(this), 1000);
   }
   getEditorType(node) {
@@ -62,19 +62,21 @@ class JobCodeTab extends Component {
   }
   getCompleted() {
     let runs = []
-    runs.push((<option>Completed: 2017-05-31 09:20 - 12 min -  Warning</option>))
-    runs.push((<option>Completed: 2017-05-31 09:18 - 5 min -  Success</option>))
-    runs.push((<option>Completed: 2017-05-30 13:13 - 5 min - Success</option>))
+    runs.push((<option key='6'>Completed: 2017-05-31 09:20 - 12 min -  Warning</option>))
+    runs.push((<option key='5'>Completed: 2017-05-31 09:18 - 5 min -  Success</option>))
+    runs.push((<option key='4'>Completed: 2017-05-30 13:13 - 5 min - Success</option>))
     return runs
   }
   getInProgress() {
-    return (<option>Started 2017-05-31 10:00 - In Progress... </option>)
+    return (<option key='3'>Started 2017-05-31 10:00 - In Progress... </option>)
   }
   getNextScheduled() {
     if (this.props.node.isActive) {
-      return (<option>Next Scheduled Run: 2017-05-31 09:30</option>)
+      return (<option key='1'>Next Scheduled Run: 2017-05-31 09:30</option>)
     } else {
-      return [(<option>Next Scheduled Run: - None -</option>),(<option>Next Scheduled Run: 2017-05-31 09:30</option>)]
+      return [
+        (<option key='1'>Next Scheduled Run: - None -</option>),
+        (<option key='2'>Next Scheduled Run: 2017-05-31 09:30</option>)]
     }
   }
   toggleIsActive(e) {

@@ -2,12 +2,11 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { fetchNode } from '../../store/actions'
-import { RESOURCES } from '../../common.js'
 import './IChart.css'
 
 class IChart extends Component {
     static propTypes = {
-        id: PropTypes.string.isRequired,
+        id: PropTypes.string,
         node: PropTypes.object,
         width: PropTypes.number,
         height: PropTypes.number,
@@ -21,23 +20,29 @@ class IChart extends Component {
         return true
     }
     render() {
-        const { node, showTitle, params } = this.props
+        const { node, id, showTitle, params, width, height } = this.props
+        if (!node || !id) {
+            return <div></div>
+        }
         const divStyle = {
             border: 'none',
-            width: this.props.width + "px",
-            height: this.props.height + "px"
+            width: width + "px",
+            height: height + "px"
         }
-        const href = '/#/clouds/' + params.cloudName + '/charts/' + node.id
+        const href = '/#/clouds/' + params.cloudName + '/charts/' + id
         return (
             <div>
                 <a href={href}><h4>{showTitle ? node.title : ''}</h4></a>
-                <iframe id={"ichart-"+this.props.id} style={divStyle}></iframe>
+                <iframe id={"ichart-" + id} style={divStyle}></iframe>
             </div>
         )
     }
     componentDidMount() {
         const { fetchNode, id } = this.props
-        fetchNode(RESOURCES.CHARTS, id)
+        if (!id) {
+            return
+        }
+        fetchNode(id)
         this._render()
     }
     componentDidUpdate() {

@@ -9,7 +9,7 @@ export default class SideNavBar extends Component {
     setActive(ev) {
         ev.currentTarget.classList.add("active")
         Array.from(document.getElementsByClassName('sidebar-link')).forEach(element => {
-            if (element != ev.currentTarget) {
+            if (element !== ev.currentTarget) {
                 element.classList.remove("active")
             }
         });

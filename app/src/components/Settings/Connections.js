@@ -11,7 +11,7 @@ class Connections extends Component {
     var links = []
     if (items.length !== 0) {
       links = items.map(function(item, index) {
-          return (<li key={index}><a href={'#/clouds/'+params.cloudName+'/'+item.collection.toLowerCase()+'/'+item.id}>{item.title}</a></li>)
+          return (<li key={index}><a href={'#/clouds/'+params.cloudName+'/'+item.nodeType.toLowerCase()+'/'+item.id}>{item.title}</a></li>)
       })
     }
     return (
@@ -31,7 +31,7 @@ const mapStateToProps = (state, ownProps) => {
   let sources = []
   // Object.keys(state.nodes).forEach(function(key){
   //   let node = state.nodes[key]
-  //   if (node.collection === RESOURCES.DATASOURCES){
+  //   if (node.nodeType === NODETYPE.DATASOURCE){
   //     sources.push(node)
   //   }
   // })

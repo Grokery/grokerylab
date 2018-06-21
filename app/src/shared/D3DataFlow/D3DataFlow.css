@@ -53,25 +53,25 @@ g.selected:hover {
     stroke-width: 4;
 }
 
-g.colored.jobs-node {
+g.colored.job-node {
     fill: #ff9233;
     stroke: #ff9233;
     stroke-width: 0;
 }
 
-g.colored.charts-node {
+g.colored.chart-node {
     fill: #ff9233;
     stroke: #ff9233;
     stroke-width: 0;
 }
 
-g.colored.datasources-node {
+g.colored.datasource-node {
     fill: #0271b1;
     stroke: #0271b1;
     stroke-width: 0;
 }
 
-g.colored.dashboards-node {
+g.colored.dashboard-node {
     fill: #0271b1;
     stroke: #0271b1;
     stroke-width: 0;

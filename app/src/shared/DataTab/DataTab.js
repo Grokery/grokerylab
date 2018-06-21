@@ -21,7 +21,7 @@ class DataTab extends Component {
   }
   componentDidMount() {
     const { fetchNode, params } = this.props
-    fetchNode(params.collection, params.nodeId)
+    fetchNode(params.nodeId)
   }
   toggleTemplateModal(e) {
     e.preventDefault()
@@ -41,20 +41,20 @@ class DataTab extends Component {
     if (this.debounce){
       clearTimeout(this.debounce)
     }
-    this.debounce = setTimeout(function(){ 
+    this.debounce = setTimeout(function(){
       this.props.onUpdate({
         'query': newCode
-      }) 
+      })
     }.bind(this), 1000);
   }
   updateData(newData) {
     if (this.debounce){
       clearTimeout(this.debounce)
     }
-    this.debounce = setTimeout(function(){ 
+    this.debounce = setTimeout(function(){
       this.props.onUpdate({
         'data': newData
-      }) 
+      })
     }.bind(this), 1000);
   }
   render() {

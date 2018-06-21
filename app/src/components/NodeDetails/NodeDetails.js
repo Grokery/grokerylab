@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { updateQueryParam, RESOURCES } from '../../common.js'
+import { updateQueryParam, NODETYPE } from '../../common.js'
 import { updateNode } from '../../store/actions'
 import { history } from '../../index.js'
 import D3DataFlow from '../../shared/D3DataFlow/D3DataFlow'
@@ -73,14 +73,14 @@ class NodeDetails extends Component {
   }
   onUpdate(nodeData) {
     const { updateNode, params, node } = this.props
-    nodeData.guid = node.guid
-    nodeData.subType = node.subType
-    updateNode(params.collection, nodeData)
+    nodeData.nodeId = node.nodeId
+    nodeData.subType = nodeData.subType ? nodeData.subType : node.subType
+    updateNode(params.nodeType, nodeData)
   }
   getCollectionComponent() {
     // THOUGHT: could use the factory pattern here
     const { params } = this.props
-    if (params.collection === RESOURCES.JOBS.toLowerCase()) {
+    if (params.nodeType === NODETYPE.JOB.toLowerCase()) {
       return (<JobDetails
         params={params}
         close={this.close.bind(this)}
@@ -88,7 +88,7 @@ class NodeDetails extends Component {
         onUpdate={this.onUpdate.bind(this)}
         toggleNodeDetailsPain={this.toggleNodeDetailsPain}
       ></JobDetails>)
-    } else if (params.collection === RESOURCES.DATASOURCES.toLowerCase()) {
+    } else if (params.nodeType === NODETYPE.DATASOURCE.toLowerCase()) {
       return (<SourceDetails
         params={params}
         close={this.close.bind(this)}
@@ -96,7 +96,7 @@ class NodeDetails extends Component {
         onUpdate={this.onUpdate.bind(this)}
         toggleNodeDetailsPain={this.toggleNodeDetailsPain}>
       </SourceDetails>)
-    } else if (params.collection === RESOURCES.CHARTS.toLowerCase()) {
+    } else if (params.nodeType === NODETYPE.CHART.toLowerCase()) {
       return (<ChartDetails
         params={params}
         close={this.close.bind(this)}
@@ -104,7 +104,7 @@ class NodeDetails extends Component {
         onUpdate={this.onUpdate.bind(this)}
         toggleNodeDetailsPain={this.toggleNodeDetailsPain}
       ></ChartDetails>)
-    } else if (params.collection === RESOURCES.DASHBOARDS.toLowerCase()) {
+    } else if (params.nodeType === NODETYPE.DASHBOARD.toLowerCase()) {
       return (<BoardDetails
         params={params}
         close={this.close.bind(this)}

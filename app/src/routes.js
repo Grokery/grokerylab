@@ -27,7 +27,7 @@ export default <Route path='/' component={App}>
       <Route path='/clouds/:cloudName/settings' component={Settings} />
       <Route path='/clouds/:cloudName/flows' component={Dataflows} />
       <Route path='/clouds/:cloudName/flows/:nodeId' component={Dataflows} />
-      <Route path='/clouds/:cloudName/:collection/:nodeId' component={NodeDetails} />
+      <Route path='/clouds/:cloudName/:nodeType/:nodeId' component={NodeDetails} />
     </Route>
   </Route>
 </Route>

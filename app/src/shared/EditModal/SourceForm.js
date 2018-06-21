@@ -14,13 +14,13 @@ class SourceForm extends Component {
     this.props.onUpdate(updates)
   }
   getOptions() {
-    const { lookups } = this.props
+    // const { lookups } = this.props
     var items = []
-    if (lookups.sourcetypes) {
-      items = lookups.sourcetypes.map(function(item, index) {
-        return <option key={index} value={item.name}>{item.description}</option>
-      })
-    }
+    // if (lookups.sourcetypes) {
+    //   items = lookups.sourcetypes.map(function(item, index) {
+    //     return <option key={index} value={item.name}>{item.description}</option>
+    //   })
+    // }
     return items
   }
   render() {
@@ -39,7 +39,7 @@ class SourceForm extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    lookups: state.lookups
+    lookups: state.cloudDetails ? state.cloudDetails.lookups : {}
   }
 }
 

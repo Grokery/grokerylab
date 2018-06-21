@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { history } from '../../index.js'
 import { setD3State, createNode, updateNode, deleteNode } from '../../store/actions'
 import { getSelectedCloudName } from '../../authentication'
-import { RESOURCES } from '../../common.js'
+import { NODETYPE } from '../../common.js'
 import d3 from 'd3'
 import './D3DataFlow.css'
 
@@ -65,8 +65,8 @@ class D3DataFlow extends Component {
                 <img className='drag-create-img' role='presentation' src='img/chart.png' onMouseDown={this.createNodeDrag.bind(this, this.createChart.bind(this))}/>
                 <img className='drag-create-img' role='presentation' src='img/board.png' onMouseDown={this.createNodeDrag.bind(this, this.createBoard.bind(this))}/>
             </div>
-            <a id='delete-icon' href='javascript:void(0)' onClick={this.onDelete.bind(this)}><i className='fa fa-trash'></i></a>
             <a className="create-btn" href='javascript:void(0)' onClick={this.toggleCreateNodes}><i className='fa fa-plus'></i></a>
+            <a id='delete-icon' href='javascript:void(0)' onClick={this.onDelete.bind(this)}><i className='fa fa-trash'></i></a>
             <div className="node-filter">
                 <input id='filter-input' className='filter-input' onChange={this.filterNodes.bind(this)}/>
                 <i className='fa fa-filter'></i>
@@ -276,13 +276,13 @@ class D3DataFlow extends Component {
         if (!node.upstream){node.upstream = []}
         if (!node.downstream){node.downstream = []}
         node.downstream.forEach(function(dnode){
-            if (nodes[dnode.guid]) {
-                edgeList.push({ source: node, target: nodes[dnode.guid] })
+            if (nodes[dnode.nodeId]) {
+                edgeList.push({ source: node, target: nodes[dnode.nodeId] })
             }
         })
         nodeList.push(node)
-        if (d3state.selectedNodes[node.guid]) {
-            d3state.selectedNodes[node.guid] = node
+        if (d3state.selectedNodes[node.nodeId]) {
+            d3state.selectedNodes[node.nodeId] = node
         }
     })
     // Add padding to account for shape width & height
@@ -296,7 +296,7 @@ class D3DataFlow extends Component {
     // Render paths
     // ****************
     graph.paths = graph.paths.data(edgeList, function(d) {
-        return String(d.source.guid) + '+' + String(d.target.guid)
+        return String(d.source.nodeId) + '+' + String(d.target.nodeId)
     })
 
     // update existing
@@ -309,7 +309,7 @@ class D3DataFlow extends Component {
         .append('path')
         .style('marker-end', 'url(#mark-end-arrow)')
         .classed('link', true)
-        .attr('id', function(d) { return 'n' + d.source.guid + d.target.guid })
+        .attr('id', function(d) { return 'n' + d.source.nodeId + d.target.nodeId })
         .attr('d', function(d) { return graph.buildPathStr(d) })
         .on('mousedown', function(d) { graph.pathMouseDown.call(graph, d) })
         .on('mouseup', function(d) { graph.pathMouseUp.call(graph, d) })
@@ -321,7 +321,7 @@ class D3DataFlow extends Component {
     // *****************
     // Render shapes
     // ****************
-    graph.shapes = graph.shapes.data(nodeList, function(d) { return d.guid })
+    graph.shapes = graph.shapes.data(nodeList, function(d) { return d.nodeId })
 
     // update existing
     this.shapes.attr('transform', function(d) {
@@ -335,10 +335,10 @@ class D3DataFlow extends Component {
 
     // bind actions
     newGs.classed(d3state.shapeGClass, true)
-    .attr('id', function(d) { return 'n' + d.guid })
+    .attr('id', function(d) { return 'n' + d.nodeId })
     .attr('class', function(d) {
         let colorclass = colored ? ' colored' : ''
-        return d3state.shapeGClass + ' ' + d.collection.toLowerCase() + '-node' + colorclass
+        return d3state.shapeGClass + ' ' + d.nodeType.toLowerCase() + '-node' + colorclass
     })
     .attr('transform', function(d) {
         let tr = 'translate(' + (Math.round(d.x / d3state.xgridSize) * d3state.xgridSize)
@@ -352,10 +352,10 @@ class D3DataFlow extends Component {
         graph.shapeMouseUp(d)
     })
     .on('mouseover', function(d) {
-        d3.select('.tip-' + d.guid).classed('hidden', false)
+        d3.select('.tip-' + d.nodeId).classed('hidden', false)
     })
     .on('mouseout', function(d) {
-        d3.select('.tip-' + d.guid).classed('hidden', true)
+        d3.select('.tip-' + d.nodeId).classed('hidden', true)
     })
     .call(this.drag)
 
@@ -375,13 +375,13 @@ class D3DataFlow extends Component {
     //           .attr('dx', graph.d3state.shapeWidth / 2)
     //           .attr('font-family', 'FontAwesome')
     //       el.text(function(d) {
-    //           if (d.collection===RESOURCES.JOBS) {
+    //           if (d.nodeType===NODETYPE.JOB) {
     //               return '\uf121'
-    //           } else if (d.collection===RESOURCES.DATASOURCES) {
+    //           } else if (d.nodeType===NODETYPE.DATASOURCE) {
     //               return '\uf1c0'
-    //           } else if (d.collection===RESOURCES.CHARTS) {
+    //           } else if (d.nodeType===NODETYPE.CHART) {
     //               return '\uf201'
-    //           } else if (d.collection===RESOURCES.DASHBOARDS) {
+    //           } else if (d.nodeType===NODETYPE.DASHBOARD) {
     //               return '\uf009'
     //           } else {
     //               return ''
@@ -393,7 +393,7 @@ class D3DataFlow extends Component {
     // newGs.each(function(){
     //     d3.select(this).append('text')
     //         .attr('class', function (d) {
-    //                 return 'hidden tooltiptext tip-' + d.guid
+    //                 return 'hidden tooltiptext tip-' + d.nodeId
     //         })
     //         .text(function (d) {
     //                 return d.title
@@ -420,7 +420,7 @@ class D3DataFlow extends Component {
     let d3state = this.d3state
     if (d3state.nodeShape === nodeShapes.Fat) {
         return function(d) {
-            if (d.collection===RESOURCES.JOBS) {
+            if (d.nodeType===NODETYPE.JOB) {
                 return 'M 28.5 4.4' +
                     'c 1.3 -2.44 4.6 -4.4 7.36 -4.4' +
                     'h 88' +
@@ -434,13 +434,13 @@ class D3DataFlow extends Component {
                     'l -27.3 -51.16' +
                     'c -1.3 -2.44 -1.3 -6.4 0 -8.83' +
                     'z';
-            } else if (d.collection===RESOURCES.DATASOURCES) {
+            } else if (d.nodeType===NODETYPE.DATASOURCE) {
                 return 'M 16 120' +
                     'c -8.83 0 -16 -26.87 -16 -60 0 -33.14 7.17 -60 16 -60' +
                     'h 128' +
                     'c 8.84 0 16 26.86 16 60 0 33.13 -7.16 60 -16 60' +
                     'z';
-            } else if (d.collection===RESOURCES.CHARTS) {
+            } else if (d.nodeType===NODETYPE.CHART) {
                 return 'M 16 120' +
                     'c -8.83 0 -16 -26.87 -16 -60 0 -33.14 7.17 -60 16 -60' +
                     'h 108' +
@@ -450,7 +450,7 @@ class D3DataFlow extends Component {
                     'l -27.3 51.17' +
                     'c -1.3 2.45 -4.6 4.43-7.35 4.43' +
                     'z';
-            } else if (d.collection===RESOURCES.DASHBOARDS) {
+            } else if (d.nodeType===NODETYPE.DASHBOARD) {
                 return 'M 0 5' +
                     'c 0 -2.77 2.23 -5 5 -5' +
                     'h 150' +
@@ -474,7 +474,7 @@ class D3DataFlow extends Component {
         }
     } else if (d3state.nodeShape === nodeShapes.Flat) {
         return function(d) {
-            if (d.collection===RESOURCES.JOBS) {
+            if (d.nodeType===NODETYPE.JOB) {
                 return 'M 10 5' +
                     'c 1.3 -2.44 4.6 -4.4 7.36 -4.4' +
                     'h 220' +
@@ -488,7 +488,7 @@ class D3DataFlow extends Component {
                     'l -10 -16.2' +
                     'c -1.3 -2.44 -1.3 -6.4 0 -8.83' +
                     'l 10 -16.2';
-            } else if (d.collection===RESOURCES.DATASOURCES) {
+            } else if (d.nodeType===NODETYPE.DATASOURCE) {
                 return 'M 8 50' +
                     'c -8 0 -8 -25 -8 -25' +
                     'c 0 -25 8 -25 8 -25' +
@@ -496,7 +496,7 @@ class D3DataFlow extends Component {
                     'c 8 0 8 25 8 25' +
                     'c 0 25 -8 25 -8 25' +
                     'h -234';
-            } else if (d.collection===RESOURCES.CHARTS) {
+            } else if (d.nodeType===NODETYPE.CHART) {
                 return 'M 8 50' +
                     'c -8 0 -8 -25 -8 -25' +
                     'c 0 -25 8 -25 8 -25' +
@@ -507,7 +507,7 @@ class D3DataFlow extends Component {
                     'l -10 16.2' +
                     'c -1.3 2.45 -4.6 4.43-7.35 4.43' +
                     'h -234';
-            } else if (d.collection===RESOURCES.DASHBOARDS) {
+            } else if (d.nodeType===NODETYPE.DASHBOARD) {
                 return 'M 0 4' +
                     'c 0 -2 2 -4 4 -4' +
                     'h 242' +
@@ -535,13 +535,13 @@ class D3DataFlow extends Component {
     let d3state = this.d3state
     if (d3state.nodeShape === nodeShapes.Fat) {
         return function (d) {
-            if (d.collection === RESOURCES.JOBS) {
+            if (d.nodeType === NODETYPE.JOB) {
                 return d.type_abrev ? d.type_abrev : 'Job'
-            } else if (d.collection === RESOURCES.DATASOURCES) {
+            } else if (d.nodeType === NODETYPE.DATASOURCE) {
                 return d.type_abrev ? d.type_abrev : 'Source'
-            } else if (d.collection === RESOURCES.CHARTS) {
+            } else if (d.nodeType === NODETYPE.CHART) {
                 return d.type_abrev ? d.type_abrev : 'Chart'
-            } else if (d.collection === RESOURCES.DASHBOARDS) {
+            } else if (d.nodeType === NODETYPE.DASHBOARD) {
                 return d.type_abrev ? d.type_abrev : 'Board'
             } else {
                 return ''
@@ -645,17 +645,17 @@ class D3DataFlow extends Component {
       if (this.d3state.drawEdge) {
           this.dragLine.attr('d', this.buildDragLineStr(d))
       } else {
-        if (Object.keys(this.d3state.selectedNodes).length > 0 && this.d3state.selectedNodes[d.guid]) {
-        Object.keys(this.d3state.selectedNodes).forEach(function(guid) {
-            let node = this.d3state.selectedNodes[guid]
+        if (Object.keys(this.d3state.selectedNodes).length > 0 && this.d3state.selectedNodes[d.nodeId]) {
+        Object.keys(this.d3state.selectedNodes).forEach(function(nodeId) {
+            let node = this.d3state.selectedNodes[nodeId]
             node.x += d3.event.dx
             node.y += d3.event.dy
-            this.d3state.changedNodes[node.guid] = node
+            this.d3state.changedNodes[node.nodeId] = node
           }.bind(this))
         } else {
             d.x += d3.event.dx
             d.y += d3.event.dy
-            this.d3state.changedNodes[d.guid] = d
+            this.d3state.changedNodes[d.nodeId] = d
         }
         this.renderD3()
       }
@@ -680,7 +680,7 @@ class D3DataFlow extends Component {
       } else {
         this.clearAllSelection()
         this.d3state.selectedEdge = d
-        d3.select('#n' + d.source.guid + d.target.guid).classed(this.d3state.selectedClass, true)
+        d3.select('#n' + d.source.nodeId + d.target.nodeId).classed(this.d3state.selectedClass, true)
         this.showDeleteIcon()
       }
   }
@@ -697,7 +697,7 @@ class D3DataFlow extends Component {
     Object.keys(nodes).forEach(function(key) {
         let node = nodes[key]
         if (node.title.toLowerCase().includes(filterText) &&
-            filterText != '' &&
+            filterText !== '' &&
             filterText.length > 1) {
             this.addNodeToSelected(node)
         } else {
@@ -718,14 +718,14 @@ class D3DataFlow extends Component {
       }
   }
   addNodeToSelected(d) {
-    this.d3state.selectedNodes[d.guid] = d
+    this.d3state.selectedNodes[d.nodeId] = d
     if (Object.keys(this.d3state.selectedNodes).length > 1) {
         history.push('/clouds/'+ getSelectedCloudName() + '/flows')
     }
     this.selectNodes(this.d3state.selectedNodes)
   }
   removeNodeFromSelected(d) {
-    delete this.d3state.selectedNodes[d.guid]
+    delete this.d3state.selectedNodes[d.nodeId]
     if (Object.keys(this.d3state.selectedNodes).length < 1) {
         history.push('/clouds/'+ getSelectedCloudName() + '/flows')
     }
@@ -737,9 +737,9 @@ class D3DataFlow extends Component {
         this.d3state.selectedNodes = nodes
         this.paths.classed('inactive', true)
         this.shapes.classed('inactive', true)
-        Object.keys(nodes).forEach(function(guid) {
-            d3.select('#n' + guid).classed(this.d3state.selectedClass, true)
-            this.highlightFlow(nodes[guid])
+        Object.keys(nodes).forEach(function(nodeId) {
+            d3.select('#n' + nodeId).classed(this.d3state.selectedClass, true)
+            this.highlightFlow(nodes[nodeId])
         }.bind(this))
         this.showDeleteIcon()
       }
@@ -760,9 +760,12 @@ class D3DataFlow extends Component {
       this.d3state.selectedNodes = {}
   }
   highlightFlow(d) {
+      if (!d) {
+        return
+      }
       const { zoomOnHighlight } = this.props
 
-      d3.select('#n' + d.guid).classed('inactive', false)
+      d3.select('#n' + d.nodeId).classed('inactive', false)
       this.highlightUpstream(d)
       this.highlightDownstream(d)
 
@@ -787,9 +790,9 @@ class D3DataFlow extends Component {
 
       if (!d.upstream) { return }
       d.upstream.forEach(function(node){
-          d3.select('#n' + node.guid).classed('inactive', false);
-          d3.select('#n' + node.guid + d.guid).classed('inactive', false);
-          this.highlightUpstream(nodes[node.guid]);
+          d3.select('#n' + node.nodeId).classed('inactive', false);
+          d3.select('#n' + node.nodeId + d.nodeId).classed('inactive', false);
+          this.highlightUpstream(nodes[node.nodeId]);
       }.bind(this))
   }
   highlightDownstream(d) {
@@ -804,9 +807,9 @@ class D3DataFlow extends Component {
 
       if (!d.upstream) { return }
       d.downstream.forEach(function(node) {
-          d3.select('#n' + node.guid).classed('inactive', false);
-          d3.select('#n' + d.guid + node.guid).classed('inactive', false);
-          this.highlightDownstream(nodes[node.guid]);
+          d3.select('#n' + node.nodeId).classed('inactive', false);
+          d3.select('#n' + d.nodeId + node.nodeId).classed('inactive', false);
+          this.highlightDownstream(nodes[node.nodeId]);
       }.bind(this))
   }
   shapeMouseDown(d) {
@@ -824,24 +827,24 @@ class D3DataFlow extends Component {
       if (d3state.drawEdge) {
           d3state.drawEdge = false
           this.dragLine.classed('hidden', true)
-          if (d3state.mouseDownNode.guid !== d.guid) {
-            d.upstream.push({'collection':d3state.mouseDownNode.collection,'guid':d3state.mouseDownNode.guid})
-            d3state.mouseDownNode.downstream.push({'collection':d.collection,'guid':d.guid})
-            d3state.changedNodes[d.guid] = d
-            d3state.changedNodes[d3state.mouseDownNode.guid] = d3state.mouseDownNode
+          if (d3state.mouseDownNode.nodeId !== d.nodeId) {
+            d.upstream.push({'nodeType':d3state.mouseDownNode.nodeType,'nodeId':d3state.mouseDownNode.nodeId})
+            d3state.mouseDownNode.downstream.push({'nodeType':d.nodeType,'nodeId':d.nodeId})
+            d3state.changedNodes[d.nodeId] = d
+            d3state.changedNodes[d3state.mouseDownNode.nodeId] = d3state.mouseDownNode
             this.onUpdateNodes(d3state.changedNodes)
           }
       } else if (d3state.dragging) {
           d3state.dragging = false
           this.onUpdateNodes(d3state.changedNodes)
       } else if (d3state.dblClickNodeTimeout) {
-          history.push('/clouds/'+ getSelectedCloudName() + '/' + d.collection.toLowerCase() + '/' + d.guid + '?flow=open')
+          history.push('/clouds/'+ getSelectedCloudName() + '/' + d.nodeType.toLowerCase() + '/' + d.nodeId + '?flow=open')
       } else {
         if (this.props.singleClickNav) {
             this.clearAllSelection()
-            history.push('/clouds/'+ getSelectedCloudName() + '/' + d.collection.toLowerCase() + '/' + d.guid + '?flow=open')
+            history.push('/clouds/'+ getSelectedCloudName() + '/' + d.nodeType.toLowerCase() + '/' + d.nodeId + '?flow=open')
         } else {
-            if (this.d3state.selectedNodes[d.guid]) {
+            if (this.d3state.selectedNodes[d.nodeId]) {
                 this.removeNodeFromSelected(d)
             } else {
                 this.addNodeToSelected(d)
@@ -888,12 +891,11 @@ class D3DataFlow extends Component {
         this.d3state.dragNode = false
         window.onmouseup = null
         cb(this.d3state.mouseLocation)
-        this.toggleCreateNodes()
       }.bind(this)
   }
   createJob(xy) {
       this.createNode({
-        collection: RESOURCES.JOBS,
+        nodeType: NODETYPE.JOB,
         subType: 'GENERIC',
         title: 'New Job',
         description: 'Default description',
@@ -905,7 +907,7 @@ class D3DataFlow extends Component {
   }
   createSource(xy) {
       this.createNode({
-        collection: RESOURCES.DATASOURCES,
+        nodeType: NODETYPE.DATASOURCE,
         subType: 'GENERIC',
         title: 'New Source',
         description: 'Default description',
@@ -917,7 +919,7 @@ class D3DataFlow extends Component {
   }
   createChart(xy) {
       this.createNode({
-        collection: RESOURCES.CHARTS,
+        nodeType: NODETYPE.CHART,
         subtype: 'GENERIC',
         title: 'New Chart',
         description: 'Default description',
@@ -929,7 +931,7 @@ class D3DataFlow extends Component {
   }
   createBoard(xy) {
       this.createNode({
-        collection: RESOURCES.DASHBOARDS,
+        nodeType: NODETYPE.DASHBOARD,
         subtype: 'GENERIC',
         title: 'New Board',
         description: 'Default description',
@@ -942,7 +944,7 @@ class D3DataFlow extends Component {
   createNode(newNode, tempNode) {
       newNode.x -= this.d3state.shapeWidth/2
       newNode.y -= this.d3state.shapeHeight/2
-      this.props.createNode(newNode.collection, newNode, null)
+      this.props.createNode(newNode, null)
   }
   onSave() {
       this.onUpdateNodes(this.d3state.changedNodes)
@@ -950,25 +952,25 @@ class D3DataFlow extends Component {
   onUpdateNodes(nodes) {
     Object.keys(nodes).forEach(function(key){
         let node = nodes[key]
-        this.props.updateNode(node.collection, node, null)
+        this.props.updateNode(node, null)
     }.bind(this))
   }
   deleteEdge(edge) {
       let d3state = this.d3state
       let source = edge.source
       let target = edge.target
-      source.downstream = source.downstream.filter(function(n) { return n.guid !== target.guid; })
-      target.upstream = target.upstream.filter(function(n) { return n.guid !== source.guid })
-      d3state.changedNodes[source.guid] = source
-      d3state.changedNodes[target.guid] = target
+      source.downstream = source.downstream.filter(function(n) { return n.nodeId !== target.nodeId; })
+      target.upstream = target.upstream.filter(function(n) { return n.nodeId !== source.nodeId })
+      d3state.changedNodes[source.nodeId] = source
+      d3state.changedNodes[target.nodeId] = target
       this.onUpdateNodes(d3state.changedNodes)
   }
   onDelete() {
       if (Object.keys(this.d3state.selectedNodes).length > 0) {
         if (confirm('Confirm delete node(s)?' ) === true) {
-            Object.keys(this.d3state.selectedNodes).forEach(function(guid) {
-                let node = this.d3state.selectedNodes[guid]
-                this.props.deleteNode(node.collection, node, null)
+            Object.keys(this.d3state.selectedNodes).forEach(function(nodeId) {
+                let node = this.d3state.selectedNodes[nodeId]
+                this.props.deleteNode(node, null)
             }.bind(this))
             this.clearAllSelection()
         }

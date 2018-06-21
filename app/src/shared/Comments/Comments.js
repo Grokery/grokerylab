@@ -14,7 +14,7 @@ class Comments extends Component {
         appendLogItem: PropTypes.func.isRequired
     }
     componentDidMount() {
-        const { fetchLogs, nodeId } = this.props
+        // const { fetchLogs, nodeId } = this.props
         // fetchLogs(nodeId)
     }
     getComments() {
@@ -46,7 +46,7 @@ class Comments extends Component {
         event.preventDefault()
         const { username, appendLogItem, nodeId } = this.props
         let newcomment = {
-            collection: "comments",
+            nodeType: "comments",
             datetime: new Date().getTime(),
             referenceid: nodeId,
             user: username.split('@')[0],
@@ -77,7 +77,7 @@ class Comments extends Component {
 const mapStateToProps = (state, ownProps) => {
     let sessionInfo = getSessionInfo()
     let filter = function(item) {
-        return item.collection === "comments"
+        return item.nodeType === "comments"
     }
     let sort = function(a, b) {
         return a.datetime < b.datetime

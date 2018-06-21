@@ -21,7 +21,7 @@ class ChartCodeTab extends Component {
   }
   componentDidMount() {
     const { fetchNode, params } = this.props
-    fetchNode(params.collection, params.nodeId)
+    fetchNode(params.nodeId)
   }
   toggleTemplateModal(e) {
     e.preventDefault()
@@ -41,10 +41,10 @@ class ChartCodeTab extends Component {
     if (this.debounce){
       clearTimeout(this.debounce)
     }
-    this.debounce = setTimeout(function(){ 
+    this.debounce = setTimeout(function(){
       this.props.onUpdate({
         'code': newCode
-      }) 
+      })
     }.bind(this), 1000);
   }
   render() {

@@ -17,7 +17,7 @@ require('codemirror/mode/sql/sql')
 
 class CodeEditor extends Component {
 	/*
-		I've copied substantial paortions of Jed Watson's excelent React 
+		I've copied substantial paortions of Jed Watson's excelent React
 		CodeMirror component available from npm under the following license:
 
 		The MIT License (MIT)
@@ -41,7 +41,7 @@ class CodeEditor extends Component {
 		LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 		OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 		SOFTWARE.
-		
+
 	 */
     static propTypes = {
         autoFocus: PropTypes.bool,
@@ -72,9 +72,6 @@ class CodeEditor extends Component {
     }
     componentWillMount() {
         this.componentWillReceiveProps = debounce(this.componentWillReceiveProps, 0);
-        if (this.props.path) {
-            console.error('Warning: react-codemirror: the `path` prop has been changed to `name`')
-        }
     }
     componentDidMount() {
 		const codeMirrorInstance = this.getCodeMirrorInstance()

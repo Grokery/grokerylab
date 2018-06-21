@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Tabs, Panel } from '../Tabs/Tabs'
-import { RESOURCES } from '../../common.js'
+import { NODETYPE } from '../../common.js'
 import EditModal from '../EditModal/EditModal'
 import IChart from '../IChart/IChart'
 import './NodeDetails.css'
@@ -49,11 +49,11 @@ class BoardDetails extends Component {
     const { node, params } = this.props
     let elements = []
     node.upstream.forEach(function(chart) {
-      if (!chart || chart.collection !== RESOURCES.CHARTS) {
+      if (!chart || chart.nodeType !== NODETYPE.CHART) {
         return
       }
       elements.push((
-        <div key={chart.id} className={'dashboard-item'}>
+        <div key={chart.nodeId} className={'dashboard-item'}>
           <IChart
             key={Math.random()}
             id={chart.id}

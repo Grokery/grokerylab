@@ -4,9 +4,7 @@ import io.grokery.lab.api.spring.providers.AccountsProvider;
 import io.grokery.lab.api.spring.providers.AuthenticationProvider;
 import io.grokery.lab.api.spring.providers.CloudsProvider;
 import io.grokery.lab.api.spring.providers.UsersProvider;
-import io.grokery.lab.api.spring.providers.LookupProvider;
-import io.grokery.lab.api.spring.providers.ResourcesProvider;
-import io.grokery.lab.api.spring.providers.DataflowServiceProvider;
+import io.grokery.lab.api.spring.providers.NodesProvider;
 
 import javax.annotation.PostConstruct;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -54,9 +52,7 @@ public class JerseyConfig extends ResourceConfig {
 		this.register(AccountsProvider.class);
 		this.register(CloudsProvider.class);
 		this.register(UsersProvider.class);
-		this.register(LookupProvider.class);
-		this.register(ResourcesProvider.class);
-		this.register(DataflowServiceProvider.class);
+		this.register(NodesProvider.class);
 		this.register(CORSFilter.class);
 		this.register(WadlResource.class);
 	}

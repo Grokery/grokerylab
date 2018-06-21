@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { fetchNode } from '../../store/actions'
-import { RESOURCES } from '../../common.js'
+import { NODETYPE } from '../../common.js'
 import ContentEditable from '../ContentEditable/ContentEditable'
 import Comments from '../Comments/Comments'
 import ChartInfo from './ChartInfo'
@@ -19,11 +19,11 @@ class InfoTab extends Component {
   }
   getItemDetailSection() {
     const { node, params } = this.props
-    if (node.collection === RESOURCES.CHARTS) {
+    if (node.nodeType === NODETYPE.CHART) {
         return (<ChartInfo node={node} params={params}></ChartInfo>)
-    } else if (node.collection === RESOURCES.DATASOURCES) {
+    } else if (node.nodeType === NODETYPE.DATASOURCE) {
         return (<SourceInfo node={node} params={params}></SourceInfo>)
-    } else if (node.collection === RESOURCES.JOBS) {
+    } else if (node.nodeType === NODETYPE.JOB) {
         return (<JobInfo node={node} params={params}></JobInfo>)
     }  else {
         return (<div></div>)
@@ -37,15 +37,15 @@ class InfoTab extends Component {
   }
   getSubtypeName(node) {
     // const { lookups } = this.props
-    // switch (node.collection) {
-    //     case RESOURCES.JOBS:
-    //         return lookups.jobtypes[node.jobType] ? lookups.jobtypes[node.jobType].description : "Job Placeholder"
-    //     case RESOURCES.DATASOURCES:
-    //         return lookups.sourcetypes[node.sourceType] ? lookups.sourcetypes[node.sourceType].description : "Source Placeholder"
+    // switch (node.nodeType) {
+    //     case NODETYPE.JOB:
+    //         return lookups.jobtypes[node.subType] ? lookups.jobtypes[node.subType] : "Job Placeholder"
+    //     case NODETYPE.DATASOURCE:
+    //         return lookups.sourcetypes[node.subType] ? lookups.sourcetypes[node.subType].description : "Source Placeholder"
     //     default:
     //         return ""
     // }
-    return ""
+    return "Temp Placeholder"
   }
   render() {
     const { node, params } = this.props
@@ -63,7 +63,7 @@ class InfoTab extends Component {
                 <div className='node-info'>
                     <div className='col-md-6'><label>SubType: </label> {this.getSubtypeName(node)}</div>
                     <div className='col-md-6'><label>Owner: </label> {node.owner}</div>
-                    {/* Maybe make component to handle collection and type specific fields */}
+                    {/* Maybe make component to handle nodeType and type specific fields */}
                 </div>
                 <Comments nodeId={params.nodeId}></Comments>
             </div>
@@ -72,14 +72,14 @@ class InfoTab extends Component {
   }
   componentDidMount() {
     const { fetchNode, params } = this.props
-    fetchNode(params.collection, params.nodeId)
+    fetchNode(params.nodeId)
   }
 }
 
 const mapStateToProps = (state, ownProps) => {
   return {
     node: state.nodes[ownProps.params.nodeId],
-    lookups: state.lookups
+    lookups: state.cloudDetails ? state.cloudDetails.lookups : {}
   }
 }
 
