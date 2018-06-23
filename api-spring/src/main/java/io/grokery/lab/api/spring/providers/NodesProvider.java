@@ -26,12 +26,12 @@ import org.springframework.stereotype.Component;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import io.grokery.lab.api.common.CloudContext;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
 import io.grokery.lab.api.common.exceptions.NotAuthorizedException;
 import io.grokery.lab.api.common.exceptions.NotFoundException;
-import io.grokery.lab.api.core.nodes.Node;
-import io.grokery.lab.api.core.NodesService;
+import io.grokery.lab.api.cloud.nodes.Node;
+import io.grokery.lab.api.cloud.NodesService;
+import io.grokery.lab.api.cloud.context.CloudContext;
 
 
 @Component

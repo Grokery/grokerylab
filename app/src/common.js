@@ -1,7 +1,6 @@
 
 
 export const NODETYPE = {
-    GENERIC: "GENERIC",
     JOB: "JOB",
     JOBRUN: "JOBRUN",
     DATASOURCE: "DATASOURCE",

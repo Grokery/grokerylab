@@ -11,11 +11,11 @@ class CloudHome extends Component {
   render() {
     const { cloudInfo } = this.props
     return (
-      <div className='page-content padded sidebar-page'>
-        <h1>{cloudInfo.name}</h1>
-        <p>counts badges (sources, jobs, users)</p>
+      <div className='page-content'>
+        <h1>{cloudInfo.title}</h1>
+        {/* <p>counts badges (sources, jobs, users)</p> */}
         {/* <p>alerts/messages</p> */}
-        <p>activity log</p>
+        {/* <p>activity log</p> */}
         {this.props.children}
       </div>
     )

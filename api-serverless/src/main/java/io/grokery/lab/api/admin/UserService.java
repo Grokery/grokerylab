@@ -6,16 +6,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.grokery.lab.api.admin.models.submodels.CloudAccess;
 import io.grokery.lab.api.admin.models.submodels.CloudCredentials;
+import io.grokery.lab.api.admin.dao.DynamoDAOUtil;
 import io.grokery.lab.api.admin.models.Account;
 import io.grokery.lab.api.admin.models.User;
 import io.grokery.lab.api.admin.models.submodels.UserRef;
 import io.grokery.lab.api.admin.types.AccountRole;
 import io.grokery.lab.api.common.DigitalPiglet;
+import io.grokery.lab.api.common.MapperUtil;
 import io.grokery.lab.api.common.CommonUtils;
 import io.grokery.lab.api.common.errors.NotImplementedError;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
@@ -29,15 +33,19 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class UserService extends ServiceBaseClass {
+public class UserService {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 	private static volatile UserService instance;
 
 	private static final long JWT_TIMEOUT = 28800000;
 
+	private DynamoDBMapper dao;
+	public final ObjectMapper mapper;
+
 	public UserService() {
-		super(User.class);
+		dao = new DynamoDAOUtil(User.class).getDAO();
+		mapper = MapperUtil.getInstance();
 	}
 
 	public static UserService getInstance() {
@@ -51,11 +59,11 @@ public class UserService extends ServiceBaseClass {
 
 	public Map<String, Object> create(String auth, Map<String, Object> requestBody) throws Exception {
 
-		User user = objectMapper.convertValue(requestBody, User.class);
+		User user = mapper.convertValue(requestBody, User.class);
 
 		if (auth == null && AccountRole.valueOf(requestBody.get("accountRole").toString()) == AccountRole.SUPERADMIN) {
 			// make sure there aren't any users/accounts yet and throw exception if there are
-			int userCount = dynamo.count(User.class, new DynamoDBQueryExpression<User>().withHashKeyValues(new User()));
+			int userCount = dao.count(User.class, new DynamoDBQueryExpression<User>().withHashKeyValues(new User()));
 			if (userCount != 0) {
 				throw new NotAuthorizedException("SuperAdmin user/account may only be created during system initialization");
 			}
@@ -83,13 +91,13 @@ public class UserService extends ServiceBaseClass {
 			}
 		}
 
-		if (dynamo.load(User.class, User.hashKey, user.getUsername()) != null) {
+		if (dao.load(User.class, User.hashKey, user.getUsername()) != null) {
 			throw new InvalidInputException("Invalid username");
 		}
 
 		user.assertIsValidForCreate();
 
-		Account account = dynamo.load(Account.class, Account.hashKey, user.getAccountId());
+		Account account = dao.load(Account.class, Account.hashKey, user.getAccountId());
 		if (account == null) {
 			throw new InvalidInputException("Invalid accountId");
 		}
@@ -100,10 +108,10 @@ public class UserService extends ServiceBaseClass {
 		user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12)));
 
 		// Save and verify
-		dynamo.save(user);
-		dynamo.save(account);
+		dao.save(user);
+		dao.save(account);
 
-        User created = dynamo.load(User.class, User.hashKey, user.getUserId());
+        User created = dao.load(User.class, User.hashKey, user.getUserId());
 		if (created == null) {
 			throw new Error("Error creating user");
 		}
@@ -113,7 +121,7 @@ public class UserService extends ServiceBaseClass {
 
 		// Map and return
 		@SuppressWarnings("unchecked")
-		Map<String, Object> response = objectMapper.convertValue(created, Map.class);
+		Map<String, Object> response = mapper.convertValue(created, Map.class);
 		return response;
 	}
 
@@ -128,7 +136,7 @@ public class UserService extends ServiceBaseClass {
 			throw new NotAuthorizedException();
 		}
 
-		User user = dynamo.load(User.class, User.hashKey, username);
+		User user = dao.load(User.class, User.hashKey, username);
 		if (user == null) {
 			throw new NotFoundException();
 		}
@@ -136,7 +144,7 @@ public class UserService extends ServiceBaseClass {
 		user = redact(user);
 
 		@SuppressWarnings("unchecked")
-		Map<String, Object> response = objectMapper.convertValue(user, Map.class);
+		Map<String, Object> response = mapper.convertValue(user, Map.class);
 		return response;
 	}
 
@@ -190,7 +198,7 @@ public class UserService extends ServiceBaseClass {
 		}
 
 		@SuppressWarnings("unchecked")
-		Map<String, Object> response = objectMapper.convertValue(user, Map.class);
+		Map<String, Object> response = mapper.convertValue(user, Map.class);
 		return response;
 	}
 
@@ -220,7 +228,7 @@ public class UserService extends ServiceBaseClass {
 			.withKeyConditionExpression("hashKey = :hk and username = :v1")
 			.withExpressionAttributeValues(eav);
 
-		List<User> results =  dynamo.query(User.class, queryExpression);
+		List<User> results =  dao.query(User.class, queryExpression);
 		if (results == null || results.size() == 0) {
 			throw new NotAuthorizedException("User not found or password not match");
 		}
@@ -228,7 +236,7 @@ public class UserService extends ServiceBaseClass {
 			throw new NotAuthorizedException("User in error State");
 		}
 		User user = results.get(0);
-		user = dynamo.load(User.class, User.hashKey, user.getUserId());
+		user = dao.load(User.class, User.hashKey, user.getUserId());
 		return user;
 	}
 

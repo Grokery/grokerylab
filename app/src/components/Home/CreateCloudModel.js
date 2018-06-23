@@ -19,7 +19,7 @@ let defaultData = {
     credentials: {
       awsAccessKeyId: '',
       awsSecretKey: '',
-      awsRegion: 'US_WEST_2',
+      awsRegion: 'us-west-2',
       azureKey: ''
     }
   }

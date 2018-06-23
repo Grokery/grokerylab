@@ -1,9 +1,12 @@
 package io.grokery.lab.api.admin;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.grokery.lab.api.admin.dao.DynamoDAOUtil;
 import io.grokery.lab.api.admin.models.Account;
 import io.grokery.lab.api.admin.models.Cloud;
 import io.grokery.lab.api.admin.models.User;
@@ -13,6 +16,7 @@ import io.grokery.lab.api.admin.models.submodels.CloudRef;
 import io.grokery.lab.api.admin.models.submodels.UserRef;
 import io.grokery.lab.api.admin.types.AccountRole;
 import io.grokery.lab.api.common.DigitalPiglet;
+import io.grokery.lab.api.common.MapperUtil;
 import io.grokery.lab.api.common.errors.NotImplementedError;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
 import io.grokery.lab.api.common.exceptions.NotAuthorizedException;
@@ -22,13 +26,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.jsonwebtoken.Claims;
 
-public class CloudService extends ServiceBaseClass {
+public class CloudService {
 
 	private static final Logger logger = LoggerFactory.getLogger(CloudService.class);
 	private static volatile CloudService instance;
 
+	private DynamoDBMapper dao;
+	public final ObjectMapper mapper;
+
 	public CloudService () {
-		super(Cloud.class);
+		dao = new DynamoDAOUtil(Cloud.class).getDAO();
+		mapper = MapperUtil.getInstance();
 	}
 
 	public static CloudService getInstance() {
@@ -48,25 +56,25 @@ public class CloudService extends ServiceBaseClass {
 			if (AccountRole.valueOf(accountRole) != AccountRole.ADMIN) {
 				throw new NotAuthorizedException("Admin role required to create new cloud");
 			}
-			user = dynamo.load(User.class, User.hashKey, claims.get("userId").toString());
+			user = dao.load(User.class, User.hashKey, claims.get("userId").toString());
 		} catch (Throwable e) {
 			throw new NotAuthorizedException();
 		}
 
-		Cloud cloud = objectMapper.convertValue(requestBody, Cloud.class);
+		Cloud cloud = mapper.convertValue(requestBody, Cloud.class);
 		cloud.setAccountId(user.getAccountId());
 		cloud.getUsers().add(new UserRef(user.getUserId()));
 		cloud.assertIsValidForCreate();
 
-		Cloud existing = dynamo.load(Cloud.class, Cloud.hashKey, cloud.getName());
+		Cloud existing = dao.load(Cloud.class, Cloud.hashKey, cloud.getName());
 		if (existing != null) {
 			throw new InvalidInputException("Duplicate cloud name");
 		}
 
-		Account account = dynamo.load(Account.class, Account.hashKey, cloud.getAccountId());
+		Account account = dao.load(Account.class, Account.hashKey, cloud.getAccountId());
 		account.getClouds().add(new CloudRef(cloud.getCloudId()));
 
-		CloudAccess access = objectMapper.convertValue(requestBody.get("adminAccess"), CloudAccess.class);
+		CloudAccess access = mapper.convertValue(requestBody.get("adminAccess"), CloudAccess.class);
 		access.setCloudId(cloud.getCloudId());
 		access.setTitle(cloud.getTitle());
 		access.setName(cloud.getName());
@@ -78,17 +86,17 @@ public class CloudService extends ServiceBaseClass {
 		user.getClouds().put(cloud.getName(), access);
 
 		logger.info("Saving new cloud and cloud references for account and user");
-		dynamo.save(cloud);
-		dynamo.save(account);
-		dynamo.save(user);
+		dao.save(cloud);
+		dao.save(account);
+		dao.save(user);
 		logger.info("Finished saving");
 
-		Cloud created = dynamo.load(Cloud.class, Cloud.hashKey, cloud.getCloudId());
+		Cloud created = dao.load(Cloud.class, Cloud.hashKey, cloud.getCloudId());
 		if (created == null) {
 			throw new Error("Error creating or saving cloud");
 		}
 		@SuppressWarnings("unchecked")
-		Map<String, Object> response = objectMapper.convertValue(created, Map.class);
+		Map<String, Object> response = mapper.convertValue(created, Map.class);
 		return response;
 	}
 
@@ -96,7 +104,7 @@ public class CloudService extends ServiceBaseClass {
 		Cloud cloud = null;
 		try {
 			Claims claims = DigitalPiglet.parseJWT(auth);
-			cloud = dynamo.load(Cloud.class, Cloud.hashKey, cloudId);
+			cloud = dao.load(Cloud.class, Cloud.hashKey, cloudId);
 			if (cloud == null) {
 				throw new NotFoundException();
 			}
@@ -110,7 +118,7 @@ public class CloudService extends ServiceBaseClass {
 		}
 
 		@SuppressWarnings("unchecked")
-		Map<String, Object> response = objectMapper.convertValue(cloud, Map.class);
+		Map<String, Object> response = mapper.convertValue(cloud, Map.class);
 
         // Map<String, Object> subTypes = new HashMap<>();
         // for (JobType type : JobType.values()) {
@@ -133,11 +141,11 @@ public class CloudService extends ServiceBaseClass {
 		Cloud cloud = null;
 		try {
 			Claims claims = DigitalPiglet.parseJWT(auth);
-			user = dynamo.load(User.class, User.hashKey, claims.get("userId").toString());
+			user = dao.load(User.class, User.hashKey, claims.get("userId").toString());
 			if (user == null) {
 				throw new NotFoundException("User not found");
 			}
-			cloud = dynamo.load(Cloud.class, Cloud.hashKey, cloudId);
+			cloud = dao.load(Cloud.class, Cloud.hashKey, cloudId);
 			if (cloud == null) {
 				throw new NotFoundException("Cloud not found");
 			}
@@ -157,20 +165,20 @@ public class CloudService extends ServiceBaseClass {
 			throw new NotAuthorizedException();
 		}
 
-		Account account = dynamo.load(Account.class, Account.hashKey, cloud.getAccountId());
+		Account account = dao.load(Account.class, Account.hashKey, cloud.getAccountId());
 		account.getClouds().remove(new CloudRef(cloudId));
-		dynamo.save(account);
+		dao.save(account);
 
 		for (UserRef userRef : cloud.getUsers()) {
-			user = dynamo.load(User.class, User.hashKey, userRef.getUserId());
+			user = dao.load(User.class, User.hashKey, userRef.getUserId());
 			user.getClouds().remove(cloud.getName());
-			dynamo.save(user);
+			dao.save(user);
 		}
 
-		dynamo.delete(cloud);
+		dao.delete(cloud);
 
 		@SuppressWarnings("unchecked")
-		Map<String, Object> response = objectMapper.convertValue(cloud, Map.class);
+		Map<String, Object> response = mapper.convertValue(cloud, Map.class);
 		return response;
 	}
 

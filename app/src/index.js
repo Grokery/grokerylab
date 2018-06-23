@@ -14,7 +14,7 @@ export const store = configureStore()
 const appHistory = useRouterHistory(createHashHistory)()
 export const history = syncHistoryWithStore(appHistory, store)
 
-// This hooks into the navigation event and scrolls page to top 
+// This hooks into the navigation event and scrolls page to top
 history.listen((location) => {
   window.scrollTo(0,0)
 })
@@ -23,6 +23,6 @@ history.listen((location) => {
 render(
   <Provider store={store}>
     <Router history={history} routes={routes} />
-  </Provider>, 
+  </Provider>,
   document.getElementById('react-root')
 )

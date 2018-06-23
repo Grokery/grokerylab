@@ -123,14 +123,17 @@ class JobCodeTab extends Component {
     }
     return (
       <div className='job-code-tab'>
-        <div className='code col col-md-6'>
+
+        {/* <div className='code col col-md-12'>
           {this.getEditorType(node)}
-        </div>
-        <div className='col col-md-6'>
-          {/* TODO abstract out this column to own component that shows run btn or active toggle depending on job type and pulls run info from logs */}
+        </div> */}
+
+        {/* TODO abstract out this column to own component that shows run btn or active toggle depending on job type and pulls run info from logs */}
+
+        {/* <div className='col col-md-6'>
           <div className=''>
             <div className='col col-md-1 run-button'>
-              {/* <a href='#' onClick={function(){}}><i className="fa fa-pause" aria-hidden="true"></i></a> */}
+              <a href='#' onClick={function(){}}><i className="fa fa-pause" aria-hidden="true"></i></a>
               <label className="switch"><input type="checkbox" onClick={this.toggleIsActive.bind(this)} /><span className="slider round"></span></label>
             </div>
             <div className='col col-md-11 output-select'>
@@ -148,7 +151,8 @@ class JobCodeTab extends Component {
             </pre>
             </div>
           </div>
-        </div>
+        </div> */}
+
       </div>
     )
   }
