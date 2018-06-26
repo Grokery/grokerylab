@@ -59,7 +59,7 @@ pre {
 }
 
 .page-content {
-  height: 1500px;
+  height: 100%;
 }
 
 .page-content.white {
@@ -76,17 +76,14 @@ pre {
 }
 
 h1, h2, h3, h4, h5, h6 {
+  clear: both;
   font-weight: 300;
   margin: 0;
   padding: 0;
 }
 
 h1 {
-  clear: both;
   color: #0291E3;
-  margin-top: 10px;
-  margin-left: 10px;
-  padding-left: 0;
   font-size: 2em;
 }
 
@@ -100,25 +97,25 @@ h1 {
   border-color: #0291E3;
 }
 
+*:focus {
+  outline: none !important;
+}
+
 
 /* Default modal styles */
-.modal-dialog {
+.modal .modal-dialog {
   min-width: 60%;
 }
 
-.modal-body {
+.modal .modal-body {
   overflow-y: auto;
 }
 
-.ReactCodeMirror .CodeMirror {
-  height: auto;
-}
-
-.form-help-text {
+.modal .form-help-text {
   font-size: small;
   color: #4C5763
 }
 
-*:focus {
-  outline: none !important;
+.modal .ReactCodeMirror .CodeMirror {
+  height: auto;
 }

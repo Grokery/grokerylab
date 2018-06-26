@@ -9,22 +9,16 @@ import io.grokery.lab.api.common.exceptions.InvalidInputException;
 import io.grokery.lab.api.cloud.nodes.Node;
 import io.grokery.lab.api.cloud.nodes.NodeType;
 
-/**
- * Contains the fields and logic common to all Job types
- *
- * @author hogue
- */
 public class Job extends Node {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Job.class);
 
     private JobType subType;
     private UUID templateId;
-    private String helloJob;
 
     public Job() {
         super(NodeType.JOB);
-        this.subType = JobType.SHELLSCRIPT;
+        this.subType = JobType.GENERIC;
     }
 
     public Job(JobType subType) {
@@ -42,17 +36,19 @@ public class Job extends Node {
 		// TODO get field values from obj
     }
 
-    public static String getResourceSubTypeName() {
+    public static String getNodeSubTypeName() {
         return "subType";
     }
 
     public static Job getClassInstance(Map<String, Object>  obj) throws InvalidInputException  {
         try {
-			String subTypeStr = obj.get(Job.getResourceSubTypeName()).toString();
+			String subTypeStr = obj.get(Job.getNodeSubTypeName()).toString();
 			JobType subType = JobType.valueOf(subTypeStr);
 			switch (subType) {
 				case GENERIC:
 					return new Job();
+				case AWSLAMBDA:
+					return new AWSLambdaJob();
 				case AWSDATAPIPELINE:
 					return new AWSDataPipelineJob();
 				default:
@@ -70,45 +66,20 @@ public class Job extends Node {
 
     }
 
-	/**
-	 * @return the resourceSubType
-	 */
 	public JobType getSubType() {
 		return subType;
 	}
 
-	/**
-	 * @param resourceSubType the resourceSubType to set
-	 */
 	public void setSubType(JobType subType) {
 		this.subType = subType;
 	}
 
-	/**
-	 * @return the templateId
-	 */
 	public UUID getTemplateId() {
 		return templateId;
 	}
 
-	/**
-	 * @param templateId the templateId to set
-	 */
 	public void setTemplateId(UUID templateId) {
 		this.templateId = templateId;
 	}
 
-	/**
-	 * @return the helloJob
-	 */
-	public String getHelloJob() {
-		return helloJob;
-	}
-
-	/**
-	 * @param helloJob the helloJob to set
-	 */
-	public void setHelloJob(String helloJob) {
-		this.helloJob = helloJob;
-	}
 }

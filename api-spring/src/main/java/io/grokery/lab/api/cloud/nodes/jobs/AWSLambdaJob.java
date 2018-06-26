@@ -2,16 +2,9 @@ package io.grokery.lab.api.cloud.nodes.jobs;
 
 import java.util.Map;
 
-/**
- * Contains fields and logic specific to AWS Lambda jobs
- *
- * Might be cool to make this use github. It could create push and forget. Then checkout update commit push and forget.
- *
- * @author hogue
- */
 public class AWSLambdaJob extends Job {
 
-    private String s3Path;
+    private String s3PkgPath;
     private String lambdaARN;
 
     public AWSLambdaJob() {
@@ -30,7 +23,7 @@ public class AWSLambdaJob extends Job {
 
     public void transitionTo(AWSLambdaJob other) {
         super.transitionTo(other);
-		// replace files in s3 folder with any matching incomming files
+		// replace files in s3 folder with any matching incoming files
     }
 
 	public void transitionFrom(AWSLambdaJob other) {
@@ -41,30 +34,18 @@ public class AWSLambdaJob extends Job {
 		super.decomission();
 	}
 
-	/**
-	 * @return the s3Path
-	 */
 	public String getS3Path() {
-		return s3Path;
+		return s3PkgPath;
 	}
 
-	/**
-	 * @param s3Path the s3Path to set
-	 */
 	public void setS3Path(String s3Path) {
-		this.s3Path = s3Path;
+		this.s3PkgPath = s3Path;
 	}
 
-	/**
-	 * @return the lambdaARN
-	 */
 	public String getLambdaARN() {
 		return lambdaARN;
 	}
 
-	/**
-	 * @param lambdaARN the lambdaARN to set
-	 */
 	public void setLambdaARN(String lambdaARN) {
 		this.lambdaARN = lambdaARN;
 	}

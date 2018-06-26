@@ -7,8 +7,8 @@ package io.grokery.lab.api.cloud.nodes.jobs;
  */
 public enum JobType {
     GENERIC("Generic"),
-    SHELLSCRIPT("Shell Script"),
     AWSLAMBDA("AWS Lambda"),
+    SHELLSCRIPT("Shell Script"),
     AWSDATAPIPELINE("AWS DataPipeline");
 
 	private String typeName;

@@ -9,16 +9,9 @@ import org.slf4j.LoggerFactory;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
 import io.grokery.lab.api.common.MapperUtil;
 import io.grokery.lab.api.common.errors.NotImplementedError;
-import io.grokery.lab.api.cloud.nodes.jobruns.JobRun;
 import io.grokery.lab.api.cloud.nodes.jobs.Job;
 import io.grokery.lab.api.cloud.nodes.sources.Datasource;
 
-/**
- * Contains the fields and logic common to all API resource types as well as
- * defining a common interface for all resources
- *
- * @author hogue
- */
 public class Node {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Node.class);
@@ -42,7 +35,7 @@ public class Node {
 		return "nodeType";
 	}
 
-	public static String getResourceIdName() {
+	public static String getNodeIdName() {
 		return "nodeId";
 	}
 
@@ -56,59 +49,23 @@ public class Node {
 		this.nodeId = UUID.randomUUID();
 	}
 
-	/**
-	 *
-	 *
-	 */
-	public void initialize() {
+	public void initialize() {}
 
-	}
+	public void transitionTo(Node other) {}
 
-	/**
-	 *
-	 *
-	 */
-	public void transitionTo(Node other) {
+	public void transitionFrom(Node other) {}
 
-	}
+	public void decomission() {}
 
-	/**
-	 *
-	 *
-	 */
-	public void transitionFrom(Node other) {
-
-	}
-
-	/**
-	 *
-	 *
-	 */
-	public void decomission() {
-
-	}
-
-	/**
-	 * Checks if Node has required fields
-	 * @throws InvalidInputException
-	 *
-	 */
 	public void validate() throws InvalidInputException {
 		if (this.nodeType == null) {
 			throw new InvalidInputException("Missing required field: '"+Node.getNodeTypeName()+"'. Must be a valid IAPIResourceType");
 		}
 		if (this.nodeId.toString().length() != 36) {
-			throw new InvalidInputException("Missing or invalid required field: '"+Node.getResourceIdName()+"'. Should be valid UUID string.");
+			throw new InvalidInputException("Missing or invalid required field: '"+Node.getNodeIdName()+"'. Should be valid UUID string.");
 		}
 	}
 
-	/**
-	 * Maps an Node to a generic Key/Value Map
-	 *
-	 * @param obj : the Node object to map
-	 * @param removeNulls : bool select for removing null values from result
-	 * @return obj : a Map<String, Object>
-	 */
 	@SuppressWarnings("unchecked")
 	public static Map<String, Object> toMap(Node obj, Boolean removeNulls) {
 		Map<String, Object> result = MapperUtil.getInstance().convertValue(obj, Map.class);
@@ -119,12 +76,6 @@ public class Node {
 		}
     }
 
-	/**
-	 * Removes any null values from the map. It makes it easy to do partial updates
-	 *
-	 * @param obj : a Map<String, Object>
-	 * @return obj : a Map<String, Object>
-	 */
 	public static Map<String, Object> RemoveNullValues(Map<String, Object> obj) {
       for(Iterator<Map.Entry<String, Object>> it = obj.entrySet().iterator(); it.hasNext(); ) {
           Map.Entry<String, Object> entry = it.next();
@@ -135,34 +86,14 @@ public class Node {
       return obj;
 	}
 
-	/**
-	 * Maps a generic Key/Value Map to the Node class defined in map
-	 *
-	 * @param obj the generic Key/Value Map
-	 * @throws UnknownInputException
-	 * @return Node type
-	 */
 	public static Node fromMap(Map<String, Object> obj) throws InvalidInputException {
         return Node.fromMap(obj, Node.getClassInstance(obj));
     }
 
-	/**
-	 * Maps a generic Key/Value Map to the given Node Class
-	 *
-	 * @param obj the generic Key/Value Map
-	 * @param toValueType Node type instance
-	 * @return Node type
-	 */
 	public static Node fromMap(Map<String, Object> obj, Node toValueType) {
 		return MapperUtil.getInstance().convertValue(obj, toValueType.getClass());
     }
 
-	/**
-	 * Gets correct class instance to map to from generic Key/Value Map
-	 *
-	 * @param obj Key/Value Map with "nodeType" key defined
-	 * @throws UnknownInputException
-	 */
     public static Node getClassInstance(Map<String, Object> obj) throws InvalidInputException {
 		try {
 			String typeName = obj.get(Node.getNodeTypeName()).toString();
@@ -177,8 +108,6 @@ public class Node {
 					return new Node();
 				case JOB:
 					return Job.getClassInstance(obj);
-				case JOBRUN:
-					return new JobRun();
 				case DATASOURCE:
 					return Datasource.getClassInstance(obj);
 				default:
@@ -195,76 +124,36 @@ public class Node {
         }
 	}
 
-	/**
-	 * @return the cloudId
-	 */
 	public String getCloudId() {
 		return cloudId;
 	}
-
-	/**
-	 * @param cloudId the cloudId to set
-	 */
 	public void setCloudId(String cloudId) {
 		this.cloudId = cloudId;
 	}
-
-	/**
-	 * @return the nodeType
-	 */
 	public NodeType getNodeType() {
 		return nodeType;
 	}
-
-	/**
-	 * @param nodeType the nodeType to set
-	 */
 	public void setNodeType(NodeType nodeType) {
 		this.nodeType = nodeType;
 	}
-
-	/**
-	 * @return the nodeId
-	 */
 	public UUID getNodeId() {
 		return nodeId;
 	}
-
-	/**
-	 * @param nodeId the nodeId to set
-	 */
 	public void setNodeId(UUID nodeId) {
 		this.nodeId = nodeId;
 	}
-
-	/**
-	 * @return the title
-	 */
 	public String getTitle() {
 		return title;
 	}
-
-	/**
-	 * @param title the title to set
-	 */
 	public void setTitle(String title) {
 		this.title = title;
 	}
-
-	/**
-	 * @return the description
-	 */
 	public String getDescription() {
 		return description;
 	}
-
-	/**
-	 * @param description the description to set
-	 */
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
 	public Double getX() {
 		return x;
 	}

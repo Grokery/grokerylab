@@ -61,7 +61,6 @@ public class DynamoDAOUtil {
 				e1.printStackTrace();
 			}
 		}
-
 	}
 
 	private AmazonDynamoDB getDynamoDbClient() {

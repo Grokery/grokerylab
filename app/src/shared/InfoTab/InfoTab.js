@@ -7,7 +7,7 @@ import ContentEditable from 'shared/ContentEditable/ContentEditable'
 import Comments from 'shared/Comments/Comments'
 import ChartInfo from './ChartInfo'
 import SourceInfo from './SourceInfo'
-import JobInfo from './JobInfo'
+import JobDetail from './JobDetail/JobDetail'
 import './InfoTab.css'
 
 class InfoTab extends Component {
@@ -24,7 +24,7 @@ class InfoTab extends Component {
     } else if (node.nodeType === NODETYPE.DATASOURCE) {
         return (<SourceInfo node={node} params={params}></SourceInfo>)
     } else if (node.nodeType === NODETYPE.JOB) {
-        return (<JobInfo node={node} params={params}></JobInfo>)
+        return (<JobDetail node={node} params={params}></JobDetail>)
     }  else {
         return (<div></div>)
     }
@@ -35,37 +35,42 @@ class InfoTab extends Component {
   handleDescriptionChange(e) {
       this.props.onUpdate({'description': e.target.value})
   }
-  getSubtypeName(node) {
-    // const { lookups } = this.props
-    // switch (node.nodeType) {
-    //     case NODETYPE.JOB:
-    //         return lookups.jobtypes[node.subType] ? lookups.jobtypes[node.subType] : "Job Placeholder"
-    //     case NODETYPE.DATASOURCE:
-    //         return lookups.sourcetypes[node.subType] ? lookups.sourcetypes[node.subType].description : "Source Placeholder"
-    //     default:
-    //         return ""
-    // }
-    return "Temp Placeholder"
-  }
   render() {
     const { node, params } = this.props
     if (!node) { return <div></div> }
     return (
-        <div className='info-tab'>
+        <div className='row info-tab'>
             <div className='col-md-6'>
-                <ContentEditable type='h1' className="node-title" value={node.title} onChange={this.handleTitleChange.bind(this)}></ContentEditable>
-                <ContentEditable type='p' className="node-description" value={node.description} onChange={this.handleDescriptionChange.bind(this)}></ContentEditable>
-                <div className="node-detail-section">
-                    {this.getItemDetailSection()}
+                <div className="row">
+                    <div className="col-md-12">
+                        <div className="node-title-section">
+                            <ContentEditable type='h1' className="node-title" value={node.title} onChange={this.handleTitleChange.bind(this)}></ContentEditable>
+                            <ContentEditable type='p' className="node-description" value={node.description} onChange={this.handleDescriptionChange.bind(this)}></ContentEditable>
+                        </div>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-md-12">
+                        <div className="node-detail-section">
+                            {this.getItemDetailSection()}
+                        </div>
+                    </div>
                 </div>
             </div>
             <div className='col-md-6'>
-                <div className='node-info'>
-                    <div className='col-md-6'><label>SubType: </label> {this.getSubtypeName(node)}</div>
-                    <div className='col-md-6'><label>Owner: </label> {node.owner}</div>
-                    {/* Maybe make component to handle nodeType and type specific fields */}
+                <div className='row'>
+                    <div className="node-info-section">
+                        <div className='col-md-6'><label>Type: </label> { node.subType || ""}</div>
+                        <div className='col-md-6'><label>Owner: </label> {node.owner || "admin"}</div>
+                        {/* <div className='col-md-6'><label>Hello: </label> world</div>
+                        <div className='col-md-6'><label>This: </label> that</div> */}
+                    </div>
                 </div>
-                <Comments nodeId={params.nodeId}></Comments>
+                <div className="row node-comments">
+                    <div className='col-md-12'>
+                        <Comments nodeId={params.nodeId}></Comments>
+                    </div>
+                </div>
             </div>
         </div>
     )

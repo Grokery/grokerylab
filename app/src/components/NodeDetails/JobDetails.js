@@ -39,7 +39,7 @@ class JobDetails extends Component {
           <Panel title='Code'>
             <JobCodeTab key={params.nodeId} params={params} onUpdate={onUpdate}></JobCodeTab>
           </Panel>
-          <Panel title='Logs'>
+          <Panel title='History'>
             <LogsTab params={this.props.params}></LogsTab>
           </Panel>
         </Tabs>

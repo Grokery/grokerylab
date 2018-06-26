@@ -79,7 +79,7 @@ public class NodesProvider {
 		LOGGER.info("PUT: {}/nodes/{}", apiVersion, nodeId);
 		try {
 			CloudContext context = new CloudContext(authorization);
-			nodeData.put(Node.getResourceIdName(), nodeId);
+			nodeData.put(Node.getNodeIdName(), nodeId);
 			Map<String, Object> result = NodesService.update(nodeData, context);
 			return Response.status(Status.OK).entity(result).build();
 		} catch (NotAuthorizedException e) {

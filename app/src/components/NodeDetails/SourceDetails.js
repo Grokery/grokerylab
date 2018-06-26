@@ -40,7 +40,7 @@ class SourceDetails extends Component {
           <Panel title='Data'>
             <DataTab key={params.nodeId} params={params} onUpdate={onUpdate}></DataTab>
           </Panel>
-          <Panel title='Logs'>
+          <Panel title='History'>
             <LogsTab params={this.props.params}></LogsTab>
           </Panel>
         </Tabs>

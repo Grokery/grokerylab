@@ -82,9 +82,23 @@ const mapStateToProps = (state, ownProps) => {
     let sort = function(a, b) {
         return a.datetime < b.datetime
     }
+    let comments = [
+        {
+            id: "124",
+            user: "dhogue",
+            body: "Hello this is another a test",
+            datetime: "2018-06-05 10:26"
+        },
+        {
+            id: "123",
+            user: "admin",
+            body: "Hello this is a test",
+            datetime: "2018-06-05 10:27"
+        }
+    ]
     return {
         username: sessionInfo['name'] ? sessionInfo['name'] : "User Name",
-        comments: state.logs.filter(filter).sort(sort)
+        comments: comments//state.logs.filter(filter).sort(sort)
     }
 }
 

@@ -1,33 +1,19 @@
 
-
-.info-tab h1 {
-    margin:0;
-    padding:0;
+.info-tab .node-title-section {
+    padding: 15px;
 }
 
-.info-tab .node-description {
-    padding-top: 10px;
+.info-tab .node-title-section h1 {
+    margin-bottom: 10px;
 }
 
+.info-tab .node-title-section p {
+    margin-bottom: 0;
+}
+
+.info-tab .node-info-section {
+    padding: 15px;
+}
 .info-tab .node-detail-section {
-    padding-top: 10px;
-}
-
-.info-tab .col-md-6 {
-    margin: 0;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-right: 10px;
-    padding-left: 10px;
-}
-
-.info-tab .node-info .col-md-6 {
-    margin: 0;
-    padding: 0;
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-
-.info-tab select {
-    margin-left: 10px;
+    padding-left: 15px;
 }
