@@ -20,11 +20,11 @@ class InfoTab extends Component {
   getItemDetailSection() {
     const { node, params } = this.props
     if (node.nodeType === NODETYPE.CHART) {
-        return (<ChartInfo node={node} params={params}></ChartInfo>)
+        return (<ChartInfo node={node} params={params} onUpdate={this.props.onUpdate}></ChartInfo>)
     } else if (node.nodeType === NODETYPE.DATASOURCE) {
-        return (<SourceInfo node={node} params={params}></SourceInfo>)
+        return (<SourceInfo node={node} params={params} onUpdate={this.props.onUpdate}></SourceInfo>)
     } else if (node.nodeType === NODETYPE.JOB) {
-        return (<JobDetail node={node} params={params}></JobDetail>)
+        return (<JobDetail node={node} params={params} onUpdate={this.props.onUpdate}></JobDetail>)
     }  else {
         return (<div></div>)
     }

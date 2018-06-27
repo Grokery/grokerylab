@@ -74,8 +74,9 @@ class NodeDetails extends Component {
   onUpdate(nodeData) {
     const { updateNode, params, node } = this.props
     nodeData.nodeId = node.nodeId
+    nodeData.nodeType = node.nodeType
     nodeData.subType = nodeData.subType ? nodeData.subType : node.subType
-    updateNode(params.nodeType, nodeData)
+    updateNode(nodeData)
   }
   getCollectionComponent() {
     // THOUGHT: could use the factory pattern here

@@ -5,21 +5,40 @@ import './JobDetail.css'
 
 class JobDetail extends Component {
   static propTypes = {
-    node: PropTypes.object,
-    params: PropTypes.object
+    params: PropTypes.object.isRequired,
+    node: PropTypes.object.isRequired,
+    onUpdate: PropTypes.func.isRequired,
   }
   constructor(props) {
     super(props)
       this.state = {
-          scheduleActive: false,
-          runControl: 'manual'
+          node: props.node,
       }
   }
+  componentWillMount() {
+    var node = this.state.node
+    if (!node.runControl) {
+        node.runControl = 'manual'
+    }
+    if (!node.schedule) {
+        node.schedule = {}
+    }
+    this.setState({'node': node})
+  }
   toggleIsActive(e) {
-    this.setState({"scheduleActive": !this.state.scheduleActive})
+    var node = this.state.node
+    node.schedule.isActive = !node.schedule.isActive
+    this.setState({'node': node})
+    this.props.onUpdate({'schedule': node.schedule})
+  }
+  onRunControleChange(e) {
+    var node = this.state.node
+    node.runControl = e.currentTarget.value
+    this.setState({'node': node})
+    this.props.onUpdate({'runControl': node.runControl})
   }
   getRunControl() {
-    if (this.state.runControl === 'schedule') {
+    if (this.state.node.runControl === 'schedule') {
         return (
             <div className="run-control scheduled-run">
                 <div className="col-md-3 form-group">
@@ -39,12 +58,12 @@ class JobDetail extends Component {
                 <div className="col-md-3 form-group">
                     <label>Active</label>
                     <div className='is-active-switch'>
-                        <label className="switch"><input type="checkbox" onClick={this.toggleIsActive.bind(this)} value={this.state.scheduleActive} /><span className="slider round"></span></label>
+                        <label className="switch"><input type="checkbox" onChange={this.toggleIsActive.bind(this)} checked={this.state.node.schedule.isActive} /><span className="slider round"></span></label>
                     </div>
                 </div>
             </div>
         )
-    } else if (this.state.runControl === 'event') {
+    } else if (this.state.node.runControl === 'event') {
         return (
             <div className="run-control event-run">
                 <div className="col-md-4 form-group">
@@ -67,9 +86,6 @@ class JobDetail extends Component {
         )
     }
   }
-  onRunControleChange(e) {
-    this.setState({runControl: e.currentTarget.value})
-  }
   render() {
     const { node } = this.props
     if (!node) { return <div></div> }
@@ -78,10 +94,10 @@ class JobDetail extends Component {
             <div className="row">
                 <div className="col-md-3 form-group run-control-select">
                     <label>Run</label>
-                    <select className="form-control" value={this.state.runControl} onChange={this.onRunControleChange.bind(this)}>
+                    <select className="form-control" value={this.state.node.runControl} onChange={this.onRunControleChange.bind(this)}>
                         <option value='manual'>Manually</option>
                         <option value='schedule'>On Schedule</option>
-                        <option value='event'>On Event</option>
+                        {/* <option value='event'>On Event</option> */}
                     </select>
                 </div>
                 {this.getRunControl()}
@@ -135,7 +151,7 @@ class JobDetail extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    node: state.nodes[ownProps.params.nodeId]
+    node: state.nodes[ownProps.params.nodeId] || {}
   }
 }
 
