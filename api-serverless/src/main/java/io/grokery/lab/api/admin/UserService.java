@@ -159,7 +159,7 @@ public class UserService {
 	}
 
 	public Map<String, Object> authenticate(Map<String, Object> request) throws InvalidInputException, NotAuthorizedException {
-		// Get and validate user
+		// Get and validateValues user
 		User user = null;
 		try {
 			user = getAndValidateUser(request);

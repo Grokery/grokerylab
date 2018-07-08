@@ -22,10 +22,10 @@ public class NodesService {
 		DAO dao = DAOFactory.getDAO(context);
 
 		Node newItem = Node.fromMap(data);
-		newItem.validate();
+		newItem.validateValues();
 		dao.create(newItem.getNodeId().toString(), Node.toMap(newItem, true));
 
-		newItem.initialize();
+		newItem.setupExternalResources();
 		return dao.update(newItem.getNodeId().toString(), Node.toMap(newItem, true));
 	}
 
@@ -47,18 +47,18 @@ public class NodesService {
 			node.setNodeId(existing.getNodeId());
 			node.setValues(Node.toMap(existing, false));
 
-			existing.decomission();
+			existing.cleanupExternalResources();
 			dao.delete(existing.getNodeId().toString());
 
 			node.setValues(data);
-			node.validate();
+			node.validateValues();
 
 			dao.create(node.getNodeId().toString(), Node.toMap(node, true));
-			node.initialize();
+			node.setupExternalResources();
 			return dao.update(existing.getNodeId().toString(), Node.toMap(node, false));
 		} else {
 			existing.setValues(data);
-			existing.validate();
+			existing.validateValues();
 			return dao.update(existing.getNodeId().toString(), Node.toMap(existing, false));
 		}
 	}
@@ -69,7 +69,7 @@ public class NodesService {
 		Node item = null;
 		DAO dao = DAOFactory.getDAO(context);
 		item = Node.fromMap(dao.retrieve(nodeId));
-		item.decomission();
+		item.cleanupExternalResources();
 
 		return dao.delete(nodeId);
 	}

@@ -9,15 +9,15 @@ public class AWSDataPipelineJob extends Job {
 	// Constructers
 	public AWSDataPipelineJob() {
 		super(JobType.AWSLAMBDA);
-		this.construct();
+		this.initializeDefaults();
 	}
 
 	public AWSDataPipelineJob(Map<String, Object> obj) {
 		super(JobType.AWSLAMBDA);
-		this.construct();
+		this.initializeDefaults();
 	}
 
-	private void construct() {
+	private void initializeDefaults() {
 	}
 
 	// Inherited class methodss
@@ -26,21 +26,21 @@ public class AWSDataPipelineJob extends Job {
 		// TODO update self values with new data and return self
 	}
 
-	public void initialize() {
-		super.initialize();
+	public void validateValues() throws InvalidInputException {
+		super.validateValues();
+		// TODO make sure I'm good to be saved
+	}
+
+	public void setupExternalResources() {
+		super.setupExternalResources();
 		// TODO allocate any external resources
 		// create s3 package path and copy default pkg
 		// create lambda and save ARN
 	}
 
-	public void decomission() {
-		super.decomission();
+	public void cleanupExternalResources() {
+		super.cleanupExternalResources();
 		// TODO de allocate any external resources
-	}
-
-	public void validate() throws InvalidInputException {
-		super.validate();
-		// TODO make sure I'm good to be saved
 	}
 
 	// Getters and Setters

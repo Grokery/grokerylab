@@ -7,8 +7,6 @@ package io.grokery.lab.api.cloud.nodes;
  */
 public enum NodeType {
     GENERIC("Generic Node"),
-    CHART("Chart"),
-    DASHBOARD("Dashboard"),
 	DATASOURCE("Datasource"),
 	JOBRUN("Job Run"),
 	JOB("Job");

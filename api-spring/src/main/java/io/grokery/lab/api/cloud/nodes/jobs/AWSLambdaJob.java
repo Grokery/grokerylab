@@ -16,15 +16,15 @@ public class AWSLambdaJob extends Job {
 	// Constructers
 	public AWSLambdaJob() {
 		super(JobType.AWSLAMBDA);
-		this.construct();
+		this.initializeDefaults();
 	}
 
 	public AWSLambdaJob(Map<String, Object> obj) {
 		super(JobType.AWSLAMBDA);
-		this.construct();
+		this.initializeDefaults();
 	}
 
-	private void construct() {
+	private void initializeDefaults() {
 		this.runControl = "manual";
 		this.schedule = new HashMap<String, Object>();
 	}
@@ -39,21 +39,21 @@ public class AWSLambdaJob extends Job {
 		this.schedule = newData.get("schedule") != null ? MapperUtil.getInstance().convertValue(newData.get("schedule"), HashMap.class) : this.schedule;
 	}
 
-	public void initialize() {
-		super.initialize();
+	public void validateValues() throws InvalidInputException {
+		super.validateValues();
+		// TODO make sure I'm good to be saved
+	}
+
+	public void setupExternalResources() {
+		super.setupExternalResources();
 		// TODO allocate any external resources
 		// create s3 package path and copy default pkg
 		// create lambda and save ARN
 	}
 
-	public void decomission() {
-		super.decomission();
+	public void cleanupExternalResources() {
+		super.cleanupExternalResources();
 		// TODO de allocate any external resources
-	}
-
-	public void validate() throws InvalidInputException {
-		super.validate();
-		// TODO make sure I'm good to be saved
 	}
 
 	// Getters and Setters

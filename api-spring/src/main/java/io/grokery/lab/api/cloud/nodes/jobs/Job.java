@@ -20,16 +20,16 @@ public class Job extends Node {
 	// Constructers
 	public Job() {
 		super(NodeType.JOB);
-		this.construct();
+		this.initializeDefaults();
 	}
 
 	protected Job(JobType subType) {
 		super(NodeType.JOB);
-		this.construct();
+		this.initializeDefaults();
 		this.setSubType(subType.toString());
 	}
 
-	private void construct() {
+	private void initializeDefaults() {
 		this.setSubType(JobType.GENERIC.toString());
 	}
 
@@ -38,20 +38,20 @@ public class Job extends Node {
 		this.templateId = newData.get("templateId") != null ? MapperUtil.getInstance().convertValue(newData.get("templateId"), UUID.class) : this.templateId;
 	}
 
-	public void initialize() {
-		super.initialize();
+	public void validateValues() throws InvalidInputException {
+		super.validateValues();
 	}
 
-	public void update() {
-		super.update();
+	public void setupExternalResources() {
+		super.setupExternalResources();
 	}
 
-	public void decomission() {
-		super.decomission();
+	public void updateExternalResources() {
+		super.updateExternalResources();
 	}
 
-	public void validate() throws InvalidInputException {
-		super.validate();
+	public void cleanupExternalResources() {
+		super.cleanupExternalResources();
 	}
 
     public static Job getClassInstance(Map<String, Object> obj) throws InvalidInputException {

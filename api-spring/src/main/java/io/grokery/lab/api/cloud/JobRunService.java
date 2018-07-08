@@ -12,8 +12,8 @@ public class JobRunService {
 
 	// 	logger.info("create resource");
 	// 	Node item = Node.fromMap(obj);
-	// 	item.initialize();
-	// 	item.validate();
+	// 	item.setupExternalResources();
+	// 	item.validateValues();
 	// 	obj = Node.toMap(item, true);
 	// 	return DAOFactory.getDAO(context).create(item.getNodeId().toString(), obj);
 	// }
@@ -40,7 +40,7 @@ public class JobRunService {
 	// 	Node item = null;
 	// 	DAO dao = DAOFactory.getDAO(context);
 	// 	item = Node.fromMap(dao.retrieve(nodeId));
-	// 	item.decomission();
+	// 	item.cleanupExternalResources();
 	// 	return dao.delete(nodeId);
 	// }
 

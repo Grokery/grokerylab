@@ -18,7 +18,7 @@ public class Node {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Node.class);
 
 	private UUID nodeId;
-	private NodeType nodeType;
+	private String nodeType;
 	private String subType;
 
 	private String title;
@@ -42,17 +42,17 @@ public class Node {
 
 	// Constructers
 	public Node() {
-		this.construct();
+		this.initializeDefaults();
 	}
 
 	protected Node(NodeType nodeType) {
-		this.construct();
-		this.nodeType = nodeType;
+		this.initializeDefaults();
+		this.nodeType = nodeType.toString();
 	}
 
-	private void construct() {
+	private void initializeDefaults() {
 		this.nodeId = UUID.randomUUID();
-		this.nodeType = NodeType.GENERIC;
+		this.nodeType = NodeType.GENERIC.toString();
 		this.subType = "";
 
 		this.title = "New Node";
@@ -74,20 +74,20 @@ public class Node {
 		this.downstream = newData.get("downstream") != null ? MapperUtil.getInstance().convertValue(newData.get("downstream"), ArrayList.class) : this.downstream;
 	}
 
-	public void initialize() {}
-
-	public void update() {}
-
-	public void decomission() {}
-
-	public void validate() throws InvalidInputException {
-		if (this.nodeType == null) {
-			throw new InvalidInputException("Missing required field: '" + Node.getNodeTypeName() + "'. Must be a valid IAPIResourceType");
+	public void validateValues() throws InvalidInputException {
+		if (this.nodeType == null || this.nodeType.isEmpty()) {
+			throw new InvalidInputException("Missing required field: '" + Node.getNodeTypeName() + "'. Must be a valid NodeType");
 		}
 		if (this.nodeId.toString().length() != 36) {
 			throw new InvalidInputException("Missing or invalid required field: '" + Node.getNodeIdName() + "'. Should be valid UUID string.");
 		}
 	}
+
+	public void setupExternalResources() {}
+
+	public void updateExternalResources() {}
+
+	public void cleanupExternalResources() {}
 
 	@SuppressWarnings("unchecked")
 	public static Map<String, Object> toMap(Node obj, Boolean removeNulls) {
@@ -120,14 +120,10 @@ public class Node {
     public static Node getClassInstance(Map<String, Object> obj) throws InvalidInputException {
 		try {
 			String typeName = obj.get(Node.getNodeTypeName()).toString();
-			LOGGER.info("Get class instance for nodeType=" + typeName);
+			LOGGER.info("Get class instance for nodeType: " + typeName);
 			NodeType nodeType = NodeType.valueOf(typeName);
 			switch (nodeType) {
 				case GENERIC:
-					return new Node();
-				case CHART:
-					return new Node();
-				case DASHBOARD:
 					return new Node();
 				case JOB:
 					return Job.getClassInstance(obj);
@@ -137,11 +133,11 @@ public class Node {
 					throw new NotImplementedError();
 			}
 		} catch (IllegalArgumentException e) {
-			String message = "Unknown ResourceTypes";
+			String message = "Unknown NodeType";
 			LOGGER.error(message, e);
 			throw new InvalidInputException(message);
 		} catch (NullPointerException e) {
-			String message = "ResourceTypes specification required";
+			String message = "NodeType specification required";
 			LOGGER.error(message, e);
 			throw new InvalidInputException(message);
         }
@@ -154,11 +150,11 @@ public class Node {
 	public void setNodeId(UUID nodeId) {
 		this.nodeId = nodeId;
 	}
-	public NodeType getNodeType() {
+	public String getNodeType() {
 		return nodeType;
 	}
 	public void setNodeType(NodeType nodeType) {
-		this.nodeType = nodeType;
+		this.nodeType = nodeType.toString();
 	}
 	public String getSubType() {
 		return subType;

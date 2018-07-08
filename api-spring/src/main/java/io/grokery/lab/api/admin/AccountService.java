@@ -63,7 +63,7 @@ public class AccountService {
 			}
 		}
 
-		// Get account info and validate fields
+		// Get account info and validateValues fields
 		Account account = mapper.convertValue(requestBody, Account.class);
 		account.assertIsValidForCreate();
 
