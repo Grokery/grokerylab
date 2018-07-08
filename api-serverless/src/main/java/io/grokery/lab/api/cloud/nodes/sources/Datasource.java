@@ -18,24 +18,17 @@ public class Datasource extends Node {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Datasource.class);
 
-	private SourceType subType;
-    private UUID templateId;
+	private UUID templateId;
 
-    public Datasource() {
-        super(NodeType.DATASOURCE);
-        this.subType = SourceType.GENERIC;
-    }
+	public Datasource() {
+		super(NodeType.DATASOURCE);
+		this.setSubType(SourceType.GENERIC.toString());
+	}
 
     public Datasource(SourceType subType) {
         super(NodeType.DATASOURCE);
-        this.subType = subType;
+        this.setSubType(subType.toString());
 	}
-
-	public Datasource(SourceType subType, Map<String, Object> obj) {
-        super(NodeType.DATASOURCE);
-		this.subType = subType;
-		this.init(obj);
-    }
 
     public void init(Map<String, Object> obj) {
 		// TODO get field values from obj
@@ -68,20 +61,6 @@ public class Datasource extends Node {
         }
 
     }
-
-	/**
-	 * @return the subType
-	 */
-	public SourceType getSubType() {
-		return subType;
-	}
-
-	/**
-	 * @param subType the subType to set
-	 */
-	public void setSubType(SourceType subType) {
-		this.subType = subType;
-	}
 
 	/**
 	 * @return the templateId

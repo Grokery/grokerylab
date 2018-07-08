@@ -25,10 +25,11 @@ class CloudSection extends Component {
       this.setState({shown: true})
     }
   }
-  getCloudIcon(cloud){
-    if (cloud.type === 'AWS'){
+  getCloudIcon(cloudType) {
+    console.log(cloudType)
+    if (cloudType === 'AWS') {
       return 'img/aws.png'
-    } else if (cloud.type === 'AZURE') {
+    } else if (cloudType === 'AZURE') {
       return 'img/azure.png'
     } else {
       return 'img/local.png'
@@ -59,7 +60,7 @@ class CloudSection extends Component {
       <div className='cloud-section'>
         <div className='cloud-section-header'>
           <a href={'#/clouds/' + cloudid} className='cloud-title'>
-            <img src={this.getCloudIcon(cloud)} className='cloud-icon' role="presentation"/>
+            <img src={this.getCloudIcon(cloud.cloudType)} className='cloud-icon' role="presentation"/>
             {cloud.title}
           </a>
           {/* <a href='#' onClick={this.toggleEditDialog.bind(this)}><i className='fa fa-pencil pull-right cloud-edit-icon'/></a> */}

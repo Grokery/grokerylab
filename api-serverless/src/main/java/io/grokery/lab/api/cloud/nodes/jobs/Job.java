@@ -4,6 +4,8 @@ import java.util.Map;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.grokery.lab.api.common.MapperUtil;
 import io.grokery.lab.api.common.errors.NotImplementedError;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
 import io.grokery.lab.api.cloud.nodes.Node;
@@ -13,34 +15,46 @@ public class Job extends Node {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Job.class);
 
-    private JobType subType;
-    private UUID templateId;
+	private UUID templateId;
 
-    public Job() {
-        super(NodeType.JOB);
-        this.subType = JobType.GENERIC;
-    }
-
-    public Job(JobType subType) {
-        super(NodeType.JOB);
-        this.subType = subType;
+	// Constructers
+	public Job() {
+		super(NodeType.JOB);
+		this.construct();
 	}
 
-	public Job(JobType subType, Map<String, Object> obj) {
-        super(NodeType.JOB);
-		this.subType = subType;
-		this.init(obj);
-    }
+	protected Job(JobType subType) {
+		super(NodeType.JOB);
+		this.construct();
+		this.setSubType(subType.toString());
+	}
 
-    public void init(Map<String, Object> obj) {
-		// TODO get field values from obj
-    }
+	private void construct() {
+		this.setSubType(JobType.GENERIC.toString());
+	}
 
-    public static String getNodeSubTypeName() {
-        return "subType";
-    }
+	public void setValues(Map<String, Object> newData) {
+		super.setValues(newData);
+		this.templateId = newData.get("templateId") != null ? MapperUtil.getInstance().convertValue(newData.get("templateId"), UUID.class) : this.templateId;
+	}
 
-    public static Job getClassInstance(Map<String, Object>  obj) throws InvalidInputException  {
+	public void initialize() {
+		super.initialize();
+	}
+
+	public void update() {
+		super.update();
+	}
+
+	public void decomission() {
+		super.decomission();
+	}
+
+	public void validate() throws InvalidInputException {
+		super.validate();
+	}
+
+    public static Job getClassInstance(Map<String, Object> obj) throws InvalidInputException {
         try {
 			String subTypeStr = obj.get(Job.getNodeSubTypeName()).toString();
 			JobType subType = JobType.valueOf(subTypeStr);
@@ -52,7 +66,7 @@ public class Job extends Node {
 				case AWSDATAPIPELINE:
 					return new AWSDataPipelineJob();
 				default:
-					throw new NotImplementedError("Following valid Job type not implemented: " + subType.toString());
+					throw new NotImplementedError("Following Job type not implemented: " + subType.toString());
 			}
         } catch (IllegalArgumentException e) {
 			String message = "Unknown APIResourceSubType";
@@ -66,14 +80,7 @@ public class Job extends Node {
 
     }
 
-	public JobType getSubType() {
-		return subType;
-	}
-
-	public void setSubType(JobType subType) {
-		this.subType = subType;
-	}
-
+	// Getters and Setters
 	public UUID getTemplateId() {
 		return templateId;
 	}

@@ -1,5 +1,6 @@
 package io.grokery.lab.api.cloud.nodes;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -16,53 +17,75 @@ public class Node {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Node.class);
 
-	private String cloudId;
-	private NodeType nodeType;
 	private UUID nodeId;
+	private NodeType nodeType;
+	private String subType;
+
 	private String title;
 	private String description;
-
 	private Double x;
 	private Double y;
 	private List<Map<String, Object>> upstream;
 	private List<Map<String, Object>> downstream;
 
-	public static String getCloudIdName() {
-		return "cloudId";
+	public static String getNodeIdName() {
+		return "nodeId";
 	}
 
 	public static String getNodeTypeName() {
 		return "nodeType";
 	}
 
-	public static String getNodeIdName() {
-		return "nodeId";
+	public static String getNodeSubTypeName() {
+		return "subType";
 	}
 
+	// Constructers
 	public Node() {
-		this.nodeType = NodeType.NODE;
-		this.nodeId = UUID.randomUUID();
+		this.construct();
 	}
 
 	protected Node(NodeType nodeType) {
+		this.construct();
 		this.nodeType = nodeType;
+	}
+
+	private void construct() {
 		this.nodeId = UUID.randomUUID();
+		this.nodeType = NodeType.GENERIC;
+		this.subType = "";
+
+		this.title = "New Node";
+		this.description = "My new node.";
+		this.x = new Double(0);
+		this.y = new Double(0);
+		this.upstream = new ArrayList<>();
+		this.downstream = new ArrayList<>();
+	}
+
+	// Class methods
+	@SuppressWarnings("unchecked")
+	public void setValues(Map<String, Object> newData) {
+		this.title = newData.get("title") != null ? newData.get("title").toString() : this.title;
+		this.description = newData.get("description") != null ? newData.get("description").toString() : this.description;
+		this.x = newData.get("x") != null ? new Double(newData.get("x").toString()) : this.x;
+		this.y = newData.get("y") != null ? new Double(newData.get("y").toString()) : this.y;
+		this.upstream = newData.get("upstream") != null ? MapperUtil.getInstance().convertValue(newData.get("upstream"), ArrayList.class) : this.upstream;
+		this.downstream = newData.get("downstream") != null ? MapperUtil.getInstance().convertValue(newData.get("downstream"), ArrayList.class) : this.downstream;
 	}
 
 	public void initialize() {}
 
-	public void transitionTo(Node other) {}
-
-	public void transitionFrom(Node other) {}
+	public void update() {}
 
 	public void decomission() {}
 
 	public void validate() throws InvalidInputException {
 		if (this.nodeType == null) {
-			throw new InvalidInputException("Missing required field: '"+Node.getNodeTypeName()+"'. Must be a valid IAPIResourceType");
+			throw new InvalidInputException("Missing required field: '" + Node.getNodeTypeName() + "'. Must be a valid IAPIResourceType");
 		}
 		if (this.nodeId.toString().length() != 36) {
-			throw new InvalidInputException("Missing or invalid required field: '"+Node.getNodeIdName()+"'. Should be valid UUID string.");
+			throw new InvalidInputException("Missing or invalid required field: '" + Node.getNodeIdName() + "'. Should be valid UUID string.");
 		}
 	}
 
@@ -100,7 +123,7 @@ public class Node {
 			LOGGER.info("Get class instance for nodeType=" + typeName);
 			NodeType nodeType = NodeType.valueOf(typeName);
 			switch (nodeType) {
-				case NODE:
+				case GENERIC:
 					return new Node();
 				case CHART:
 					return new Node();
@@ -124,11 +147,12 @@ public class Node {
         }
 	}
 
-	public String getCloudId() {
-		return cloudId;
+	// Getters and Setters
+	public UUID getNodeId() {
+		return nodeId;
 	}
-	public void setCloudId(String cloudId) {
-		this.cloudId = cloudId;
+	public void setNodeId(UUID nodeId) {
+		this.nodeId = nodeId;
 	}
 	public NodeType getNodeType() {
 		return nodeType;
@@ -136,12 +160,13 @@ public class Node {
 	public void setNodeType(NodeType nodeType) {
 		this.nodeType = nodeType;
 	}
-	public UUID getNodeId() {
-		return nodeId;
+	public String getSubType() {
+		return subType;
 	}
-	public void setNodeId(UUID nodeId) {
-		this.nodeId = nodeId;
+	public void setSubType(String subType) {
+		this.subType = subType;
 	}
+
 	public String getTitle() {
 		return title;
 	}

@@ -9,12 +9,14 @@ import JobDetails from './JobDetails'
 import SourceDetails from './SourceDetails'
 import ChartDetails from './ChartDetails'
 import BoardDetails from './BoardDetails'
+import './NodeDetails.css'
 
 const flowPreviewHeight = 300
 
 class NodeDetails extends Component {
   static propTypes = {
-    updateNode: PropTypes.func.isRequired
+    updateNode: PropTypes.func.isRequired,
+    node: PropTypes.object
   }
   close() {
     const { params } = this.props
@@ -54,8 +56,14 @@ class NodeDetails extends Component {
   componentDidMount() {
     const { location } = this.props
     if (location.query.flow === "open") {
-      this.toggleNodeDetailsPain()
+      this.openNodeDetailsPain.bind(this)()
+    } else {
+      this.closeNodeDetailsPain.bind(this)()
     }
+  }
+  shouldComponentUpdate(nextProps, nextState) {
+    const { location } = nextProps
+    return location.pathname != this.props.location.pathname
   }
   toggleNodeDetailsPain(e) {
     if (e && typeof(e.preventDefault === 'function')) {
@@ -63,16 +71,24 @@ class NodeDetails extends Component {
     }
     let pain = document.getElementById("node-details-pain")
     if (pain.style.top === '0px') {
-      updateQueryParam('flow','open')
-      pain.style.top = flowPreviewHeight+'px'
+      this.openNodeDetailsPain()
     } else {
-      updateQueryParam('flow','closed')
-      pain.style.top = '0px'
+      this.closeNodeDetailsPain()
     }
     window.scrollTo(0,0)
   }
+  openNodeDetailsPain() {
+    updateQueryParam('flow','open')
+    document.getElementById("node-details-pain").style.top = flowPreviewHeight+'px'
+    window.scrollTo(0,0)
+  }
+  closeNodeDetailsPain() {
+    updateQueryParam('flow','closed')
+    document.getElementById("node-details-pain").style.top = '0px'
+    window.scrollTo(0,0)
+  }
   onUpdate(nodeData) {
-    const { updateNode, params, node } = this.props
+    const { updateNode, node } = this.props
     nodeData.nodeId = node.nodeId
     nodeData.nodeType = node.nodeType
     nodeData.subType = nodeData.subType ? nodeData.subType : node.subType
@@ -87,7 +103,7 @@ class NodeDetails extends Component {
         close={this.close.bind(this)}
         getRightMenuOptions={this.getRightMenuOptions}
         onUpdate={this.onUpdate.bind(this)}
-        toggleNodeDetailsPain={this.toggleNodeDetailsPain}
+        toggleNodeDetailsPain={this.toggleNodeDetailsPain.bind(this)}
       ></JobDetails>)
     } else if (params.nodeType === NODETYPE.DATASOURCE.toLowerCase()) {
       return (<SourceDetails
@@ -95,7 +111,7 @@ class NodeDetails extends Component {
         close={this.close.bind(this)}
         getRightMenuOptions={this.getRightMenuOptions}
         onUpdate={this.onUpdate.bind(this)}
-        toggleNodeDetailsPain={this.toggleNodeDetailsPain}>
+        toggleNodeDetailsPain={this.toggleNodeDetailsPain.bind(this)}>
       </SourceDetails>)
     } else if (params.nodeType === NODETYPE.CHART.toLowerCase()) {
       return (<ChartDetails
@@ -103,7 +119,7 @@ class NodeDetails extends Component {
         close={this.close.bind(this)}
         getRightMenuOptions={this.getRightMenuOptions}
         onUpdate={this.onUpdate.bind(this)}
-        toggleNodeDetailsPain={this.toggleNodeDetailsPain}
+        toggleNodeDetailsPain={this.toggleNodeDetailsPain.bind(this)}
       ></ChartDetails>)
     } else if (params.nodeType === NODETYPE.DASHBOARD.toLowerCase()) {
       return (<BoardDetails
@@ -111,7 +127,7 @@ class NodeDetails extends Component {
         close={this.close.bind(this)}
         getRightMenuOptions={this.getRightMenuOptions}
         onUpdate={this.onUpdate.bind(this)}
-        toggleNodeDetailsPain={this.toggleNodeDetailsPain}
+        toggleNodeDetailsPain={this.toggleNodeDetailsPain.bind(this)}
       ></BoardDetails>)
     }
   }

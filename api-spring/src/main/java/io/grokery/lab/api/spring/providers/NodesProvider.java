@@ -56,7 +56,6 @@ public class NodesProvider {
 		LOGGER.info("POST: apiVersion={} cloudId={}", apiVersion, cloudId);
 		try {
 			CloudContext context = new CloudContext(authorization);
-			nodeData.put(Node.getCloudIdName(), cloudId);
 			Map<String, Object> result = NodesService.create(nodeData, context);
 			return Response.status(Status.OK).entity(result).build();
 		} catch (NotAuthorizedException e) {
@@ -65,6 +64,9 @@ public class NodesProvider {
 		} catch (InvalidInputException e) {
 			LOGGER.error(e.message);
 			return Response.status(Status.BAD_REQUEST).entity(e).build();
+		} catch (NotFoundException e) {
+			LOGGER.error(e.message);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e).build();
 		}
 	}
 

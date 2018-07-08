@@ -5,7 +5,6 @@ import { NODETYPE } from 'common'
 import { Tabs, Panel } from 'shared/Tabs/Tabs'
 import EditModal from 'shared/EditModal/EditModal'
 import IChart from 'shared/IChart/IChart'
-import './NodeDetails.css'
 
 class BoardDetails extends Component {
   static propTypes = {

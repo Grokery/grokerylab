@@ -76,6 +76,7 @@ public class CloudService {
 
 		CloudAccess access = mapper.convertValue(requestBody.get("adminAccess"), CloudAccess.class);
 		access.setCloudId(cloud.getCloudId());
+		access.setCloudType(cloud.getCloudType());
 		access.setTitle(cloud.getTitle());
 		access.setName(cloud.getName());
 		CloudCredentials creds = access.getCredentials();

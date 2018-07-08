@@ -13,6 +13,7 @@ public class CloudAccess implements Serializable {
 	static final long serialVersionUID = 1L;
 
 	private String cloudId;
+	private String cloudType;
 	private String title;
 	private String name;
 	private CloudCredentials credentials;
@@ -31,6 +32,14 @@ public class CloudAccess implements Serializable {
 	}
 	public void setCloudId(String id) {
 		this.cloudId = id;
+	}
+
+	@DynamoDBAttribute(attributeName = "cloudType")
+	public String getCloudType() {
+		return cloudType;
+	}
+	public void setCloudType(String cloudType) {
+		this.cloudType = cloudType;
 	}
 
 	@DynamoDBAttribute(attributeName = "title")

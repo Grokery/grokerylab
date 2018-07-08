@@ -1,25 +1,19 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { fetchNode } from 'store/actions'
 import CodeEditor from 'shared/CodeEditor/CodeEditor'
 import './JobCodeTab.css'
 
 class JobCodeTab extends Component {
   static propTypes = {
     node: PropTypes.object,
-    onUpdate: PropTypes.func.isRequired,
-    fetchNode: PropTypes.func.isRequired
+    onUpdate: PropTypes.func.isRequired
   }
   constructor(props) {
     super(props)
       this.state = {
           showModal: false
       }
-  }
-  componentDidMount() {
-    const { fetchNode, params } = this.props
-    fetchNode(params.nodeId)
   }
   toggleTemplateModal(e) {
     e.preventDefault()
@@ -164,6 +158,4 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps, {
-  fetchNode
-})(JobCodeTab)
+export default connect(mapStateToProps, {})(JobCodeTab)

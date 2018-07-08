@@ -125,7 +125,7 @@ public class DynamoDAO implements DAO {
 
 		ItemCollection<ScanOutcome> scanResults = table.scan(
         	null, // Filter expression
-            null, // ProjectionExpression
+            null, // "nodeType, nodeId, title, description, x, y, upstream, downstream", // ProjectionExpression
             null, // ExpressionAttributeNames
             null // ExpressionAttributeValues
             );

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { fetchNode } from 'store/actions'
 import { NODETYPE } from 'common'
 import ContentEditable from 'shared/ContentEditable/ContentEditable'
 import Comments from 'shared/Comments/Comments'
@@ -14,17 +13,16 @@ class InfoTab extends Component {
   static propTypes = {
     lookups: PropTypes.object,
     node: PropTypes.object,
-    onUpdate: PropTypes.func.isRequired,
-    fetchNode: PropTypes.func.isRequired
+    onUpdate: PropTypes.func.isRequired
   }
   getItemDetailSection() {
     const { node, params } = this.props
     if (node.nodeType === NODETYPE.CHART) {
-        return (<ChartInfo node={node} params={params} onUpdate={this.props.onUpdate}></ChartInfo>)
+        return (<ChartInfo key={params.nodeId} node={node} params={params} onUpdate={this.props.onUpdate}></ChartInfo>)
     } else if (node.nodeType === NODETYPE.DATASOURCE) {
-        return (<SourceInfo node={node} params={params} onUpdate={this.props.onUpdate}></SourceInfo>)
+        return (<SourceInfo key={params.nodeId} node={node} params={params} onUpdate={this.props.onUpdate}></SourceInfo>)
     } else if (node.nodeType === NODETYPE.JOB) {
-        return (<JobDetail node={node} params={params} onUpdate={this.props.onUpdate}></JobDetail>)
+        return (<JobDetail key={params.nodeId} node={node} params={params} onUpdate={this.props.onUpdate}></JobDetail>)
     }  else {
         return (<div></div>)
     }
@@ -75,10 +73,6 @@ class InfoTab extends Component {
         </div>
     )
   }
-  componentDidMount() {
-    const { fetchNode, params } = this.props
-    fetchNode(params.nodeId)
-  }
 }
 
 const mapStateToProps = (state, ownProps) => {
@@ -88,6 +82,4 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps, {
-    fetchNode
-})(InfoTab)
+export default connect(mapStateToProps, {})(InfoTab)

@@ -7,7 +7,6 @@ import InfoTab from 'shared/InfoTab/InfoTab'
 import ChartCodeTab from 'shared/ChartCodeTab/ChartCodeTab'
 import DataTab from 'shared/DataTab/DataTab'
 import LogsTab from 'shared/LogsTab/LogsTab'
-import './NodeDetails.css'
 
 class ChartDetails extends Component {
   static propTypes = {

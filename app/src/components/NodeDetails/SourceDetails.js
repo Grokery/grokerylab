@@ -6,7 +6,6 @@ import EditModal from 'shared/EditModal/EditModal'
 import InfoTab from 'shared/InfoTab/InfoTab'
 import DataTab from 'shared/DataTab/DataTab'
 import LogsTab from 'shared/LogsTab/LogsTab'
-import './NodeDetails.css'
 
 class SourceDetails extends Component {
   static propTypes = {
