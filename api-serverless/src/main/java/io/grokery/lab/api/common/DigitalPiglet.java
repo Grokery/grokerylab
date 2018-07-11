@@ -6,7 +6,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.DefaultClaims;
 import java.util.Date;
-import java.util.Map;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 
@@ -28,7 +27,7 @@ public class DigitalPiglet {
 		return claims.get("value").toString();
 	}
 
-	public static String makeJWT(Map<String, Object> claims, long ttlMillis) {
+	public static String makeJWT(JsonObj claims, long ttlMillis) {
 		return makeJWT(new DefaultClaims(claims), ttlMillis);
 	}
 

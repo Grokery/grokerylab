@@ -8,8 +8,10 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
+import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.MapperUtil;
 import io.grokery.lab.api.common.errors.NotImplementedError;
+import io.grokery.lab.api.cloud.context.CloudContext;
 import io.grokery.lab.api.cloud.nodes.jobs.Job;
 import io.grokery.lab.api.cloud.nodes.sources.Datasource;
 
@@ -25,8 +27,8 @@ public class Node {
 	private String description;
 	private Double x;
 	private Double y;
-	private List<Map<String, Object>> upstream;
-	private List<Map<String, Object>> downstream;
+	private List<JsonObj> upstream;
+	private List<JsonObj> downstream;
 
 	public static String getNodeIdName() {
 		return "nodeId";
@@ -52,7 +54,7 @@ public class Node {
 
 	private void initializeDefaults() {
 		this.nodeId = UUID.randomUUID();
-		this.nodeType = NodeType.GENERIC.toString();
+		this.nodeType = "";
 		this.subType = "";
 
 		this.title = "New Node";
@@ -65,7 +67,7 @@ public class Node {
 
 	// Class methods
 	@SuppressWarnings("unchecked")
-	public void setValues(Map<String, Object> newData) {
+	public void setValues(JsonObj newData) {
 		this.title = newData.get("title") != null ? newData.get("title").toString() : this.title;
 		this.description = newData.get("description") != null ? newData.get("description").toString() : this.description;
 		this.x = newData.get("x") != null ? new Double(newData.get("x").toString()) : this.x;
@@ -83,15 +85,14 @@ public class Node {
 		}
 	}
 
-	public void setupExternalResources() {}
+	public void setupExternalResources(CloudContext context) {}
 
-	public void updateExternalResources() {}
+	public void updateExternalResources(CloudContext context, JsonObj data) {}
 
-	public void cleanupExternalResources() {}
+	public void cleanupExternalResources(CloudContext context) {}
 
-	@SuppressWarnings("unchecked")
-	public static Map<String, Object> toMap(Node obj, Boolean removeNulls) {
-		Map<String, Object> result = MapperUtil.getInstance().convertValue(obj, Map.class);
+	public static JsonObj toMap(Node obj, Boolean removeNulls) {
+		JsonObj result = MapperUtil.getInstance().convertValue(obj, JsonObj.class);
 		if (removeNulls == true) {
 			return Node.RemoveNullValues(result);
 		} else {
@@ -99,7 +100,7 @@ public class Node {
 		}
     }
 
-	public static Map<String, Object> RemoveNullValues(Map<String, Object> obj) {
+	public static JsonObj RemoveNullValues(JsonObj obj) {
       for(Iterator<Map.Entry<String, Object>> it = obj.entrySet().iterator(); it.hasNext(); ) {
           Map.Entry<String, Object> entry = it.next();
           if(entry.getValue() == null) {
@@ -109,26 +110,24 @@ public class Node {
       return obj;
 	}
 
-	public static Node fromMap(Map<String, Object> obj) throws InvalidInputException {
-        return Node.fromMap(obj, Node.getClassInstance(obj));
+	public static Node fromMap(JsonObj obj, CloudContext context) throws InvalidInputException {
+        return Node.fromMap(obj, Node.getClassInstance(obj, context));
     }
 
-	public static Node fromMap(Map<String, Object> obj, Node toValueType) {
+	public static Node fromMap(JsonObj obj, Node toValueType) {
 		return MapperUtil.getInstance().convertValue(obj, toValueType.getClass());
     }
 
-    public static Node getClassInstance(Map<String, Object> obj) throws InvalidInputException {
+    public static Node getClassInstance(JsonObj obj, CloudContext context) throws InvalidInputException {
 		try {
 			String typeName = obj.get(Node.getNodeTypeName()).toString();
 			LOGGER.info("Get class instance for nodeType: " + typeName);
 			NodeType nodeType = NodeType.valueOf(typeName);
 			switch (nodeType) {
-				case GENERIC:
-					return new Node();
 				case JOB:
-					return Job.getClassInstance(obj);
+					return Job.getClassInstance(obj, context);
 				case DATASOURCE:
-					return Datasource.getClassInstance(obj);
+					return Datasource.getClassInstance(obj, context);
 				default:
 					throw new NotImplementedError();
 			}
@@ -187,16 +186,16 @@ public class Node {
 	public void setY(Double y) {
 		this.y = y;
 	}
-	public List<Map<String, Object>> getUpstream() {
+	public List<JsonObj> getUpstream() {
 		return this.upstream;
 	}
-	public void setUpstream(List<Map<String, Object>> upstream) {
+	public void setUpstream(List<JsonObj> upstream) {
 		this.upstream = upstream;
 	}
-	public List<Map<String, Object>> getDownstream() {
+	public List<JsonObj> getDownstream() {
 		return this.downstream;
 	}
-	public void setDownstream(List<Map<String, Object>> downstream) {
+	public void setDownstream(List<JsonObj> downstream) {
 		this.downstream = downstream;
 	}
 

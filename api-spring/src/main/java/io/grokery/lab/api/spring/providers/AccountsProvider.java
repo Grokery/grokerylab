@@ -15,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
 import io.grokery.lab.api.common.exceptions.NotAuthorizedException;
 import io.grokery.lab.api.admin.AccountService;
@@ -22,7 +24,6 @@ import io.grokery.lab.api.admin.models.Account;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import java.util.Map;
 
 @Component
 @Path("/accounts")
@@ -41,10 +42,10 @@ public class AccountsProvider {
 	@ApiOperation(value = "Create Account", response = Account.class)
 	public Response create(
 		@HeaderParam("Authorization") String auth,
-		@ApiParam Map<String, Object> req) {
+		@ApiParam JsonObj req) {
 		LOGGER.info("POST: {}/accounts", apiVersion);
 		try {
-			Map<String,Object> response = AccountService.getInstance().create(auth, req);
+			JsonObj response = AccountService.getInstance().create(auth, req);
 			return Response.status(Status.OK).entity(response).build();
 		} catch (InvalidInputException e) {
 			LOGGER.error(e.message);
@@ -65,7 +66,7 @@ public class AccountsProvider {
 		@ApiParam @PathParam("accountId") String accountId) {
 		LOGGER.info("POST: {}/accounts/<accountid>", apiVersion);
 		try {
-			Map<String,Object> response = AccountService.getInstance().retrieve(auth, accountId);
+			JsonObj response = AccountService.getInstance().retrieve(auth, accountId);
 			return Response.status(Status.OK).entity(response).build();
 		} catch (NotAuthorizedException e) {
 			LOGGER.error(e.message);

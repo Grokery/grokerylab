@@ -1,7 +1,7 @@
 package io.grokery.lab.api.cloud.nodes.jobs;
 
-import java.util.Map;
-
+import io.grokery.lab.api.cloud.context.CloudContext;
+import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
 
 public class AWSDataPipelineJob extends Job {
@@ -12,7 +12,7 @@ public class AWSDataPipelineJob extends Job {
 		this.initializeDefaults();
 	}
 
-	public AWSDataPipelineJob(Map<String, Object> obj) {
+	public AWSDataPipelineJob(JsonObj obj) {
 		super(JobType.AWSLAMBDA);
 		this.initializeDefaults();
 	}
@@ -21,7 +21,7 @@ public class AWSDataPipelineJob extends Job {
 	}
 
 	// Inherited class methodss
-	public void setValues(Map<String, Object> newData) {
+	public void setValues(JsonObj newData) {
 		super.setValues(newData);
 		// TODO update self values with new data and return self
 	}
@@ -31,15 +31,15 @@ public class AWSDataPipelineJob extends Job {
 		// TODO make sure I'm good to be saved
 	}
 
-	public void setupExternalResources() {
-		super.setupExternalResources();
+	public void setupExternalResources(CloudContext context) {
+		super.setupExternalResources(context);
 		// TODO allocate any external resources
 		// create s3 package path and copy default pkg
 		// create lambda and save ARN
 	}
 
-	public void cleanupExternalResources() {
-		super.cleanupExternalResources();
+	public void cleanupExternalResources(CloudContext context) {
+		super.cleanupExternalResources(context);
 		// TODO de allocate any external resources
 	}
 

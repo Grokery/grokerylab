@@ -6,12 +6,17 @@ package io.grokery.lab.api.cloud.nodes.jobs;
  * @author hogue
  */
 public enum JobType {
-    GENERIC("Generic"),
-    AWSLAMBDA("AWS Lambda"),
-    SHELLSCRIPT("Shell Script"),
-    AWSDATAPIPELINE("AWS DataPipeline");
+    PLACEHOLDER("Placeholder"),
+    PYTHON("Python"),
+    SQL("SQL"),
+    JAVA("Java"),
 
-	private String typeName;
+    AWSLAMBDA("AWS Lambda"),
+    AZUREFUNC("Azure Function"),
+    AWSDATAPIPELINE("AWS DataPipeline"),
+    AZUREDATAFACTORY("Azure DataFactory");
+
+    private String typeName;
 
     JobType(String typeName) {
         this.typeName = typeName;
@@ -19,6 +24,6 @@ public enum JobType {
 
     public String getTypeName() {
         return typeName;
-	}
+    }
 
 }

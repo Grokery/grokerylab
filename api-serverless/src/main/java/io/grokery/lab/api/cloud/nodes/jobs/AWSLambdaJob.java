@@ -1,17 +1,28 @@
 package io.grokery.lab.api.cloud.nodes.jobs;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.amazonaws.services.lambda.AWSLambda;
+import com.amazonaws.services.lambda.AWSLambdaClientBuilder;
+import com.amazonaws.services.lambda.model.CreateFunctionResult;
+import com.amazonaws.services.lambda.model.CreateFunctionRequest;
+import com.amazonaws.services.lambda.model.FunctionCode;
+import com.amazonaws.services.lambda.model.Runtime;
+
+import io.grokery.lab.api.cloud.context.CloudContext;
+import io.grokery.lab.api.common.CredentialProvider;
+import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.MapperUtil;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
 
 public class AWSLambdaJob extends Job {
 
-	private String s3PkgPath;
+	private static final Logger LOGGER = LoggerFactory.getLogger(AWSLambdaJob.class);
+
 	private String lambdaARN;
 	private String runControl;
-	private Map<String, Object> schedule;
+	private JsonObj schedule;
 
 	// Constructers
 	public AWSLambdaJob() {
@@ -19,24 +30,22 @@ public class AWSLambdaJob extends Job {
 		this.initializeDefaults();
 	}
 
-	public AWSLambdaJob(Map<String, Object> obj) {
+	public AWSLambdaJob(JsonObj obj) {
 		super(JobType.AWSLAMBDA);
 		this.initializeDefaults();
 	}
 
 	private void initializeDefaults() {
 		this.runControl = "manual";
-		this.schedule = new HashMap<String, Object>();
+		this.schedule = new JsonObj();
 	}
 
 	// Inherited class methods
-	@SuppressWarnings("unchecked")
-	public void setValues(Map<String, Object> newData) {
+	public void setValues(JsonObj newData) {
 		super.setValues(newData);
-		this.s3PkgPath = newData.get("s3PkgPath") != null ? newData.get("s3PkgPath").toString() : this.s3PkgPath;
 		this.lambdaARN = newData.get("lambdaARN")!= null ? newData.get("lambdaARN").toString() : this.lambdaARN;
 		this.runControl = newData.get("runControl") != null ? newData.get("runControl").toString() : this.runControl;
-		this.schedule = newData.get("schedule") != null ? MapperUtil.getInstance().convertValue(newData.get("schedule"), HashMap.class) : this.schedule;
+		this.schedule = newData.get("schedule") != null ? MapperUtil.getInstance().convertValue(newData.get("schedule"), JsonObj.class) : this.schedule;
 	}
 
 	public void validateValues() throws InvalidInputException {
@@ -44,24 +53,49 @@ public class AWSLambdaJob extends Job {
 		// TODO make sure I'm good to be saved
 	}
 
-	public void setupExternalResources() {
-		super.setupExternalResources();
-		// TODO allocate any external resources
-		// create s3 package path and copy default pkg
-		// create lambda and save ARN
+	public void setupExternalResources(CloudContext context) {
+		super.setupExternalResources(context);
+
+		// TODO:
+		// check if jobs/<id> exists and create if not
+		// check if jobs/<id>/packages/<version> exists and create if not
+		// check if jobs/<id>/packages/<version>/package.zip and copy from default if not
+		// check if jobs/<id>/runs exists and create if not
+
+		final CreateFunctionRequest request = new CreateFunctionRequest()
+			.withRuntime(Runtime.Python36)
+			.withCode(new FunctionCode().withS3Bucket(context.s3BucketName).withS3Key(this.getS3Path()))
+			.withHandler("function.handler")
+			.withFunctionName(this.getTitle())
+			.withDescription(this.getDescription())
+			.withMemorySize(128)
+			.withPublish(true)
+			.withRole("arn:aws:iam::854227434563:role/grokerylab-api-dev-us-west-2-lambdaRole");
+
+		AWSLambda lambdaClient = AWSLambdaClientBuilder.standard()
+			.withCredentials(new CredentialProvider(context.awsAccessKeyId, context.awsSecretKey))
+			.withRegion(context.awsRegion)
+			.build();
+		CreateFunctionResult result = lambdaClient.createFunction(request);
+
+		lambdaARN = result.getFunctionArn();
 	}
 
-	public void cleanupExternalResources() {
-		super.cleanupExternalResources();
+	public void updateExternalResources(CloudContext context, JsonObj data) {
+		super.updateExternalResources(context, data);
+	}
+
+	public void cleanupExternalResources(CloudContext context) {
+		super.cleanupExternalResources(context);
 		// TODO de allocate any external resources
 	}
 
 	// Getters and Setters
 	public String getS3Path() {
-		return s3PkgPath;
+		return "/jobs/" + this.getNodeId() + "/v" + Integer.toString(this.getVersion());
 	}
-	public void setS3Path(String s3Path) {
-		this.s3PkgPath = s3Path;
+	public String getS3PkgPath() {
+		return this.getS3Path() + "/pkg";
 	}
 
 	public String getLambdaARN() {
@@ -78,10 +112,10 @@ public class AWSLambdaJob extends Job {
 		this.runControl = runControl;
 	}
 
-	public Map<String, Object> getSchedule() {
+	public JsonObj getSchedule() {
 		return schedule;
 	}
-	public void setSchedule(Map<String, Object> schedule) {
+	public void setSchedule(JsonObj schedule) {
 		this.schedule = schedule;
 	}
 

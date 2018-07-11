@@ -1,7 +1,5 @@
 package io.grokery.lab.api.spring.providers;
 
-import java.util.Map;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
@@ -26,6 +24,7 @@ import org.springframework.stereotype.Component;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
 import io.grokery.lab.api.common.exceptions.NotAuthorizedException;
 import io.grokery.lab.api.common.exceptions.NotFoundException;
@@ -52,11 +51,11 @@ public class NodesProvider {
 	public Response create(
 			@HeaderParam("Authorization") String authorization,
 			@ApiParam @PathParam("cloudId") String cloudId,
-			@ApiParam Map<String, Object> nodeData) {
+			@ApiParam JsonObj nodeData) {
 		LOGGER.info("POST: apiVersion={} cloudId={}", apiVersion, cloudId);
 		try {
 			CloudContext context = new CloudContext(authorization);
-			Map<String, Object> result = NodesService.create(nodeData, context);
+			JsonObj result = NodesService.create(nodeData, context);
 			return Response.status(Status.OK).entity(result).build();
 		} catch (NotAuthorizedException e) {
 			LOGGER.error(e.message);
@@ -77,12 +76,12 @@ public class NodesProvider {
 			@HeaderParam("Authorization") String authorization,
 			@ApiParam @PathParam("cloudId") String cloudId,
 			@ApiParam @PathParam("nodeId") String nodeId,
-			@ApiParam Map<String, Object> nodeData) {
+			@ApiParam JsonObj nodeData) {
 		LOGGER.info("PUT: {}/nodes/{}", apiVersion, nodeId);
 		try {
 			CloudContext context = new CloudContext(authorization);
 			nodeData.put(Node.getNodeIdName(), nodeId);
-			Map<String, Object> result = NodesService.update(nodeData, context);
+			JsonObj result = NodesService.update(nodeData, context);
 			return Response.status(Status.OK).entity(result).build();
 		} catch (NotAuthorizedException e) {
 			LOGGER.error(e.message);
@@ -106,7 +105,7 @@ public class NodesProvider {
 		LOGGER.info("DELETE: {}/nodes/{}", apiVersion, nodeId);
 		try {
 			CloudContext context = new CloudContext(authorization);
-			Map<String, Object> result = NodesService.delete(nodeId, context);
+			JsonObj result = NodesService.delete(nodeId, context);
 			return Response.status(Status.OK).entity(result).build();
 		} catch (NotAuthorizedException e) {
 			LOGGER.error(e.message);
@@ -131,7 +130,7 @@ public class NodesProvider {
 		LOGGER.info("GET: {}/nodes/{}/{}", apiVersion, nodeId);
 		try {
 			CloudContext context = new CloudContext(authorization);
-			Map<String, Object> result = NodesService.read(nodeId, context);
+			JsonObj result = NodesService.read(nodeId, context);
 			return Response.status(Status.OK).entity(result).build();
 		} catch (NotAuthorizedException e) {
 			LOGGER.error(e.message);
@@ -156,7 +155,7 @@ public class NodesProvider {
 		LOGGER.info("GET: {}/nodes", apiVersion);
 		try {
 			CloudContext context = new CloudContext(authorization);
-			Map<String, Object> result = NodesService.readMultiple(context);
+			JsonObj result = NodesService.readMultiple(context);
 			return Response.status(Status.OK).entity(result).build();
 		} catch (NotAuthorizedException e) {
 			LOGGER.error(e.message);

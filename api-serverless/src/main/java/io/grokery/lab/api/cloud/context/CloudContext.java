@@ -3,12 +3,13 @@ package io.grokery.lab.api.cloud.context;
 import io.grokery.lab.api.common.DigitalPiglet;
 import io.grokery.lab.api.common.exceptions.NotAuthorizedException;
 import io.jsonwebtoken.Claims;
-import java.util.Map;
 
 public class CloudContext {
 
+	public String cloudType = "";
 	public String daoType = "";
 	public String dynamoTableName = "";
+	public String s3BucketName = "";
 	public String awsAccessKeyId = "";
 	public String awsSecretKey = "";
 	public String awsRegion = "";
@@ -24,9 +25,10 @@ public class CloudContext {
 		}
 	}
 
-	public void init(Map<String, Object> values) {
+	public void init(Claims values) {
 		this.daoType = "DYNAMODB";
 		this.dynamoTableName = "grokery-cloud-" + values.get("cloudName").toString();
+		this.s3BucketName = "grokery-cloud-" + values.get("cloudName").toString();
 		this.awsAccessKeyId = values.get("awsAccessKeyId").toString();
 		this.awsSecretKey = values.get("awsSecretKey").toString();
 		this.awsRegion = values.get("awsRegion").toString();

@@ -1,11 +1,13 @@
 package io.grokery.lab.api.cloud.nodes.sources;
 
-import java.util.Map;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.errors.NotImplementedError;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
+import io.grokery.lab.api.cloud.context.CloudContext;
 import io.grokery.lab.api.cloud.nodes.Node;
 import io.grokery.lab.api.cloud.nodes.NodeType;
 
@@ -22,7 +24,7 @@ public class Datasource extends Node {
 
 	public Datasource() {
 		super(NodeType.DATASOURCE);
-		this.setSubType(SourceType.GENERIC.toString());
+		this.setSubType(SourceType.PLACEHOLDER.toString());
 	}
 
     public Datasource(SourceType subType) {
@@ -30,7 +32,7 @@ public class Datasource extends Node {
         this.setSubType(subType.toString());
 	}
 
-    public void init(Map<String, Object> obj) {
+    public void init(JsonObj obj) {
 		// TODO get field values from obj
     }
 
@@ -38,14 +40,14 @@ public class Datasource extends Node {
         return "subType";
     }
 
-	public static Datasource getClassInstance(Map<String, Object>  obj) throws InvalidInputException  {
+	public static Datasource getClassInstance(JsonObj obj, CloudContext context) throws InvalidInputException  {
         try {
 			String subTypeStr = obj.get(Datasource.getResourceSubTypeName()).toString();
 			SourceType subType = SourceType.valueOf(subTypeStr);
 			switch (subType) {
-				case GENERIC:
+				case PLACEHOLDER:
 					return new Datasource();
-				case AWSS3BUCKET:
+				case AWSS3:
 					return new AWSS3BucketSource();
 				default:
 					throw new NotImplementedError("Following valid Source type not implemented: " + subType.toString());

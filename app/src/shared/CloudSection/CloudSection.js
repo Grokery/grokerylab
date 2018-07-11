@@ -31,8 +31,10 @@ class CloudSection extends Component {
       return 'img/aws.png'
     } else if (cloudType === 'AZURE') {
       return 'img/azure.png'
-    } else {
+    } else if (cloudType === 'LOCAL') {
       return 'img/local.png'
+    } else {
+      return 'http://via.placeholder.com/50x50'
     }
   }
   getCloudLinks(cloudid, cloud) {

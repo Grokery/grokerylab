@@ -16,6 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
 import io.grokery.lab.api.common.exceptions.NotAuthorizedException;
 import io.grokery.lab.api.admin.CloudService;
@@ -23,7 +25,6 @@ import io.grokery.lab.api.admin.models.Cloud;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import java.util.Map;
 
 @Component
 @Path("/clouds")
@@ -42,10 +43,10 @@ public class CloudsProvider {
 	@ApiOperation(value = "Create Cloud", response = Cloud.class)
 	public Response create(
 		@HeaderParam("Authorization") String auth,
-		@ApiParam Map<String, Object> req) {
+		@ApiParam JsonObj req) {
 		LOGGER.info("POST: {}/clouds", apiVersion);
 		try {
-			Map<String,Object> response = CloudService.getInstance().create(auth, req);
+			JsonObj response = CloudService.getInstance().create(auth, req);
 			return Response.status(Status.OK).entity(response).build();
 		} catch (InvalidInputException e) {
 			LOGGER.error(e.message);
@@ -66,7 +67,7 @@ public class CloudsProvider {
 		@ApiParam @PathParam("cloudId") String cloudId) {
 		LOGGER.info("GET: {}/clouds/<cloudid>", apiVersion);
 		try {
-			Map<String,Object> response = CloudService.getInstance().retrieve(auth, cloudId);
+			JsonObj response = CloudService.getInstance().retrieve(auth, cloudId);
 			return Response.status(Status.OK).entity(response).build();
 		} catch (NotAuthorizedException e) {
 			LOGGER.error(e.message);
@@ -84,7 +85,7 @@ public class CloudsProvider {
 		@ApiParam @PathParam("cloudId") String cloudId) {
 		LOGGER.info("DELETE: {}/clouds/<cloudId>", apiVersion);
 		try {
-			Map<String,Object> response = CloudService.getInstance().delete(auth, cloudId);
+			JsonObj response = CloudService.getInstance().delete(auth, cloudId);
 			return Response.status(Status.OK).entity(response).build();
 		} catch (NotAuthorizedException e) {
 			LOGGER.error(e.message);

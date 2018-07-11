@@ -1,6 +1,6 @@
 package io.grokery.lab.api.cloud.jobruns;
 
-import java.util.Map;
+import io.grokery.lab.api.common.JsonObj;
 
 public class JobRun {
 
@@ -15,7 +15,7 @@ public class JobRun {
 
     }
 
-    public JobRun(Map<String, Object> obj) {
+    public JobRun(JsonObj obj) {
         // TODO get field values from obj
     }
 

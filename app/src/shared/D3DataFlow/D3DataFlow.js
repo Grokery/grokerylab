@@ -896,7 +896,7 @@ class D3DataFlow extends Component {
   createJob(xy) {
       this.createNode({
         nodeType: NODETYPE.JOB,
-        subType: 'GENERIC',
+        subType: 'PLACEHOLDER',
         title: 'New Job',
         description: 'Default description',
         upstream: [],
@@ -908,7 +908,7 @@ class D3DataFlow extends Component {
   createSource(xy) {
       this.createNode({
         nodeType: NODETYPE.DATASOURCE,
-        subType: 'GENERIC',
+        subType: 'PLACEHOLDER',
         title: 'New Source',
         description: 'Default description',
         upstream: [],
@@ -920,7 +920,7 @@ class D3DataFlow extends Component {
   createChart(xy) {
       this.createNode({
         nodeType: NODETYPE.CHART,
-        subtype: 'GENERIC',
+        subtype: 'PLACEHOLDER',
         title: 'New Chart',
         description: 'Default description',
         upstream: [],
@@ -932,7 +932,7 @@ class D3DataFlow extends Component {
   createBoard(xy) {
       this.createNode({
         nodeType: NODETYPE.DASHBOARD,
-        subtype: 'GENERIC',
+        subtype: 'PLACEHOLDER',
         title: 'New Board',
         description: 'Default description',
         upstream: [],

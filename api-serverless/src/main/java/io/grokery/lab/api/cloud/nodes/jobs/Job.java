@@ -1,13 +1,14 @@
 package io.grokery.lab.api.cloud.nodes.jobs;
 
-import java.util.Map;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.MapperUtil;
 import io.grokery.lab.api.common.errors.NotImplementedError;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
+import io.grokery.lab.api.cloud.context.CloudContext;
 import io.grokery.lab.api.cloud.nodes.Node;
 import io.grokery.lab.api.cloud.nodes.NodeType;
 
@@ -15,6 +16,7 @@ public class Job extends Node {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Job.class);
 
+	private int version;
 	private UUID templateId;
 
 	// Constructers
@@ -30,10 +32,11 @@ public class Job extends Node {
 	}
 
 	private void initializeDefaults() {
-		this.setSubType(JobType.GENERIC.toString());
+		this.setVersion(0);
+		this.setSubType(JobType.PLACEHOLDER.toString());
 	}
 
-	public void setValues(Map<String, Object> newData) {
+	public void setValues(JsonObj newData) {
 		super.setValues(newData);
 		this.templateId = newData.get("templateId") != null ? MapperUtil.getInstance().convertValue(newData.get("templateId"), UUID.class) : this.templateId;
 	}
@@ -42,33 +45,35 @@ public class Job extends Node {
 		super.validateValues();
 	}
 
-	public void setupExternalResources() {
-		super.setupExternalResources();
+	public void setupExternalResources(CloudContext context) {
+		super.setupExternalResources(context);
 	}
 
-	public void updateExternalResources() {
-		super.updateExternalResources();
+	public void updateExternalResources(CloudContext context, JsonObj data) {
+		super.updateExternalResources(context, data);
 	}
 
-	public void cleanupExternalResources() {
-		super.cleanupExternalResources();
+	public void cleanupExternalResources(CloudContext context) {
+		super.cleanupExternalResources(context);
 	}
 
-    public static Job getClassInstance(Map<String, Object> obj) throws InvalidInputException {
-        try {
+	public static Job getClassInstance(JsonObj obj, CloudContext context) throws InvalidInputException {
+		try {
 			String subTypeStr = obj.get(Job.getNodeSubTypeName()).toString();
 			JobType subType = JobType.valueOf(subTypeStr);
 			switch (subType) {
-				case GENERIC:
+				case PLACEHOLDER:
 					return new Job();
+				case PYTHON:
+					return Job.getPythonJobForContext(context);
+				case SQL:
+					return Job.getPythonJobForContext(context);
 				case AWSLAMBDA:
 					return new AWSLambdaJob();
-				case AWSDATAPIPELINE:
-					return new AWSDataPipelineJob();
 				default:
 					throw new NotImplementedError("Following Job type not implemented: " + subType.toString());
 			}
-        } catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			String message = "Unknown APIResourceSubType";
 			LOGGER.error(message, e);
 			throw new InvalidInputException(message);
@@ -76,15 +81,31 @@ public class Job extends Node {
 			String message = "APIResourceSubType specification required";
 			LOGGER.error(message, e);
 			throw new InvalidInputException(message);
-        }
+		}
 
-    }
+	}
+
+	private static Job getPythonJobForContext(CloudContext context) {
+		if (context.cloudType.equals("AWS")) {
+			return new AWSLambdaJob();
+		} else if(context.cloudType.equals("AZURE")) {
+			throw new NotImplementedError();
+		} else {
+			throw new NotImplementedError();
+		}
+	}
 
 	// Getters and Setters
+	public int getVersion() {
+		return version;
+	}
+	public void setVersion(int version) {
+		this.version = version;
+	}
+
 	public UUID getTemplateId() {
 		return templateId;
 	}
-
 	public void setTemplateId(UUID templateId) {
 		this.templateId = templateId;
 	}

@@ -31,10 +31,10 @@ class JobForm extends Component {
         <label>ETL Job Type</label>
         <select id="subType" className="form-control" value={node.subType ? node.subType : ""} onChange={this.onChange.bind(this)}>
           <option value="">-- choose type --</option>
-          <option value='GENERIC'>Generic</option>
+          <option value='PLACEHOLDER'>Generic</option>
           <option value='AWSLAMBDA'>AWS Lambda</option>
-          <option value='SHELLSCRIPT'>Shell Script</option>
-          <option value='AWSDATAPIPELINE'>AWS DataPipeline</option>
+          {/* <option value='SHELLSCRIPT'>Shell Script</option>
+          <option value='AWSDATAPIPELINE'>AWS DataPipeline</option> */}
           {this.getOptions()}
         </select>
       </form>

@@ -15,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
 import io.grokery.lab.api.common.exceptions.NotAuthorizedException;
 import io.grokery.lab.api.admin.UserService;
@@ -22,7 +24,6 @@ import io.grokery.lab.api.admin.models.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import java.util.Map;
 
 @Component
 @Path("/users")
@@ -30,21 +31,21 @@ import java.util.Map;
 @Produces(MediaType.APPLICATION_JSON)
 @Api(value = "Users", produces = "application/json")
 public class UsersProvider {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(UsersProvider.class);
 
 	@Value("${info.api.version}")
 	private String apiVersion;
-	
+
 	@POST
-	@Path("/")	
-	@ApiOperation(value = "Create User", response = User.class)  
+	@Path("/")
+	@ApiOperation(value = "Create User", response = User.class)
 	public Response signin(
 		@HeaderParam("Authorization") String auth,
-		@ApiParam Map<String, Object> req) {
+		@ApiParam JsonObj req) {
 		LOGGER.info("POST: {}/users", apiVersion);
 		try {
-			Map<String,Object> response = UserService.getInstance().create(auth, req);
+			JsonObj response = UserService.getInstance().create(auth, req);
 			return Response.status(Status.OK).entity(response).build();
 		} catch (InvalidInputException e) {
 			LOGGER.error(e.message);
@@ -66,7 +67,7 @@ public class UsersProvider {
 		@ApiParam @PathParam("userId") String userId) {
 		LOGGER.info("POST: {}/users/<userId>", apiVersion);
 		try {
-			Map<String,Object> response = UserService.getInstance().retrieve(auth, userId);
+			JsonObj response = UserService.getInstance().retrieve(auth, userId);
 			return Response.status(Status.OK).entity(response).build();
 		} catch (NotAuthorizedException e) {
 			LOGGER.error(e.message);

@@ -32,9 +32,9 @@ public class User implements Serializable {
 
 	// Not stored in DB
 	private String accountToken;
-	
+
 	public User() {
-		userId = UUID.randomUUID().toString();	
+		userId = UUID.randomUUID().toString();
 		userType = "USER";
 		clouds = new HashMap<String, CloudAccess>();
 	}
@@ -44,7 +44,7 @@ public class User implements Serializable {
 		return hashKey;
 	}
 	public void setHashKey(String hashKey) {
-		
+
 	}
 
 	@DynamoDBRangeKey

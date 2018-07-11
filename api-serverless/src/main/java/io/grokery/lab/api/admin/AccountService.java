@@ -1,7 +1,5 @@
 package io.grokery.lab.api.admin;
 
-import java.util.Map;
-
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedQueryList;
@@ -11,6 +9,7 @@ import io.grokery.lab.api.admin.dao.DynamoDAOUtil;
 import io.grokery.lab.api.admin.models.Account;
 import io.grokery.lab.api.admin.types.AccountRole;
 import io.grokery.lab.api.common.DigitalPiglet;
+import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.MapperUtil;
 import io.grokery.lab.api.common.errors.NotImplementedError;
 import io.grokery.lab.api.common.exceptions.NotAuthorizedException;
@@ -42,11 +41,11 @@ public class AccountService {
         return instance;
     }
 
-	public Map<String, Object> create(String auth, Map<String, Object> requestBody) throws Exception {
+	public JsonObj create(String auth, JsonObj requestBody) throws Exception {
 
 		if (auth == null) {
 			// allow create superadmin account during system initialization
-			Map<String, Object> checkResult = validateSuperAdminAccountInitialization(requestBody);
+			JsonObj checkResult = validateSuperAdminAccountInitialization(requestBody);
 			if (checkResult != null) {
 				logger.info("Returning super admin account for super admin user creation");
 				return checkResult;
@@ -75,24 +74,23 @@ public class AccountService {
 		}
 
 		// Map and return
-		@SuppressWarnings("unchecked")
-		Map<String, Object> response = mapper.convertValue(created, Map.class);
+		JsonObj response = mapper.convertValue(created, JsonObj.class);
 		return response;
 	}
 
-	public Map<String, Object> retrieve(String auth, String username) throws NotFoundException, NotAuthorizedException {
+	public JsonObj retrieve(String auth, String username) throws NotFoundException, NotAuthorizedException {
 		throw new NotImplementedError();
 	}
 
-	public Map<String, Object> update(String auth, String username, Map<String, Object> requestBody) {
+	public JsonObj update(String auth, String username, JsonObj requestBody) {
 		throw new NotImplementedError();
 	}
 
-	public Map<String, Object> delete(String auth, String username) {
+	public JsonObj delete(String auth, String username) {
 		throw new NotImplementedError();
 	}
 
-	private Map<String, Object> validateSuperAdminAccountInitialization(Map<String, Object> requestBody) throws NotAuthorizedException {
+	private JsonObj validateSuperAdminAccountInitialization(JsonObj requestBody) throws NotAuthorizedException {
 		Account acct = new Account();
 		acct.setAccountType("ACCOUNT");
 		PaginatedQueryList<Account> results = dao.query(Account.class, new DynamoDBQueryExpression<Account>().withHashKeyValues(acct));
@@ -102,8 +100,7 @@ public class AccountService {
 		if (results.size() == 1) {
 			acct = results.get(0);
 			if (acct.getUsers().size() == 0) {
-				@SuppressWarnings("unchecked")
-				Map<String, Object> response = mapper.convertValue(acct, Map.class);
+				JsonObj response = mapper.convertValue(acct, JsonObj.class);
 				return response;
 			}
 		}

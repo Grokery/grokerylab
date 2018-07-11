@@ -1,47 +1,49 @@
 package io.grokery.lab.api.cloud.dao;
 
-import io.grokery.lab.api.common.exceptions.NotFoundException;
 import java.util.Map;
+
+import io.grokery.lab.api.common.JsonObj;
+import io.grokery.lab.api.common.exceptions.NotFoundException;
 
 public interface DAO {
 
     /**
      * Creates an item in the db
      * @param String nodeId
-     * @param Map<String, Object> item to create
-     * @return Map<String, Object> item as created
+     * @param JsonObj item to create
+     * @return JsonObj item as created
      */
-    Map<String, Object> create(String nodeId, Map<String, Object> item);
+    JsonObj create(String nodeId, JsonObj item);
 
     /**
      * Updates item's (root level) key value pairs
      * @param String nodeId
-     * @param Map<String, Object> key value map of (root level) keys to update
-     * @return Map<String, Object> item as updated
+     * @param JsonObj key value map of (root level) keys to update
+     * @return JsonObj item as updated
      * @throws NotFoundException
      */
-    Map<String, Object> update(String nodeId, Map<String, Object> values) throws NotFoundException;
+    JsonObj update(String nodeId, JsonObj values) throws NotFoundException;
 
     /**
      * Deletes an item from the db
      * @param String nodeId
-     * @return Map<String, Object> item
+     * @return JsonObj item
      * @throws NotFoundException
      */
-    Map<String, Object> delete(String nodeId) throws NotFoundException;
+    JsonObj delete(String nodeId) throws NotFoundException;
 
     /**
      * Retrieves an item from the db
      * @param String nodeId
-     * @return Map<String, Object> results keyd by nodeId
+     * @return JsonObj results keyd by nodeId
      * @throws NotFoundException
      */
-    Map<String, Object> retrieve(String nodeId) throws NotFoundException;
+    JsonObj retrieve(String nodeId) throws NotFoundException;
 
     /**
      * Retrieves items from the db
-     * @return Map<String, Object> results keyd by nodeId
+     * @return JsonObj results keyd by nodeId
      * @throws NotFoundException
      */
-    Map<String, Object> retrieve();
+    JsonObj retrieve();
 }

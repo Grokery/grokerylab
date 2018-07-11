@@ -6,12 +6,10 @@ package io.grokery.lab.api.cloud.nodes;
  * @author hogue
  */
 public enum NodeType {
-    GENERIC("Generic Node"),
-	DATASOURCE("Datasource"),
-	JOBRUN("Job Run"),
-	JOB("Job");
+    JOB("Job"),
+    DATASOURCE("Datasource");
 
-	private String typeName;
+    private String typeName;
 
     NodeType(String typeName) {
         this.typeName = typeName;
@@ -19,6 +17,6 @@ public enum NodeType {
 
     public String getTypeName() {
         return typeName;
-	}
+    }
 
 }

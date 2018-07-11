@@ -1,7 +1,6 @@
 package io.grokery.lab.api.cloud.dao;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +23,7 @@ import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
 
 import io.grokery.lab.api.cloud.context.CloudContext;
 import io.grokery.lab.api.common.CredentialProvider;
+import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.exceptions.NotFoundException;
 
 public class DynamoDAO implements DAO {
@@ -77,7 +77,7 @@ public class DynamoDAO implements DAO {
 		}
 	}
 
-	public Map<String, Object> create(String nodeId, Map<String, Object> item) {
+	public JsonObj create(String nodeId, JsonObj item) {
 		Item dbItem = new Item();
 		Iterator it = item.entrySet().iterator();
 		while (it.hasNext()) {
@@ -86,10 +86,11 @@ public class DynamoDAO implements DAO {
 		}
 		dbItem.withString("nodeId", nodeId);
 		table.putItem(dbItem);
-		return dbItem.asMap();
+
+		return new JsonObj(dbItem.asMap());
 	}
 
-	public Map<String, Object> update(String nodeId, Map<String, Object> values) throws NotFoundException {
+	public JsonObj update(String nodeId, JsonObj values) throws NotFoundException {
 		Item dbItem = table.getItem("nodeId", nodeId);
 		if (dbItem == null) {
 			throw new NotFoundException();
@@ -101,27 +102,27 @@ public class DynamoDAO implements DAO {
 		}
 		dbItem.withString("nodeId", nodeId);
 		table.putItem(dbItem);
-		return dbItem.asMap();
+		return new JsonObj(dbItem.asMap());
 	}
 
-	public Map<String, Object> delete(String nodeId) throws NotFoundException {
+	public JsonObj delete(String nodeId) throws NotFoundException {
 		Item dbItem = table.getItem("nodeId", nodeId);
 		if (dbItem == null) {
 			throw new NotFoundException();
 		}
 		table.deleteItem("nodeId", nodeId);
-		return dbItem.asMap();
+		return new JsonObj(dbItem.asMap());
 	}
 
-	public Map<String, Object> retrieve(String nodeId) throws NotFoundException {
+	public JsonObj retrieve(String nodeId) throws NotFoundException {
 		Item dbItem = table.getItem("nodeId", nodeId);
 		if (dbItem == null) {
 			throw new NotFoundException();
 		}
-		return dbItem.asMap();
+		return new JsonObj(dbItem.asMap());
 	}
 
-	public Map<String, Object> retrieve() {
+	public JsonObj retrieve() {
 
 		ItemCollection<ScanOutcome> scanResults = table.scan(
         	null, // Filter expression
@@ -130,7 +131,7 @@ public class DynamoDAO implements DAO {
             null // ExpressionAttributeValues
             );
 
-		Map<String, Object> result = new HashMap<String, Object>();
+		JsonObj result = new JsonObj();
 		Iterator<Item> iterator = scanResults.iterator();
         while (iterator.hasNext()) {
         	Item item = iterator.next();

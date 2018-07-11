@@ -6,19 +6,23 @@ package io.grokery.lab.api.cloud.nodes.sources;
  * @author hogue
  */
 public enum SourceType {
-	GENERIC("Generic"),
-	AWSS3BUCKET("AWSS3Bucket"),
-	AZUREDATASTORE("AzureDataStore"),
-	GOOGLEBIGQUERYTABLE("GoogleBigQueryTable");
+	PLACEHOLDER("Placeholder"),
+	SQL("SQL Table"),
+	MONGO("Mongo Collection"),
+
+	AWSS3("AWS S3"),
+	AZUREDATASTORE("Azure Data Store"),
+	AWSREDSHIFT("AWS Redshift Table"),
+	GOOGLEBIGQUERY("Google BigQuery Table");
 
 	private String typeName;
 
-    SourceType(String typeName) {
-        this.typeName = typeName;
-    }
+	SourceType(String typeName) {
+		this.typeName = typeName;
+	}
 
-    public String getTypeName() {
-        return typeName;
+	public String getTypeName() {
+		return typeName;
 	}
 
 }

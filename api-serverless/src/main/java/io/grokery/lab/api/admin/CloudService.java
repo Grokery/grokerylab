@@ -1,7 +1,6 @@
 package io.grokery.lab.api.admin;
 
 import java.util.List;
-import java.util.Map;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,6 +15,7 @@ import io.grokery.lab.api.admin.models.submodels.CloudRef;
 import io.grokery.lab.api.admin.models.submodels.UserRef;
 import io.grokery.lab.api.admin.types.AccountRole;
 import io.grokery.lab.api.common.DigitalPiglet;
+import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.MapperUtil;
 import io.grokery.lab.api.common.errors.NotImplementedError;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
@@ -48,7 +48,7 @@ public class CloudService {
         return instance;
     }
 
-	public Map<String, Object> create(String auth, Map<String, Object> requestBody) throws Exception {
+	public JsonObj create(String auth, JsonObj requestBody) throws Exception {
 		User user = null;
 		try {
 			Claims claims = DigitalPiglet.parseJWT(auth);
@@ -96,12 +96,11 @@ public class CloudService {
 		if (created == null) {
 			throw new Error("Error creating or saving cloud");
 		}
-		@SuppressWarnings("unchecked")
-		Map<String, Object> response = mapper.convertValue(created, Map.class);
+		JsonObj response = mapper.convertValue(created, JsonObj.class);
 		return response;
 	}
 
-	public Map<String, Object> retrieve(String auth, String cloudId) throws NotFoundException, NotAuthorizedException {
+	public JsonObj retrieve(String auth, String cloudId) throws NotFoundException, NotAuthorizedException {
 		Cloud cloud = null;
 		try {
 			Claims claims = DigitalPiglet.parseJWT(auth);
@@ -118,10 +117,9 @@ public class CloudService {
 			throw new NotAuthorizedException();
 		}
 
-		@SuppressWarnings("unchecked")
-		Map<String, Object> response = mapper.convertValue(cloud, Map.class);
+		JsonObj response = mapper.convertValue(cloud, JsonObj.class);
 
-        // Map<String, Object> subTypes = new HashMap<>();
+        // JsonObj subTypes = new HashMap<>();
         // for (JobType type : JobType.values()) {
         //     subTypes.put(type.name(), type.getTypeName());
         // }
@@ -133,11 +131,11 @@ public class CloudService {
 		return response;
 	}
 
-    public Map<String, Object> update(String auth, String cloudId, Map<String, Object> requestBody) {
+    public JsonObj update(String auth, String cloudId, JsonObj requestBody) {
 		throw new NotImplementedError();
 	}
 
-	public Map<String, Object> delete(String auth, String cloudId) throws NotAuthorizedException, NotFoundException {
+	public JsonObj delete(String auth, String cloudId) throws NotAuthorizedException, NotFoundException {
 		User user = null;
 		Cloud cloud = null;
 		try {
@@ -178,8 +176,7 @@ public class CloudService {
 
 		dao.delete(cloud);
 
-		@SuppressWarnings("unchecked")
-		Map<String, Object> response = mapper.convertValue(cloud, Map.class);
+		JsonObj response = mapper.convertValue(cloud, JsonObj.class);
 		return response;
 	}
 

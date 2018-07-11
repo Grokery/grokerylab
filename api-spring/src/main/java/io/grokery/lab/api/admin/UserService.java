@@ -3,7 +3,6 @@ package io.grokery.lab.api.admin;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -19,6 +18,7 @@ import io.grokery.lab.api.admin.models.User;
 import io.grokery.lab.api.admin.models.submodels.UserRef;
 import io.grokery.lab.api.admin.types.AccountRole;
 import io.grokery.lab.api.common.DigitalPiglet;
+import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.MapperUtil;
 import io.grokery.lab.api.common.CommonUtils;
 import io.grokery.lab.api.common.errors.NotImplementedError;
@@ -57,7 +57,7 @@ public class UserService {
         return instance;
     }
 
-	public Map<String, Object> create(String auth, Map<String, Object> requestBody) throws Exception {
+	public JsonObj create(String auth, JsonObj requestBody) throws Exception {
 
 		User user = mapper.convertValue(requestBody, User.class);
 
@@ -68,9 +68,9 @@ public class UserService {
 				throw new NotAuthorizedException("SuperAdmin user/account may only be created during system initialization");
 			}
 			AccountService provider = AccountService.getInstance();
-			Map<String, Object> acct = new HashMap<>();
+			JsonObj acct = new JsonObj();
 			acct.put("accountType", "SUPERADMIN");
-			Map<String, Object> result = provider.create(null, acct);
+			JsonObj result = provider.create(null, acct);
 			user.setAccountId(result.get("accountId").toString());
 		} else {
 			try {
@@ -120,12 +120,11 @@ public class UserService {
 		created = redact(created);
 
 		// Map and return
-		@SuppressWarnings("unchecked")
-		Map<String, Object> response = mapper.convertValue(created, Map.class);
+		JsonObj response = mapper.convertValue(created, JsonObj.class);
 		return response;
 	}
 
-	public Map<String, Object> retrieve(String auth, String username) throws NotFoundException, NotAuthorizedException {
+	public JsonObj retrieve(String auth, String username) throws NotFoundException, NotAuthorizedException {
 
 		try {
 			Claims claims = DigitalPiglet.parseJWT(auth);
@@ -143,26 +142,33 @@ public class UserService {
 
 		user = redact(user);
 
-		@SuppressWarnings("unchecked")
-		Map<String, Object> response = mapper.convertValue(user, Map.class);
+		JsonObj response = mapper.convertValue(user, JsonObj.class);
 		return response;
 	}
 
-	public Map<String, Object> update(String auth, String username, Map<String, Object> requestBody) {
+	public JsonObj update(String auth, String username, JsonObj requestBody) {
 		// TODO check that user name not changing and/or handle
 		// TODO check if password updating and handle (update cloud credential)
 		throw new NotImplementedError();
 	}
 
-	public Map<String, Object> delete(String auth, String username) {
+	public JsonObj delete(String auth, String username) {
 		throw new NotImplementedError();
 	}
 
-	public Map<String, Object> authenticate(Map<String, Object> request) throws InvalidInputException, NotAuthorizedException {
-		// Get and validateValues user
+	public JsonObj authenticate(JsonObj request) throws InvalidInputException, NotAuthorizedException {
 		User user = null;
 		try {
-			user = getAndValidateUser(request);
+			String username = request.get("username").toString();
+			String password = request.get("password").toString();
+			if (CommonUtils.isNullOrEmpty(username) || CommonUtils.isNullOrEmpty(password)) {
+				throw new InvalidInputException("Please submit a valid username and password");
+			}
+			user = getUserByUsername(username);
+			String passFromDb = user.getPassword();
+			if (!BCrypt.checkpw(password, passFromDb)) {
+				throw new NotAuthorizedException("User not found or password not match");
+			}
 		} catch (InvalidInputException | NotAuthorizedException e) {
 			throw e;
 		} catch (Throwable t) {
@@ -197,24 +203,8 @@ public class UserService {
 			cloudAccess.setCredentials(null);
 		}
 
-		@SuppressWarnings("unchecked")
-		Map<String, Object> response = mapper.convertValue(user, Map.class);
+		JsonObj response = mapper.convertValue(user, JsonObj.class);
 		return response;
-	}
-
-	private User getAndValidateUser(Map<String, Object> request) throws InvalidInputException, NotAuthorizedException {
-		String username = request.get("username").toString();
-		String password = request.get("password").toString();
-		if (CommonUtils.isNullOrEmpty(username) || CommonUtils.isNullOrEmpty(password)) {
-			throw new InvalidInputException("Please submit a valid username and password");
-		}
-
-		User user = getUserByUsername(username);
-		String passFromDb = user.getPassword();
-		if (!BCrypt.checkpw(password, passFromDb)) {
-			throw new NotAuthorizedException("User not found or password not match");
-		}
-			return user;
 	}
 
 	private User getUserByUsername(String username) throws NotAuthorizedException {
