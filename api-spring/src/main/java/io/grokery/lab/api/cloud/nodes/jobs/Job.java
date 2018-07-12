@@ -66,8 +66,6 @@ public class Job extends Node {
 					return new Job();
 				case PYTHON:
 					return Job.getPythonJobForContext(context);
-				case SQL:
-					return Job.getPythonJobForContext(context);
 				case AWSLAMBDA:
 					return new AWSLambdaJob();
 				default:

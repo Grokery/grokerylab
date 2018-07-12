@@ -26,6 +26,7 @@ public class CloudContext {
 	}
 
 	public void init(Claims values) {
+		this.cloudType = values.get("cloudType").toString();
 		this.daoType = "DYNAMODB";
 		this.dynamoTableName = "grokery-cloud-" + values.get("cloudName").toString();
 		this.s3BucketName = "grokery-cloud-" + values.get("cloudName").toString();
@@ -35,7 +36,9 @@ public class CloudContext {
 	}
 
 	public boolean equals(CloudContext other) {
-		if (this.daoType.equals(other.daoType) &&
+		if (this.cloudType.equals(other.cloudType) &&
+			this.daoType.equals(other.daoType) &&
+			this.s3BucketName.equals(other.s3BucketName) &&
 			this.dynamoTableName.equals(other.dynamoTableName) &&
 			this.awsAccessKeyId.equals(other.awsAccessKeyId) &&
 			this.awsSecretKey.equals(other.awsSecretKey) &&

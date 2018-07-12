@@ -199,6 +199,7 @@ public class UserService {
 			cloudClaims.put("awsRegion", creds.getAwsRegion());
 			cloudClaims.put("cloudName", cloudAccess.getName());
 			cloudClaims.put("cloudRole", creds.getCloudRole());
+			cloudClaims.put("cloudType", cloudAccess.getCloudType());
 			cloudAccess.setCloudToken(DigitalPiglet.makeJWT(cloudClaims, JWT_TIMEOUT));
 			cloudAccess.setCredentials(null);
 		}

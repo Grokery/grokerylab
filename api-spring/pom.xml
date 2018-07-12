@@ -28,6 +28,18 @@
 
 	</properties>
 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.amazonaws</groupId>
+				<artifactId>aws-java-sdk-bom</artifactId>
+				<version>1.10.10</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -49,12 +61,17 @@
 		<dependency>
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-java-sdk-core</artifactId>
-			<version>1.11.255</version>
+			<version>1.11.362</version>
 		</dependency>
 		<dependency>
    			<groupId>com.amazonaws</groupId>
     		<artifactId>aws-java-sdk-dynamodb</artifactId>
-    		<version>1.11.248</version>
+    		<version>1.11.362</version>
+		</dependency>
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-s3</artifactId>
+			<version>1.11.362</version>
 		</dependency>
 		<dependency>
 			<groupId>com.amazonaws</groupId>

@@ -136,10 +136,10 @@ class CreateCloudModel extends Component {
           <div className='form-group col-md-2'>
             <label>Type:</label>
             <select className='form-control' value={this.state.data.cloudType} onChange={this.onCloudTypeChange.bind(this)}>
-              {/* <option value='LOCAL'>Local</option> */}
+              <option value='LOCAL'>Local</option>
               <option defaultValue value='AWS'>AWS</option>
-              {/* <option value='AZURE'>Azure</option> */}
-              {/* <option value='MULTICLOUD'>MultiCloud</option> */}
+              <option value='AZURE'>Azure</option>
+              <option value='MULTICLOUD'>MultiCloud</option>
             </select>
           </div>
         </div>

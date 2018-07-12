@@ -27,8 +27,8 @@ public class Node {
 	private String description;
 	private Double x;
 	private Double y;
-	private List<JsonObj> upstream;
-	private List<JsonObj> downstream;
+	private List<Map<String, Object>> upstream;
+	private List<Map<String, Object>> downstream;
 
 	public static String getNodeIdName() {
 		return "nodeId";
@@ -186,16 +186,16 @@ public class Node {
 	public void setY(Double y) {
 		this.y = y;
 	}
-	public List<JsonObj> getUpstream() {
+	public List<Map<String, Object>> getUpstream() {
 		return this.upstream;
 	}
-	public void setUpstream(List<JsonObj> upstream) {
+	public void setUpstream(List<Map<String, Object>> upstream) {
 		this.upstream = upstream;
 	}
-	public List<JsonObj> getDownstream() {
+	public List<Map<String, Object>> getDownstream() {
 		return this.downstream;
 	}
-	public void setDownstream(List<JsonObj> downstream) {
+	public void setDownstream(List<Map<String, Object>> downstream) {
 		this.downstream = downstream;
 	}
 

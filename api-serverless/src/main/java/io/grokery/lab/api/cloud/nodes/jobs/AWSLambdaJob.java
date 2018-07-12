@@ -9,6 +9,9 @@ import com.amazonaws.services.lambda.model.CreateFunctionResult;
 import com.amazonaws.services.lambda.model.CreateFunctionRequest;
 import com.amazonaws.services.lambda.model.FunctionCode;
 import com.amazonaws.services.lambda.model.Runtime;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.CreateBucketRequest;
 
 import io.grokery.lab.api.cloud.context.CloudContext;
 import io.grokery.lab.api.common.CredentialProvider;
@@ -57,16 +60,23 @@ public class AWSLambdaJob extends Job {
 		super.setupExternalResources(context);
 
 		// TODO:
-		// check if jobs/<id> exists and create if not
 		// check if jobs/<id>/packages/<version> exists and create if not
 		// check if jobs/<id>/packages/<version>/package.zip and copy from default if not
 		// check if jobs/<id>/runs exists and create if not
+		AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
+		.withCredentials(new CredentialProvider(context.awsAccessKeyId, context.awsSecretKey))
+		.withRegion(context.awsRegion)
+		.build();
 
+		if (!s3Client.doesBucketExistV2(context.s3BucketName)) {
+			s3Client.createBucket(new CreateBucketRequest(context.s3BucketName));
+		}
+		String key = this.getS3PkgPath();
 		final CreateFunctionRequest request = new CreateFunctionRequest()
 			.withRuntime(Runtime.Python36)
-			.withCode(new FunctionCode().withS3Bucket(context.s3BucketName).withS3Key(this.getS3Path()))
-			.withHandler("function.handler")
-			.withFunctionName(this.getTitle())
+			.withCode(new FunctionCode().withS3Bucket(context.s3BucketName).withS3Key(key))
+			.withHandler("lambda_function.lambda_handler")
+			.withFunctionName(this.getFunctionName())
 			.withDescription(this.getDescription())
 			.withMemorySize(128)
 			.withPublish(true)
@@ -92,10 +102,14 @@ public class AWSLambdaJob extends Job {
 
 	// Getters and Setters
 	public String getS3Path() {
-		return "/jobs/" + this.getNodeId() + "/v" + Integer.toString(this.getVersion());
+		return "jobs/" + this.getNodeId() + "/v" + Integer.toString(this.getVersion());
 	}
 	public String getS3PkgPath() {
-		return this.getS3Path() + "/pkg";
+		return this.getS3Path() + "/pkg/dist.zip";
+	}
+
+	public String getFunctionName() {
+		return this.getNodeId() + Integer.toString(this.getVersion());
 	}
 
 	public String getLambdaARN() {

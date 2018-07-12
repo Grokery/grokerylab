@@ -57,7 +57,7 @@ class JobDetail extends Component {
                 <div className="col-md-4 form-group">
                     <label>Event</label>
                     <select className="form-control">
-                        <option>File Drop</option>
+                        <option>Upstream File Write</option>
                         <option>Custom Event</option>
                     </select>
                 </div>
@@ -85,7 +85,7 @@ class JobDetail extends Component {
                     <select className="form-control" value={this.props.node.runControl} onChange={this.onRunControleChange.bind(this)}>
                         <option value='manual'>Manually</option>
                         <option value='schedule'>On Schedule</option>
-                        {/* <option value='event'>On Event</option> */}
+                        <option value='event'>On Event</option>
                     </select>
                 </div>
                 {this.getRunControl()}

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 class JobForm extends Component {
   static propTypes = {
-    lookups: PropTypes.object,
+    options: PropTypes.object,
     node: PropTypes.object,
     onUpdate: PropTypes.func.isRequired
   }
@@ -15,13 +15,13 @@ class JobForm extends Component {
     this.props.onUpdate(updates)
   }
   getOptions() {
-    // const { lookups } = this.props
+    const { options } = this.props
     var items = []
-    // if (lookups.jobtypes) {
-    //   Object.keys(lookups.jobtypes).map(function(key, index) {
-    //     items.push(<option key={index} value={key}>{lookups.jobtypes[key]}</option>)
-    //   })
-    // }
+    if (options.jobtypes) {
+      Object.keys(options.jobtypes).map(function(key, index) {
+        items.push(<option key={index} value={key}>{options.jobtypes[key]}</option>)
+      })
+    }
     return items
   }
   render() {
@@ -31,10 +31,6 @@ class JobForm extends Component {
         <label>ETL Job Type</label>
         <select id="subType" className="form-control" value={node.subType ? node.subType : ""} onChange={this.onChange.bind(this)}>
           <option value="">-- choose type --</option>
-          <option value='PLACEHOLDER'>Generic</option>
-          <option value='AWSLAMBDA'>AWS Lambda</option>
-          {/* <option value='SHELLSCRIPT'>Shell Script</option>
-          <option value='AWSDATAPIPELINE'>AWS DataPipeline</option> */}
           {this.getOptions()}
         </select>
       </form>
@@ -44,7 +40,7 @@ class JobForm extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    lookups: state.cloudDetails ? state.cloudDetails.lookups : {}
+    options: state.options
   }
 }
 

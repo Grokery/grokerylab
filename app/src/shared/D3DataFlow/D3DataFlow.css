@@ -200,7 +200,7 @@ g.colored.selected:hover text.tooltiptext  {
     padding: 15px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    left: -106.25px;
+    left: -43.25px;
     display: none;
 }
 
@@ -244,6 +244,7 @@ g.colored.selected:hover text.tooltiptext  {
     -webkit-user-drag: none;
     -webkit-user-select: none;
     -ms-user-select: none;
+    margin-left: 20px;
 }
 
 .flow-header-content .drag-create-img:hover {
