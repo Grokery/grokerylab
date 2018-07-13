@@ -5,6 +5,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 import java.util.Map;
+
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
@@ -19,9 +22,11 @@ public class Node {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Node.class);
 
-	private UUID nodeId;
+	private String nodeId;
 	private String nodeType;
 	private String subType;
+	private String created;
+	private String updated;
 
 	private String title;
 	private String description;
@@ -53,12 +58,14 @@ public class Node {
 	}
 
 	private void initializeDefaults() {
-		this.nodeId = UUID.randomUUID();
+		this.nodeId = UUID.randomUUID().toString();
 		this.nodeType = "";
 		this.subType = "";
+		this.created = new DateTime(DateTimeZone.UTC).toString();
+		this.updated = new DateTime(DateTimeZone.UTC).toString();
 
 		this.title = "New Node";
-		this.description = "My new node.";
+		this.description = "Default description.";
 		this.x = new Double(0);
 		this.y = new Double(0);
 		this.upstream = new ArrayList<>();
@@ -68,8 +75,10 @@ public class Node {
 	// Class methods
 	@SuppressWarnings("unchecked")
 	public void setValues(JsonObj newData) {
-		this.title = newData.get("title") != null ? newData.get("title").toString() : this.title;
-		this.description = newData.get("description") != null ? newData.get("description").toString() : this.description;
+		this.updated = new DateTime(DateTimeZone.UTC).toString();
+
+		this.title = newData.get("title") != null ? newData.getString("title") : this.title;
+		this.description = newData.get("description") != null ? newData.getString("description") : this.description;
 		this.x = newData.get("x") != null ? new Double(newData.get("x").toString()) : this.x;
 		this.y = newData.get("y") != null ? new Double(newData.get("y").toString()) : this.y;
 		this.upstream = newData.get("upstream") != null ? MapperUtil.getInstance().convertValue(newData.get("upstream"), ArrayList.class) : this.upstream;
@@ -85,11 +94,17 @@ public class Node {
 		}
 	}
 
-	public void setupExternalResources(CloudContext context) {}
+	public void setupExternalResources(CloudContext context) {
 
-	public void updateExternalResources(CloudContext context, JsonObj data) {}
+	}
 
-	public void cleanupExternalResources(CloudContext context) {}
+	public void updateExternalResources(CloudContext context, JsonObj data) {
+
+	}
+
+	public void cleanupExternalResources(CloudContext context) {
+
+	}
 
 	public static JsonObj toMap(Node obj, Boolean removeNulls) {
 		JsonObj result = MapperUtil.getInstance().convertValue(obj, JsonObj.class);
@@ -120,7 +135,7 @@ public class Node {
 
     public static Node getClassInstance(JsonObj obj, CloudContext context) throws InvalidInputException {
 		try {
-			String typeName = obj.get(Node.getNodeTypeName()).toString();
+			String typeName = obj.getString(Node.getNodeTypeName());
 			LOGGER.info("Get class instance for nodeType: " + typeName);
 			NodeType nodeType = NodeType.valueOf(typeName);
 			switch (nodeType) {
@@ -143,10 +158,10 @@ public class Node {
 	}
 
 	// Getters and Setters
-	public UUID getNodeId() {
+	public String getNodeId() {
 		return nodeId;
 	}
-	public void setNodeId(UUID nodeId) {
+	public void setNodeId(String nodeId) {
 		this.nodeId = nodeId;
 	}
 	public String getNodeType() {
@@ -160,6 +175,18 @@ public class Node {
 	}
 	public void setSubType(String subType) {
 		this.subType = subType;
+	}
+	public String getCreated() {
+		return created;
+	}
+	public void setCreated(String created) {
+		this.created = created;
+	}
+	public String getUpdated() {
+		return updated;
+	}
+	public void setUpdated(String updated) {
+		this.updated = updated;
 	}
 
 	public String getTitle() {

@@ -22,17 +22,17 @@ public class NodesService {
 
 		Node newItem = Node.fromMap(data, context);
 		newItem.validateValues();
-		dao.create(newItem.getNodeId().toString(), Node.toMap(newItem, true));
+		dao.create(newItem.getNodeId(), Node.toMap(newItem, true));
 
 		newItem.setupExternalResources(context);
-		return dao.update(newItem.getNodeId().toString(), Node.toMap(newItem, true));
+		return dao.update(newItem.getNodeId(), Node.toMap(newItem, true));
 	}
 
 	public static JsonObj update(JsonObj data, CloudContext context) throws InvalidInputException, NotFoundException {
 		logger.info("update resource");
 
 		DAO dao = DAOFactory.getDAO(context);
-		Node existing = Node.fromMap(dao.retrieve(data.get(Node.getNodeIdName()).toString()), context);
+		Node existing = Node.fromMap(dao.retrieve(data.getString(Node.getNodeIdName())), context);
 
 		String nodeType = data.getOrDefault(Node.getNodeTypeName(), "").toString();
 		if (!nodeType.equals("") && !nodeType.equals(existing.getNodeType().toString())) {
@@ -44,7 +44,7 @@ public class NodesService {
 			existing.updateExternalResources(context, data);
 			existing.setValues(data);
 			existing.validateValues();
-			return dao.update(existing.getNodeId().toString(), Node.toMap(existing, false));
+			return dao.update(existing.getNodeId(), Node.toMap(existing, false));
 		} else {
 			data.put(Node.getNodeTypeName(), existing.getNodeType());
 			Node node = Node.getClassInstance(data, context);
@@ -52,14 +52,14 @@ public class NodesService {
 			node.setValues(Node.toMap(existing, false));
 
 			existing.cleanupExternalResources(context);
-			dao.delete(existing.getNodeId().toString());
+			dao.delete(existing.getNodeId());
 
 			node.setValues(data);
 			node.validateValues();
 
-			dao.create(node.getNodeId().toString(), Node.toMap(node, true));
+			dao.create(node.getNodeId(), Node.toMap(node, true));
 			node.setupExternalResources(context);
-			return dao.update(existing.getNodeId().toString(), Node.toMap(node, false));
+			return dao.update(existing.getNodeId(), Node.toMap(node, false));
 		}
 	}
 
@@ -77,7 +77,7 @@ public class NodesService {
 	public static JsonObj read(String nodeId, CloudContext context) throws NotFoundException, InvalidInputException {
 		logger.info("read resource");
 
-		Node existing = Node.fromMap(DAOFactory.getDAO(context).retrieve(nodeId.toString()), context);
+		Node existing = Node.fromMap(DAOFactory.getDAO(context).retrieve(nodeId), context);
 
 		return Node.toMap(existing, false);
 	}

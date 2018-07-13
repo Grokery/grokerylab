@@ -42,7 +42,7 @@ public class Datasource extends Node {
 
 	public static Datasource getClassInstance(JsonObj obj, CloudContext context) throws InvalidInputException  {
         try {
-			String subTypeStr = obj.get(Datasource.getResourceSubTypeName()).toString();
+			String subTypeStr = obj.getString(Datasource.getResourceSubTypeName());
 			SourceType subType = SourceType.valueOf(subTypeStr);
 			switch (subType) {
 				case PLACEHOLDER:

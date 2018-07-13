@@ -61,7 +61,7 @@ public class UserService {
 
 		User user = mapper.convertValue(requestBody, User.class);
 
-		if (auth == null && AccountRole.valueOf(requestBody.get("accountRole").toString()) == AccountRole.SUPERADMIN) {
+		if (auth == null && AccountRole.valueOf(requestBody.getString("accountRole")) == AccountRole.SUPERADMIN) {
 			// make sure there aren't any users/accounts yet and throw exception if there are
 			int userCount = dao.count(User.class, new DynamoDBQueryExpression<User>().withHashKeyValues(new User()));
 			if (userCount != 0) {
@@ -71,7 +71,7 @@ public class UserService {
 			JsonObj acct = new JsonObj();
 			acct.put("accountType", "SUPERADMIN");
 			JsonObj result = provider.create(null, acct);
-			user.setAccountId(result.get("accountId").toString());
+			user.setAccountId(result.getString("accountId"));
 		} else {
 			try {
 				Claims claims = DigitalPiglet.parseJWT(auth);
@@ -80,7 +80,7 @@ public class UserService {
 					if (AccountRole.valueOf(accountRole) != AccountRole.ADMIN) {
 						throw new NotAuthorizedException("Admin role required to create new user");
 					}
-					if (!claims.get("accountId").toString().equals(requestBody.get("accountId").toString())) {
+					if (!claims.get("accountId").toString().equals(requestBody.getString("accountId"))) {
 						throw new NotAuthorizedException("Invalid accountId");
 					}
 				}
@@ -159,8 +159,8 @@ public class UserService {
 	public JsonObj authenticate(JsonObj request) throws InvalidInputException, NotAuthorizedException {
 		User user = null;
 		try {
-			String username = request.get("username").toString();
-			String password = request.get("password").toString();
+			String username = request.getString("username");
+			String password = request.getString("password");
 			if (CommonUtils.isNullOrEmpty(username) || CommonUtils.isNullOrEmpty(password)) {
 				throw new InvalidInputException("Please submit a valid username and password");
 			}
@@ -188,18 +188,24 @@ public class UserService {
 		user.setPassword(null);
 
 		// Decrypt cloud credentials with raw password and wrap in jwt tokens
+		// and set other info needed by cloud context
 		Iterator<Entry<String, CloudAccess>> it = user.getClouds().entrySet().iterator();
 		while (it.hasNext()) {
 			CloudAccess cloudAccess = it.next().getValue();
 			CloudCredentials creds = cloudAccess.getCredentials();
 			Claims cloudClaims = new DefaultClaims();
-			String rawPass = request.get("password").toString();
+			String rawPass = request.getString("password");
+
+			cloudClaims.put("cloudId", cloudAccess.getCloudId());
+			cloudClaims.put("cloudType", cloudAccess.getCloudType());
+			cloudClaims.put("cloudName", cloudAccess.getName());
+			cloudClaims.put("cloudRole", creds.getCloudRole());
+
 			cloudClaims.put("awsAccessKeyId", DigitalPiglet.parsePiglet(creds.getAwsAccessKeyId(), rawPass));
 			cloudClaims.put("awsSecretKey", DigitalPiglet.parsePiglet(creds.getAwsSecretKey(), rawPass));
 			cloudClaims.put("awsRegion", creds.getAwsRegion());
-			cloudClaims.put("cloudName", cloudAccess.getName());
-			cloudClaims.put("cloudRole", creds.getCloudRole());
-			cloudClaims.put("cloudType", cloudAccess.getCloudType());
+			cloudClaims.put("daoType", "DYNAMODB");
+
 			cloudAccess.setCloudToken(DigitalPiglet.makeJWT(cloudClaims, JWT_TIMEOUT));
 			cloudAccess.setCredentials(null);
 		}

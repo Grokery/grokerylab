@@ -81,7 +81,7 @@ public class CloudService {
 		access.setName(cloud.getName());
 		CloudCredentials creds = access.getCredentials();
 		creds.setCloudRole("admin");
-		String rawPass = requestBody.get("password").toString();
+		String rawPass = requestBody.getString("password");
 		creds.setAwsAccessKeyId(DigitalPiglet.makePiglet(creds.getAwsAccessKeyId(), rawPass));
 		creds.setAwsSecretKey(DigitalPiglet.makePiglet(creds.getAwsSecretKey(), rawPass));
 		user.getClouds().put(cloud.getName(), access);

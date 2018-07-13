@@ -7,40 +7,40 @@ public interface DAO {
 
     /**
      * Creates an item in the db
-     * @param String nodeId
+     * @param String id
      * @param JsonObj item to create
      * @return JsonObj item as created
      */
-    JsonObj create(String nodeId, JsonObj item);
+    JsonObj create(String id, JsonObj item);
 
     /**
-     * Updates item's (root level) key value pairs
-     * @param String nodeId
+     * Updates item's (root level) key/value pairs
+     * @param String id
      * @param JsonObj key value map of (root level) keys to update
      * @return JsonObj item as updated
      * @throws NotFoundException
      */
-    JsonObj update(String nodeId, JsonObj values) throws NotFoundException;
+    JsonObj update(String id, JsonObj values) throws NotFoundException;
 
     /**
      * Deletes an item from the db
-     * @param String nodeId
+     * @param String id
      * @return JsonObj item
      * @throws NotFoundException
      */
-    JsonObj delete(String nodeId) throws NotFoundException;
+    JsonObj delete(String id) throws NotFoundException;
 
     /**
      * Retrieves an item from the db
-     * @param String nodeId
-     * @return JsonObj results keyd by nodeId
+     * @param String id
+     * @return JsonObj results keyd by id
      * @throws NotFoundException
      */
-    JsonObj retrieve(String nodeId) throws NotFoundException;
+    JsonObj retrieve(String id) throws NotFoundException;
 
     /**
      * Retrieves items from the db
-     * @return JsonObj results keyd by nodeId
+     * @return JsonObj results keyd by id
      * @throws NotFoundException
      */
     JsonObj retrieve();

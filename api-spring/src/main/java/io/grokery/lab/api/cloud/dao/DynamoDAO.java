@@ -47,10 +47,10 @@ public class DynamoDAO implements DAO {
 	public DynamoDAO(CloudContext context) {
 		logger.info("init new dynamo dao instance");
 		this.context = context;
-		init();
+		init(context);
 	}
 
-	public void init() {
+	public void init(CloudContext context) {
 		 DynamoDB client = new DynamoDB(AmazonDynamoDBClientBuilder.standard()
 				.withCredentials(new CredentialProvider(
 					this.context.awsAccessKeyId,
@@ -59,7 +59,7 @@ public class DynamoDAO implements DAO {
 				.withRegion(context.awsRegion)
 				.build());
 
-		this.table = client.getTable(context.dynamoTableName);
+		this.table = client.getTable(getDynamoTableName(context));
 
 		try {
 			this.table.describe();
@@ -73,8 +73,12 @@ public class DynamoDAO implements DAO {
 
 			ProvisionedThroughput tput = new ProvisionedThroughput(new Long(10), new Long(10));
 
-			client.createTable(context.dynamoTableName, keySchema, attrDefs, tput);
+			client.createTable(getDynamoTableName(context), keySchema, attrDefs, tput);
 		}
+	}
+
+	private String getDynamoTableName(CloudContext context) {
+		return "grokery-nodes";
 	}
 
 	public JsonObj create(String nodeId, JsonObj item) {
@@ -135,7 +139,7 @@ public class DynamoDAO implements DAO {
 		Iterator<Item> iterator = scanResults.iterator();
         while (iterator.hasNext()) {
         	Item item = iterator.next();
-			result.put(item.get("nodeId").toString(), item.asMap());
+			result.put(item.getString("nodeId"), item.asMap());
 		}
 
 		return result;

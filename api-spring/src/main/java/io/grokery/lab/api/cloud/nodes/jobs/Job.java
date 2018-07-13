@@ -1,11 +1,9 @@
 package io.grokery.lab.api.cloud.nodes.jobs;
 
-import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.grokery.lab.api.common.JsonObj;
-import io.grokery.lab.api.common.MapperUtil;
 import io.grokery.lab.api.common.errors.NotImplementedError;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
 import io.grokery.lab.api.cloud.context.CloudContext;
@@ -17,7 +15,7 @@ public class Job extends Node {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Job.class);
 
 	private int version;
-	private UUID templateId;
+	private String templateId;
 
 	// Constructers
 	public Job() {
@@ -38,7 +36,7 @@ public class Job extends Node {
 
 	public void setValues(JsonObj newData) {
 		super.setValues(newData);
-		this.templateId = newData.get("templateId") != null ? MapperUtil.getInstance().convertValue(newData.get("templateId"), UUID.class) : this.templateId;
+		this.templateId = newData.get("templateId") != null ? newData.getString("templateId") : this.templateId;
 	}
 
 	public void validateValues() throws InvalidInputException {
@@ -59,7 +57,7 @@ public class Job extends Node {
 
 	public static Job getClassInstance(JsonObj obj, CloudContext context) throws InvalidInputException {
 		try {
-			String subTypeStr = obj.get(Job.getNodeSubTypeName()).toString();
+			String subTypeStr = obj.getString(Job.getNodeSubTypeName());
 			JobType subType = JobType.valueOf(subTypeStr);
 			switch (subType) {
 				case PLACEHOLDER:
@@ -101,10 +99,10 @@ public class Job extends Node {
 		this.version = version;
 	}
 
-	public UUID getTemplateId() {
+	public String getTemplateId() {
 		return templateId;
 	}
-	public void setTemplateId(UUID templateId) {
+	public void setTemplateId(String templateId) {
 		this.templateId = templateId;
 	}
 

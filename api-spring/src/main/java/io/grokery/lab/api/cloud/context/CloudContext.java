@@ -6,13 +6,19 @@ import io.jsonwebtoken.Claims;
 
 public class CloudContext {
 
+	// Common
+	public String cloudId = "";
 	public String cloudType = "";
 	public String daoType = "";
-	public String dynamoTableName = "";
-	public String s3BucketName = "";
+
+	// AWS
 	public String awsAccessKeyId = "";
 	public String awsSecretKey = "";
 	public String awsRegion = "";
+
+	//Azure
+	public String apikey = "";
+
 
 	public CloudContext() {}
 
@@ -26,27 +32,22 @@ public class CloudContext {
 	}
 
 	public void init(Claims values) {
+		this.cloudId = values.get("cloudId").toString();
 		this.cloudType = values.get("cloudType").toString();
-		this.daoType = "DYNAMODB";
-		this.dynamoTableName = "grokery-cloud-" + values.get("cloudName").toString();
-		this.s3BucketName = "grokery-cloud-" + values.get("cloudName").toString();
+		this.daoType = values.get("daoType").toString();
+
 		this.awsAccessKeyId = values.get("awsAccessKeyId").toString();
 		this.awsSecretKey = values.get("awsSecretKey").toString();
 		this.awsRegion = values.get("awsRegion").toString();
 	}
 
 	public boolean equals(CloudContext other) {
-		if (this.cloudType.equals(other.cloudType) &&
+		return this.cloudId.equals(other.cloudId) &&
+			this.cloudType.equals(other.cloudType) &&
 			this.daoType.equals(other.daoType) &&
-			this.s3BucketName.equals(other.s3BucketName) &&
-			this.dynamoTableName.equals(other.dynamoTableName) &&
 			this.awsAccessKeyId.equals(other.awsAccessKeyId) &&
 			this.awsSecretKey.equals(other.awsSecretKey) &&
-			this.awsRegion.equals(other.awsRegion))
-		{
-			return true;
-		}
-		return false;
+			this.awsRegion.equals(other.awsRegion);
 	}
 
 }
