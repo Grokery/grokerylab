@@ -83,7 +83,7 @@ public class Job extends Node {
 
 	private static Job getPythonJobForContext(CloudContext context) {
 		if (context.cloudType.equals("AWS")) {
-			return new AWSLambdaJob();
+			return new AWSLambdaPythonJob();
 		} else if(context.cloudType.equals("AZURE")) {
 			throw new NotImplementedError();
 		} else {

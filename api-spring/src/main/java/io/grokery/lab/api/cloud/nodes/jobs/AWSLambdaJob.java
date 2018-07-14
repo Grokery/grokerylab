@@ -11,9 +11,9 @@ import com.amazonaws.services.lambda.model.DeleteFunctionResult;
 import com.amazonaws.services.lambda.model.CreateFunctionRequest;
 import com.amazonaws.services.lambda.model.FunctionCode;
 import com.amazonaws.services.lambda.model.Runtime;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.CreateBucketRequest;
+// import com.amazonaws.services.s3.AmazonS3;
+// import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+// import com.amazonaws.services.s3.model.CreateBucketRequest;
 
 import io.grokery.lab.api.cloud.context.CloudContext;
 import io.grokery.lab.api.common.CredentialProvider;
@@ -35,12 +35,18 @@ public class AWSLambdaJob extends Job {
 		this.initializeDefaults();
 	}
 
+	protected AWSLambdaJob(JobType subType) {
+		super(subType);
+		this.initializeDefaults();
+		this.setSubType(subType.toString());
+	}
+
 	public AWSLambdaJob(JsonObj obj) {
 		super(JobType.AWSLAMBDA);
 		this.initializeDefaults();
 	}
 
-	private void initializeDefaults() {
+	protected void initializeDefaults() {
 		this.runControl = "manual";
 		this.schedule = new JsonObj();
 	}

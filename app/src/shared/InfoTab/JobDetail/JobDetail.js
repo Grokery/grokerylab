@@ -44,7 +44,7 @@ class JobDetail extends Component {
                     <label>Active</label>
                     <div className='is-active-switch'>
                         <label className="switch">
-                            <input type="checkbox" onChange={this.toggleIsActive.bind(this)} checked={node.schedule.isActive} />
+                            <input type="checkbox" onChange={this.toggleIsActive.bind(this)} checked={node.schedule.isActive} value />
                             <span className="slider round"></span>
                         </label>
                     </div>
