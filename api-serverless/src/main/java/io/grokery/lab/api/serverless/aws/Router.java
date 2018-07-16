@@ -171,11 +171,11 @@ public class Router implements RequestHandler<ApiGatewayRequest, ApiGatewayRespo
 		final String method = req.getHttpMethod();
 		final String collection = req.getPathValue("collection");
 
-		if (method.equals("POST")) {
-			return ApiGatewayResponse.make(200, ResourcesService.create(req.getBody(), gcxt));
-		} else if (method.equals("GET")) {
-			return ApiGatewayResponse.make(200, ResourcesService.readMultiple(collection, gcxt));
-		}
+		// if (method.equals("POST")) {
+		// 	return ApiGatewayResponse.make(200, ResourcesService.create(req.getBody(), gcxt));
+		// } else if (method.equals("GET")) {
+		// 	return ApiGatewayResponse.make(200, ResourcesService.readMultiple(collection, gcxt));
+		// }
 
 		throw new NotImplementedError();
 	}
@@ -186,16 +186,16 @@ public class Router implements RequestHandler<ApiGatewayRequest, ApiGatewayRespo
 		final String collection = req.getPathValue("collection");
 		final String id = req.getPathValue("guid");
 
-		if (method.equals("PUT")) {
-			Map<String, Object> res = ResourcesService.update(req.getBody(), gcxt);
-			return ApiGatewayResponse.make(200, res);
-		} else if (method.equals("GET")) {
-			Map<String, Object> res = ResourcesService.read(collection, id, gcxt);
-			return ApiGatewayResponse.make(200, res);
-		} else if (method.equals("DELETE")) {
-			Map<String, Object> res = ResourcesService.delete(collection, id, gcxt);
-			return ApiGatewayResponse.make(200, res);
-		}
+		// if (method.equals("PUT")) {
+		// 	Map<String, Object> res = ResourcesService.update(req.getBody(), gcxt);
+		// 	return ApiGatewayResponse.make(200, res);
+		// } else if (method.equals("GET")) {
+		// 	Map<String, Object> res = ResourcesService.read(collection, id, gcxt);
+		// 	return ApiGatewayResponse.make(200, res);
+		// } else if (method.equals("DELETE")) {
+		// 	Map<String, Object> res = ResourcesService.delete(collection, id, gcxt);
+		// 	return ApiGatewayResponse.make(200, res);
+		// }
 
 		throw new NotImplementedError();
 	}
@@ -203,9 +203,9 @@ public class Router implements RequestHandler<ApiGatewayRequest, ApiGatewayRespo
 	private ApiGatewayResponse handleDefinitionService(String resource, ApiGatewayRequest req) throws Exception {
 		final String method = req.getHttpMethod();
 
-		if (method.equals("GET")) {
-			return ApiGatewayResponse.make(200, LookupService.getLookups());
-		}
+		// if (method.equals("GET")) {
+		// 	return ApiGatewayResponse.make(200, LookupService.getLookups());
+		// }
 
 		throw new NotImplementedError();
 	}
