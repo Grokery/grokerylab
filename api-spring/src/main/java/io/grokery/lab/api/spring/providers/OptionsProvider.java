@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import io.grokery.lab.api.cloud.OptionsService;
+import io.grokery.lab.api.cloud.options.OptionsService;
 import io.grokery.lab.api.common.JsonObj;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

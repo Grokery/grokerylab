@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import io.grokery.lab.api.cloud.JobRunsService;
+import io.grokery.lab.api.cloud.jobruns.JobRunsService;
 import io.grokery.lab.api.cloud.context.CloudContext;
 import io.grokery.lab.api.common.JsonObj;
 import io.swagger.annotations.Api;
@@ -45,7 +45,7 @@ public class JobRunsProvider {
 		LOGGER.info("POST: apiVersion={} cloudId={}", apiVersion, cloudId);
 		try {
 			CloudContext context = new CloudContext(authorization);
-			JsonObj result = JobRunsService.runJob(request, context);
+			JsonObj result = JobRunsService.createAndStartJobRun(request, context);
 			return Response.status(Status.OK).entity(result).build();
 		} catch (Exception e) {
 			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e).build();

@@ -1,6 +1,8 @@
-package io.grokery.lab.api.cloud.dao;
+package io.grokery.lab.api.cloud.jobruns.dao;
 
 import io.grokery.lab.api.cloud.context.CloudContext;
+import io.grokery.lab.api.common.dao.DAO;
+import io.grokery.lab.api.common.dao.DAOType;
 import io.grokery.lab.api.common.errors.NotImplementedError;
 
 public class DAOFactory {
@@ -9,7 +11,7 @@ public class DAOFactory {
 		DAOType resourcesDb = DAOType.valueOf(context.daoType);
 		switch(resourcesDb) {
 			case DYNAMODB:
-				return DynamoDAO.getInstance(context);
+				return new JobRunsDynamoDAO(context);
 			case MONGODB:
 				throw new NotImplementedError("MONGODB not implemented");
 			case DOCUMENTDB:

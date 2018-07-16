@@ -1,4 +1,4 @@
-package io.grokery.lab.api.cloud;
+package io.grokery.lab.api.cloud.nodes;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,10 +6,10 @@ import org.slf4j.LoggerFactory;
 import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
 import io.grokery.lab.api.common.exceptions.NotFoundException;
+import io.grokery.lab.api.common.dao.DAO;
 import io.grokery.lab.api.cloud.context.CloudContext;
-import io.grokery.lab.api.cloud.dao.DAO;
-import io.grokery.lab.api.cloud.dao.DAOFactory;
 import io.grokery.lab.api.cloud.nodes.Node;
+import io.grokery.lab.api.cloud.nodes.dao.DAOFactory;
 
 public class NodesService {
 

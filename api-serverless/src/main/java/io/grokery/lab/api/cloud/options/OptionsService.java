@@ -1,4 +1,4 @@
-package io.grokery.lab.api.cloud;
+package io.grokery.lab.api.cloud.options;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

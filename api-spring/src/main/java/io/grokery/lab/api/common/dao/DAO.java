@@ -1,4 +1,4 @@
-package io.grokery.lab.api.cloud.dao;
+package io.grokery.lab.api.common.dao;
 
 import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.exceptions.NotFoundException;

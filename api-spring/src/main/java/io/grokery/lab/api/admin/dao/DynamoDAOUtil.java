@@ -28,18 +28,18 @@ public class DynamoDAOUtil {
 	private DynamoDBMapper dynamo;
 
 	public DynamoDBMapper getDAO() {
-		return dynamo;
+		return this.dynamo;
 	}
 
 	public DynamoDAOUtil() {
-		dynamo = this.getDynamoDbMapper(this.getDynamoDbClient());
+		this.dynamo = this.getDynamoDbMapper(this.getDynamoDbClient());
 	}
 
 	public DynamoDAOUtil(final Class<?> klass) {
 		AmazonDynamoDB dynamoClient = this.getDynamoDbClient();
-		dynamo = this.getDynamoDbMapper(dynamoClient);
+		this.dynamo = this.getDynamoDbMapper(dynamoClient);
 
-		CreateTableRequest request = dynamo.generateCreateTableRequest(klass);
+		CreateTableRequest request = this.dynamo.generateCreateTableRequest(klass);
 		request.setProvisionedThroughput(new ProvisionedThroughput(THROUGHPUT, THROUGHPUT));
 		if (request.getGlobalSecondaryIndexes() != null) {
 			for (final GlobalSecondaryIndex index : request.getGlobalSecondaryIndexes()) {
@@ -52,6 +52,8 @@ public class DynamoDAOUtil {
 			dynamoClient.describeTable(tableName);
 		} catch (final ResourceNotFoundException e) {
 			logger.info("Dynamo db table {} doesn't exist, attempting to create....", tableName);
+
+
 			dynamoClient.createTable(request);
 			try {
 				TableUtils.waitUntilActive(dynamoClient, tableName);

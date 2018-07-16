@@ -1,8 +1,6 @@
-package io.grokery.lab.api.cloud.dao;
+package io.grokery.lab.api.common.dao;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -14,74 +12,34 @@ import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.ItemCollection;
 import com.amazonaws.services.dynamodbv2.document.ScanOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
-import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
-import com.amazonaws.services.dynamodbv2.model.KeySchemaElement;
-import com.amazonaws.services.dynamodbv2.model.KeyType;
-import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
-import com.amazonaws.services.dynamodbv2.model.ResourceNotFoundException;
-import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
 
 import io.grokery.lab.api.cloud.context.CloudContext;
 import io.grokery.lab.api.common.CredentialProvider;
 import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.exceptions.NotFoundException;
 
-public class DynamoDAO implements DAO {
+public abstract class DynamoDAO implements DAO {
 
 	private static final Logger logger = LoggerFactory.getLogger(DynamoDAO.class);
 
-	private CloudContext context;
-	private static volatile DynamoDAO instance;
-	private Table table;
-
-	public static DAO getInstance(CloudContext context) {
-		logger.info("get dynamo dao instance");
-		synchronized (DynamoDAO.class) {
-			if(instance == null || !instance.context.equals(context)) {
-				instance = new DynamoDAO(context);
-			}
-		}
-		return instance;
-	}
+	protected DynamoDB client;
 
 	public DynamoDAO(CloudContext context) {
 		logger.info("init new dynamo dao instance");
-		this.context = context;
-		init(context);
+
+		client = new DynamoDB(AmazonDynamoDBClientBuilder.standard()
+		.withCredentials(new CredentialProvider(
+			context.awsAccessKeyId,
+			context.awsSecretKey
+		))
+		.withRegion(context.awsRegion)
+		.build());
 	}
 
-	public void init(CloudContext context) {
-		 DynamoDB client = new DynamoDB(AmazonDynamoDBClientBuilder.standard()
-				.withCredentials(new CredentialProvider(
-					this.context.awsAccessKeyId,
-					this.context.awsSecretKey
-				))
-				.withRegion(context.awsRegion)
-				.build());
-
-		this.table = client.getTable(getDynamoTableName(context));
-
-		try {
-			this.table.describe();
-		} catch (ResourceNotFoundException e) {
-
-			List<KeySchemaElement> keySchema = new ArrayList<KeySchemaElement>();
-			keySchema.add(new KeySchemaElement("nodeId", KeyType.HASH));
-
-			List<AttributeDefinition> attrDefs = new ArrayList<AttributeDefinition>();
-			attrDefs.add(new AttributeDefinition("nodeId", ScalarAttributeType.S));
-
-			ProvisionedThroughput tput = new ProvisionedThroughput(new Long(10), new Long(10));
-
-			client.createTable(getDynamoTableName(context), keySchema, attrDefs, tput);
-		}
-	}
-
-	private String getDynamoTableName(CloudContext context) {
-		return "grokery-nodes";
-	}
+	protected abstract Table getTable();
 
 	public JsonObj create(String nodeId, JsonObj item) {
+		Table table = getTable();
 		Item dbItem = new Item();
 		Iterator it = item.entrySet().iterator();
 		while (it.hasNext()) {
@@ -95,6 +53,7 @@ public class DynamoDAO implements DAO {
 	}
 
 	public JsonObj update(String nodeId, JsonObj values) throws NotFoundException {
+		Table table = getTable();
 		Item dbItem = table.getItem("nodeId", nodeId);
 		if (dbItem == null) {
 			throw new NotFoundException();
@@ -110,6 +69,7 @@ public class DynamoDAO implements DAO {
 	}
 
 	public JsonObj delete(String nodeId) throws NotFoundException {
+		Table table = getTable();
 		Item dbItem = table.getItem("nodeId", nodeId);
 		if (dbItem == null) {
 			throw new NotFoundException();
@@ -119,6 +79,7 @@ public class DynamoDAO implements DAO {
 	}
 
 	public JsonObj retrieve(String nodeId) throws NotFoundException {
+		Table table = getTable();
 		Item dbItem = table.getItem("nodeId", nodeId);
 		if (dbItem == null) {
 			throw new NotFoundException();
@@ -127,6 +88,7 @@ public class DynamoDAO implements DAO {
 	}
 
 	public JsonObj retrieve() {
+		Table table = getTable();
 
 		ItemCollection<ScanOutcome> scanResults = table.scan(
         	null, // Filter expression
