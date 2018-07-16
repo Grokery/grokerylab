@@ -4,16 +4,13 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import io.grokery.lab.api.common.exceptions.InvalidInputException;
-import io.grokery.lab.api.common.exceptions.NotAuthorizedException;
-import io.grokery.lab.api.common.CloudContext;
-import io.grokery.lab.api.common.errors.NotImplementedError;
-import io.grokery.lab.api.common.exceptions.NotFoundException;
-import io.grokery.lab.api.core.LookupService;
-import io.grokery.lab.api.core.ResourcesService;
 import io.grokery.lab.api.admin.AccountService;
 import io.grokery.lab.api.admin.CloudService;
 import io.grokery.lab.api.admin.UserService;
+import io.grokery.lab.api.cloud.context.CloudContext;
+import io.grokery.lab.api.common.errors.NotImplementedError;
+import io.grokery.lab.api.common.exceptions.InvalidInputException;
+import io.grokery.lab.api.common.exceptions.NotFoundException;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
@@ -62,7 +59,7 @@ public class Router implements RequestHandler<ApiGatewayRequest, ApiGatewayRespo
 			return ApiGatewayResponse.error(404, e.getMessage());
 		} catch (InvalidInputException e) {
 			return ApiGatewayResponse.error(400, e.getMessage());
-		} catch (NotAuthorizedException e) {
+		} catch (NotFoundException e) {
 			return ApiGatewayResponse.error(401, e.getMessage());
 		} catch (NotImplementedError e) {
 			return ApiGatewayResponse.error(500, "No route or method handler implemented for: " + req.getResource());
