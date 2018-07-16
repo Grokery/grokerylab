@@ -3,6 +3,7 @@ package io.grokery.lab.api.spring;
 import io.grokery.lab.api.spring.providers.AccountsProvider;
 import io.grokery.lab.api.spring.providers.AuthenticationProvider;
 import io.grokery.lab.api.spring.providers.CloudsProvider;
+import io.grokery.lab.api.spring.providers.JobRunsProvider;
 import io.grokery.lab.api.spring.providers.UsersProvider;
 import io.grokery.lab.api.spring.providers.NodesProvider;
 import io.grokery.lab.api.spring.providers.OptionsProvider;
@@ -55,6 +56,7 @@ public class JerseyConfig extends ResourceConfig {
 		this.register(UsersProvider.class);
 		this.register(NodesProvider.class);
 		this.register(OptionsProvider.class);
+		this.register(JobRunsProvider.class);
 		this.register(CORSFilter.class);
 		this.register(WadlResource.class);
 	}
