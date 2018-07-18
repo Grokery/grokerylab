@@ -30,7 +30,7 @@ import io.grokery.lab.api.common.exceptions.NotAuthorizedException;
 import io.grokery.lab.api.common.exceptions.NotFoundException;
 import io.grokery.lab.api.cloud.nodes.Node;
 import io.grokery.lab.api.cloud.nodes.NodesService;
-import io.grokery.lab.api.cloud.context.CloudContext;
+import io.grokery.lab.api.common.dao.DAO; import io.grokery.lab.api.common.context.CloudContext;
 
 
 @Component
@@ -46,15 +46,17 @@ public class NodesProvider {
 	private String apiVersion;
 
 	@POST
-	@Path("")
+	@Path("{nodeType}")
 	@ApiOperation(value = "Create node", response = Node.class)
 	public Response create(
 			@HeaderParam("Authorization") String authorization,
 			@ApiParam @PathParam("cloudId") String cloudId,
+			@ApiParam @PathParam("nodeType") String nodeType,
 			@ApiParam JsonObj nodeData) {
 		LOGGER.info("POST: apiVersion={} cloudId={}", apiVersion, cloudId);
 		try {
 			CloudContext context = new CloudContext(authorization);
+			nodeData.put(Node.getNodeTypeName(), nodeType);
 			JsonObj result = NodesService.create(nodeData, context);
 			return Response.status(Status.OK).entity(result).build();
 		} catch (NotAuthorizedException e) {
@@ -70,16 +72,18 @@ public class NodesProvider {
 	}
 
 	@PUT
-	@Path("/{nodeId}")
+	@Path("{nodeType}/{nodeId}")
 	@ApiOperation(value = "Update node", response = Node.class)
 	public Response update(
 			@HeaderParam("Authorization") String authorization,
 			@ApiParam @PathParam("cloudId") String cloudId,
+			@ApiParam @PathParam("nodeType") String nodeType,
 			@ApiParam @PathParam("nodeId") String nodeId,
 			@ApiParam JsonObj nodeData) {
 		LOGGER.info("PUT: {}/nodes/{}", apiVersion, nodeId);
 		try {
 			CloudContext context = new CloudContext(authorization);
+			nodeData.put(Node.getNodeTypeName(), nodeType);
 			nodeData.put(Node.getNodeIdName(), nodeId);
 			JsonObj result = NodesService.update(nodeData, context);
 			return Response.status(Status.OK).entity(result).build();
@@ -96,16 +100,17 @@ public class NodesProvider {
 	}
 
 	@DELETE
-	@Path("/{nodeId}")
+	@Path("{nodeType}/{nodeId}")
 	@ApiOperation(value = "Delete node", response = Node.class)
 	public Response delete(
 			@HeaderParam("Authorization") String authorization,
 			@ApiParam @PathParam("cloudId") String cloudId,
+			@ApiParam @PathParam("nodeType") String nodeType,
 			@ApiParam @PathParam("nodeId") String nodeId) {
 		LOGGER.info("DELETE: {}/nodes/{}", apiVersion, nodeId);
 		try {
 			CloudContext context = new CloudContext(authorization);
-			JsonObj result = NodesService.delete(nodeId, context);
+			JsonObj result = NodesService.delete(nodeType, nodeId, context);
 			return Response.status(Status.OK).entity(result).build();
 		} catch (NotAuthorizedException e) {
 			LOGGER.error(e.message);
@@ -120,17 +125,18 @@ public class NodesProvider {
 	}
 
 	@GET
-	@Path("/{nodeId}")
+	@Path("{nodeType}/{nodeId}")
 	@ApiOperation(value = "Get node", response = Node.class)
 	public Response read(
 			@HeaderParam("Authorization") String authorization,
 			@ApiParam @PathParam("cloudId") String cloudId,
+			@ApiParam @PathParam("nodeType") String nodeType,
 			@ApiParam @PathParam("nodeId") String nodeId,
 			@DefaultValue("") @QueryParam("projection") String projection) {
 		LOGGER.info("GET: {}/nodes/{}/{}", apiVersion, nodeId);
 		try {
 			CloudContext context = new CloudContext(authorization);
-			JsonObj result = NodesService.read(nodeId, context);
+			JsonObj result = NodesService.read(nodeType, nodeId, context);
 			return Response.status(Status.OK).entity(result).build();
 		} catch (NotAuthorizedException e) {
 			LOGGER.error(e.message);
@@ -147,7 +153,7 @@ public class NodesProvider {
 	@GET
 	@Path("")
 	@ApiOperation(value = "Get nodes", response = Node.class)
-	public Response readMultiple(
+	public Response readAll(
 			@HeaderParam("Authorization") String authorization,
 			@ApiParam @PathParam("cloudId") String cloudId,
 			@DefaultValue("") @QueryParam("nodeType") String nodeType,
@@ -155,7 +161,7 @@ public class NodesProvider {
 		LOGGER.info("GET: {}/nodes", apiVersion);
 		try {
 			CloudContext context = new CloudContext(authorization);
-			JsonObj result = NodesService.readMultiple(context);
+			JsonObj result = NodesService.readAll(context);
 			return Response.status(Status.OK).entity(result).build();
 		} catch (NotAuthorizedException e) {
 			LOGGER.error(e.message);

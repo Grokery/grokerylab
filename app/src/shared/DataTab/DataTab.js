@@ -21,7 +21,7 @@ class DataTab extends Component {
   }
   componentDidMount() {
     const { fetchNode, params } = this.props
-    fetchNode(params.nodeId)
+    fetchNode('DATASOURCE', params.nodeId)
   }
   toggleTemplateModal(e) {
     e.preventDefault()

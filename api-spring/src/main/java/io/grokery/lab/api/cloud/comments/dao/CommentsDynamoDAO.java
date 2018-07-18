@@ -1,4 +1,4 @@
-package io.grokery.lab.api.cloud.nodes.dao;
+package io.grokery.lab.api.cloud.comments.dao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,25 +10,24 @@ import com.amazonaws.services.dynamodbv2.model.KeyType;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
 
-import io.grokery.lab.api.common.dao.DAO;
-import io.grokery.lab.api.common.context.CloudContext;
+import io.grokery.lab.api.common.dao.DAO; import io.grokery.lab.api.common.context.CloudContext;
 import io.grokery.lab.api.common.dao.DynamoDAO;
 
-public class NodesDynamoDAO extends DynamoDAO {
+public class CommentsDynamoDAO extends DynamoDAO {
 
 	@Override
 	protected String getHashKeyName() {
-		return "nodeType";
-	}
-
-	@Override
-	protected String getRangeKeyName() {
 		return "nodeId";
 	}
 
 	@Override
+	protected String getRangeKeyName() {
+		return "created";
+	}
+
+	@Override
 	protected String getTableName() {
-		return this.context.cloudId + "-nodes";
+		return this.context.cloudId + "-comments";
 	}
 
 	@Override
@@ -46,7 +45,7 @@ public class NodesDynamoDAO extends DynamoDAO {
 		return this.client.createTable(getTableName(), keySchema, attrDefs, tput);
 	}
 
-	public NodesDynamoDAO(CloudContext context) {
+	public CommentsDynamoDAO(CloudContext context) {
 		super(context);
 	}
 

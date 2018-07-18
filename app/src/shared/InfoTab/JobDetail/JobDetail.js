@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { postJobRun } from 'store/actions'
 import './JobDetail.css'
 
 class JobDetail extends Component {
@@ -20,6 +21,15 @@ class JobDetail extends Component {
     node.runControl = e.currentTarget.value
     // this.setState({'node': node})
     this.props.onUpdate({'runControl': node.runControl})
+  }
+  runJob(e) {
+      const { postJobRun, node } = this.props
+      postJobRun({
+        "jobId": node.nodeId,
+        "jobRunType": node.subType,
+        "lambdaARN": node.lambdaARN,
+        "args": {}
+    })
   }
   getRunControl() {
     const { node } = this.props
@@ -68,7 +78,9 @@ class JobDetail extends Component {
             <div className="run-control manual-run">
                 <div className="col-md-2">
                     <label>Run Now</label>
-                    <button className="run-btn form-control"><i className="fa fa-play" aria-hidden="true"></i></button>
+                    <button className="run-btn form-control" onClick={this.runJob.bind(this)}>
+                        <i className="fa fa-play" aria-hidden="true"></i>
+                    </button>
                 </div>
             </div>
         )
@@ -143,4 +155,6 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps, {})(JobDetail)
+export default connect(mapStateToProps, {
+    postJobRun
+})(JobDetail)

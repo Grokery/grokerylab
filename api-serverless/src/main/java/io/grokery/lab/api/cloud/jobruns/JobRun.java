@@ -2,10 +2,13 @@ package io.grokery.lab.api.cloud.jobruns;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.UUID;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import io.grokery.lab.api.cloud.context.CloudContext;
+import io.grokery.lab.api.common.dao.DAO; import io.grokery.lab.api.common.context.CloudContext;
 import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.MapperUtil;
 import io.grokery.lab.api.common.errors.NotImplementedError;
@@ -22,20 +25,29 @@ public class JobRun {
 	private String startTime;
 	private String endTime;
 	private JsonObj args;
+	private String created;
+	private String updated;
 
 	private static String getJobRunTypeName() {
 		return "jobRunType";
 	}
 
-	public JobRun() {
-
+	protected JobRun(JobRunType jobRunType) {
+		this.initializeDefaults();
+		this.setJobRunType(jobRunType.toString());
 	}
 
-	public void startRun() {
+	private void initializeDefaults() {
+		this.setJobrunId(UUID.randomUUID().toString());
+		this.setCreated(new DateTime(DateTimeZone.UTC).toString());
+		this.setUpdated(new DateTime(DateTimeZone.UTC).toString());
+	}
+
+	public void startRun(CloudContext context) {
 		throw new NotImplementedError();
 	}
 
-	public static JsonObj toMap(JobRun obj, Boolean removeNulls) {
+	public static JsonObj toJsonObj(JobRun obj, Boolean removeNulls) {
 		JsonObj result = MapperUtil.getInstance().convertValue(obj, JsonObj.class);
 		if (removeNulls == true) {
 			return JobRun.RemoveNullValues(result);
@@ -68,6 +80,8 @@ public class JobRun {
 			LOGGER.info("Get class instance for jobRunType: " + typeName);
 			JobRunType nodeType = JobRunType.valueOf(typeName);
 			switch (nodeType) {
+				case PYTHON:
+					return new AWSLambdaJobRun();
 				case AWSLAMBDA:
 					return new AWSLambdaJobRun();
 				default:
@@ -126,6 +140,18 @@ public class JobRun {
 	}
 	public void setArgs(JsonObj args) {
 		this.args = args;
+	}
+	public String getUpdated() {
+		return updated;
+	}
+	public void setUpdated(String updated) {
+		this.updated = updated;
+	}
+	public String getCreated() {
+		return created;
+	}
+	public void setCreated(String created) {
+		this.created = created;
 	}
 
 }

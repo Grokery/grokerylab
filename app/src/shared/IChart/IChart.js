@@ -42,7 +42,7 @@ class IChart extends Component {
         if (!id) {
             return
         }
-        fetchNode(id)
+        fetchNode('CHART', id)
         this._render()
     }
     componentDidUpdate() {

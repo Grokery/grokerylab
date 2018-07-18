@@ -15,7 +15,8 @@ import com.amazonaws.services.lambda.model.Runtime;
 // import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 // import com.amazonaws.services.s3.model.CreateBucketRequest;
 
-import io.grokery.lab.api.cloud.context.CloudContext;
+import io.grokery.lab.api.common.dao.DAO;
+import io.grokery.lab.api.common.context.CloudContext;
 import io.grokery.lab.api.common.CredentialProvider;
 import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.MapperUtil;

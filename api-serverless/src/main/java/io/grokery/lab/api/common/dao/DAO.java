@@ -1,47 +1,52 @@
 package io.grokery.lab.api.common.dao;
 
+import java.util.List;
+
 import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.exceptions.NotFoundException;
 
 public interface DAO {
 
     /**
-     * Creates an item in the db
-     * @param String id
-     * @param JsonObj item to create
+     * Creates an item in the table
+     * @param String hashKey
+     * @param String rangeKey
+     * @param JsonObj item data
      * @return JsonObj item as created
      */
-    JsonObj create(String id, JsonObj item);
+    public JsonObj create(String hashKey, String rangeKey, JsonObj data);
 
     /**
      * Updates item's (root level) key/value pairs
-     * @param String id
-     * @param JsonObj key value map of (root level) keys to update
+     * @param String hashKey
+     * @param String rangeKey
+     * @param JsonObj data as key value map of (root level) keys to update
      * @return JsonObj item as updated
      * @throws NotFoundException
      */
-    JsonObj update(String id, JsonObj values) throws NotFoundException;
+    public JsonObj update(String hashKey, String rangeKey, JsonObj data) throws NotFoundException;
 
     /**
-     * Deletes an item from the db
-     * @param String id
+     * Deletes an item from the table
+     * @param String hashKey
+     * @param String rangeKey
      * @return JsonObj item
      * @throws NotFoundException
      */
-    JsonObj delete(String id) throws NotFoundException;
+    public JsonObj delete(String hashKey, String rangeKey) throws NotFoundException;
 
     /**
-     * Retrieves an item from the db
-     * @param String id
+     * Gets an item from the table
+     * @param String hashKey
+     * @param String rangeKey
      * @return JsonObj results keyd by id
      * @throws NotFoundException
      */
-    JsonObj retrieve(String id) throws NotFoundException;
+    public JsonObj get(String hashKey, String rangeKey) throws NotFoundException;
 
     /**
-     * Retrieves items from the db
-     * @return JsonObj results keyd by id
-     * @throws NotFoundException
+     * Gets all items from the table
+     * @return List<JsonObj>
      */
-    JsonObj retrieve();
+    List<JsonObj> scan();
 }

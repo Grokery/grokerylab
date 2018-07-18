@@ -14,13 +14,14 @@ import io.grokery.lab.api.common.exceptions.InvalidInputException;
 import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.MapperUtil;
 import io.grokery.lab.api.common.errors.NotImplementedError;
-import io.grokery.lab.api.cloud.context.CloudContext;
+import io.grokery.lab.api.common.dao.DAO;
+import io.grokery.lab.api.common.context.CloudContext;
 import io.grokery.lab.api.cloud.nodes.jobs.Job;
 import io.grokery.lab.api.cloud.nodes.sources.Datasource;
 
 public class Node {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(Node.class);
+	private static final Logger LOG = LoggerFactory.getLogger(Node.class);
 
 	private String nodeId;
 	private String nodeType;
@@ -106,16 +107,12 @@ public class Node {
 
 	}
 
-	public static JsonObj toMap(Node obj, Boolean removeNulls) {
-		JsonObj result = MapperUtil.getInstance().convertValue(obj, JsonObj.class);
-		if (removeNulls == true) {
-			return Node.RemoveNullValues(result);
-		} else {
-			return result;
-		}
-    }
+	public JsonObj to() {
+		JsonObj result = MapperUtil.getInstance().convertValue(this, JsonObj.class);
+		return removeNullValues(result);
+	}
 
-	public static JsonObj RemoveNullValues(JsonObj obj) {
+	private JsonObj removeNullValues(JsonObj obj) {
       for(Iterator<Map.Entry<String, Object>> it = obj.entrySet().iterator(); it.hasNext(); ) {
           Map.Entry<String, Object> entry = it.next();
           if(entry.getValue() == null) {
@@ -125,18 +122,18 @@ public class Node {
       return obj;
 	}
 
-	public static Node fromMap(JsonObj obj, CloudContext context) throws InvalidInputException {
-        return Node.fromMap(obj, Node.getClassInstance(obj, context));
+	public static Node from(JsonObj obj, CloudContext context) throws InvalidInputException {
+        return Node.from(obj, Node.getClassInstance(obj, context));
     }
 
-	public static Node fromMap(JsonObj obj, Node toValueType) {
+	public static Node from(JsonObj obj, Node toValueType) {
 		return MapperUtil.getInstance().convertValue(obj, toValueType.getClass());
     }
 
     public static Node getClassInstance(JsonObj obj, CloudContext context) throws InvalidInputException {
 		try {
 			String typeName = obj.getString(Node.getNodeTypeName());
-			LOGGER.info("Get class instance for nodeType: " + typeName);
+			LOG.info("Get class instance for nodeType: " + typeName);
 			NodeType nodeType = NodeType.valueOf(typeName);
 			switch (nodeType) {
 				case JOB:
@@ -148,11 +145,11 @@ public class Node {
 			}
 		} catch (IllegalArgumentException e) {
 			String message = "Unknown NodeType";
-			LOGGER.error(message, e);
+			LOG.error(message, e);
 			throw new InvalidInputException(message);
 		} catch (NullPointerException e) {
 			String message = "NodeType specification required";
-			LOGGER.error(message, e);
+			LOG.error(message, e);
 			throw new InvalidInputException(message);
         }
 	}

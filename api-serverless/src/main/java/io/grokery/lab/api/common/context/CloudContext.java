@@ -1,4 +1,4 @@
-package io.grokery.lab.api.cloud.context;
+package io.grokery.lab.api.common.context;
 
 import io.grokery.lab.api.common.DigitalPiglet;
 import io.grokery.lab.api.common.exceptions.NotAuthorizedException;

@@ -26,7 +26,6 @@ class CloudSection extends Component {
     }
   }
   getCloudIcon(cloudType) {
-    console.log(cloudType)
     if (cloudType === 'AWS') {
       return 'img/aws.png'
     } else if (cloudType === 'AZURE') {

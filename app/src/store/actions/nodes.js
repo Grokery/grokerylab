@@ -33,11 +33,11 @@ export const FETCHNODE_REQUEST = 'FETCHNODE_REQUEST'
 export const FETCHNODE_SUCCESS = 'FETCHNODE_SUCCESS'
 export const FETCHNODE_FAILURE = 'FETCHNODE_FAILURE'
 
-export const fetchNode = (nodeId, cb) => (dispatch, getState) => {
+export const fetchNode = (nodeType, nodeId, cb) => (dispatch, getState) => {
     dispatch({
         [CALL_CLOUD_API]: {
             types: [FETCHNODE_REQUEST, FETCHNODE_SUCCESS, FETCHNODE_FAILURE],
-            endpoint: '/nodes/' + nodeId,
+            endpoint: '/nodes/' + nodeType + '/' + nodeId,
             method: 'GET',
             callback: cb
         }
@@ -54,7 +54,7 @@ export const updateNode = (node, cb) => (dispatch, getState) => {
     dispatch({
         [CALL_CLOUD_API]: {
             types: [UPDATENODE_REQUEST, UPDATENODE_SUCCESS, UPDATENODE_FAILURE],
-            endpoint: '/nodes/' + node.nodeId,
+            endpoint: '/nodes/' + node.nodeType + '/' + node.nodeId,
             method: 'PUT',
             data: node,
             callback: cb
@@ -72,7 +72,7 @@ export const createNode = (node, cb) => (dispatch, getState) => {
     dispatch({
         [CALL_CLOUD_API]: {
             types: [CREATEENODE_REQUEST, CREATENODE_SUCCESS, CREATENODE_FAILURE],
-            endpoint: '/nodes',
+            endpoint: '/nodes/' + node.nodeType,
             method: 'POST',
             data: node,
             callback: cb
@@ -90,7 +90,7 @@ export const deleteNode = (node, cb) => (dispatch, getState) => {
     dispatch({
         [CALL_CLOUD_API]: {
             types: [DELETEENODE_REQUEST, DELETEENODE_SUCCESS, DELETEENODE_FAILURE],
-            endpoint: '/nodes/' + node.nodeId,
+            endpoint: '/nodes/' + node.nodeType + '/' + node.nodeId,
             method: 'DELETE',
             callback: cb
         }

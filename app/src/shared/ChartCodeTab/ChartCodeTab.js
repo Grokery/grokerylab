@@ -21,7 +21,7 @@ class ChartCodeTab extends Component {
   }
   componentDidMount() {
     const { fetchNode, params } = this.props
-    fetchNode(params.nodeId)
+    fetchNode('CHART', params.nodeId)
   }
   toggleTemplateModal(e) {
     e.preventDefault()
