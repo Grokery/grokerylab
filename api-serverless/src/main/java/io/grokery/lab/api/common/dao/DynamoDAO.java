@@ -122,14 +122,23 @@ public abstract class DynamoDAO implements DAO {
 			null, // Map<String, String> ExpressionAttributeNames
 			null // Map<String, Object> ExpressionAttributeValues
 			);
-
 		ArrayList<JsonObj> result = new ArrayList<>();
 		Iterator<Item> iterator = scanResults.iterator();
 		while (iterator.hasNext()) {
 			Item item = iterator.next();
 			result.add(new JsonObj(item.asMap()));
 		}
+		return result;
+	}
 
+	public List<JsonObj> query(String hashKey) {
+		ItemCollection queryResults = this.table.query(getHashKeyName(), hashKey);
+		ArrayList<JsonObj> result = new ArrayList<>();
+		Iterator<Item> iterator = queryResults.iterator();
+		while (iterator.hasNext()) {
+			Item item = iterator.next();
+			result.add(new JsonObj(item.asMap()));
+		}
 		return result;
 	}
 

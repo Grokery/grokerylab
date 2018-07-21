@@ -119,3 +119,7 @@ h1 {
 .modal .ReactCodeMirror .CodeMirror {
   height: auto;
 }
+
+.modal .modal-title {
+  display: inline-block;
+}

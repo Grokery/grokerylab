@@ -63,7 +63,7 @@ class NodeDetails extends Component {
   }
   shouldComponentUpdate(nextProps, nextState) {
     const { location } = nextProps
-    return location.pathname != this.props.location.pathname
+    return location.pathname !== this.props.location.pathname
   }
   toggleNodeDetailsPain(e) {
     if (e && typeof(e.preventDefault === 'function')) {

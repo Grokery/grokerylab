@@ -65,8 +65,8 @@ class D3DataFlow extends Component {
                 {/* <img className='drag-create-img' role='presentation' src='img/chart.png' onMouseDown={this.createNodeDrag.bind(this, this.createChart.bind(this))}/> */}
                 {/* <img className='drag-create-img' role='presentation' src='img/board.png' onMouseDown={this.createNodeDrag.bind(this, this.createBoard.bind(this))}/> */}
             </div>
-            <a className="create-btn" href='javascript:void(0)' onClick={this.toggleCreateNodes}><i className='fa fa-plus'></i></a>
-            <a id='delete-icon' href='javascript:void(0)' onClick={this.onDelete.bind(this)}><i className='fa fa-trash'></i></a>
+            <a className="create-btn" href='' onClick={this.toggleCreateNodes}><i className='fa fa-plus'></i></a>
+            <a id='delete-icon' href='' onClick={this.onDelete.bind(this)}><i className='fa fa-trash'></i></a>
             <div className="node-filter">
                 <input id='filter-input' className='filter-input' onChange={this.filterNodes.bind(this)}/>
                 <i className='fa fa-filter'></i>
@@ -684,7 +684,8 @@ class D3DataFlow extends Component {
         this.showDeleteIcon()
       }
   }
-  toggleCreateNodes() {
+  toggleCreateNodes(e) {
+      if (e && e.preventDefault) {e.preventDefault()}
       if (document.getElementById('create-nodes').style.display === 'inline') {
           document.getElementById('create-nodes').style.display = 'none'
       } else {
@@ -965,7 +966,8 @@ class D3DataFlow extends Component {
       d3state.changedNodes[target.nodeId] = target
       this.onUpdateNodes(d3state.changedNodes)
   }
-  onDelete() {
+  onDelete(e) {
+    if (e && e.preventDefault) {e.preventDefault()}
       if (Object.keys(this.d3state.selectedNodes).length > 0) {
         if (confirm('Confirm delete node(s)?' ) === true) {
             Object.keys(this.d3state.selectedNodes).forEach(function(nodeId) {

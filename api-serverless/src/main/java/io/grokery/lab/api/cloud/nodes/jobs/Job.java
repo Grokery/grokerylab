@@ -6,14 +6,13 @@ import org.slf4j.LoggerFactory;
 import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.errors.NotImplementedError;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
-import io.grokery.lab.api.common.dao.DAO;
 import io.grokery.lab.api.common.context.CloudContext;
 import io.grokery.lab.api.cloud.nodes.Node;
 import io.grokery.lab.api.cloud.nodes.NodeType;
 
 public class Job extends Node {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(Job.class);
+	private static final Logger LOG = LoggerFactory.getLogger(Job.class);
 
 	private int version;
 	private String templateId;
@@ -72,11 +71,11 @@ public class Job extends Node {
 			}
 		} catch (IllegalArgumentException e) {
 			String message = "Unknown APIResourceSubType";
-			LOGGER.error(message, e);
+			LOG.error(message, e);
 			throw new InvalidInputException(message);
 		} catch (NullPointerException e) {
 			String message = "APIResourceSubType specification required";
-			LOGGER.error(message, e);
+			LOG.error(message, e);
 			throw new InvalidInputException(message);
 		}
 
@@ -84,7 +83,7 @@ public class Job extends Node {
 
 	private static Job getPythonJobForContext(CloudContext context) {
 		if (context.cloudType.equals("AWS")) {
-			return new AWSLambdaPythonJob();
+			return new AWSLambdaJob();
 		} else if(context.cloudType.equals("AZURE")) {
 			throw new NotImplementedError();
 		} else {

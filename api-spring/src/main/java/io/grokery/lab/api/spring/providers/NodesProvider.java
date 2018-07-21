@@ -30,7 +30,7 @@ import io.grokery.lab.api.common.exceptions.NotAuthorizedException;
 import io.grokery.lab.api.common.exceptions.NotFoundException;
 import io.grokery.lab.api.cloud.nodes.Node;
 import io.grokery.lab.api.cloud.nodes.NodesService;
-import io.grokery.lab.api.common.dao.DAO; import io.grokery.lab.api.common.context.CloudContext;
+import io.grokery.lab.api.common.context.CloudContext;
 
 
 @Component

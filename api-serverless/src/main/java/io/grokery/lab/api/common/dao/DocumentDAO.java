@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import io.grokery.lab.api.common.dao.DAO;
 import io.grokery.lab.api.common.context.CloudContext;
 import io.grokery.lab.api.common.JsonObj;
-import io.grokery.lab.api.common.dao.DAO;
 import io.grokery.lab.api.common.exceptions.NotFoundException;
 
 public class DocumentDAO implements DAO {
@@ -41,6 +40,11 @@ public class DocumentDAO implements DAO {
 
 	@Override
 	public List<JsonObj> scan() {
+		return null;
+	}
+
+	@Override
+	public List<JsonObj> query(String hashKey) {
 		return null;
 	}
 

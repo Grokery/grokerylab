@@ -139,7 +139,7 @@ class CreateCloudModel extends Component {
               <option value='LOCAL'>Local</option>
               <option defaultValue value='AWS'>AWS</option>
               <option value='AZURE'>Azure</option>
-              <option value='MULTICLOUD'>MultiCloud</option>
+              <option value='MULTICLOUD'>Custom</option>
             </select>
           </div>
         </div>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { postJobRun } from 'store/actions'
+import { postJobRun, fetchJobRuns } from 'store/actions'
 import './JobDetail.css'
 
 class JobDetail extends Component {
@@ -9,6 +9,10 @@ class JobDetail extends Component {
     params: PropTypes.object.isRequired,
     node: PropTypes.object.isRequired,
     onUpdate: PropTypes.func.isRequired,
+  }
+  componentDidMount() {
+    const { fetchJobRuns, node } = this.props
+    fetchJobRuns(node.nodeId)
   }
   toggleIsActive(e) {
     const { node } = this.props
@@ -41,7 +45,7 @@ class JobDetail extends Component {
                     <select className="form-control">
                         <option>Minute</option>
                         <option>Hour</option>
-                        <option>Day</option>
+                        <option selected>Day</option>
                         <option>Week</option>
                         <option>Month</option>
                     </select>
@@ -86,6 +90,20 @@ class JobDetail extends Component {
         )
     }
   }
+  getJobRuns() {
+    const { jobRuns } = this.props
+    let results = []
+    jobRuns.forEach(element => {
+        results.push(
+            <tr key={element.jobrunId}>
+                <td>{element.startTime}</td>
+                <td>{element.endTime}</td>
+                <td><span className="label label-success">{element.runStatus}</span></td>
+            </tr>
+        )
+    });
+    return results
+  }
   render() {
     const { node } = this.props
     if (!node) { return <div></div> }
@@ -114,31 +132,12 @@ class JobDetail extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            {/* <tr>
                                 <td>2017-05-31 11:26</td>
                                 <td></td>
                                 <td><span className="label label-info">Scheduled</span></td>
-                            </tr>
-                            <tr>
-                                <td>2017-05-31 10:26</td>
-                                <td>2017-05-31 10:26</td>
-                                <td><span className="label label-danger">Error</span></td>
-                            </tr>
-                            <tr>
-                                <td>2017-05-31 10:26</td>
-                                <td>2017-05-31 10:26</td>
-                                <td><span className="label label-warning">Finished</span></td>
-                            </tr>
-                            <tr>
-                                <td>2017-05-31 10:26</td>
-                                <td>2017-05-31 10:26</td>
-                                <td><span className="label label-success">Finished</span></td>
-                            </tr>
-                            <tr>
-                                <td>2017-05-31 10:26</td>
-                                <td>2017-05-31 10:26</td>
-                                <td><span className="label label-success">Finished</span></td>
-                            </tr>
+                            </tr> */}
+                            {this.getJobRuns()}
                         </tbody>
                     </table>
                 </div>
@@ -150,11 +149,13 @@ class JobDetail extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  return {
-    node: state.nodes[ownProps.params.nodeId] || {}
-  }
+    return {
+        node: state.nodes[ownProps.params.nodeId] || {},
+        jobRuns: state.jobruns[ownProps.params.nodeId] || []
+    }
 }
 
 export default connect(mapStateToProps, {
-    postJobRun
+    postJobRun,
+    fetchJobRuns
 })(JobDetail)

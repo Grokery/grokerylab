@@ -10,8 +10,8 @@ import com.amazonaws.services.dynamodbv2.model.KeyType;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
 
-import io.grokery.lab.api.common.dao.DAO; import io.grokery.lab.api.common.context.CloudContext;
 import io.grokery.lab.api.common.dao.DynamoDAO;
+import io.grokery.lab.api.common.context.CloudContext;
 
 public class JobRunsDynamoDAO extends DynamoDAO {
 

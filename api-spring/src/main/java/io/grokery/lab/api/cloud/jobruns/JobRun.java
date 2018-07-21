@@ -8,7 +8,7 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import io.grokery.lab.api.common.dao.DAO; import io.grokery.lab.api.common.context.CloudContext;
+import io.grokery.lab.api.common.context.CloudContext;
 import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.MapperUtil;
 import io.grokery.lab.api.common.errors.NotImplementedError;
@@ -28,10 +28,6 @@ public class JobRun {
 	private String created;
 	private String updated;
 
-	private static String getJobRunTypeName() {
-		return "jobRunType";
-	}
-
 	protected JobRun(JobRunType jobRunType) {
 		this.initializeDefaults();
 		this.setJobRunType(jobRunType.toString());
@@ -39,12 +35,22 @@ public class JobRun {
 
 	private void initializeDefaults() {
 		this.setJobrunId(UUID.randomUUID().toString());
+		this.setRunStatus(JobRunStatus.STAGED.toString());
 		this.setCreated(new DateTime(DateTimeZone.UTC).toString());
-		this.setUpdated(new DateTime(DateTimeZone.UTC).toString());
+		this.setUpdated(this.getCreated());
 	}
 
 	public void startRun(CloudContext context) {
 		throw new NotImplementedError();
+	}
+
+	public void updateStatus(JsonObj request) {
+		this.setUpdated(new DateTime(DateTimeZone.UTC).toString());
+		JobRunStatus status = JobRunStatus.valueOf(request.getString("runStatus"));
+		this.setRunStatus(status.toString());
+		if (status == JobRunStatus.COMPLETED || status == JobRunStatus.ERRORED || status == JobRunStatus.TIMEOUT) {
+			this.setEndTime(this.getUpdated());
+		}
 	}
 
 	public static JsonObj toJsonObj(JobRun obj, Boolean removeNulls) {
@@ -76,7 +82,7 @@ public class JobRun {
 
 	public static JobRun getClassInstance(JsonObj obj, CloudContext context) throws InvalidInputException {
 		try {
-			String typeName = obj.getString(JobRun.getJobRunTypeName());
+			String typeName = obj.getString("jobRunType");
 			LOGGER.info("Get class instance for jobRunType: " + typeName);
 			JobRunType nodeType = JobRunType.valueOf(typeName);
 			switch (nodeType) {

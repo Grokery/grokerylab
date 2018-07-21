@@ -1,5 +1,6 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import ReactDOM from 'react-dom'
+import DOM from 'react-dom-factories';
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
@@ -34,13 +35,13 @@ class ContentEditable extends Component {
         dangerouslySetInnerHTML: {__html: this.props.value}
     }
     if (this.props.type === "h1") {
-        return React.DOM.h1(options)
+        return DOM.h1(options)
     } else if (this.props.type === "p") {
-        return React.DOM.p(options)
+        return DOM.p(options)
     } else if (this.props.type === "pre") {
-        return React.DOM.pre(options)
+        return DOM.pre(options)
     } else {
-        return React.DOM.div(options)
+        return DOM.div(options)
     }
   }
 }

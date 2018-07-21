@@ -11,11 +11,7 @@ import com.amazonaws.services.lambda.model.DeleteFunctionResult;
 import com.amazonaws.services.lambda.model.CreateFunctionRequest;
 import com.amazonaws.services.lambda.model.FunctionCode;
 import com.amazonaws.services.lambda.model.Runtime;
-// import com.amazonaws.services.s3.AmazonS3;
-// import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-// import com.amazonaws.services.s3.model.CreateBucketRequest;
 
-import io.grokery.lab.api.common.dao.DAO;
 import io.grokery.lab.api.common.context.CloudContext;
 import io.grokery.lab.api.common.CredentialProvider;
 import io.grokery.lab.api.common.JsonObj;
@@ -24,7 +20,7 @@ import io.grokery.lab.api.common.exceptions.InvalidInputException;
 
 public class AWSLambdaJob extends Job {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(AWSLambdaJob.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AWSLambdaJob.class);
 
 	private String lambdaARN;
 	private String runControl;

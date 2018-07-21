@@ -8,14 +8,14 @@ import com.amazonaws.services.lambda.model.InvokeResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.grokery.lab.api.common.dao.DAO; import io.grokery.lab.api.common.context.CloudContext;
+import io.grokery.lab.api.common.context.CloudContext;
 import io.grokery.lab.api.common.CredentialProvider;
 import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.MapperUtil;
 
 public class AWSLambdaJobRun extends JobRun {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(AWSLambdaJobRun.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AWSLambdaJobRun.class);
 
 	private String s3LogPath;
 	private String lambdaARN;

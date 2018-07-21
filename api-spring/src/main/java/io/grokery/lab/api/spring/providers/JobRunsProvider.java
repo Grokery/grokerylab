@@ -4,9 +4,11 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -17,7 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.grokery.lab.api.cloud.jobruns.JobRunsService;
-import io.grokery.lab.api.common.dao.DAO; import io.grokery.lab.api.common.context.CloudContext;
+import io.grokery.lab.api.common.context.CloudContext;
 import io.grokery.lab.api.common.JsonObj;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,7 +32,7 @@ import io.swagger.annotations.ApiParam;
 @Api(value = "JobRuns", produces = "application/json")
 public class JobRunsProvider {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(OptionsProvider.class);
+	private static final Logger LOG = LoggerFactory.getLogger(OptionsProvider.class);
 
 	@Value("${info.api.version}")
 	private String apiVersion;
@@ -42,10 +44,31 @@ public class JobRunsProvider {
 			@HeaderParam("Authorization") String authorization,
 			@ApiParam @PathParam("cloudId") String cloudId,
 			@ApiParam JsonObj request) {
-		LOGGER.info("POST: apiVersion={} cloudId={}", apiVersion, cloudId);
+		LOG.info("POST: apiVersion={} cloudId={}", apiVersion, cloudId);
 		try {
 			CloudContext context = new CloudContext(authorization);
 			JsonObj result = JobRunsService.createAndStartJobRun(request, context);
+			return Response.status(Status.OK).entity(result).build();
+		} catch (Exception e) {
+			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e).build();
+		}
+	}
+
+	@PUT
+	@Path("/{jobId}/{created}")
+	@ApiOperation(value = "Update job run", response = JsonObj.class)
+	public Response update(
+			@HeaderParam("Authorization") String authorization,
+			@ApiParam @PathParam("cloudId") String cloudId,
+			@ApiParam @PathParam("jobId") String jobId,
+			@ApiParam @PathParam("created") String created,
+			@ApiParam JsonObj request) {
+		LOG.info("POST: apiVersion={} cloudId={} jobRunId={} created={}", apiVersion, cloudId, jobId, created);
+		try {
+			CloudContext context = new CloudContext(authorization);
+			request.put("jobId", jobId);
+			request.put("created", created);
+			JsonObj result = JobRunsService.updateJobRunStatus(request, context);
 			return Response.status(Status.OK).entity(result).build();
 		} catch (Exception e) {
 			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e).build();
@@ -56,35 +79,34 @@ public class JobRunsProvider {
 	@Path("/{jobRunId}")
 	@ApiOperation(value = "Get job run info", response = JsonObj.class)
 	public Response get(
-		@HeaderParam("Authorization") String authorization,
-		@ApiParam @PathParam("cloudId") String cloudId,
-		@ApiParam @PathParam("jobRunId") String jobRunId
-	) {
-		LOGGER.info("POST: apiVersion={} cloudId={} jobRunId={}", apiVersion, cloudId, jobRunId);
+			@HeaderParam("Authorization") String authorization,
+			@ApiParam @PathParam("cloudId") String cloudId,
+			@ApiParam @PathParam("jobRunId") String jobRunId) {
+		LOG.info("POST: apiVersion={} cloudId={} jobRunId={}", apiVersion, cloudId, jobRunId);
 		try {
 			CloudContext context = new CloudContext(authorization);
-
-			return Response.status(Status.OK).entity(new JsonObj()).build();
+			JsonObj result = JobRunsService.getJobRunDetails(jobRunId, context);
+			return Response.status(Status.OK).entity(result).build();
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
+			LOG.error(e.getMessage());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e).build();
 		}
 	}
 
 	@GET
-	@Path("/")
+	@Path("")
 	@ApiOperation(value = "Search", response = JsonObj.class)
 	public Response search(
-		@HeaderParam("Authorization") String authorization,
-		@ApiParam @PathParam("cloudId") String cloudId
-	) {
-		LOGGER.info("POST: apiVersion={} cloudId={}", apiVersion, cloudId);
+			@HeaderParam("Authorization") String authorization,
+			@ApiParam @PathParam("cloudId") String cloudId,
+			@QueryParam("jobId") String jobId){
+		LOG.info("POST: apiVersion={} cloudId={}", apiVersion, cloudId);
 		try {
 			CloudContext context = new CloudContext(authorization);
-
-			return Response.status(Status.OK).entity(new JsonObj()).build();
+			JsonObj result = JobRunsService.getJobRunsforJob(jobId, context);
+			return Response.status(Status.OK).entity(result).build();
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
+			LOG.error(e.getMessage());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e).build();
 		}
 	}

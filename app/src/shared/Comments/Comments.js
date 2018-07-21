@@ -76,12 +76,12 @@ class Comments extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     let sessionInfo = getSessionInfo()
-    let filter = function(item) {
-        return item.nodeType === "comments"
-    }
-    let sort = function(a, b) {
-        return a.datetime < b.datetime
-    }
+    // let filter = function(item) {
+    //     return item.nodeType === "comments"
+    // }
+    // let sort = function(a, b) {
+    //     return a.datetime < b.datetime
+    // }
     let comments = [
         {
             id: "124",

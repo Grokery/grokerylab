@@ -1,6 +1,5 @@
 package io.grokery.lab.api.cloud.nodes.jobs;
 
-import io.grokery.lab.api.common.dao.DAO;
 import io.grokery.lab.api.common.context.CloudContext;
 import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;

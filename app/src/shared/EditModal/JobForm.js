@@ -18,8 +18,9 @@ class JobForm extends Component {
     const { options } = this.props
     var items = []
     if (options.jobtypes) {
-      Object.keys(options.jobtypes).map(function(key, index) {
-        items.push(<option key={index} value={key}>{options.jobtypes[key]}</option>)
+      items = Object.keys(options.jobtypes).map(function(key, index) {
+        // items.push(<option key={index} value={key}>{options.jobtypes[key]}</option>)
+        return (<option key={index} value={key}>{options.jobtypes[key]}</option>)
       })
     }
     return items
