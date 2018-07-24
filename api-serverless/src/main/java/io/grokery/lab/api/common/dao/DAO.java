@@ -55,4 +55,10 @@ public interface DAO {
      * @return List<JsonObj>
      */
     List<JsonObj> query(String hashKey);
+
+    /**
+     * Gets all items from the table for a given hashKey
+     * @return List<JsonObj>
+     */
+    public List<JsonObj> query(String hashKey, JsonObj queryParams);
 }

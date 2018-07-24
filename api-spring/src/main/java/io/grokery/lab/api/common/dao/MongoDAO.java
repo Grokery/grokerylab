@@ -48,5 +48,10 @@ public class MongoDAO implements DAO {
 		return null;
 	}
 
+	@Override
+	public List<JsonObj> query(String hashKey, JsonObj queryParams) {
+		return null;
+	}
+
 
 }

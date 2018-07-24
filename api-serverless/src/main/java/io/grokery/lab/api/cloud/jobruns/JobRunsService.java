@@ -39,6 +39,11 @@ public class JobRunsService {
 
 	public static JsonObj getJobRunsforJob(String jobId, CloudContext context) {
 		DAO dao = JobRunsDAO.getInst(context);
+
+		// JsonObj query = new JsonObj();
+		// query.put("startTime", "2018-07-21T06:28:26.738Z");
+		// List<JsonObj> test = dao.query(jobId, query);
+
 		List<JsonObj> items = dao.query(jobId);
 		JsonObj result = new JsonObj();
 		result.put("data", items);

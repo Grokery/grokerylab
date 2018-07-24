@@ -20,7 +20,7 @@ class JobDetail extends Component {
     // this.setState({'node': node})
     this.props.onUpdate({'schedule': node.schedule})
   }
-  onRunControleChange(e) {
+  onRunControlChange(e) {
     const { node } = this.props
     node.runControl = e.currentTarget.value
     // this.setState({'node': node})
@@ -112,7 +112,7 @@ class JobDetail extends Component {
             <div className="row">
                 <div className="col-md-3 form-group run-control-select">
                     <label>Run</label>
-                    <select className="form-control" value={this.props.node.runControl} onChange={this.onRunControleChange.bind(this)}>
+                    <select className="form-control" value={this.props.node.runControl} onChange={this.onRunControlChange.bind(this)}>
                         <option value='manual'>Manually</option>
                         <option value='schedule'>On Schedule</option>
                         <option value='event'>On Event</option>

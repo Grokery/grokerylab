@@ -48,7 +48,7 @@ public class JobRun {
 		this.setUpdated(new DateTime(DateTimeZone.UTC).toString());
 		JobRunStatus status = JobRunStatus.valueOf(request.getString("runStatus"));
 		this.setRunStatus(status.toString());
-		if (status == JobRunStatus.COMPLETED || status == JobRunStatus.ERRORED || status == JobRunStatus.TIMEOUT) {
+		if (status == JobRunStatus.COMPLETED || status == JobRunStatus.ERRORED) {
 			this.setEndTime(this.getUpdated());
 		}
 	}

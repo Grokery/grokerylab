@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,8 @@ import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.ItemCollection;
 import com.amazonaws.services.dynamodbv2.document.ScanOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
+import com.amazonaws.services.dynamodbv2.document.spec.QuerySpec;
+import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
 import com.amazonaws.services.dynamodbv2.model.ResourceNotFoundException;
 
 import io.grokery.lab.api.common.dao.DAO;
@@ -40,13 +43,9 @@ public abstract class DynamoDAO implements DAO {
 		this.context = context;
 
 		this.client = new DynamoDB(AmazonDynamoDBClientBuilder.standard()
-			.withCredentials(new CredentialProvider(
-				context.awsAccessKeyId,
-				context.awsSecretKey
-			)
-		)
-		.withRegion(context.awsRegion)
-		.build());
+			.withCredentials(new CredentialProvider(context.awsAccessKeyId, context.awsSecretKey))
+			.withRegion(context.awsRegion)
+			.build());
 
 		this.table = this.client.getTable(getTableName());
 		try {
@@ -132,14 +131,43 @@ public abstract class DynamoDAO implements DAO {
 	}
 
 	public List<JsonObj> query(String hashKey) {
-		ItemCollection queryResults = this.table.query(getHashKeyName(), hashKey);
-		ArrayList<JsonObj> result = new ArrayList<>();
+		return this.query(hashKey, null);
+	}
+
+	public List<JsonObj> query(String hashKey, JsonObj queryParams) {
+		String keyConditionExp = "";
+		ValueMap valueMap = new ValueMap();
+		if (queryParams != null) {
+			queryParams.put(this.getHashKeyName(), hashKey);
+			Iterator it = queryParams.entrySet().iterator();
+			int i = 0;
+			while (it.hasNext()) {
+				Map.Entry pair = (Map.Entry)it.next();
+				keyConditionExp += pair.getKey().toString() + " = :i" + i + " and ";
+				valueMap.put(":i" + i, pair.getValue());
+				i++;
+			}
+			keyConditionExp = keyConditionExp.replaceFirst(" and $","");
+		}
+
+		QuerySpec query = new QuerySpec()
+			.withConsistentRead(true)
+			.withScanIndexForward(false);
+		if (queryParams != null) {
+			query.withKeyConditionExpression(keyConditionExp);
+			query.withValueMap(valueMap);
+		} else {
+			query.withHashKey(getHashKeyName(), hashKey);
+		}
+		ItemCollection queryResults = this.table.query(query);
+
+		ArrayList<JsonObj> results = new ArrayList<>();
 		Iterator<Item> iterator = queryResults.iterator();
 		while (iterator.hasNext()) {
-			Item item = iterator.next();
-			result.add(new JsonObj(item.asMap()));
+			results.add(new JsonObj(iterator.next().asMap()));
 		}
-		return result;
+
+		return results;
 	}
 
 }

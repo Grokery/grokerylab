@@ -4,6 +4,5 @@ public enum JobRunStatus {
     STAGED,
     RUNNING,
     COMPLETED,
-    ERRORED,
-    TIMEOUT;
+    ERRORED;
 }
