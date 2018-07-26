@@ -81,29 +81,14 @@ public class JobRunsProvider {
 	public Response get(
 			@HeaderParam("Authorization") String authorization,
 			@ApiParam @PathParam("cloudId") String cloudId,
-			@ApiParam @PathParam("jobRunId") String jobRunId) {
+			@ApiParam @PathParam("jobRunId") String jobRunId, 
+			@ApiParam @QueryParam("query") String query,
+			@ApiParam @QueryParam("projection") String projection,
+			@ApiParam @QueryParam("limit") int limit) {
 		LOG.info("POST: apiVersion={} cloudId={} jobRunId={}", apiVersion, cloudId, jobRunId);
 		try {
 			CloudContext context = new CloudContext(authorization);
-			JsonObj result = JobRunsService.getJobRunDetails(jobRunId, context);
-			return Response.status(Status.OK).entity(result).build();
-		} catch (Exception e) {
-			LOG.error(e.getMessage());
-			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e).build();
-		}
-	}
-
-	@GET
-	@Path("")
-	@ApiOperation(value = "Search", response = JsonObj.class)
-	public Response search(
-			@HeaderParam("Authorization") String authorization,
-			@ApiParam @PathParam("cloudId") String cloudId,
-			@QueryParam("jobId") String jobId){
-		LOG.info("POST: apiVersion={} cloudId={}", apiVersion, cloudId);
-		try {
-			CloudContext context = new CloudContext(authorization);
-			JsonObj result = JobRunsService.getJobRunsforJob(jobId, context);
+			JsonObj result = JobRunsService.getJobRunsforJob(jobRunId, query, projection, limit, context);
 			return Response.status(Status.OK).entity(result).build();
 		} catch (Exception e) {
 			LOG.error(e.getMessage());

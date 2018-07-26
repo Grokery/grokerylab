@@ -24,11 +24,11 @@ export const FETCHJOBRUNS_REQUEST = 'FETCHJOBRUNS_REQUEST'
 export const FETCHJOBRUNS_SUCCESS = 'FETCHJOBRUNS_SUCCESS'
 export const FETCHJOBRUNS_FAILURE = 'FETCHJOBRUNS_FAILURE'
 
-export const fetchJobRuns = (jobId, cb) => (dispatch, getState) => {
+export const fetchJobRuns = (jobId, query, cb) => (dispatch, getState) => {
     dispatch({
         [CALL_CLOUD_API]: {
             types: [FETCHJOBRUNS_REQUEST, FETCHJOBRUNS_SUCCESS, FETCHJOBRUNS_FAILURE],
-            endpoint: '/jobruns?jobId=' + jobId,
+            endpoint: '/jobruns/' + jobId + (query ? query : ''),
             method: 'GET',
             callback: cb
         }

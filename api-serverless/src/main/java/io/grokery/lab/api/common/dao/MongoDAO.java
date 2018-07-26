@@ -1,7 +1,5 @@
 package io.grokery.lab.api.common.dao;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,19 +37,28 @@ public class MongoDAO implements DAO {
 	}
 
 	@Override
-	public List<JsonObj> scan() {
+	public JsonObj get(String hashKey, String rangeKey, String projection) throws NotFoundException {
+		return null;
+	}
+	
+	@Override
+	public JsonObj query(String hashKey, String query) {
 		return null;
 	}
 
 	@Override
-	public List<JsonObj> query(String hashKey) {
+	public JsonObj query(String hashKey, String query, String projection) {
 		return null;
 	}
 
 	@Override
-	public List<JsonObj> query(String hashKey, JsonObj queryParams) {
+	public JsonObj scan(String projection) {
 		return null;
 	}
 
+	@Override
+	public JsonObj query(String hashKey, String query, String projection, int limit) {
+		return null;
+	}
 
 }

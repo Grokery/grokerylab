@@ -1,10 +1,9 @@
 package io.grokery.lab.api.common.dao;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,11 +15,13 @@ import com.amazonaws.services.dynamodbv2.document.ItemCollection;
 import com.amazonaws.services.dynamodbv2.document.ScanOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.document.spec.QuerySpec;
+import com.amazonaws.services.dynamodbv2.document.utils.NameMap;
 import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
 import com.amazonaws.services.dynamodbv2.model.ResourceNotFoundException;
 
 import io.grokery.lab.api.common.dao.DAO;
 import io.grokery.lab.api.common.context.CloudContext;
+import io.grokery.lab.api.cloud.nodes.Node;
 import io.grokery.lab.api.common.CredentialProvider;
 import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.exceptions.NotFoundException;
@@ -107,6 +108,10 @@ public abstract class DynamoDAO implements DAO {
 	}
 
 	public JsonObj get(String hashKey, String rangeKey) throws NotFoundException {
+		return this.get(hashKey, rangeKey, null);
+	}
+
+	public JsonObj get(String hashKey, String rangeKey, String projection) throws NotFoundException {
 		Item dbItem = this.table.getItem(getHashKeyName(), hashKey, getRangeKeyName(), rangeKey);
 		if (dbItem == null) {
 			throw new NotFoundException();
@@ -114,60 +119,100 @@ public abstract class DynamoDAO implements DAO {
 		return new JsonObj(dbItem.asMap());
 	}
 
-	public List<JsonObj> scan() {
-		ItemCollection<ScanOutcome> scanResults = this.table.scan(
-			null, // String Filter expression
-			null, // "nodeType, hashKey, title, description, x, y, upstream, downstream",// String ProjectionExpression
-			null, // Map<String, String> ExpressionAttributeNames
-			null // Map<String, Object> ExpressionAttributeValues
-			);
-		ArrayList<JsonObj> result = new ArrayList<>();
-		Iterator<Item> iterator = scanResults.iterator();
-		while (iterator.hasNext()) {
-			Item item = iterator.next();
-			result.add(new JsonObj(item.asMap()));
-		}
-		return result;
-	}
-
-	public List<JsonObj> query(String hashKey) {
-		return this.query(hashKey, null);
-	}
-
-	public List<JsonObj> query(String hashKey, JsonObj queryParams) {
-		String keyConditionExp = "";
-		ValueMap valueMap = new ValueMap();
-		if (queryParams != null) {
-			queryParams.put(this.getHashKeyName(), hashKey);
-			Iterator it = queryParams.entrySet().iterator();
+	public JsonObj scan(String projection) {
+		String projectionExp = null;
+		NameMap nameMap = null;
+		if (projection != null) {
+			projectionExp = "";
+			nameMap = new NameMap();
+			Iterator it = Arrays.asList(projection.split(",")).iterator();
 			int i = 0;
 			while (it.hasNext()) {
-				Map.Entry pair = (Map.Entry)it.next();
-				keyConditionExp += pair.getKey().toString() + " = :i" + i + " and ";
-				valueMap.put(":i" + i, pair.getValue());
+				String k = it.next().toString().trim();
+				projectionExp += "#" + i;
+				if (it.hasNext()) {
+					projectionExp += ", ";
+				}
+				nameMap.put("#" + i, k);
 				i++;
 			}
-			keyConditionExp = keyConditionExp.replaceFirst(" and $","");
 		}
+		ItemCollection<ScanOutcome> scanResults = this.table.scan(
+			null,
+			projectionExp,
+			nameMap,
+			null
+			);
+			JsonObj results = new JsonObj();
+			Iterator<Item> iterator = scanResults.iterator();
+			while (iterator.hasNext()) {
+				Item item = iterator.next();
+				Map<String, Object> m = item.asMap();
+				results.put(item.getString(Node.getNodeIdName()), new JsonObj(m));
+			}
+			JsonObj result = new JsonObj();
+			result.put("data", results);
+			result.put("count", results.size());
+			return result;
+	}
 
-		QuerySpec query = new QuerySpec()
+	public JsonObj query(String hashKey, String query) {
+		return this.query(hashKey, query, null, 0);
+	}
+
+	public JsonObj query(String hashKey, String query, String projection) {
+		return this.query(hashKey, query, null, 0);
+	}
+
+	public JsonObj query(String hashKey, String query, String projection, int limit) {
+		QuerySpec spec = new QuerySpec()
 			.withConsistentRead(true)
-			.withScanIndexForward(false);
-		if (queryParams != null) {
-			query.withKeyConditionExpression(keyConditionExp);
-			query.withValueMap(valueMap);
+			.withScanIndexForward(false);	
+		if (query != null) {
+			query = getHashKeyName() + " = " + hashKey + " and " + query;
+			String keyConditionExp = "";
+			ValueMap valueMap = new ValueMap();
+			NameMap nameMap = new NameMap();
+			int i = 0;
+			Iterator it = Arrays.asList(query.split("\\s")).iterator();
+			while (it.hasNext()) {
+				String k = it.next().toString();
+				String o = it.next().toString();
+				String v = it.next().toString();
+				keyConditionExp += "#" + i + " " + o + " :" + i;
+				if (it.hasNext()) {
+					keyConditionExp += " " + it.next().toString() + " ";
+				}
+				nameMap.put("#" + i, k);
+				valueMap.put(":" + i, v);
+				i++;
+			}
+			spec.withKeyConditionExpression(keyConditionExp);
+			spec.withNameMap(nameMap);
+			spec.withValueMap(valueMap);
 		} else {
-			query.withHashKey(getHashKeyName(), hashKey);
+			spec.withHashKey(getHashKeyName(), hashKey);
 		}
-		ItemCollection queryResults = this.table.query(query);
 
+		if (projection != null) {
+			spec.withProjectionExpression(projection);
+		}
+
+		if (limit > 0) {
+			spec.withMaxResultSize(limit);
+		}
+
+		ItemCollection queryResults = this.table.query(spec);
 		ArrayList<JsonObj> results = new ArrayList<>();
 		Iterator<Item> iterator = queryResults.iterator();
 		while (iterator.hasNext()) {
 			results.add(new JsonObj(iterator.next().asMap()));
 		}
 
-		return results;
+		JsonObj result = new JsonObj();
+		result.put("data", results);
+		result.put("count", results.size());
+		return result;
 	}
 
 }

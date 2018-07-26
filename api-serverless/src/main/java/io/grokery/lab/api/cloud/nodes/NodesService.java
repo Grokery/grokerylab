@@ -1,7 +1,5 @@
 package io.grokery.lab.api.cloud.nodes;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,12 +78,9 @@ public class NodesService {
 	public static JsonObj readAll(CloudContext context) throws InvalidInputException {
 		LOG.info("read multiple resource");
 		DAO dao = NodesDAO.getInst(context);
-		List<JsonObj> results = dao.scan();
-		JsonObj result = new JsonObj();
-		for(JsonObj item : results) {
-			result.put(item.getString(Node.getNodeIdName()), item);
-		}
-		return result;
+		// String projection = "nodeId, nodeType, title, description, x, y, upstream, downstream";
+		JsonObj results = dao.scan(null);
+		return results;
 	}
 
 }

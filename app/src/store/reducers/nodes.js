@@ -3,7 +3,7 @@ import * as ActionTypes from 'store/actions'
 export const nodes = (state = {}, action) => {
     var newState = state
     if (action.type === ActionTypes.FETCHNODES_SUCCESS) {
-        newState = action.response
+        newState = action.response.data
     } else if (action.type === ActionTypes.CREATENODE_SUCCESS ||
         action.type === ActionTypes.UPDATENODE_SUCCESS) {
         let foo = Object.assign({}, state)
@@ -18,4 +18,3 @@ export const nodes = (state = {}, action) => {
     }
     return newState
 }
-

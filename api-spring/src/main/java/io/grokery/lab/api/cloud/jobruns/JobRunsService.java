@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.grokery.lab.api.common.dao.DAO;
+import io.grokery.lab.api.common.errors.NotImplementedError;
 import io.grokery.lab.api.common.context.CloudContext;
 import io.grokery.lab.api.cloud.jobruns.dao.JobRunsDAO;
 import io.grokery.lab.api.common.JsonObj;
@@ -31,31 +32,25 @@ public class JobRunsService {
 		return JobRun.toJsonObj(jobrun, true);
 	}
 
-	public static JsonObj getJobRunDetails(String jobRunId, CloudContext context) {
-		DAO dao = JobRunsDAO.getInst(context);
-
-		return new JsonObj();
-	}
-
-	public static JsonObj getJobRunsforJob(String jobId, CloudContext context) {
-		DAO dao = JobRunsDAO.getInst(context);
-
-		// JsonObj query = new JsonObj();
-		// query.put("startTime", "2018-07-21T06:28:26.738Z");
-		// List<JsonObj> test = dao.query(jobId, query);
-
-		List<JsonObj> items = dao.query(jobId);
-		JsonObj result = new JsonObj();
-		result.put("data", items);
-		return result;
-	}
-
 	public static JsonObj updateJobRunStatus(JsonObj request, CloudContext context) throws InvalidInputException, NotFoundException {
 		DAO dao = JobRunsDAO.getInst(context);
 		JobRun existing = JobRun.fromMap(dao.get(request.getString("jobId"), request.getString("created")), context);
 		existing.updateStatus(request);
 		dao.update(existing.getJobId(), existing.getStartTime(), JobRun.toJsonObj(existing, true));
 		return JobRun.toJsonObj(existing, true);
+	}
+
+	public static JsonObj getJobRunsforJob(String jobId, String query, String projection, int limit, CloudContext context) {
+		DAO dao = JobRunsDAO.getInst(context);
+		if (projection == null) {
+			projection = "jobId, jobrunId, startTime, endTime, jobRunType, updated, runStatus";
+		}
+		JsonObj results = dao.query(jobId, query, projection, limit);
+		return results;
+	}
+
+	public static JsonObj getJobRunDetails(String jobRunId, CloudContext context) {
+		throw new NotImplementedError();
 	}
 
 }

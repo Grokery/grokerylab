@@ -12,7 +12,8 @@ class JobDetail extends Component {
   }
   componentDidMount() {
     const { fetchJobRuns, node } = this.props
-    fetchJobRuns(node.nodeId)
+    
+    fetchJobRuns(node.nodeId, "?limit=10")
   }
   toggleIsActive(e) {
     const { node } = this.props

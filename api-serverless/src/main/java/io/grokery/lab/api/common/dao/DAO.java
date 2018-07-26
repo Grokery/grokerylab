@@ -1,7 +1,5 @@
 package io.grokery.lab.api.common.dao;
 
-import java.util.List;
-
 import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.exceptions.NotFoundException;
 
@@ -45,20 +43,41 @@ public interface DAO {
     public JsonObj get(String hashKey, String rangeKey) throws NotFoundException;
 
     /**
-     * Gets all items from the table
-     * @return List<JsonObj>
+     * Gets an item from the table
+     * @param String hashKey
+     * @param String rangeKey
+     * @param String projection
+     * @return JsonObj results keyd by id
+     * @throws NotFoundException
      */
-    List<JsonObj> scan();
+    public JsonObj get(String hashKey, String rangeKey, String projection) throws NotFoundException;
 
     /**
      * Gets all items from the table for a given hashKey
+     * @param String hashKey
+     * @param String query
      * @return List<JsonObj>
      */
-    List<JsonObj> query(String hashKey);
+    public JsonObj query(String hashKey, String query);
+    
+    /**
+     * Gets all items from the table for a given hashKey
+     * @param String hashKey
+     * @param String query
+     * @param String projection
+     * @return List<JsonObj>
+     */
+    public JsonObj query(String hashKey, String query, String projection);
 
     /**
      * Gets all items from the table for a given hashKey
+     * @param String hashKey
+     * @param String query
+     * @param String projection
+     * @param int limit
      * @return List<JsonObj>
      */
-    public List<JsonObj> query(String hashKey, JsonObj queryParams);
+    public JsonObj query(String hashKey, String query, String projection, int limit);
+
+    public JsonObj scan(String projection);
 }
