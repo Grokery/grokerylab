@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.grokery.lab.api.common.JsonObj;
+
 public class RouterMain { 
 
   public static void main(String[] args) {
@@ -52,9 +54,9 @@ public class RouterMain {
 		creds.put("awsAccessKeyId", "ABC");
 		creds.put("awsSecretKey", "abc123");
 		creds.put("awsRegion","us-west-2");
-		Map<String, Object> adminAccess = new HashMap<String, Object>();
+		JsonObj adminAccess = new JsonObj();
 		adminAccess.put("credentials", creds);
-		Map<String, Object> body = new HashMap<String, Object>();
+		JsonObj body = new JsonObj();
 		body.put("accountId", "5f56fab3-5f03-4576-82c0-a62ea61268fd");
 		body.put("name", "hellocloud");
 		body.put("title", "Hello Cloud Test");

@@ -2,21 +2,22 @@ package io.grokery.lab.api.serverless.aws;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.grokery.lab.api.common.JsonObj;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ApiGatewayResponse {
 
 	private final int statusCode;
 	private final String body;
-	private final Map<String, String> headers;
+	private final JsonObj headers;
 	private final boolean isBase64Encoded;
 
-	public ApiGatewayResponse(int statusCode, String body, Map<String, String> headers, boolean isBase64Encoded) {
+	public ApiGatewayResponse(int statusCode, String body, JsonObj headers, boolean isBase64Encoded) {
 		this.statusCode = statusCode;
 		this.body = body;
 		this.headers = headers;
@@ -40,7 +41,7 @@ public class ApiGatewayResponse {
 	}
 
 	public static ApiGatewayResponse make(int code, Object responseBody) {
-		Map<String, String> headers = new HashMap<String, String>();
+		JsonObj headers = new JsonObj();
 		headers.put("Access-Control-Allow-Origin", "*");
 		ApiGatewayResponse response = ApiGatewayResponse.builder()
 		.setStatusCode(code)
@@ -57,7 +58,7 @@ public class ApiGatewayResponse {
 		return body;
 	}
 
-	public Map<String, String> getHeaders() {
+	public JsonObj getHeaders() {
 		return headers;
 	}
 
@@ -72,12 +73,12 @@ public class ApiGatewayResponse {
 
 	public static class Builder {
 
-		private static final Logger LOGGER = Logger.getLogger(ApiGatewayResponse.Builder.class);
+		private static final Logger LOG = LoggerFactory.getLogger(ApiGatewayResponse.Builder.class);
 
 		private static final ObjectMapper objectMapper = new ObjectMapper();
 
 		private int statusCode = 200;
-		private Map<String, String> headers = Collections.emptyMap();
+		private JsonObj headers = new JsonObj();
 		private String rawBody;
 		private Object objectBody;
 		private byte[] binaryBody;
@@ -88,7 +89,7 @@ public class ApiGatewayResponse {
 			return this;
 		}
 
-		public Builder setHeaders(Map<String, String> headers) {
+		public Builder setHeaders(JsonObj headers) {
 			this.headers = headers;
 			return this;
 		}
@@ -142,7 +143,7 @@ public class ApiGatewayResponse {
 				try {
 					body = objectMapper.writeValueAsString(objectBody);
 				} catch (Throwable e) {
-					LOGGER.error("Failed to serialize response object", e);
+					LOG.error("Failed to serialize response object", e);
 					body = "Failed to serialize response object";
 				}
 			} else if (binaryBody != null) {

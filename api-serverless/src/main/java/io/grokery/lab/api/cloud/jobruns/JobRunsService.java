@@ -1,7 +1,5 @@
 package io.grokery.lab.api.cloud.jobruns;
 
-import java.util.List;
-
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
@@ -43,7 +41,7 @@ public class JobRunsService {
 	public static JsonObj getJobRunsforJob(String jobId, String query, String projection, int limit, CloudContext context) {
 		DAO dao = JobRunsDAO.getInst(context);
 		if (projection == null) {
-			projection = "jobId, jobrunId, startTime, endTime, jobRunType, updated, runStatus";
+			projection = "jobId, jobrunId, startTime, endTime, runStatus";
 		}
 		JsonObj results = dao.query(jobId, query, projection, limit);
 		return results;

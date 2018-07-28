@@ -20,7 +20,7 @@ functions:
   router:
     description: Grokery API router
     handler: io.grokery.lab.api.serverless.aws.Router
-    timeout: 300
+    timeout: 30
     events:
       - http:
           path: ${self:custom.urlBase}/auth/signin
@@ -35,21 +35,25 @@ functions:
           path: ${self:custom.urlBase}/accounts
           method: post
           cors: true
+      - http:
+          path: ${self:custom.urlBase}/accounts/{accountId}
+          method: get
+          cors: true
 
       - http:
           path: ${self:custom.urlBase}/users
           method: post
           cors: true
       - http:
-          path: ${self:custom.urlBase}/users/{username}
+          path: ${self:custom.urlBase}/users/{userId}
           method: get
           cors: true
       - http:
-          path: ${self:custom.urlBase}/users/{username}
+          path: ${self:custom.urlBase}/users/{userId}
           method: put
           cors: true
       - http:
-          path: ${self:custom.urlBase}/users/{username}
+          path: ${self:custom.urlBase}/users/{userId}
           method: delete
           cors: true
 
@@ -69,8 +73,14 @@ functions:
           path: ${self:custom.urlBase}/clouds/{cloudId}
           method: delete
           cors: true
+
       - http:
-          path: ${self:custom.urlBase}/clouds/{cloudId}/nodes
+          path: ${self:custom.urlBase}/clouds/{cloudId}/options
+          method: get
+          cors: true
+
+      - http:
+          path: ${self:custom.urlBase}/clouds/{cloudId}/nodes/{nodeType}
           method: post
           cors: true
       - http:
@@ -78,14 +88,27 @@ functions:
           method: get
           cors: true
       - http:
-          path: ${self:custom.urlBase}/clouds/{cloudId}/nodes/{nodeId}
+          path: ${self:custom.urlBase}/clouds/{cloudId}/nodes/{nodeType}/{nodeId}
           method: get
           cors: true
       - http:
-          path: ${self:custom.urlBase}/clouds/{cloudId}/nodes/{nodeId}
+          path: ${self:custom.urlBase}/clouds/{cloudId}/nodes/{nodeType}/{nodeId}
           method: put
           cors: true
       - http:
-          path: ${self:custom.urlBase}/clouds/{cloudId}/nodes/{nodeId}
+          path: ${self:custom.urlBase}/clouds/{cloudId}/nodes/{nodeType}/{nodeId}
           method: delete
+          cors: true
+
+      - http:
+          path: ${self:custom.urlBase}/clouds/{cloudId}/jobruns
+          method: post
+          cors: true  
+      - http:
+          path: ${self:custom.urlBase}/clouds/{cloudId}/jobruns/{jobId}
+          method: get
+          cors: true
+      - http:
+          path: ${self:custom.urlBase}/clouds/{cloudId}/jobruns/{jobId}/{startTime}    
+          method: put
           cors: true

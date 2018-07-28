@@ -1,48 +1,48 @@
 package io.grokery.lab.api.serverless.aws;
 
-import java.util.Map;
-import java.util.HashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.apache.log4j.Logger;
+import io.grokery.lab.api.common.JsonObj;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ApiGatewayRequest {
 	
-	private static final Logger LOGGER = Logger.getLogger(ApiGatewayRequest.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ApiGatewayRequest.class);
 	
 	private String resource;
     private String path;
 	private String httpMethod;
 	private String stage;
-	private Map<String, String> headers;
-	private Map<String, String> pathParameters;
-	private Map<String, String> queryStringParameters;
-	private Map<String, Object> body;
+	private JsonObj headers;
+	private JsonObj pathParameters;
+	private JsonObj queryStringParameters;
+	private JsonObj body;
 	
 	public ApiGatewayRequest() {
-		this.headers = new HashMap<String, String>();
-		this.pathParameters = new HashMap<String, String>();
-		this.queryStringParameters = new HashMap<String, String>();
-		this.body = new HashMap<String, Object>();
+		this.headers = new JsonObj();
+		this.pathParameters = new JsonObj();
+		this.queryStringParameters = new JsonObj();
+		this.body = new JsonObj();
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void setBody(String body) {
 		if (body != null && body != "") {
-			LOGGER.debug("Mapping request body string into Map<String, Object>");
+			LOG.debug("Mapping request body string into JsonObj");
 			ObjectMapper mapper = new ObjectMapper();
 			try {
-				this.body = mapper.readValue(body, Map.class);
+				this.body = mapper.readValue(body, JsonObj.class);
 			} catch (Throwable e) {
-				LOGGER.error("Error mapping request body", e);
+				LOG.error("Error mapping request body", e);
 				this.body.put("Error", "Error mapping request body");
 			}
 		}
 	}
-	public void setObjectBody(Map<String, Object> body) {
+	public void setObjectBody(JsonObj body) {
 		this.body = body;
 	}
-	public Map<String, Object> getBody() {
+	public JsonObj getBody() {
 		return body;
 	}
 	public String getHttpMethod() {
@@ -51,22 +51,22 @@ public class ApiGatewayRequest {
 	public void setHttpMethod(String httpMethod) {
 		this.httpMethod = httpMethod;
 	}
-	public Map<String, String> getHeaders() {
+	public JsonObj getHeaders() {
 		return headers;
 	}
-	public void setHeaders(Map<String, String> headers) {
+	public void setHeaders(JsonObj headers) {
 		this.headers = headers;
 	}
-	public Map<String, String> getPathParameters() {
+	public JsonObj getPathParameters() {
 		return pathParameters;
 	}
-	public void setPathParameters(Map<String, String> pathParameters) {
+	public void setPathParameters(JsonObj pathParameters) {
 		this.pathParameters = pathParameters;
 	}
-	public Map<String, String> getQueryStringParameters() {
+	public JsonObj getQueryStringParameters() {
 		return queryStringParameters;
 	}
-	public void setQueryStringParameters(Map<String, String> queryStringParameters) {
+	public void setQueryStringParameters(JsonObj queryStringParameters) {
 		this.queryStringParameters = queryStringParameters;
 	}
 	public String getPath() {
@@ -94,7 +94,7 @@ public class ApiGatewayRequest {
 
 	public String getHeader(String key, String defaultVal) {
 		if (headers != null) {
-			return headers.getOrDefault(key, defaultVal);
+			return headers.getString(key, defaultVal);
 		}
 		return defaultVal;
 	}
@@ -105,7 +105,18 @@ public class ApiGatewayRequest {
 
 	public String getPathValue(String key, String defaultVal) {
 		if (pathParameters != null) {
-			return pathParameters.getOrDefault(key, defaultVal);
+			return pathParameters.getString(key, defaultVal);
+		}
+		return defaultVal;
+	}
+
+	public String getQueryValue(String key) throws Exception {
+		return getQueryValue(key, null);
+	}
+
+	public String getQueryValue(String key, String defaultVal) {
+		if (pathParameters != null) {
+			return queryStringParameters.getString(key, defaultVal);
 		}
 		return defaultVal;
 	}

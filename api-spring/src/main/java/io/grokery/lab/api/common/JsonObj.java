@@ -26,12 +26,18 @@ public class JsonObj extends HashMap<String, Object> {
     public JsonObj getJsonObj(String key) {
         return (JsonObj) this.get(key);
     }
+    public JsonObj getJsonObj(String key, JsonObj defaultValue) {
+        return (JsonObj) this.getOrDefault(key, defaultValue);
+    }
 
     public void putString(String key, String value) {
         this.put(key, value);
     }
     public String getString(String key) {
         return (String) this.get(key);
+    }
+    public String getString(String key, String defaultValue) {
+        return (String) this.getOrDefault(key, defaultValue);
     }
 
     public void putInt(String key, int value) {
@@ -40,6 +46,9 @@ public class JsonObj extends HashMap<String, Object> {
     public int getInt(String key) {
         return (int) this.get(key);
     }
+    public int getInt(String key, int defaultValue) {
+        return (int) this.getOrDefault(key, defaultValue);
+    }
 
     public void putBool(String key, boolean value) {
         this.put(key, value);
@@ -47,12 +56,18 @@ public class JsonObj extends HashMap<String, Object> {
     public boolean getBool(String key) {
         return (boolean) this.get(key);
     }
+    public boolean getBool(String key, Boolean defaultValue) {
+        return (boolean) this.getOrDefault(key, defaultValue);
+    }
 
     public void putDouble(String key, double value) {
         this.put(key, value);
     }
     public double getDouble(String key) {
         return (double) this.get(key);
+    }
+    public double getDouble(String key, double defaultValue) {
+        return (double) this.getOrDefault(key, defaultValue);
     }
 
 }
