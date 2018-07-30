@@ -31,11 +31,11 @@ public class JobRunsService {
 	}
 
 	public static JsonObj updateJobRunStatus(JsonObj request, CloudContext context) throws InvalidInputException, NotFoundException {
-		LOG.info("run job");
+		LOG.info("update job job run status for jobId: {}/{}", request.getString("jobId"), request.getString("created"));
 		DAO dao = JobRunsDAO.getInst(context);
 		JobRun existing = JobRun.fromMap(dao.get(request.getString("jobId"), request.getString("created")), context);
 		existing.updateStatus(request);
-		dao.update(existing.getJobId(), existing.getStartTime(), JobRun.toJsonObj(existing, true));
+		dao.update(existing.getJobId(), existing.getCreated(), JobRun.toJsonObj(existing, true));
 		return JobRun.toJsonObj(existing, true);
 	}
 
