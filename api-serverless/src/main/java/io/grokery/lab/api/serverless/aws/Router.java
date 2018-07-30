@@ -62,7 +62,7 @@ public class Router implements RequestHandler<ApiGatewayRequest, ApiGatewayRespo
 				return handleJobruns(req);
 			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}/jobruns/\\{jobId\\}"))
 				return handleJobruns(req);
-			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}/jobruns/\\{jobId\\}/\\{startTime\\}"))
+			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}/jobruns/\\{jobId\\}/\\{created\\}"))
 				return handleJobrun(req);
 
 			throw new NotImplementedError();
@@ -242,7 +242,10 @@ public class Router implements RequestHandler<ApiGatewayRequest, ApiGatewayRespo
 		final String method = req.getHttpMethod();
 
 		if (method.equals("PUT")) {
-			JsonObj result = JobRunsService.updateJobRunStatus(req.getBody(), gcxt);
+			JsonObj request = req.getBody();
+			request.put("jobId", req.getPathValue("jobId"));
+			request.put("created", req.getPathValue("created"));
+			JsonObj result = JobRunsService.updateJobRunStatus(request, gcxt);
 			return ApiGatewayResponse.make(200, result);
 		} else if (method.equals("GET")) {
 			// TODO

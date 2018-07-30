@@ -109,6 +109,6 @@ functions:
           method: get
           cors: true
       - http:
-          path: ${self:custom.urlBase}/clouds/{cloudId}/jobruns/{jobId}/{startTime}    
+          path: ${self:custom.urlBase}/clouds/{cloudId}/jobruns/{jobId}/{created}    
           method: put
           cors: true
