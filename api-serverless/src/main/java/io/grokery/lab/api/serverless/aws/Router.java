@@ -67,10 +67,13 @@ public class Router implements RequestHandler<ApiGatewayRequest, ApiGatewayRespo
 
 			throw new NotImplementedError();
 		} catch (NotFoundException e) {
+			LOG.error(e.getMessage());
 			return ApiGatewayResponse.error(404, e.getMessage());
 		} catch (InvalidInputException e) {
+			LOG.error(e.getMessage());
 			return ApiGatewayResponse.error(400, e.getMessage());
 		} catch (NotImplementedError e) {
+			LOG.error(e.getMessage());
 			return ApiGatewayResponse.error(500, "No route or method handler implemented for: " + req.getResource());
 		} catch (Throwable e) {
 			LOG.error(e.getMessage());
@@ -223,11 +226,11 @@ public class Router implements RequestHandler<ApiGatewayRequest, ApiGatewayRespo
 			JsonObj result = JobRunsService.createAndStartJobRun(req.getBody(), gcxt);
 			return ApiGatewayResponse.make(200, result);
 		} else if (method.equals("GET")) {
-			String jobRunId = req.getPathValue("jobRunId");
+			String jobId = req.getPathValue("jobId");
 			String query = req.getQueryValue("query", null);
 			String projection = req.getQueryValue("projection", null);
 			int limit = Integer.parseInt(req.getQueryValue("limit", "0"));
-			JsonObj result = JobRunsService.getJobRunsforJob(jobRunId, query, projection, limit, gcxt);
+			JsonObj result = JobRunsService.getJobRunsforJob(jobId, query, projection, limit, gcxt);
 			return ApiGatewayResponse.make(200, result);
 		}
 

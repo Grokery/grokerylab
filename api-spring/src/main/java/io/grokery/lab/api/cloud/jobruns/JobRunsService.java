@@ -15,10 +15,10 @@ import io.grokery.lab.api.common.exceptions.NotFoundException;
 
 public class JobRunsService {
 
-	private static final Logger logger = LoggerFactory.getLogger(JobRunsService.class);
+	private static final Logger LOG = LoggerFactory.getLogger(JobRunsService.class);
 
 	public static JsonObj createAndStartJobRun(JsonObj request, CloudContext context) throws InvalidInputException, NotFoundException {
-		logger.info("run job");
+		LOG.info("run job");
 
 		DAO dao = JobRunsDAO.getInst(context);
 		JobRun jobrun = JobRun.fromMap(request, context);
@@ -31,6 +31,7 @@ public class JobRunsService {
 	}
 
 	public static JsonObj updateJobRunStatus(JsonObj request, CloudContext context) throws InvalidInputException, NotFoundException {
+		LOG.info("run job");
 		DAO dao = JobRunsDAO.getInst(context);
 		JobRun existing = JobRun.fromMap(dao.get(request.getString("jobId"), request.getString("created")), context);
 		existing.updateStatus(request);
@@ -39,9 +40,10 @@ public class JobRunsService {
 	}
 
 	public static JsonObj getJobRunsforJob(String jobId, String query, String projection, int limit, CloudContext context) {
+		LOG.info("jobId={} query={} projection={}", jobId, query, projection);
 		DAO dao = JobRunsDAO.getInst(context);
 		if (projection == null) {
-			projection = "jobId, jobrunId, startTime, endTime, runStatus";
+			projection = "jobId, jobrunId, created, startTime, endTime, runStatus";
 		}
 		JsonObj results = dao.query(jobId, query, projection, limit);
 		return results;

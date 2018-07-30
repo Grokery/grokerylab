@@ -98,7 +98,6 @@
 			<artifactId>jbcrypt</artifactId>
 			<version>0.4</version>
 		</dependency>
-
 		<!-- testing related dependencies -->
 		<dependency>
             <groupId>junit</groupId>
