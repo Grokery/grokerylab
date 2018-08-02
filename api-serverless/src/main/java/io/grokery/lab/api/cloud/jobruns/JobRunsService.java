@@ -26,7 +26,6 @@ public class JobRunsService {
 		dao.create(jobrun.getJobId(), jobrun.getCreated(), JobRun.toJsonObj(jobrun, true));
 
 		jobrun.startRun(context);
-		dao.update(jobrun.getJobId(), jobrun.getCreated(), JobRun.toJsonObj(jobrun, true));
 		return JobRun.toJsonObj(jobrun, true);
 	}
 

@@ -82,7 +82,8 @@ public class AWSLambdaJob extends Job {
 			.withHandler("lambda_function.lambda_handler")
 			.withFunctionName(this.getFunctionName())
 			.withDescription(this.getFunctionDescription())
-			.withMemorySize(128)
+			.withMemorySize(3008)
+			.withTimeout(300)
 			.withPublish(true)
 			.withRole("arn:aws:iam::854227434563:role/LambdaJobRole");
 

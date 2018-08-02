@@ -1,7 +1,9 @@
 package io.grokery.lab.api.cloud.jobruns;
 
-import com.amazonaws.services.lambda.AWSLambda;
-import com.amazonaws.services.lambda.AWSLambdaClientBuilder;
+import java.util.concurrent.Future;
+
+import com.amazonaws.services.lambda.AWSLambdaAsync;
+import com.amazonaws.services.lambda.AWSLambdaAsyncClientBuilder;
 import com.amazonaws.services.lambda.model.InvokeRequest;
 import com.amazonaws.services.lambda.model.InvokeResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -26,7 +28,7 @@ public class AWSLambdaJobRun extends JobRun {
 	}
 
 	public void startRun(CloudContext context) {
-		AWSLambda lambdaClient = AWSLambdaClientBuilder.standard()
+		AWSLambdaAsync lambdaClient = AWSLambdaAsyncClientBuilder.standard()
 			.withCredentials(new CredentialProvider(context.awsAccessKeyId, context.awsSecretKey))
 			.withRegion(context.awsRegion)
 			.build();
@@ -34,12 +36,12 @@ public class AWSLambdaJobRun extends JobRun {
 		JsonObj args = this.getArgs();
 		args.put("jobId", this.getJobId());
 		args.put("createdTime", this.getCreated());
-		
+
 		try {
-			InvokeRequest request = new InvokeRequest()
+			InvokeRequest req = new InvokeRequest()
 				.withFunctionName(this.getLambdaARN())
 				.withPayload(MapperUtil.getInstance().writeValueAsString(args));
-			InvokeResult result = lambdaClient.invoke(request);
+			Future<InvokeResult> future_res = lambdaClient.invokeAsync(req);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
