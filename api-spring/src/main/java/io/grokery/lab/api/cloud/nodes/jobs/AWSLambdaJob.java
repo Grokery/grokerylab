@@ -84,7 +84,7 @@ public class AWSLambdaJob extends Job {
 			.withDescription(this.getFunctionDescription())
 			.withMemorySize(128)
 			.withPublish(true)
-			.withRole("arn:aws:iam::854227434563:role/grokerylab-api-dev-us-west-2-lambdaRole");
+			.withRole("arn:aws:iam::854227434563:role/LambdaJobRole");
 
 		AWSLambda lambdaClient = AWSLambdaClientBuilder.standard()
 			.withCredentials(new CredentialProvider(context.awsAccessKeyId, context.awsSecretKey))

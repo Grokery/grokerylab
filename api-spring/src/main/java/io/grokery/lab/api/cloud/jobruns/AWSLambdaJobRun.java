@@ -4,12 +4,14 @@ import com.amazonaws.services.lambda.AWSLambda;
 import com.amazonaws.services.lambda.AWSLambdaClientBuilder;
 import com.amazonaws.services.lambda.model.InvokeRequest;
 import com.amazonaws.services.lambda.model.InvokeResult;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.grokery.lab.api.common.context.CloudContext;
 import io.grokery.lab.api.common.CredentialProvider;
+import io.grokery.lab.api.common.MapperUtil;
 
 public class AWSLambdaJobRun extends JobRun {
 
@@ -28,9 +30,14 @@ public class AWSLambdaJobRun extends JobRun {
 			.withRegion(context.awsRegion)
 			.build();
 
-		InvokeRequest request = new InvokeRequest()
-			.withFunctionName(this.getLambdaARN());
-		InvokeResult result = lambdaClient.invoke(request);
+		try {
+			InvokeRequest request = new InvokeRequest()
+				.withFunctionName(this.getLambdaARN())
+				.withPayload(MapperUtil.getInstance().writeValueAsString(this.getArgs()));
+			InvokeResult result = lambdaClient.invoke(request);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public String getS3LogPath() {
