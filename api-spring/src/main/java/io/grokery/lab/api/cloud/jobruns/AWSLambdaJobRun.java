@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import io.grokery.lab.api.common.context.CloudContext;
 import io.grokery.lab.api.common.CredentialProvider;
+import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.MapperUtil;
 
 public class AWSLambdaJobRun extends JobRun {
@@ -30,10 +31,14 @@ public class AWSLambdaJobRun extends JobRun {
 			.withRegion(context.awsRegion)
 			.build();
 
+		JsonObj args = this.getArgs();
+		args.put("jobId", this.getJobId());
+		args.put("createdTime", this.getCreated());
+		
 		try {
 			InvokeRequest request = new InvokeRequest()
 				.withFunctionName(this.getLambdaARN())
-				.withPayload(MapperUtil.getInstance().writeValueAsString(this.getArgs()));
+				.withPayload(MapperUtil.getInstance().writeValueAsString(args));
 			InvokeResult result = lambdaClient.invoke(request);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();

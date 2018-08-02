@@ -34,8 +34,6 @@ class JobDetail extends Component {
         "jobRunType": node.subType,
         "lambdaARN": node.lambdaARN,
         "args": {
-            "jobId": node.nodeId,
-            "createdTime": node.created,
             "cloudId": "123",
             "baseUrl": "https://566xhrt8dk.execute-api.us-west-2.amazonaws.com/dev/api/v0",
             "authorization":"eyJhbGciOiJIUzI1NiJ9.eyJjbG91ZElkIjoiMjg3ZGMxZGEtMjc4YS00NDIyLWI1NzEtNDcxZTgxNWFjN2E2IiwiY2xvdWRUeXBlIjoiQVdTIiwiY2xvdWROYW1lIjoiZnViaXR6IiwiY2xvdWRSb2xlIjoiYWRtaW4iLCJhd3NBY2Nlc3NLZXlJZCI6IkFLSUFJUVRYRENLS1VaTlRYUjVBIiwiYXdzU2VjcmV0S2V5IjoiN1hzWnRDTW4wd0tDYm55NmcyYUdwcmYxdmFLcWF1eVl1Nkc5Z2NVOCIsImF3c1JlZ2lvbiI6InVzLXdlc3QtMiIsImRhb1R5cGUiOiJEWU5BTU9EQiIsImlzcyI6Imh0dHBzOi8vYXBpLmdyb2tlcnkuaW8iLCJpYXQiOjE1MzE3ODUyODIsImV4cCI6MTUzMTgxNDA4Mn0.0bxnFjZI3wjKR5FPgGRpir-IJDmXmjv_50_7ug9dRNM"
