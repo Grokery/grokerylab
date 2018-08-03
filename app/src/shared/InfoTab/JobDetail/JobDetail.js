@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { postJobRun, fetchJobRuns } from 'store/actions'
+import { postJobRun, fetchJobRuns, fetchJobRunsWithRepeat } from 'store/actions'
 import './JobDetail.css'
 
 class JobDetail extends Component {
@@ -28,7 +28,7 @@ class JobDetail extends Component {
     this.props.onUpdate({'runControl': node.runControl})
   }
   runJob(e) {
-      const { postJobRun, node } = this.props
+      const { postJobRun, node, fetchJobRunsWithRepeat } = this.props
       postJobRun({
         "jobId": node.nodeId,
         "jobRunType": node.subType,
@@ -38,6 +38,8 @@ class JobDetail extends Component {
             "baseUrl": "https://566xhrt8dk.execute-api.us-west-2.amazonaws.com/dev/api/v0",
             "authorization":"eyJhbGciOiJIUzI1NiJ9.eyJjbG91ZElkIjoiMjg3ZGMxZGEtMjc4YS00NDIyLWI1NzEtNDcxZTgxNWFjN2E2IiwiY2xvdWRUeXBlIjoiQVdTIiwiY2xvdWROYW1lIjoiZnViaXR6IiwiY2xvdWRSb2xlIjoiYWRtaW4iLCJhd3NBY2Nlc3NLZXlJZCI6IkFLSUFJUVRYRENLS1VaTlRYUjVBIiwiYXdzU2VjcmV0S2V5IjoiN1hzWnRDTW4wd0tDYm55NmcyYUdwcmYxdmFLcWF1eVl1Nkc5Z2NVOCIsImF3c1JlZ2lvbiI6InVzLXdlc3QtMiIsImRhb1R5cGUiOiJEWU5BTU9EQiIsImlzcyI6Imh0dHBzOi8vYXBpLmdyb2tlcnkuaW8iLCJpYXQiOjE1MzE3ODUyODIsImV4cCI6MTUzMTgxNDA4Mn0.0bxnFjZI3wjKR5FPgGRpir-IJDmXmjv_50_7ug9dRNM"
         }
+    }, function() {
+        fetchJobRunsWithRepeat(node.nodeId, "?limit=10", null, [[1, 0.0, 5], [1, 2.0, 5]])
     })
   }
   getRunControl() {
@@ -96,9 +98,9 @@ class JobDetail extends Component {
     }
   }
   getRunLabelType(status) {
-      if (status == "COMPLETED") {
+      if (status === "COMPLETED") {
         return "label-success"
-      } else if (status == "ERRORED") {
+      } else if (status === "ERRORED") {
         return "label-danger"
       } else {
         return "label-default"
@@ -171,5 +173,6 @@ const mapStateToProps = (state, ownProps) => {
 
 export default connect(mapStateToProps, {
     postJobRun,
-    fetchJobRuns
+    fetchJobRuns,
+    fetchJobRunsWithRepeat
 })(JobDetail)
