@@ -69,6 +69,7 @@ public abstract class DynamoDAO implements DAO {
 	}
 
 	public JsonObj create(String hashKey, String rangeKey, JsonObj data) {
+		LOG.info("create {}/{}", hashKey, rangeKey);
 		Item dbItem = new Item();
 		Iterator it = data.entrySet().iterator();
 		while (it.hasNext()) {
@@ -83,6 +84,7 @@ public abstract class DynamoDAO implements DAO {
 	}
 
 	public JsonObj update(String hashKey, String rangeKey, JsonObj data) throws NotFoundException {
+		LOG.info("update {}/{}", hashKey, rangeKey);
 		Item dbItem = this.table.getItem(getHashKeyName(), hashKey, getRangeKeyName(), rangeKey);
 		if (dbItem == null) {
 			throw new NotFoundException();
@@ -99,6 +101,7 @@ public abstract class DynamoDAO implements DAO {
 	}
 
 	public JsonObj delete(String hashKey, String rangeKey) throws NotFoundException {
+		LOG.info("delete {}/{}", hashKey, rangeKey);
 		Item dbItem = this.table.getItem(getHashKeyName(), hashKey, getRangeKeyName(), rangeKey);
 		if (dbItem == null) {
 			throw new NotFoundException();

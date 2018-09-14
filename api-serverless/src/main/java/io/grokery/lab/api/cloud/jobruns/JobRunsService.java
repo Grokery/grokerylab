@@ -18,19 +18,17 @@ public class JobRunsService {
 	private static final Logger LOG = LoggerFactory.getLogger(JobRunsService.class);
 
 	public static JsonObj createAndStartJobRun(JsonObj request, CloudContext context) throws InvalidInputException, NotFoundException {
-		LOG.info("run job");
-
 		DAO dao = JobRunsDAO.getInst(context);
 		JobRun jobrun = JobRun.fromMap(request, context);
 		jobrun.setStartTime(new DateTime(DateTimeZone.UTC).toString());
 		dao.create(jobrun.getJobId(), jobrun.getCreated(), JobRun.toJsonObj(jobrun, true));
-
+		LOG.info("createAndStartJobRun {}/{}", jobrun.getJobId(), jobrun.getCreated());
 		jobrun.startRun(context);
 		return JobRun.toJsonObj(jobrun, true);
 	}
 
 	public static JsonObj updateJobRunStatus(JsonObj request, CloudContext context) throws InvalidInputException, NotFoundException {
-		LOG.info("update job job run status for jobId: {}/{}", request.getString("jobId"), request.getString("created"));
+		LOG.info("updateJobRunStatus {}/{}", request.getString("jobId"), request.getString("created"));
 		DAO dao = JobRunsDAO.getInst(context);
 		JobRun existing = JobRun.fromMap(dao.get(request.getString("jobId"), request.getString("created")), context);
 		existing.updateStatus(request);
@@ -39,7 +37,7 @@ public class JobRunsService {
 	}
 
 	public static JsonObj getJobRunsforJob(String jobId, String query, String projection, int limit, CloudContext context) {
-		LOG.info("jobId={} query={} projection={}", jobId, query, projection);
+		LOG.info("getJobRunsforJob jobId={} query={} projection={}", jobId, query, projection);
 		DAO dao = JobRunsDAO.getInst(context);
 		if (projection == null) {
 			projection = "jobId, jobrunId, created, startTime, endTime, runStatus";

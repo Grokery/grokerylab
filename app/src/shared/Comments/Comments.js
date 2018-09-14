@@ -22,7 +22,7 @@ class Comments extends Component {
         this.props.comments.forEach(function(comment) {
             let date = new Date(comment.datetime)
             let options = {
-                weekday: "long", year: "numeric", month: "short",
+                weekday: "short", year: "numeric", month: "short",
                 day: "numeric", hour: "2-digit", minute: "2-digit"
             }
             lis.push((

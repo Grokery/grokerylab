@@ -35,8 +35,9 @@ public class AWSLambdaJobRun extends JobRun {
 
 		JsonObj args = this.getArgs();
 		args.put("jobId", this.getJobId());
-		args.put("createdTime", this.getCreated());
+		args.put("created", this.getCreated());
 
+		LOG.info("startRun {}/{}", this.getJobId(), this.getCreated());
 		try {
 			InvokeRequest req = new InvokeRequest()
 				.withFunctionName(this.getLambdaARN())

@@ -27,7 +27,7 @@ public class Router implements RequestHandler<ApiGatewayRequest, ApiGatewayRespo
 		try {
 			final String resource = req.getResource();
 
-			LOG.info(String.format("%s: %s", req.getHttpMethod(), resource));
+			LOG.info(String.format("handleRequest %s: %s", req.getHttpMethod(), resource));
 
 			if (resource.matches("/api/v[0-9]+/auth/signin"))
 				return signin(req);

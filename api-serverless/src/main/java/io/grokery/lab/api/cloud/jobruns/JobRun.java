@@ -16,7 +16,7 @@ import io.grokery.lab.api.common.exceptions.InvalidInputException;
 
 public class JobRun {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(JobRun.class);
+	private static final Logger LOG = LoggerFactory.getLogger(JobRun.class);
 
 	private String jobId;
 	private String jobRunType;
@@ -44,12 +44,34 @@ public class JobRun {
 		throw new NotImplementedError();
 	}
 
-	public void updateStatus(JsonObj request) {
-		this.setUpdated(new DateTime(DateTimeZone.UTC).toString());
+	public void updateStatus(JsonObj request) throws InvalidInputException {		
 		JobRunStatus status = JobRunStatus.valueOf(request.getString("runStatus"));
+		this.validateStatusTransition(status);
+
+		LOG.info("updateStatus jobId/created: {}/{} from {} to {}", 
+			this.getJobId(),
+			this.getCreated(),
+			this.getRunStatus(),
+			request.getString("runStatus"));
+
 		this.setRunStatus(status.toString());
+		this.setUpdated(new DateTime(DateTimeZone.UTC).toString());
+
 		if (status == JobRunStatus.COMPLETED || status == JobRunStatus.ERRORED) {
 			this.setEndTime(this.getUpdated());
+		}
+	}
+
+	private void validateStatusTransition(JobRunStatus newStatus) throws InvalidInputException {
+		JobRunStatus currentStatus = JobRunStatus.valueOf(this.getRunStatus());
+		if (currentStatus == newStatus) {
+			throw new InvalidInputException("JobRun has already been updated to status: " + newStatus.toString());
+		} else if (currentStatus == JobRunStatus.RUNNING) {
+			if (newStatus == JobRunStatus.STAGED) {
+				throw new InvalidInputException("JobRun may not return to STAGED status after starting run");
+			} 
+		} else if (currentStatus == JobRunStatus.COMPLETED || currentStatus == JobRunStatus.ERRORED) {
+			throw new InvalidInputException("JobRun has already terminated with status: " + this.getRunStatus());
 		}
 	}
 
@@ -83,7 +105,7 @@ public class JobRun {
 	public static JobRun getClassInstance(JsonObj obj, CloudContext context) throws InvalidInputException {
 		try {
 			String typeName = obj.getString("jobRunType");
-			LOGGER.info("Get class instance for jobRunType: " + typeName);
+			LOG.info("Get class instance for jobRunType: " + typeName);
 			JobRunType nodeType = JobRunType.valueOf(typeName);
 			switch (nodeType) {
 				case PYTHON:
@@ -95,11 +117,11 @@ public class JobRun {
 			}
 		} catch (IllegalArgumentException e) {
 			String message = "Unknown NodeType";
-			LOGGER.error(message, e);
+			LOG.error(message, e);
 			throw new InvalidInputException(message);
 		} catch (NullPointerException e) {
 			String message = "NodeType specification required";
-			LOGGER.error(message, e);
+			LOG.error(message, e);
 			throw new InvalidInputException(message);
 		}
 	}

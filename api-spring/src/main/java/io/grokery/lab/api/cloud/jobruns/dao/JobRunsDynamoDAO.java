@@ -1,18 +1,13 @@
 package io.grokery.lab.api.cloud.jobruns.dao;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
-import com.amazonaws.services.dynamodbv2.model.GlobalSecondaryIndex;
 import com.amazonaws.services.dynamodbv2.model.KeySchemaElement;
 import com.amazonaws.services.dynamodbv2.model.KeyType;
-import com.amazonaws.services.dynamodbv2.model.Projection;
-import com.amazonaws.services.dynamodbv2.model.ProjectionType;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
-import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
 
 import io.grokery.lab.api.common.dao.DynamoDAO;
 import io.grokery.lab.api.common.context.CloudContext;
@@ -28,7 +23,7 @@ public class JobRunsDynamoDAO extends DynamoDAO {
 
 	@Override
 	protected String getRangeKeyName() {
-		return "startTime";
+		return "created";
 	}
 
 	@Override
