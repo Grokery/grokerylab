@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import CodeEditor from 'shared/CodeEditor/CodeEditor'
-import './JobCodeTab.css'
+
+import './JobCode.css'
 
 class JobCodeTab extends Component {
   static propTypes = {
@@ -33,26 +34,15 @@ class JobCodeTab extends Component {
     if (this.debounce){
       clearTimeout(this.debounce)
     }
-    this.debounce = setTimeout(function(){
+    this.debounce = setTimeout(() => {
       this.props.onUpdate({
-        'code': newCode
+        'files': {
+          'v0': {
+            'hello.py':newCode
+          }
+        }
       })
-    }.bind(this), 1000);
-  }
-  getEditorType(node) {
-    let type = node.type
-    /* TODO: select code editor component by job type (datapipeline is different than sproc) */
-    // TODO finish refactoring this
-    if (type === 'type a' || type === 'type b') {
-      return(<div></div>)
-    } else {
-      let options = {
-        lineNumbers: true,
-        dragDrop: false,
-        mode: {name: "javascript"}
-      }
-      return (<CodeEditor value={node.code} options={options} onChange={this.updateCode.bind(this)} />)
-    }
+    }, 1000);
   }
   getCompleted() {
     let runs = []
@@ -115,37 +105,52 @@ class JobCodeTab extends Component {
     if (!node){
       return (<div></div>)
     }
+
+    let editorOptions = {
+      lineNumbers: true,
+      dragDrop: false,
+      mode: {name: "python"}
+    }
+    // node.code = "import os\n\ndef main(event, context):\n    print('hello from main')\n    print('secret value: ' + event['SECRET_VALUE'])\n    print(event)\n"
     return (
-      <div className='job-code-tab'>
+      <div className='row job-code-tab'>
+        <div className='col-md-2'>
 
-        {/* <div className='code col col-md-12'>
-          {this.getEditorType(node)}
-        </div> */}
+          {/* <div className='' style={{padding:'5px',paddingLeft:'15px'}}>
+            <select className={'form-control'}>
+              <option>V0</option>
+              <option>V1</option>
+              <option>V2 - Published</option>
+              <option>V3</option>
+            </select>
+          </div> */}
 
-        {/* TODO abstract out this column to own component that shows run btn or active toggle depending on job type and pulls run info from logs */}
+          <ul style={{marginTop:'40px'}}>
+            <li><a href='#/'>requirements.txt</a></li>
+            <li><a href='#/'>main.py</a></li>
+            {/* <li><a href='#/'> - add file - </a></li> */}
+          </ul>
 
-        {/* <div className='col col-md-6'>
-          <div className=''>
-            <div className='col col-md-1 run-button'>
-              <a href='#' onClick={function(){}}><i className="fa fa-pause" aria-hidden="true"></i></a>
-              <label className="switch"><input type="checkbox" onClick={this.toggleIsActive.bind(this)} /><span className="slider round"></span></label>
+        </div>
+        <div className='col-md-10' style={{borderLeft:'1px solid #ccc'}}>
+          <div className='row' style={{paddingTop:'5px',paddingBottom:'5px',paddingRight:'15px'}}>
+            <div className="col-md-1">
+                <button className="run-btn form-control">
+                    <i className="fa fa-play" aria-hidden="true"></i>
+                </button>
             </div>
-            <div className='col col-md-11 output-select'>
-              <select className='form-control'>
-                {this.getNextScheduled()}
-                {this.getInProgress()}
-                {this.getCompleted()}
-              </select>
+            {/* <div className='col-md-11'>
+              <div className='form-inline pull-right'>
+                <button className={'form-control btn btn-default'}>Publish version</button>
+              </div>
+            </div> */}
+          </div>
+          <div className='row'>
+            <div className='col-md-12' style={{paddingLeft:'0px',borderTop:'1px solid #ccc'}}> 
+              <CodeEditor value={node['files']['v0']['hello.py']} options={editorOptions} onChange={this.updateCode.bind(this)} />
             </div>
           </div>
-          <div className='run-logs'>
-            <div className='col col-md-12'>
-            <pre>
-              {this.getLogsForRun()}
-            </pre>
-            </div>
-          </div>
-        </div> */}
+        </div>
 
       </div>
     )

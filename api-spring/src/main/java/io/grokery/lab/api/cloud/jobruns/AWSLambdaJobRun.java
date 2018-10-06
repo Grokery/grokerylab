@@ -33,6 +33,8 @@ public class AWSLambdaJobRun extends JobRun {
 			.withRegion(context.awsRegion)
 			.build();
 
+		// TODO get secrets and pass needed values as args to the job run
+
 		JsonObj args = this.getArgs();
 		args.put("jobId", this.getJobId());
 		args.put("created", this.getCreated());

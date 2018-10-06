@@ -7,10 +7,10 @@ import InfoTab from 'shared/InfoTab/InfoTab'
 import DataTab from 'shared/DataTab/DataTab'
 import LogsTab from 'shared/LogsTab/LogsTab'
 
-class SourceDetails extends Component {
+import ChartCodeTab from './code/ChartCodeTab'
+
+class ChartDetails extends Component {
   static propTypes = {
-    params: PropTypes.object.isRequired,
-    node: PropTypes.object.isRequired,
     toggleNodeDetailsPain: PropTypes.func.isRequired,
     onUpdate: PropTypes.func.isRequired
   }
@@ -21,7 +21,9 @@ class SourceDetails extends Component {
       }
   }
   toggleEditDialog(e) {
-    if (e) {e.preventDefault()}
+    if (e) {
+      e.preventDefault()
+    }
     if (this.state.shown) {
       this.setState({shown: false})
     } else {
@@ -29,21 +31,24 @@ class SourceDetails extends Component {
     }
   }
   render() {
-    const { params, onUpdate, node } = this.props
+    const { onUpdate, params, node } = this.props
     return (
-      <div className='source-details'>
+      <div className='chart-details'>
         <Tabs getRightMenuOptions={this.props.getRightMenuOptions.bind(this)}>
           <Panel title='Info'>
             <InfoTab key={params.nodeId} params={params} onUpdate={onUpdate}></InfoTab>
           </Panel>
+          <Panel title='Code'>
+            <ChartCodeTab key={params.nodeId} params={params} onUpdate={onUpdate}></ChartCodeTab>
+          </Panel>
           <Panel title='Data'>
             <DataTab key={params.nodeId} params={params} onUpdate={onUpdate}></DataTab>
           </Panel>
-          <Panel title='History'>
+          <Panel title='Logs'>
             <LogsTab params={this.props.params}></LogsTab>
           </Panel>
         </Tabs>
-        <EditModal title="Edit Data Source" node={node} onUpdate={this.props.onUpdate} shown={this.state.shown} toggleEditDialog={this.toggleEditDialog.bind(this)}></EditModal>
+        <EditModal title="Edit Chart" node={node} onUpdate={this.props.onUpdate} shown={this.state.shown} toggleEditDialog={this.toggleEditDialog.bind(this)}></EditModal>
         {this.props.children}
       </div>
     )
@@ -56,4 +61,4 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps, {})(SourceDetails)
+export default connect(mapStateToProps, {})(ChartDetails)

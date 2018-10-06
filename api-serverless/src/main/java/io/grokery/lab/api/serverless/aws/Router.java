@@ -29,12 +29,7 @@ public class Router implements RequestHandler<ApiGatewayRequest, ApiGatewayRespo
 
 			LOG.info(String.format("handleRequest %s: %s", req.getHttpMethod(), resource));
 
-			if (resource.matches("/api/v[0-9]+/auth/signin"))
-				return signin(req);
-			else if (resource.matches("/api/v[0-9]+/auth/resetpass"))
-				return resetPass(req);
-
-			else if (resource.matches("/api/v[0-9]+/accounts"))
+			if (resource.matches("/api/v[0-9]+/accounts"))
 				return handleAccounts(req);
 			else if (resource.matches("/api/v[0-9]+/accounts/\\{accountId\\}"))
 				return handleAccount(req);
@@ -43,6 +38,8 @@ public class Router implements RequestHandler<ApiGatewayRequest, ApiGatewayRespo
 				return handleUsers(req);
 			else if (resource.matches("/api/v[0-9]+/users/\\{userId\\}"))
 				return handleUser(req);
+			else if (resource.matches("/api/v[0-9]+/users/authenticate"))
+				return authenticate(req);
 
 			else if (resource.matches("/api/v[0-9]+/clouds"))
 				return handleClouds(req);
@@ -53,6 +50,8 @@ public class Router implements RequestHandler<ApiGatewayRequest, ApiGatewayRespo
 
 			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}/nodes"))
 				return handleNodes(req);
+			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}/nodes/search"))
+				return handleNodes(req);
 			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}/nodes/\\{nodeType\\}"))
 				return handleNodes(req);
 			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}/nodes/\\{nodeType\\}/\\{nodeId\\}"))
@@ -60,7 +59,7 @@ public class Router implements RequestHandler<ApiGatewayRequest, ApiGatewayRespo
 			
 			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}/jobruns"))
 				return handleJobruns(req);
-			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}/jobruns/\\{jobId\\}"))
+			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}/jobruns/search"))
 				return handleJobruns(req);
 			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}/jobruns/\\{jobId\\}/\\{created\\}"))
 				return handleJobrun(req);
@@ -82,15 +81,11 @@ public class Router implements RequestHandler<ApiGatewayRequest, ApiGatewayRespo
 		}
 	}
 
-	private ApiGatewayResponse signin(ApiGatewayRequest req) throws Exception {
+	private ApiGatewayResponse authenticate(ApiGatewayRequest req) throws Exception {
 		if (req.getHttpMethod().equals("POST")) {
 			JsonObj res = UserService.getInstance().authenticate(req.getBody());
 			return ApiGatewayResponse.make(200, res);
 		}
-		throw new NotImplementedError();
-	}
-
-	private ApiGatewayResponse resetPass(ApiGatewayRequest req) throws Exception {
 		throw new NotImplementedError();
 	}
 
@@ -226,7 +221,7 @@ public class Router implements RequestHandler<ApiGatewayRequest, ApiGatewayRespo
 			JsonObj result = JobRunsService.createAndStartJobRun(req.getBody(), gcxt);
 			return ApiGatewayResponse.make(200, result);
 		} else if (method.equals("GET")) {
-			String jobId = req.getPathValue("jobId");
+			String jobId = req.getQueryValue("jobId", null);
 			String query = req.getQueryValue("query", null);
 			String projection = req.getQueryValue("projection", null);
 			int limit = Integer.parseInt(req.getQueryValue("limit", "0"));

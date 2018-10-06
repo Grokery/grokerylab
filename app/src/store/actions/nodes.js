@@ -10,7 +10,7 @@ export const fetchNodes = (cb) => (dispatch, getState) => {
     dispatch({
         [CALL_CLOUD_API]: {
             types: [FETCHNODES_REQUEST, FETCHNODES_SUCCESS, FETCHNODES_FAILURE],
-            endpoint: '/nodes',
+            endpoint: '/nodes/search',
             method: 'GET',
             callback: cb
         }

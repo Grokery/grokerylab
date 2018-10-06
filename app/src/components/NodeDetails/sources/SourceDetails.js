@@ -4,12 +4,14 @@ import { connect } from 'react-redux'
 import { Tabs, Panel } from 'shared/Tabs/Tabs'
 import EditModal from 'shared/EditModal/EditModal'
 import InfoTab from 'shared/InfoTab/InfoTab'
-import JobCodeTab from 'shared/JobCodeTab/JobCodeTab'
+import DataTab from 'shared/DataTab/DataTab'
 import LogsTab from 'shared/LogsTab/LogsTab'
+import SourceInfo from './SourceInfo'
 
-class JobDetails extends Component {
+class SourceDetails extends Component {
   static propTypes = {
-    node: PropTypes.object,
+    params: PropTypes.object.isRequired,
+    node: PropTypes.object.isRequired,
     toggleNodeDetailsPain: PropTypes.func.isRequired,
     onUpdate: PropTypes.func.isRequired
   }
@@ -28,21 +30,23 @@ class JobDetails extends Component {
     }
   }
   render() {
-    const { onUpdate, params, node } = this.props
+    const { params, onUpdate, node } = this.props
     return (
-      <div className='job-details'>
+      <div className='source-details'>
         <Tabs getRightMenuOptions={this.props.getRightMenuOptions.bind(this)}>
           <Panel title='Info'>
-            <InfoTab key={params.nodeId} params={params} onUpdate={onUpdate}></InfoTab>
+            <InfoTab key={params.nodeId} params={params} onUpdate={onUpdate}>
+              <SourceInfo key={params.nodeId} params={params} onUpdate={onUpdate}></SourceInfo>
+            </InfoTab>
           </Panel>
-          <Panel title='Code'>
-            <JobCodeTab key={params.nodeId} params={params} onUpdate={onUpdate}></JobCodeTab>
+          <Panel title='Data'>
+            <DataTab key={params.nodeId} params={params} onUpdate={onUpdate}></DataTab>
           </Panel>
           <Panel title='History'>
             <LogsTab params={this.props.params}></LogsTab>
           </Panel>
         </Tabs>
-        <EditModal title="Edit Job" node={node} onUpdate={this.props.onUpdate} shown={this.state.shown} toggleEditDialog={this.toggleEditDialog.bind(this)}></EditModal>
+        <EditModal title="Edit Data Source" node={node} onUpdate={this.props.onUpdate} shown={this.state.shown} toggleEditDialog={this.toggleEditDialog.bind(this)}></EditModal>
         {this.props.children}
       </div>
     )
@@ -55,4 +59,4 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps, {})(JobDetails)
+export default connect(mapStateToProps, {})(SourceDetails)

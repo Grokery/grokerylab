@@ -26,14 +26,14 @@ export const FETCHJOBRUNS_FAILURE = 'FETCHJOBRUNS_FAILURE'
 
 // schedules example: [[1, 0.0, 5], [1, 2.0, 5], [30, 0.0, 120], ... ]
 // delay in seconds = a + b*i for i=1 to i=c given schedule [a, b, c]
-export const fetchJobRunsWithRepeat = (jobId, query, cb, schedules) => (dispatch, getState) => {
+export const fetchJobRunsWithRepeat = (query, cb, schedules) => (dispatch, getState) => {
     var iter = 1
     var count = 1
     let run = function () {
         dispatch({
             [CALL_CLOUD_API]: {
                 types: [FETCHJOBRUNS_REQUEST, FETCHJOBRUNS_SUCCESS, FETCHJOBRUNS_FAILURE],
-                endpoint: '/jobruns/' + jobId + (query ? query : ''),
+                endpoint: '/jobruns/search' + (query ? query : ''),
                 method: 'GET',
                 callback: cb
             }
@@ -52,11 +52,11 @@ export const fetchJobRunsWithRepeat = (jobId, query, cb, schedules) => (dispatch
     run()
 }
 
-export const fetchJobRuns = (jobId, query, cb) => (dispatch, getState) => {
+export const fetchJobRuns = (query, cb) => (dispatch, getState) => {
     dispatch({
         [CALL_CLOUD_API]: {
             types: [FETCHJOBRUNS_REQUEST, FETCHJOBRUNS_SUCCESS, FETCHJOBRUNS_FAILURE],
-            endpoint: '/jobruns/' + jobId + (query ? query : ''),
+            endpoint: '/jobruns/search' + (query ? query : ''),
             method: 'GET',
             callback: cb
         }

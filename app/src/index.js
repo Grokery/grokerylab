@@ -4,10 +4,11 @@ import { Provider } from 'react-redux'
 import { useRouterHistory, Router } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 import { createHashHistory } from 'react-router/node_modules/history'
+
+import configureStore from './store/configureStore'
 import routes from './routes'
 
 // Set up redux store
-import configureStore from './store/configureStore'
 export const store = configureStore()
 
 // Set up router history

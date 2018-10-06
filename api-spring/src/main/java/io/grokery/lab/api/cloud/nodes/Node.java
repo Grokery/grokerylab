@@ -34,6 +34,7 @@ public class Node {
 	private Double y;
 	private List<Map<String, Object>> upstream;
 	private List<Map<String, Object>> downstream;
+	private List<String> secrets;
 
 	public static String getNodeIdName() {
 		return "nodeId";
@@ -220,6 +221,14 @@ public class Node {
 	}
 	public void setDownstream(List<Map<String, Object>> downstream) {
 		this.downstream = downstream;
+	}
+
+	public List<String> getSecrets() {
+		return secrets;
+	}
+
+	public void setSecrets(List<String> secrets) {
+		this.secrets = secrets;
 	}
 
 }

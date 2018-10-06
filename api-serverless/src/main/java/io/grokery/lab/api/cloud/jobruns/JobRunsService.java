@@ -37,7 +37,7 @@ public class JobRunsService {
 	}
 
 	public static JsonObj getJobRunsforJob(String jobId, String query, String projection, int limit, CloudContext context) {
-		LOG.info("getJobRunsforJob jobId={} query={} projection={}", jobId, query, projection);
+		LOG.info("getJobRunsforJob query={} projection={}", query, projection);
 		DAO dao = JobRunsDAO.getInst(context);
 		if (projection == null) {
 			projection = "jobId, jobrunId, created, startTime, endTime, runStatus";

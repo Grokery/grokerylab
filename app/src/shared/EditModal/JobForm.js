@@ -10,7 +10,8 @@ class JobForm extends Component {
   }
   onChange() {
     let updates = {
-      subType: document.getElementById('subType').value
+      subType: document.getElementById('subType').value,
+      secrets: document.getElementById('secrets').value,
     }
     this.props.onUpdate(updates)
   }
@@ -34,6 +35,12 @@ class JobForm extends Component {
           <option value="">-- choose type --</option>
           {this.getOptions()}
         </select>
+        <select id="secrets" className="form-control" value={node.secrets} onChange={this.onChange.bind(this)}>
+          <option value=""></option>
+          <option value="MY_SUPER_SECRET">MY_SUPER_SECRET</option>
+          <option value="OTHER_SECRET">OTHER_SECRET</option>
+          <option value="TEST_SECRET">TEST_SECRET</option>
+        </select>
       </form>
     )
   }
@@ -46,4 +53,3 @@ const mapStateToProps = (state, ownProps) => {
 }
 
 export default connect(mapStateToProps, {})(JobForm)
-

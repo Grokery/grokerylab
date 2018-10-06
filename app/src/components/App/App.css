@@ -40,6 +40,8 @@ body,
   width: 100%;
   background-color: #FFF;
   font-family: "Open Sans", sans-serif;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 pre {

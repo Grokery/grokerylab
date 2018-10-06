@@ -3,6 +3,13 @@ package io.grokery.lab.api.cloud.nodes.jobs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
 import com.amazonaws.services.lambda.AWSLambda;
 import com.amazonaws.services.lambda.AWSLambdaClientBuilder;
 import com.amazonaws.services.lambda.model.CreateFunctionResult;
@@ -96,8 +103,58 @@ public class AWSLambdaJob extends Job {
 		lambdaARN = result.getFunctionArn();
 	}
 
+	private String makeDeployPackage(String code) {
+		LOG.debug("makeDeployPackage");
+		String path = "/tmp/dist.zip";
+		try {
+			ZipOutputStream out = new ZipOutputStream(new FileOutputStream(new File(path)));
+
+			out.putNextEntry(new ZipEntry("main.py"));
+			byte[] data = code.getBytes();
+			out.write(data, 0, data.length);
+			out.closeEntry();
+
+			// next entry
+
+			out.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		return path;
+	}
+
 	public void updateExternalResources(CloudContext context, JsonObj data) {
 		super.updateExternalResources(context, data);
+
+
+		String path = this.makeDeployPackage("print('hello')");
+		LOG.debug("path: " + path);
+		// ? copy path to s3
+		// update function with new pkg
+
+
+		// AWSLambdaAsync lambdaClient = AWSLambdaAsyncClientBuilder.standard()
+		// 	.withCredentials(new CredentialProvider(context.awsAccessKeyId, context.awsSecretKey))
+		// 	.withRegion(context.awsRegion)
+		// 	.build();
+
+		// JsonObj args = this.getArgs();
+		// args.put("jobId", this.getJobId());
+		// args.put("created", this.getCreated());
+
+		// LOG.info("startRun {}/{}", this.getJobId(), this.getCreated());
+		// try {
+		// 	InvokeRequest req = new InvokeRequest()
+		// 		.withFunctionName(this.getLambdaARN())
+		// 		.withPayload(MapperUtil.getInstance().writeValueAsString(args));
+		// 	Future<InvokeResult> future_res = lambdaClient.invokeAsync(req);
+		// } catch (JsonProcessingException e) {
+		// 	e.printStackTrace();
+		// }
+
+
 	}
 
 	public void cleanupExternalResources(CloudContext context) {

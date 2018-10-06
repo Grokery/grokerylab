@@ -1,12 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { NODETYPE } from 'common'
+
 import ContentEditable from 'shared/ContentEditable/ContentEditable'
 import Comments from 'shared/Comments/Comments'
-import ChartInfo from './ChartInfo'
-import SourceInfo from './SourceInfo'
-import JobDetail from './JobDetail/JobDetail'
+
 import './InfoTab.css'
 
 class InfoTab extends Component {
@@ -14,18 +12,6 @@ class InfoTab extends Component {
     lookups: PropTypes.object,
     node: PropTypes.object,
     onUpdate: PropTypes.func.isRequired
-  }
-  getItemDetailSection() {
-    const { node, params } = this.props
-    if (node.nodeType === NODETYPE.CHART) {
-        return (<ChartInfo key={params.nodeId} node={node} params={params} onUpdate={this.props.onUpdate}></ChartInfo>)
-    } else if (node.nodeType === NODETYPE.DATASOURCE) {
-        return (<SourceInfo key={params.nodeId} node={node} params={params} onUpdate={this.props.onUpdate}></SourceInfo>)
-    } else if (node.nodeType === NODETYPE.JOB) {
-        return (<JobDetail key={params.nodeId} node={node} params={params} onUpdate={this.props.onUpdate}></JobDetail>)
-    }  else {
-        return (<div></div>)
-    }
   }
   handleTitleChange(e) {
       this.props.onUpdate({'title': e.target.value})
@@ -50,7 +36,7 @@ class InfoTab extends Component {
                 <div className="row">
                     <div className="col-md-12">
                         <div className="node-detail-section">
-                            {this.getItemDetailSection()}
+                            {this.props.children}
                         </div>
                     </div>
                 </div>

@@ -1,5 +1,7 @@
 package io.grokery.lab.api.cloud.nodes.jobs;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +18,7 @@ public class Job extends Node {
 
 	private int version;
 	private String templateId;
+	private Map<String, Object> files;
 
 	// Constructers
 	public Job() {
@@ -104,6 +107,12 @@ public class Job extends Node {
 	}
 	public void setTemplateId(String templateId) {
 		this.templateId = templateId;
+	}
+	public Map<String, Object> getFiles() {
+		return files;
+	}
+	public void setFiles(Map<String, Object> files) {
+		this.files = files;
 	}
 
 }

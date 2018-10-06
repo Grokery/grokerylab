@@ -14,6 +14,7 @@ export const APPSTATUS = {
     ERROR: "error"
 }
 
+// TODO make a separate npm package
 // Update query string params in url
 export const updateQueryParam = function(key, value) {
     let uri = window.location.href

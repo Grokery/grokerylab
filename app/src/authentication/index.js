@@ -36,7 +36,7 @@ export const authenticate = (user, pass) => {
         headers: new Headers({'Content-Type':'application/json'}),
         body: JSON.stringify({username: user, password: pass})
     }
-    return fetch(GROKERY_API+"/auth/signin", params)
+    return fetch(GROKERY_API+"/users/authenticate", params)
         .then(response =>
             response.json().then(json => {
                 if (!response.ok) {

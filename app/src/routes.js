@@ -1,18 +1,18 @@
 import React from 'react'
 import { Route, IndexRoute } from 'react-router'
 
+import Account from './components/Account/Account'
 import App from './components/App/App'
 import Auth from './components/Auth/Auth'
 import AuthGateway from './components/AuthGateway/AuthGateway'
-import Home from './components/Home/Home'
-import Account from './components/Account/Account'
 import Cloud from './components/Cloud/Cloud'
 // import CloudHome from './components/CloudHome/CloudHome'
 import Dataflows from './components/Dataflows/Dataflows'
-import NodeDetails from './components/NodeDetails/NodeDetails'
-import Sources from './components/Sources/Sources'
+import Home from './components/Home/Home'
 import Jobs from './components/Jobs/Jobs'
+import NodeDetails from './components/NodeDetails/NodeDetails'
 import Settings from './components/Settings/Settings'
+import Sources from './components/Sources/Sources'
 
 export default <Route path='/' component={App}>
   <Route path='/signin' component={Auth} />

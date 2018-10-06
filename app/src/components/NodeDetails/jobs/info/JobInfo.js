@@ -3,7 +3,8 @@ import { object, func, array } from 'prop-types'
 import { connect } from 'react-redux'
 import { getSelectedCloudUrl, getSelectedCloudToken } from 'authentication'
 import { postJobRun, fetchJobRuns, fetchJobRunsWithRepeat } from 'store/actions'
-import './JobDetail.css'
+
+import './JobInfo.css'
 
 export default connect(
     (state, ownProps) => {
@@ -21,14 +22,15 @@ export default connect(
 class JobDetail extends Component {
     static propTypes = {
       params: object.isRequired,
-      node: object.isRequired,
       onUpdate: func.isRequired,
+
+      node: object.isRequired,
       jobRuns: array.isRequired,
     }
     componentDidMount() {
       const { fetchJobRuns, node } = this.props
       
-      fetchJobRuns(node.nodeId, "?limit=10")
+      fetchJobRuns("?jobId="+node.nodeId+"&limit=10")
     }
     toggleIsActive(e) {
       const { node } = this.props
@@ -50,10 +52,10 @@ class JobDetail extends Component {
           "lambdaARN": node.lambdaARN,
           "args": {
               "baseUrl": getSelectedCloudUrl(),
-              "authorization": getSelectedCloudToken()
+              "authorization": getSelectedCloudToken(),
           }
       }, function() {
-          fetchJobRunsWithRepeat(node.nodeId, "?limit=10", null, [[1, 0.0, 5], [1, 2.0, 5]])
+          fetchJobRunsWithRepeat("?jobId="+node.nodeId+"&limit=10", null, [[1, 0.0, 5], [1, 2.0, 5]])
       })
     }
     getRunControl() {
@@ -139,9 +141,10 @@ class JobDetail extends Component {
           results.push(
               <tr key={element.jobrunId}>
                   <td>Manual</td>
+                  <td>v0</td>
                   {/* <td>{startTime.toLocaleTimeString("en-us", dateOptions)}</td> */}
+                  {/* <td>{element.startTime}</td> */}
                   <td>{element.startTime}</td>
-                  <td>{element.endTime}</td>
                   <td>{(difference / 1000).toFixed(0) + " Seconds"}</td>
                   <td><span className={"label " + this.getRunLabelType(element.runStatus)}>{element.runStatus}</span></td>
               </tr>
@@ -171,10 +174,11 @@ class JobDetail extends Component {
                       <table className="table table-hover">
                           <thead>
                               <tr>
-                                  <th>Job Type</th>
+                                  <th>Run Type</th>
+                                  <th>Version</th>
+                                  {/* <th>Start Time</th> */}
                                   <th>Start Time</th>
-                                  <th>End Time</th>
-                                  <th>Run Length</th>
+                                  <th>Duration</th>
                                   <th>Status</th>
                               </tr>
                           </thead>

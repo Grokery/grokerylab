@@ -5,10 +5,10 @@ import { updateQueryParam, NODETYPE } from 'common'
 import { updateNode } from 'store/actions'
 import { history } from 'index'
 import D3DataFlow from 'shared/D3DataFlow/D3DataFlow'
-import JobDetails from './JobDetails'
-import SourceDetails from './SourceDetails'
-import ChartDetails from './ChartDetails'
-import BoardDetails from './BoardDetails'
+import JobDetails from './jobs/JobDetails'
+import SourceDetails from './sources/SourceDetails'
+import ChartDetails from './charts/ChartDetails'
+import BoardDetails from './boards/BoardDetails'
 import './NodeDetails.css'
 
 const flowPreviewHeight = 300
@@ -18,22 +18,15 @@ class NodeDetails extends Component {
     updateNode: PropTypes.func.isRequired,
     node: PropTypes.object
   }
-  close() {
-    const { params } = this.props
-    history.push("/clouds/"+ params.cloudName + "/flows/"+ params.nodeId +"?center-and-fit=true")
-  }
-  getRightMenuOptions() {
-    const { toggleNodeDetailsPain, close } = this.props
-    return (
-      <div className='btn-group pull-right item-options'>
-          <a href='' onClick={this.toggleEditDialog.bind(this)} className='btn btn-default'><i className='fa fa-cog'></i></a>
-          <a href='' onClick={toggleNodeDetailsPain} className='btn btn-default'><i className='fa fa-arrows-v'></i></a>
-          <a onClick={close} className='btn btn-default'><i className='fa fa-times'></i></a>
-      </div>
-    )
-  }
   render() {
     const { params, location } = this.props
+    let props = {
+      params: params,
+      close: this.close.bind(this),
+      getRightMenuOptions: this.getRightMenuOptions,
+      onUpdate: this.onUpdate.bind(this),
+      toggleNodeDetailsPain: this.toggleNodeDetailsPain.bind(this),
+    }
     return (
       <div className='page-content white'>
         <D3DataFlow
@@ -45,11 +38,31 @@ class NodeDetails extends Component {
           colored={true}
           nodeShape={2}
           query={location.query}
-        ></D3DataFlow>
+        />
         <div id='node-details-pain' className='node-details' style={{'top':'0px'}}>
-            {this.getCollectionComponent()}
+            {function() {
+                if (params.nodeType === NODETYPE.JOB.toLowerCase()) {
+                  return (<JobDetails {...props} />)
+                } else if (params.nodeType === NODETYPE.DATASOURCE.toLowerCase()) {
+                  return (<SourceDetails {...props} />)
+                } else if (params.nodeType === NODETYPE.CHART.toLowerCase()) {
+                  return (<ChartDetails {...props} />)
+                } else if (params.nodeType === NODETYPE.DASHBOARD.toLowerCase()) {
+                  return (<BoardDetails {...props} />)
+                }
+            }()}
         </div>
         {this.props.children}
+      </div>
+    )
+  }
+  getRightMenuOptions() {
+    const { toggleNodeDetailsPain, close } = this.props
+    return (
+      <div className='btn-group pull-right item-options'>
+          <a href='' onClick={this.toggleEditDialog.bind(this)} className='btn btn-default'><i className='fa fa-cog'></i></a>
+          <a href='' onClick={toggleNodeDetailsPain} className='btn btn-default'><i className='fa fa-arrows-v'></i></a>
+          <a onClick={close} className='btn btn-default'><i className='fa fa-times'></i></a>
       </div>
     )
   }
@@ -87,6 +100,10 @@ class NodeDetails extends Component {
     document.getElementById("node-details-pain").style.top = '0px'
     window.scrollTo(0,0)
   }
+  close() {
+    const { params } = this.props
+    history.push("/clouds/"+ params.cloudName + "/flows/"+ params.nodeId +"?center-and-fit=true")
+  }
   onUpdate(nodeData) {
     const { updateNode, node } = this.props
     nodeData.nodeId = node.nodeId
@@ -94,43 +111,7 @@ class NodeDetails extends Component {
     nodeData.subType = nodeData.subType ? nodeData.subType : node.subType
     updateNode(nodeData)
   }
-  getCollectionComponent() {
-    // THOUGHT: could use the factory pattern here
-    const { params } = this.props
-    if (params.nodeType === NODETYPE.JOB.toLowerCase()) {
-      return (<JobDetails
-        params={params}
-        close={this.close.bind(this)}
-        getRightMenuOptions={this.getRightMenuOptions}
-        onUpdate={this.onUpdate.bind(this)}
-        toggleNodeDetailsPain={this.toggleNodeDetailsPain.bind(this)}
-      ></JobDetails>)
-    } else if (params.nodeType === NODETYPE.DATASOURCE.toLowerCase()) {
-      return (<SourceDetails
-        params={params}
-        close={this.close.bind(this)}
-        getRightMenuOptions={this.getRightMenuOptions}
-        onUpdate={this.onUpdate.bind(this)}
-        toggleNodeDetailsPain={this.toggleNodeDetailsPain.bind(this)}>
-      </SourceDetails>)
-    } else if (params.nodeType === NODETYPE.CHART.toLowerCase()) {
-      return (<ChartDetails
-        params={params}
-        close={this.close.bind(this)}
-        getRightMenuOptions={this.getRightMenuOptions}
-        onUpdate={this.onUpdate.bind(this)}
-        toggleNodeDetailsPain={this.toggleNodeDetailsPain.bind(this)}
-      ></ChartDetails>)
-    } else if (params.nodeType === NODETYPE.DASHBOARD.toLowerCase()) {
-      return (<BoardDetails
-        params={params}
-        close={this.close.bind(this)}
-        getRightMenuOptions={this.getRightMenuOptions}
-        onUpdate={this.onUpdate.bind(this)}
-        toggleNodeDetailsPain={this.toggleNodeDetailsPain.bind(this)}
-      ></BoardDetails>)
-    }
-  }
+
 }
 
 const mapStateToProps = (state, ownProps) => {

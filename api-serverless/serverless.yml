@@ -23,15 +23,6 @@ functions:
     timeout: 30
     events:
       - http:
-          path: ${self:custom.urlBase}/auth/signin
-          method: post
-          cors: true
-      - http:
-          path: ${self:custom.urlBase}/auth/resetpass
-          method: post
-          cors: true
-
-      - http:
           path: ${self:custom.urlBase}/accounts
           method: post
           cors: true
@@ -56,6 +47,10 @@ functions:
           path: ${self:custom.urlBase}/users/{userId}
           method: delete
           cors: true
+      - http:
+          path: ${self:custom.urlBase}/users/authenticate
+          method: post
+          cors: true
 
       - http:
           path: ${self:custom.urlBase}/clouds
@@ -73,7 +68,6 @@ functions:
           path: ${self:custom.urlBase}/clouds/{cloudId}
           method: delete
           cors: true
-
       - http:
           path: ${self:custom.urlBase}/clouds/{cloudId}/options
           method: get
@@ -82,10 +76,6 @@ functions:
       - http:
           path: ${self:custom.urlBase}/clouds/{cloudId}/nodes/{nodeType}
           method: post
-          cors: true
-      - http:
-          path: ${self:custom.urlBase}/clouds/{cloudId}/nodes
-          method: get
           cors: true
       - http:
           path: ${self:custom.urlBase}/clouds/{cloudId}/nodes/{nodeType}/{nodeId}
@@ -99,16 +89,37 @@ functions:
           path: ${self:custom.urlBase}/clouds/{cloudId}/nodes/{nodeType}/{nodeId}
           method: delete
           cors: true
+      - http:
+          path: ${self:custom.urlBase}/clouds/{cloudId}/nodes/search
+          method: get
+          cors: true
 
       - http:
           path: ${self:custom.urlBase}/clouds/{cloudId}/jobruns
           method: post
           cors: true  
       - http:
-          path: ${self:custom.urlBase}/clouds/{cloudId}/jobruns/{jobId}
+          path: ${self:custom.urlBase}/clouds/{cloudId}/jobruns/{jobId}/{created}    
+          method: put
+          cors: true
+      - http:
+          path: ${self:custom.urlBase}/clouds/{cloudId}/jobruns/search
+          method: get
+          cors: true
+
+      - http:
+          path: ${self:custom.urlBase}/clouds/{cloudId}/secrets
+          method: post
+          cors: true  
+      - http:
+          path: ${self:custom.urlBase}/clouds/{cloudId}/secrets/{secretId}
           method: get
           cors: true
       - http:
-          path: ${self:custom.urlBase}/clouds/{cloudId}/jobruns/{jobId}/{created}    
+          path: ${self:custom.urlBase}/clouds/{cloudId}/secrets/{secretId}  
           method: put
+          cors: true
+      - http:
+          path: ${self:custom.urlBase}/clouds/{cloudId}/secrets/{secretId}  
+          method: delete
           cors: true

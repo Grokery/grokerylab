@@ -2,7 +2,9 @@ import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { isAuthenticated, getSessionInfo } from 'authentication'
-import StatusIndicator from 'shared/StatusIndicator/StatusIndicator'
+
+import StatusIndicator from './appStatus/StatusIndicator'
+
 import './TopNavBar.css'
 
 class TopNavBar extends Component {
@@ -33,8 +35,8 @@ class TopNavBar extends Component {
 
                     <div className='navbar-header'>
                         <a id='menu-toggle' className='navbar-brand' href='#'><i className='fa fa-bars'></i></a>
-                        <a className='navbar-brand' href='#'><img alt="Grokery" src="./img/logo-white-on-clear.png"></img></a>
-                        {/* <a className='navbar-brand' href='#'>GrokeryLab</a> */}
+                        {/* <a className='navbar-brand' href='#'><img alt="Grokery" src="./img/logo-white-on-clear.png"></img></a> */}
+                        <a className='navbar-brand' href='#/' style={{margin:'15px'}}>FlowLab</a>
                     </div>
 
                     <ul id='top-right-nav-options' className={'nav navbar-top-links navbar-right pull-right '+showRightNav}>
