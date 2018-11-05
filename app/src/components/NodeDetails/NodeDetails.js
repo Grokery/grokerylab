@@ -35,7 +35,7 @@ class NodeDetails extends Component {
           height={flowPreviewHeight}
           zoomOnHighlight={false}
           singleClickNav={true}
-          colored={true}
+          colored={false}
           nodeShape={2}
           query={location.query}
         />
@@ -109,6 +109,8 @@ class NodeDetails extends Component {
     nodeData.nodeId = node.nodeId
     nodeData.nodeType = node.nodeType
     nodeData.subType = nodeData.subType ? nodeData.subType : node.subType
+    console.log("updateing node details: ")
+    console.log(nodeData)
     updateNode(nodeData)
   }
 

@@ -1,4 +1,4 @@
-import { GROKERY_API } from "config"
+import { ADMIN_API_BASE_URL } from "config"
 import { history } from 'index'
 
 export const setRedirectUrl = (url) => {
@@ -36,7 +36,7 @@ export const authenticate = (user, pass) => {
         headers: new Headers({'Content-Type':'application/json'}),
         body: JSON.stringify({username: user, password: pass})
     }
-    return fetch(GROKERY_API+"/users/authenticate", params)
+    return fetch(ADMIN_API_BASE_URL+"/users/authenticate", params)
         .then(response =>
             response.json().then(json => {
                 if (!response.ok) {

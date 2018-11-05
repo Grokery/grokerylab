@@ -2,101 +2,60 @@
 // Middleware for calling REST api endpoints
 //------------------------------------------------
 
-import { GROKERY_API } from "config"
+import { ADMIN_API_BASE_URL } from "config"
+import { callApi } from './helpers/callApi'
 import { getAccountToken, getSelectedCloudUrl, getSelectedCloudToken } from 'authentication'
 
-const callApi = (endpoint, method, data, token, callback) => {
-    var myHeaders = new Headers({
-        "Content-Type":"application/json"
-    })
-    myHeaders.append("Authorization", token)
-    var params = {
-        method: method ? method : "GET",
-        headers: myHeaders,
-        mode: "cors"
-    }
-    if (data && (method === 'POST' || method === "PUT")) {
-        params['body'] = JSON.stringify(data)
-    }
-    return fetch(endpoint, params)
-        .then(response =>
-            response.json().then(json => {
-                if (typeof(callback) === 'function') {
-                    callback(response, json)
-                }
-                if (!response.ok) {
-                    return Promise.reject(json)
-                }
-                return json
-            })
-        )
-}
-
-export const CALL_GROKERY_API = Symbol('Call Grokery API')
-export const grokeryApi = store => next => action => {
-    const callApiActionInfo = action[CALL_GROKERY_API]
-    if (typeof callApiActionInfo === 'undefined') {
+export const CALL_ADMIN_API = Symbol('Call admin API')
+export const adminApi = store => next => action => {
+    const actionInfo = action[CALL_ADMIN_API]
+    if (typeof actionInfo === 'undefined') {
         return next(action)
     }
 
-    const { types } = callApiActionInfo
-    const [requestType, successType, failureType] = types
-
+    const [requestType, successType, failureType] = actionInfo.types
     const actionWith = data => {
         const finalAction = Object.assign({}, action, data)
-        delete finalAction[CALL_GROKERY_API]
+        delete finalAction[CALL_ADMIN_API]
         return finalAction
     }
-
     next(actionWith({ type: requestType }))
 
-    const { endpoint, method, data, callback } = callApiActionInfo
-    const fullUrl = GROKERY_API + endpoint
-    const token = getAccountToken()
-
-    return callApi(fullUrl, method, data, token, callback).then(
+    return callApi(ADMIN_API_BASE_URL, getAccountToken(), actionInfo).then(
         response => next(actionWith({
             response,
             type: successType
         })),
         error => next(actionWith({
             type: failureType,
-            error: error.message || 'Error Calling API'
+            error: error.message || 'Error Calling admin API'
         }))
     )
 }
 
-export const CALL_CLOUD_API = Symbol('Call API')
-
+export const CALL_CLOUD_API = Symbol('Call cloud API')
 export const cloudApi = store => next => action => {
-    const callApiActionInfo = action[CALL_CLOUD_API]
-    if (typeof callApiActionInfo === 'undefined') {
+    const actionInfo = action[CALL_CLOUD_API]
+    if (typeof actionInfo === 'undefined') {
         return next(action)
     }
 
-    const { types } = callApiActionInfo
-    const [requestType, successType, failureType] = types
-
+    const [requestType, successType, failureType] = actionInfo.types
     const actionWith = data => {
         const finalAction = Object.assign({}, action, data)
         delete finalAction[CALL_CLOUD_API]
         return finalAction
     }
-
     next(actionWith({ type: requestType }))
 
-    const { endpoint, method, data, callback } = callApiActionInfo
-    const fullUrl = getSelectedCloudUrl() + endpoint
-    const token = getSelectedCloudToken()
-
-    return callApi(fullUrl, method, data, token, callback).then(
+    return callApi(getSelectedCloudUrl(), getSelectedCloudToken(), actionInfo).then(
         response => next(actionWith({
             response,
             type: successType
         })),
         error => next(actionWith({
             type: failureType,
-            error: error.message || 'Error Calling API'
+            error: error.message || 'Error Calling cloud API'
         }))
     )
 }

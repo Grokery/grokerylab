@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Gallery from 'shared/Gallery/Gallery'
-import Modal from 'shared/Modal/Modal'
-import CodeEditor from 'shared/CodeEditor/CodeEditor'
+// import Modal from 'shared/Modal/Modal'
+// import CodeEditor from 'shared/CodeEditor/CodeEditor'
+import CreateEditCloudModel from '../CreateEditCloudModel/CreateEditCloudModel'
 import './CloudSection.css'
 
 class CloudSection extends Component {
@@ -14,26 +15,16 @@ class CloudSection extends Component {
   constructor(props) {
     super(props)
       this.state = {
-          shown: false
+        showEditModel: false
       }
-  }
-  toggleEditDialog(e) {
-    if (e) {e.preventDefault()}
-    if (this.state.shown) {
-      this.setState({shown: false})
-    } else {
-      this.setState({shown: true})
-    }
   }
   getCloudIcon(cloudType) {
     if (cloudType === 'AWS') {
       return 'img/aws.png'
     } else if (cloudType === 'AZURE') {
       return 'img/azure.png'
-    } else if (cloudType === 'LOCAL') {
-      return 'img/local.png'
     } else {
-      return 'http://via.placeholder.com/50x50'
+      return 'img/custom.png'
     }
   }
   getCloudLinks(cloudid, cloud) {
@@ -49,14 +40,11 @@ class CloudSection extends Component {
     }
     return links
   }
+  toggleEditModal = () => {
+    this.setState({showEditModel: !this.state.showEditModel})
+  }
   render() {
     const { cloudid, cloud } = this.props
-    let options = {
-      lineNumbers: false,
-      dragDrop: false,
-      mode: {name: "javascript"}
-    }
-    let value = this.state.shown ? JSON.stringify(cloud, null, 2) : ""
     return (
       <div className='cloud-section'>
         <div className='cloud-section-header'>
@@ -64,19 +52,15 @@ class CloudSection extends Component {
             <img src={this.getCloudIcon(cloud.cloudType)} className='cloud-icon' role="presentation"/>
             {cloud.title}
           </a>
-          {/* <a href='#' onClick={this.toggleEditDialog.bind(this)}><i className='fa fa-pencil pull-right cloud-edit-icon'/></a> */}
-          <Modal shown={this.state.shown}>
-            <div className="modal-header">
-              <button type="button" className="close" onClick={this.toggleEditDialog.bind(this)} aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 className="modal-title">Edit Cloud</h4>
-            </div>
-            <div className="modal-body">
-                <CodeEditor value={value} options={options} onChange={this.updateCloud.bind(this)} />
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-primary" onClick={this.toggleEditDialog.bind(this)}>Close Edit</button>
-            </div>
-          </Modal>
+          <a href='#' onClick={this.toggleEditModal}><i className='fa fa-cog pull-right cloud-edit-icon'/></a>
+          <CreateEditCloudModel 
+              key="edit-cloud" 
+              shown={this.state.showEditModel} 
+              toggleShown={this.toggleEditModal} 
+              modalTitle={"Edit Cloud"}
+              isEdit={true}
+              cloudData={cloud}
+            />          
         </div>
         <div className='cloud-section-quicklinks'>
           <Gallery itemSize='medium' colorClass='light' images={false} items={this.getCloudLinks(cloudid, cloud)} params={{}}></Gallery>

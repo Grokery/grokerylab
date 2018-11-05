@@ -30,7 +30,7 @@
 g {
     fill: #fff;
     stroke: #373F48;
-    stroke-width: 2;
+    stroke-width: 1.5;
 }
 
 g.undefined {
@@ -39,18 +39,18 @@ g.undefined {
 }
 
 g:hover {
-    stroke: #d62728;
-    stroke-width: 2;
-}
-
-g.selected {
-    stroke: #d62728;
+    stroke: #0271b1;
     stroke-width: 3;
 }
 
-g.selected:hover {
-    stroke: #d62728;
+g.selected {
+    stroke: #0271b1;
     stroke-width: 4;
+}
+
+g.selected:hover {
+    stroke: #0271b1;
+    stroke-width: 5;
 }
 
 g.colored.job-node {
@@ -147,17 +147,18 @@ path.link {
 }
 
 path.link:hover {
-    stroke: #d62728;
+    stroke: #0271b1;
+    stroke-width: 4px;
 }
 
 path.link.selected {
-    stroke: #d62728;
-    stroke-width: 4px;
+    stroke: #0271b1;
+    stroke-width: 5px;
 }
 
 path.link.selected:hover {
-    stroke: #d62728;
-    stroke-width: 4px;
+    stroke: #0271b1;
+    stroke-width: 5px;
 }
 
 
@@ -276,7 +277,7 @@ g.colored.selected:hover text.tooltiptext  {
 }
 
 .flow-header-content .node-filter .fa {
-    color: #0291E3;
+    /* color: #0291E3; */
     position: absolute;
     right: 8px;
     top: 8px;

@@ -22,23 +22,22 @@ public class CloudContext {
 
 	public CloudContext() {}
 
-	public CloudContext(String auth) throws NotAuthorizedException {
+	public CloudContext(String cloudId, String auth) throws NotAuthorizedException {
 		try {
 			Claims claims = DigitalPiglet.parseJWT(auth);
-			init(claims);
+			this.cloudId = claims.get("cloudId").toString();
+			this.cloudType = claims.get("cloudType").toString();
+			this.daoType = claims.get("daoType").toString();
+			
+			this.awsAccessKeyId = claims.get("awsAccessKeyId").toString();
+			this.awsSecretKey = claims.get("awsSecretKey").toString();
+			this.awsRegion = claims.get("awsRegion").toString();
 		} catch (Throwable e) {
 			throw new NotAuthorizedException();
 		}
-	}
-
-	public void init(Claims values) {
-		this.cloudId = values.get("cloudId").toString();
-		this.cloudType = values.get("cloudType").toString();
-		this.daoType = values.get("daoType").toString();
-
-		this.awsAccessKeyId = values.get("awsAccessKeyId").toString();
-		this.awsSecretKey = values.get("awsSecretKey").toString();
-		this.awsRegion = values.get("awsRegion").toString();
+		if (!this.cloudId.equals(cloudId)) {
+			throw new NotAuthorizedException();
+		}
 	}
 
 	public boolean equals(CloudContext other) {

@@ -12,7 +12,7 @@ class Dataflows extends Component {
           selectedNodeId={params.nodeId}
           zoomOnHighlight={false}
           singleClickNav={false}
-          colored={true}
+          colored={false}
           nodeShape={2}
           query={location.query}
         ></D3DataFlow>

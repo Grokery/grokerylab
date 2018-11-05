@@ -89,9 +89,17 @@ h1 {
   font-size: 2em;
 }
 
+a i {
+  color: #4C5763;  
+}
+
+a i:hover {
+  color: #0291E3;
+}
+
 .btn-primary {
-  background-color: #0291E3;
-  border-color: #0291E3;
+  background-color: #4C5763;
+  border-color: #4C5763;
 }
 
 .btn-primary:hover {

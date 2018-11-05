@@ -1,26 +1,25 @@
 
-
-const callApi = (endpoint, method, data, token, callback) => {
-    var myHeaders = new Headers({
-        "Content-Type":"application/json"
-    })
-    myHeaders.append("Authorization", token)
+export const callApi = (baseUrl, token, actionInfo) => {
+    const { method, endpoint, data, callback } = actionInfo
     var params = {
-        method: method ? method : "GET",
-        headers: myHeaders,
-        mode: "cors"
+        method: method,
+        mode: "cors",
+        headers: new Headers({
+            "Content-Type": "application/json",
+            "Authorization": token,
+        }),
     }
     if (data && (method === 'POST' || method === "PUT")) {
         params['body'] = JSON.stringify(data)
     }
-    return fetch(endpoint, params)
+    return fetch(baseUrl + endpoint, params)
         .then(response =>
             response.json().then(json => {
-                if (typeof(callback) === 'function') {
-                    callback(response, json)
-                }
                 if (!response.ok) {
                     return Promise.reject(json)
+                }
+                if (typeof(callback) === 'function') {
+                    return callback(response, json)
                 }
                 return json
             })

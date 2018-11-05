@@ -5,6 +5,6 @@ import org.slf4j.LoggerFactory;
 
 public class CommentsService {
 
-	private static final Logger logger = LoggerFactory.getLogger(CommentsService.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CommentsService.class);
 
 }

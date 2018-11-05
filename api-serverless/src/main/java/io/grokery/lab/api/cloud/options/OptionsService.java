@@ -13,7 +13,7 @@ public class OptionsService {
 
 	private static final Logger logger = LoggerFactory.getLogger(OptionsService.class);
 
-	public static JsonObj getOptions() throws InvalidInputException{
+	public static JsonObj getOptions(String auth, String CloudId) throws InvalidInputException{
 		logger.info("get options");
 		JsonObj response = new JsonObj();
 

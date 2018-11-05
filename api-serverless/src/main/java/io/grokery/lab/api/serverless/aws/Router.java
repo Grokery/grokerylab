@@ -13,9 +13,9 @@ import io.grokery.lab.api.cloud.jobruns.JobRunsService;
 import io.grokery.lab.api.cloud.nodes.NodesService;
 import io.grokery.lab.api.cloud.options.OptionsService;
 import io.grokery.lab.api.common.JsonObj;
-import io.grokery.lab.api.common.context.CloudContext;
 import io.grokery.lab.api.common.errors.NotImplementedError;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
+import io.grokery.lab.api.common.exceptions.NotAuthorizedException;
 import io.grokery.lab.api.common.exceptions.NotFoundException;
 
 public class Router implements RequestHandler<ApiGatewayRequest, ApiGatewayResponse> {
@@ -26,227 +26,247 @@ public class Router implements RequestHandler<ApiGatewayRequest, ApiGatewayRespo
 	public ApiGatewayResponse handleRequest(ApiGatewayRequest req, Context lcxt) {
 		try {
 			final String resource = req.getResource();
+			final String method = req.getHttpMethod();
 
 			LOG.info(String.format("handleRequest %s: %s", req.getHttpMethod(), resource));
 
-			if (resource.matches("/api/v[0-9]+/accounts"))
-				return handleAccounts(req);
+			JsonObj res = null;
+			if (resource.matches("/api/v[0-9]+/accounts")) 
+				res = handleAccounts(method, req);
 			else if (resource.matches("/api/v[0-9]+/accounts/\\{accountId\\}"))
-				return handleAccount(req);
+				res = handleAccount(method, req);
 
 			else if (resource.matches("/api/v[0-9]+/users"))
-				return handleUsers(req);
+				res = handleUsers(method, req);
 			else if (resource.matches("/api/v[0-9]+/users/\\{userId\\}"))
-				return handleUser(req);
+				res = handleUser(method, req);
 			else if (resource.matches("/api/v[0-9]+/users/authenticate"))
-				return authenticate(req);
+				res = authenticateUser(method, req);
 
 			else if (resource.matches("/api/v[0-9]+/clouds"))
-				return handleClouds(req);
+				res = handleClouds(method, req);
 			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}"))
-				return handleCloud(req);
+				res =  handleCloud(method, req);
 			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}/options"))
-				return handleOptions(req);
+				res = handleOptions(method, req);
 
 			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}/nodes"))
-				return handleNodes(req);
+				res = handleNodes(method, req);
 			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}/nodes/search"))
-				return handleNodes(req);
+				res = handleNodes(method, req);
 			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}/nodes/\\{nodeType\\}"))
-				return handleNodes(req);
+				res = handleNodes(method, req);
 			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}/nodes/\\{nodeType\\}/\\{nodeId\\}"))
-				return handleNode(req);
+				res = handleNode(method, req);
 			
 			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}/jobruns"))
-				return handleJobruns(req);
+				res = handleJobruns(method, req);
 			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}/jobruns/search"))
-				return handleJobruns(req);
+				res = handleJobrunSearch(method, req);
 			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}/jobruns/\\{jobId\\}/\\{created\\}"))
-				return handleJobrun(req);
+				res = handleJobrun(method, req);
+			else
+				throw new NotImplementedError();
 
-			throw new NotImplementedError();
-		} catch (NotFoundException e) {
+			return ApiGatewayResponse.make(200, res);
+		} catch (NotAuthorizedException e) {
 			LOG.error(e.getMessage());
-			return ApiGatewayResponse.error(404, e.getMessage());
+			return ApiGatewayResponse.error(401, "Not Authorized");
 		} catch (InvalidInputException e) {
 			LOG.error(e.getMessage());
-			return ApiGatewayResponse.error(400, e.getMessage());
+			return ApiGatewayResponse.error(400, "Invalid Input");
+		} catch (NotFoundException e) {
+			LOG.error(e.getMessage());
+			return ApiGatewayResponse.error(404, "Not Found");
 		} catch (NotImplementedError e) {
 			LOG.error(e.getMessage());
-			return ApiGatewayResponse.error(500, "No route or method handler implemented for: " + req.getResource());
+			return ApiGatewayResponse.error(500, "Not Implemented");
 		} catch (Throwable e) {
 			LOG.error(e.getMessage());
 			e.printStackTrace();
-			return ApiGatewayResponse.error(500, "An error occured and a stack trace has been logged.");
+			return ApiGatewayResponse.error(500, "Internal Server Error");
 		}
 	}
 
-	private ApiGatewayResponse authenticate(ApiGatewayRequest req) throws Exception {
-		if (req.getHttpMethod().equals("POST")) {
-			JsonObj res = UserService.getInstance().authenticate(req.getBody());
-			return ApiGatewayResponse.make(200, res);
-		}
-		throw new NotImplementedError();
-	}
-
-	private ApiGatewayResponse handleAccounts(ApiGatewayRequest req) throws Exception {
+	private JsonObj handleAccounts(String method, ApiGatewayRequest req) throws Exception {
 		final String auth = req.getHeader("Authorization");
-		final String method = req.getHttpMethod();
 
 		if (method.equals("POST")) {
-			JsonObj result = AccountService.getInstance().create(auth, req.getBody());
-			return ApiGatewayResponse.make(200, result);
+			return AccountService.getInstance().create(auth, req.getBody());
+		} else {
+			throw new NotImplementedError();
 		}
 
-		throw new NotImplementedError();
 	}
 
-	private ApiGatewayResponse handleAccount(ApiGatewayRequest req) throws Exception {
+	private JsonObj handleAccount(String method, ApiGatewayRequest req) throws Exception {
 		final String auth = req.getHeader("Authorization");
-		final String method = req.getHttpMethod();
 		final String accountId = req.getPathValue("accountId");
 
 		if (method.equals("GET")) {
-			return ApiGatewayResponse.make(200, AccountService.getInstance().retrieve(auth, accountId));
+			return AccountService.getInstance().retrieve(auth, accountId);
 		} else if (method.equals("PUT")) {
-			JsonObj result = AccountService.getInstance().update(auth, accountId, req.getBody());
-			return ApiGatewayResponse.make(200, result);
+			return AccountService.getInstance().update(auth, accountId, req.getBody());
 		} else if (method.equals("DELETE")) {
-			return ApiGatewayResponse.make(200, AccountService.getInstance().delete(auth, accountId));
+			return AccountService.getInstance().delete(auth, accountId);
+		} else {
+			throw new NotImplementedError();
 		}
 
-		throw new NotImplementedError();
 	}
 
-	private ApiGatewayResponse handleUsers(ApiGatewayRequest req) throws Exception {
+	private JsonObj handleUsers(String method, ApiGatewayRequest req) throws Exception {
 		final String auth = req.getHeader("Authorization");
-		final String method = req.getHttpMethod();
 
 		if (method.equals("POST")) {
-			JsonObj result = UserService.getInstance().create(auth, req.getBody());
-			return ApiGatewayResponse.make(200, result);
+			return UserService.getInstance().create(auth, req.getBody());
+		} else {
+			throw new NotImplementedError();
 		}
 
-		throw new NotImplementedError();
 	}
 
-	private ApiGatewayResponse handleUser(ApiGatewayRequest req) throws Exception {
+	private JsonObj handleUser(String method, ApiGatewayRequest req) throws Exception {
 		final String auth = req.getHeader("Authorization");
-		final String method = req.getHttpMethod();
 		final String username = req.getPathValue("username");
 
 		if (method.equals("GET")) {
-			return ApiGatewayResponse.make(200, UserService.getInstance().retrieve(auth, username));
+			return UserService.getInstance().retrieve(auth, username);
 		} else if (method.equals("PUT")) {
-			return ApiGatewayResponse.make(200, UserService.getInstance().update(auth, username, req.getBody()));
+			return UserService.getInstance().update(auth, username, req.getBody());
 		} else if (method.equals("DELETE")) {
-			return ApiGatewayResponse.make(200, UserService.getInstance().delete(auth, username));
+			return UserService.getInstance().delete(auth, username);
+		} else {
+			throw new NotImplementedError();
 		}
-
-		throw new NotImplementedError();
+		
 	}
 
-	private ApiGatewayResponse handleClouds(ApiGatewayRequest req) throws Exception {
+	private JsonObj authenticateUser(String method, ApiGatewayRequest req) throws Exception {
+
+		if (req.getHttpMethod().equals("POST")) {
+			return UserService.getInstance().authenticate(req.getBody());
+		} else {
+			throw new NotImplementedError();
+		}
+
+	}
+
+	private JsonObj handleClouds(String method, ApiGatewayRequest req) throws Exception {
 		final String auth = req.getHeader("Authorization");
-		final String method = req.getHttpMethod();
 
 		if (method.equals("POST")) {
-			return ApiGatewayResponse.make(200, CloudService.getInstance().create(auth, req.getBody()));
+			return CloudService.getInstance().create(auth, req.getBody());
+		} else {
+			throw new NotImplementedError();
 		}
 
-		throw new NotImplementedError();
 	}
 
-	private ApiGatewayResponse handleCloud(ApiGatewayRequest req) throws Exception {
+	private JsonObj handleCloud(String method, ApiGatewayRequest req) throws Exception {
 		final String auth = req.getHeader("Authorization");
 		final String cloudId = req.getPathValue("cloudId");
-		final String method = req.getHttpMethod();
 
-		if (method.equals("GET")){
-			return ApiGatewayResponse.make(200, CloudService.getInstance().retrieve(auth, cloudId));
+		if (method.equals("GET")) {
+			return CloudService.getInstance().retrieve(auth, cloudId);
 		} else if (method.equals("PUT")) {
-			return ApiGatewayResponse.make(200, CloudService.getInstance().update(auth, cloudId, req.getBody()));
+			return CloudService.getInstance().update(auth, cloudId, req.getBody());
 		} else if (method.equals("DELETE")) {
-			return ApiGatewayResponse.make(200, CloudService.getInstance().delete(auth, cloudId));
+			return CloudService.getInstance().delete(auth, cloudId);
+		} else {
+			throw new NotImplementedError();
 		}
 
-		throw new NotImplementedError();
 	}
 
 
-	private ApiGatewayResponse handleOptions(ApiGatewayRequest req) throws Exception {
-		final CloudContext gcxt = new CloudContext(req.getHeader("Authorization"));
+	private JsonObj handleOptions(String method, ApiGatewayRequest req) throws Exception {
+		final String auth = req.getHeader("Authorization");
+		final String cloudId = req.getPathValue("cloudId");
 
-		return ApiGatewayResponse.make(200, OptionsService.getOptions());
+		if (method.equals("GET")) {
+			return OptionsService.getOptions(auth, cloudId);
+		} else {
+			throw new NotImplementedError();
+		}
+
 	}
 
-	private ApiGatewayResponse handleNodes(ApiGatewayRequest req) throws Exception {
-		final CloudContext gcxt = new CloudContext(req.getHeader("Authorization"));
-		final String method = req.getHttpMethod();
+	private JsonObj handleNodes(String method, ApiGatewayRequest req) throws Exception {
+		final String auth = req.getHeader("Authorization");
+		final String cloudId = req.getPathValue("cloudId");
+		final String nodeType = req.getPathValue("nodeType");
 
 		if (method.equals("POST")) {
-			return ApiGatewayResponse.make(200, NodesService.create(req.getBody(), gcxt));
+			return NodesService.create(auth, cloudId, nodeType, req.getBody());
 		} else if (method.equals("GET")) {
-			return ApiGatewayResponse.make(200, NodesService.readAll(gcxt));
+			return NodesService.readAll(auth, cloudId);
+		} else {
+			throw new NotImplementedError();
 		}
 
-		throw new NotImplementedError();
 	}
 
-	private ApiGatewayResponse handleNode(ApiGatewayRequest req) throws Exception {
-		final CloudContext gcxt = new CloudContext(req.getHeader("Authorization"));
-		final String method = req.getHttpMethod();
+	private JsonObj handleNode(String method, ApiGatewayRequest req) throws Exception {
+		final String auth = req.getHeader("Authorization");
+		final String cloudId = req.getPathValue("cloudId");
 		final String nodeType = req.getPathValue("nodeType");
 		final String nodeId = req.getPathValue("nodeId");
 
 		if (method.equals("PUT")) {
-			JsonObj res = NodesService.update(req.getBody(), gcxt);
-			return ApiGatewayResponse.make(200, res);
+			return NodesService.update(auth, cloudId, nodeType, nodeId, req.getBody());
 		} else if (method.equals("GET")) {
-			JsonObj res = NodesService.read(nodeType, nodeId, gcxt);
-			return ApiGatewayResponse.make(200, res);
+			return NodesService.read(auth, cloudId, nodeType, nodeId);
 		} else if (method.equals("DELETE")) {
-			JsonObj res = NodesService.delete(nodeType, nodeId, gcxt);
-			return ApiGatewayResponse.make(200, res);
+			return NodesService.delete(auth, cloudId, nodeType, nodeId);
+		} else {
+			throw new NotImplementedError();
 		}
 
-		throw new NotImplementedError();
 	}
 
-	private ApiGatewayResponse handleJobruns(ApiGatewayRequest req) throws Exception {
-		final CloudContext gcxt = new CloudContext(req.getHeader("Authorization"));
-		final String method = req.getHttpMethod();
+	private JsonObj handleJobruns(String method, ApiGatewayRequest req) throws Exception {
+		final String auth = req.getHeader("Authorization");
+		final String cloudId = req.getPathValue("cloudId");
 
 		if (method.equals("POST")) {
-			JsonObj result = JobRunsService.createAndStartJobRun(req.getBody(), gcxt);
-			return ApiGatewayResponse.make(200, result);
-		} else if (method.equals("GET")) {
+			return JobRunsService.createAndStartJobRun(auth, cloudId, req.getBody());
+		} else {
+			throw new NotImplementedError();
+		}
+		
+	}
+
+	private JsonObj handleJobrunSearch(String method, ApiGatewayRequest req) throws Exception {
+		final String auth = req.getHeader("Authorization");
+		final String cloudId = req.getPathValue("cloudId");
+
+		if (method.equals("GET")) {
 			String jobId = req.getQueryValue("jobId", null);
 			String query = req.getQueryValue("query", null);
 			String projection = req.getQueryValue("projection", null);
 			int limit = Integer.parseInt(req.getQueryValue("limit", "0"));
-			JsonObj result = JobRunsService.getJobRunsforJob(jobId, query, projection, limit, gcxt);
-			return ApiGatewayResponse.make(200, result);
+			return JobRunsService.getJobRunsforJob(auth, cloudId, jobId, query, projection, limit);
+		} else {
+			throw new NotImplementedError();
 		}
-
-		throw new NotImplementedError();
+		
 	}
 
-	private ApiGatewayResponse handleJobrun(ApiGatewayRequest req) throws Exception {
-		final CloudContext gcxt = new CloudContext(req.getHeader("Authorization"));
-		final String method = req.getHttpMethod();
+	private JsonObj handleJobrun(String method, ApiGatewayRequest req) throws Exception {
+		final String auth = req.getHeader("Authorization");
+		final String cloudId = req.getPathValue("cloudId");
 
 		if (method.equals("PUT")) {
-			JsonObj request = req.getBody();
-			request.put("jobId", req.getPathValue("jobId"));
-			request.put("created", req.getPathValue("created"));
-			JsonObj result = JobRunsService.updateJobRunStatus(request, gcxt);
-			return ApiGatewayResponse.make(200, result);
+			final String jobId = req.getPathValue("jobId");
+			final String created = req.getPathValue("created");
+			return JobRunsService.updateJobRunStatus(auth, cloudId, jobId, created, req.getBody());
 		} else if (method.equals("GET")) {
-			// TODO
+			throw new NotImplementedError();
+		} else {
+			throw new NotImplementedError();
 		}
-
-		throw new NotImplementedError();
+		
 	}
 
 }

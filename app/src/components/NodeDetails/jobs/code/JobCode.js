@@ -31,7 +31,7 @@ class JobCodeTab extends Component {
     })
   }
   updateCode(newCode) {
-    if (this.debounce){
+    if (this.debounce) {
       clearTimeout(this.debounce)
     }
     this.debounce = setTimeout(() => {
@@ -116,19 +116,19 @@ class JobCodeTab extends Component {
       <div className='row job-code-tab'>
         <div className='col-md-2'>
 
-          {/* <div className='' style={{padding:'5px',paddingLeft:'15px'}}>
+          <div className='' style={{padding:'5px',paddingLeft:'15px'}}>
             <select className={'form-control'}>
               <option>V0</option>
               <option>V1</option>
               <option>V2 - Published</option>
               <option>V3</option>
             </select>
-          </div> */}
+          </div>
 
           <ul style={{marginTop:'40px'}}>
             <li><a href='#/'>requirements.txt</a></li>
             <li><a href='#/'>main.py</a></li>
-            {/* <li><a href='#/'> - add file - </a></li> */}
+            <li><a href='#/'> - add file - </a></li>
           </ul>
 
         </div>
@@ -139,11 +139,11 @@ class JobCodeTab extends Component {
                     <i className="fa fa-play" aria-hidden="true"></i>
                 </button>
             </div>
-            {/* <div className='col-md-11'>
+            <div className='col-md-11'>
               <div className='form-inline pull-right'>
                 <button className={'form-control btn btn-default'}>Publish version</button>
               </div>
-            </div> */}
+            </div>
           </div>
           <div className='row'>
             <div className='col-md-12' style={{paddingLeft:'0px',borderTop:'1px solid #ccc'}}> 

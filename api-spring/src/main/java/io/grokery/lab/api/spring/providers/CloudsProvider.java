@@ -18,8 +18,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.grokery.lab.api.common.JsonObj;
-import io.grokery.lab.api.common.exceptions.InvalidInputException;
 import io.grokery.lab.api.common.exceptions.NotAuthorizedException;
+import io.grokery.lab.api.common.exceptions.NotFoundException;
 import io.grokery.lab.api.admin.CloudService;
 import io.grokery.lab.api.admin.models.Cloud;
 import io.swagger.annotations.Api;
@@ -33,7 +33,7 @@ import io.swagger.annotations.ApiParam;
 @Api(value = "Clouds", produces = "application/json")
 public class CloudsProvider {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(CloudsProvider.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CloudsProvider.class);
 
 	@Value("${info.api.version}")
 	private String apiVersion;
@@ -43,20 +43,11 @@ public class CloudsProvider {
 	@ApiOperation(value = "Create Cloud", response = Cloud.class)
 	public Response create(
 		@HeaderParam("Authorization") String auth,
-		@ApiParam JsonObj req) {
-		LOGGER.info("POST: {}/clouds", apiVersion);
-		try {
-			JsonObj response = CloudService.getInstance().create(auth, req);
-			return Response.status(Status.OK).entity(response).build();
-		} catch (InvalidInputException e) {
-			LOGGER.error(e.message);
-			return Response.status(Status.BAD_REQUEST).entity(e).build();
-		} catch (NotAuthorizedException e) {
-			LOGGER.error(e.message);
-			return Response.status(Status.UNAUTHORIZED).entity(e).build();
-		} catch (Exception e) {
-			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e).build();
-		}
+		@ApiParam JsonObj req
+	) throws Exception {
+		LOG.info("POST:{}/clouds", apiVersion);
+		JsonObj response = CloudService.getInstance().create(auth, req);
+		return Response.status(Status.OK).entity(response).build();
 	}
 
 	@GET
@@ -64,17 +55,11 @@ public class CloudsProvider {
 	@ApiOperation(value = "Get Cloud", response = Cloud.class)
 	public Response retreive(
 		@HeaderParam("Authorization") String auth,
-		@ApiParam @PathParam("cloudId") String cloudId) {
-		LOGGER.info("GET: {}/clouds/<cloudid>", apiVersion);
-		try {
-			JsonObj response = CloudService.getInstance().retrieve(auth, cloudId);
-			return Response.status(Status.OK).entity(response).build();
-		} catch (NotAuthorizedException e) {
-			LOGGER.error(e.message);
-			return Response.status(Status.UNAUTHORIZED).entity(e).build();
-		} catch (Exception e) {
-			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e).build();
-		}
+		@ApiParam @PathParam("cloudId") String cloudId
+	) throws NotFoundException, NotAuthorizedException {
+		LOG.info("GET:{}/clouds/{}", apiVersion, cloudId);
+		JsonObj response = CloudService.getInstance().retrieve(auth, cloudId);
+		return Response.status(Status.OK).entity(response).build();
 	}
 
 	@DELETE
@@ -82,17 +67,11 @@ public class CloudsProvider {
 	@ApiOperation(value = "Get Cloud", response = Cloud.class)
 	public Response delete(
 		@HeaderParam("Authorization") String auth,
-		@ApiParam @PathParam("cloudId") String cloudId) {
-		LOGGER.info("DELETE: {}/clouds/<cloudId>", apiVersion);
-		try {
-			JsonObj response = CloudService.getInstance().delete(auth, cloudId);
-			return Response.status(Status.OK).entity(response).build();
-		} catch (NotAuthorizedException e) {
-			LOGGER.error(e.message);
-			return Response.status(Status.UNAUTHORIZED).entity(e).build();
-		} catch (Exception e) {
-			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e).build();
-		}
+		@ApiParam @PathParam("cloudId") String cloudId
+	) throws NotAuthorizedException, NotFoundException {
+		LOG.info("DELETE:{}/clouds/{}", apiVersion, cloudId);
+		JsonObj response = CloudService.getInstance().delete(auth, cloudId);
+		return Response.status(Status.OK).entity(response).build();
 	}
 
 }

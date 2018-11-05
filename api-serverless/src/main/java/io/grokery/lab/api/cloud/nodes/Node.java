@@ -107,7 +107,7 @@ public class Node {
 
 	}
 
-	public JsonObj to() {
+	public JsonObj toJsonObj() {
 		JsonObj result = MapperUtil.getInstance().convertValue(this, JsonObj.class);
 		return removeNullValues(result);
 	}
@@ -122,11 +122,11 @@ public class Node {
       return obj;
 	}
 
-	public static Node from(JsonObj obj, CloudContext context) throws InvalidInputException {
-        return Node.from(obj, Node.getClassInstance(obj, context));
+	public static Node fromJsonObj(JsonObj obj, CloudContext context) throws InvalidInputException {
+        return Node.fromJsonObj(obj, Node.getClassInstance(obj, context));
     }
 
-	public static Node from(JsonObj obj, Node toValueType) {
+	public static Node fromJsonObj(JsonObj obj, Node toValueType) {
 		return MapperUtil.getInstance().convertValue(obj, toValueType.getClass());
     }
 

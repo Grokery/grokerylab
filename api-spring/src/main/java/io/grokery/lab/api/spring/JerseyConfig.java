@@ -1,12 +1,12 @@
 package io.grokery.lab.api.spring;
 
 import io.grokery.lab.api.spring.providers.AccountsProvider;
-import io.grokery.lab.api.spring.providers.AuthenticationProvider;
 import io.grokery.lab.api.spring.providers.CloudsProvider;
 import io.grokery.lab.api.spring.providers.JobRunsProvider;
 import io.grokery.lab.api.spring.providers.UsersProvider;
 import io.grokery.lab.api.spring.providers.NodesProvider;
 import io.grokery.lab.api.spring.providers.OptionsProvider;
+import io.grokery.lab.api.spring.ApiExceptionHandler;
 
 import javax.annotation.PostConstruct;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -41,16 +41,6 @@ public class JerseyConfig extends ResourceConfig {
 	private String apiPath;
 
 	public JerseyConfig() {
-		this.registerEndpoints();
-	}
-
-	@PostConstruct
-	public void init() {
-		this.configureSwagger();
-	}
-
-	private void registerEndpoints() {
-		this.register(AuthenticationProvider.class);
 		this.register(AccountsProvider.class);
 		this.register(CloudsProvider.class);
 		this.register(UsersProvider.class);
@@ -58,7 +48,13 @@ public class JerseyConfig extends ResourceConfig {
 		this.register(OptionsProvider.class);
 		this.register(JobRunsProvider.class);
 		this.register(CORSFilter.class);
+		this.register(ApiExceptionHandler.class);
 		this.register(WadlResource.class);
+	}
+
+	@PostConstruct
+	public void init() {
+		this.configureSwagger();
 	}
 
 	private void configureSwagger() {

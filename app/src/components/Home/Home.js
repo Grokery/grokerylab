@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { getSessionInfo } from 'authentication'
-import CloudSection from 'shared/CloudSection/CloudSection'
-import CreateCloudModel from './CreateCloudModel'
+import CloudSection from './CloudSection/CloudSection'
+import CreateEditCloudModel from './CreateEditCloudModel/CreateEditCloudModel'
 import './Home.css'
 
 class Home extends Component {
@@ -14,7 +14,7 @@ class Home extends Component {
   constructor(props) {
     super(props)
       this.state = {
-          shown: false
+        showCreateModel: false
       }
   }
   getCloudSections() {
@@ -27,6 +27,9 @@ class Home extends Component {
     })
     return sections
   }
+  toggleCreateModal = () => {
+    this.setState({showCreateModel: !this.state.showCreateModel})
+  }
   render() {
     let { username } = this.props
     return (
@@ -34,7 +37,16 @@ class Home extends Component {
         <div className='user-section'>
           {<h1>Hi {username}</h1>}
         </div>
-        <CreateCloudModel key="createnew" />
+        <div className='pull-right'>
+          <a id='new-cloud-btn' className='btn' href='#' onClick={this.toggleCreateModal}><i className='fa fa-plus'/></a>
+        </div>
+        <CreateEditCloudModel 
+            key="createnew" 
+            shown={this.state.showCreateModel} 
+            toggleShown={this.toggleCreateModal} 
+            modalTitle={"Create New Cloud"}
+            isCreate={true}
+          />
         <div className='cloud-sections'>
           {this.getCloudSections()}
         </div>

@@ -29,8 +29,8 @@ export default class SideNavBar extends Component {
                         <li title="Data Flows"><a href={basepath+'/flows'} className="sidebar-link active" onClick={this.setActive}><i className='fa fa-share-alt fa-fw'></i></a></li>
                         <li title="ETL Jobs"><a href={basepath+'/jobs'} className="sidebar-link" onClick={this.setActive}><i className='fa fa-code fa-fw'></i></a></li>
                         <li title="Data Sources"><a href={basepath+'/datasources'} className="sidebar-link" onClick={this.setActive}><i className='fa fa-database fa-fw'></i></a></li>
-                        <hr className='sidebar-section-devider'></hr>
-                        <li title="Cloud Settings"><a href={basepath+'/settings'} className="sidebar-link" onClick={this.setActive}><i className='fa fa-cogs fa-fw'></i></a></li>
+                        {/* <hr className='sidebar-section-devider'></hr> */}
+                        <li title="Users"><a href={basepath+'/users'} className="sidebar-link" onClick={this.setActive}><i className='fa fa-users fa-fw'></i></a></li>
                     </ul>
                 </div>
             </div>

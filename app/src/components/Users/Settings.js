@@ -4,6 +4,8 @@ import { getSelectedCloudId, getSelectedCloudName, removeCloudFromSession } from
 import Loader from 'shared/Loader/Loader'
 import { deleteCloud } from 'store/actions'
 
+// TODO move the delete into CreateEditCloudModel and edit settings from home page
+
 class Settings extends Component {
   constructor(props) {
     super(props)
@@ -27,11 +29,15 @@ class Settings extends Component {
     return (
       <div className='page-content padded'>
         <Loader show={this.state.working} />
-        <h1>Settings</h1>
-        <form>
-          <button className="btn btn-danger" type='button' onClick={this.onSubmit.bind(this)}>Delete Cloud</button>
-        </form>
-        {this.props.children}
+        <h1>Users</h1>
+        <div><p>add / remove / modify users</p></div>
+        <hr />
+        <div>
+          <h1></h1>
+          <form>
+            <button className="btn btn-danger" type='button' onClick={this.onSubmit.bind(this)}>Delete Cloud</button>
+          </form>
+        </div>
       </div>
     )
   }

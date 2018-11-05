@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import io.grokery.lab.api.cloud.options.OptionsService;
 import io.grokery.lab.api.common.JsonObj;
+import io.grokery.lab.api.common.exceptions.InvalidInputException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -28,7 +29,7 @@ import io.swagger.annotations.ApiParam;
 @Api(value = "Options", produces = "application/json")
 public class OptionsProvider {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(OptionsProvider.class);
+	private static final Logger LOG = LoggerFactory.getLogger(OptionsProvider.class);
 
 	@Value("${info.api.version}")
 	private String apiVersion;
@@ -37,16 +38,11 @@ public class OptionsProvider {
 	@Path("/")
 	@ApiOperation(value = "Get all", response = JsonObj.class)
 	public Response getTypes(
-		@HeaderParam("Authorization") String authorization,
+		@HeaderParam("Authorization") String auth,
 		@ApiParam @PathParam("cloudId") String cloudId
-	) {
-		LOGGER.info("GET: {}", apiVersion);
-		try {
-			return Response.status(Status.OK).entity(OptionsService.getOptions()).build();
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
-			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e).build();
-		}
+	) throws InvalidInputException {
+		LOG.info("GET:{}/clouds/{}/options", apiVersion, cloudId);
+		return Response.status(Status.OK).entity(OptionsService.getOptions(auth, cloudId)).build();
 	}
 
 }

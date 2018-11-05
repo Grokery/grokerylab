@@ -17,8 +17,13 @@ class Jobs extends Component {
     }
     return (
       <div className='page-content'>
-        <h1>Jobs</h1>
-        <ul>
+        <div className='pull-left'>
+         <h1>Jobs</h1>
+        </div>
+        <div className='btn-group pull-right item-options'>
+          <a className='btn btn-default'><i className='fa fa-times'></i></a>
+        </div>
+        <ul style={{paddingTop:'40px'}}>
           {links}
         </ul>
         {/*<pre>{JSON.stringify(items, null, 2)}</pre>*/}

@@ -1,7 +1,6 @@
 
 #new-cloud-btn {
   font-size: large;
-  color: #0291E3;
 }
 
 /* TODO move next to container */
@@ -61,12 +60,7 @@
 }
 
 .home .cloud-section a i {
-  color: #4C5763;
-  font-size: 20px;
-}
-
-.home .cloud-section a i:hover {
-  color: #4C5763;
+  font-size: 18px;
 }
 
 .home .cloud-edit-icon {

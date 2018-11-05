@@ -13,6 +13,7 @@ public class DigitalPiglet {
 
 	// TODO make this a config item
 	private static final String ISSUER = "https://api.grokery.io";
+	
 	// TODO implement dynamic secret string handling. at least make it an env var
 	private static final String SECRET = "yZPnIVTMcHIMnpk3OqgwBe096HERSEOmtgN2Sky3";
 

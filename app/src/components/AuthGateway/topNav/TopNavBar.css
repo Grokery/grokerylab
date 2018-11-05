@@ -16,12 +16,13 @@
   margin-left: 20px;
 }
 
+#top-nav-wrapper #top-menu-wrapper a i,
 #top-nav-wrapper #top-menu-wrapper a {
   color: #fff;
 }
 
 #top-nav-wrapper #top-menu-wrapper a:hover {
-  background-color: #0291E3;
+  background-color: #4c5763;
 }
 
 #top-nav-wrapper .nav .open>a,
@@ -38,6 +39,10 @@
 #top-nav-wrapper #top-menu-wrapper .navbar-default .navbar-brand:focus,
 #top-nav-wrapper #top-menu-wrapper.navbar-default .navbar-brand:hover {
   color: #fff;
+}
+
+#top-nav-wrapper #top-menu-wrapper a.navbar-brand:hover {
+  background-color: #0291E3;
 }
 
 #top-nav-wrapper .navbar-dropdown-header {

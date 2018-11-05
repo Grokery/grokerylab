@@ -17,8 +17,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.grokery.lab.api.common.JsonObj;
-import io.grokery.lab.api.common.exceptions.InvalidInputException;
 import io.grokery.lab.api.common.exceptions.NotAuthorizedException;
+import io.grokery.lab.api.common.exceptions.NotFoundException;
 import io.grokery.lab.api.admin.AccountService;
 import io.grokery.lab.api.admin.models.Account;
 import io.swagger.annotations.Api;
@@ -32,7 +32,7 @@ import io.swagger.annotations.ApiParam;
 @Api(value = "Accounts", produces = "application/json")
 public class AccountsProvider {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(AccountsProvider.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AccountsProvider.class);
 
 	@Value("${info.api.version}")
 	private String apiVersion;
@@ -42,20 +42,11 @@ public class AccountsProvider {
 	@ApiOperation(value = "Create Account", response = Account.class)
 	public Response create(
 		@HeaderParam("Authorization") String auth,
-		@ApiParam JsonObj req) {
-		LOGGER.info("POST: {}/accounts", apiVersion);
-		try {
-			JsonObj response = AccountService.getInstance().create(auth, req);
-			return Response.status(Status.OK).entity(response).build();
-		} catch (InvalidInputException e) {
-			LOGGER.error(e.message);
-			return Response.status(Status.BAD_REQUEST).entity(e).build();
-		} catch (NotAuthorizedException e) {
-			LOGGER.error(e.message);
-			return Response.status(Status.UNAUTHORIZED).entity(e).build();
-		} catch (Exception e) {
-			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e).build();
-		}
+		@ApiParam JsonObj req
+	) throws Exception {
+		LOG.info("POST:{}/accounts", apiVersion);
+		JsonObj response = AccountService.getInstance().create(auth, req);
+		return Response.status(Status.OK).entity(response).build();
 	}
 
 	@GET
@@ -63,17 +54,11 @@ public class AccountsProvider {
 	@ApiOperation(value = "Get Account", response = Account.class)
 	public Response retreive(
 		@HeaderParam("Authorization") String auth,
-		@ApiParam @PathParam("accountId") String accountId) {
-		LOGGER.info("POST: {}/accounts/<accountid>", apiVersion);
-		try {
-			JsonObj response = AccountService.getInstance().retrieve(auth, accountId);
-			return Response.status(Status.OK).entity(response).build();
-		} catch (NotAuthorizedException e) {
-			LOGGER.error(e.message);
-			return Response.status(Status.UNAUTHORIZED).entity(e).build();
-		} catch (Exception e) {
-			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e).build();
-		}
+		@ApiParam @PathParam("accountId") String accountId
+	) throws NotFoundException, NotAuthorizedException {
+		LOG.info("GET:{}/accounts/{}", apiVersion, accountId);
+		JsonObj response = AccountService.getInstance().retrieve(auth, accountId);
+		return Response.status(Status.OK).entity(response).build();
 	}
 
 }

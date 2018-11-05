@@ -30,7 +30,6 @@ import io.grokery.lab.api.common.exceptions.NotAuthorizedException;
 import io.grokery.lab.api.common.exceptions.NotFoundException;
 import io.grokery.lab.api.cloud.nodes.Node;
 import io.grokery.lab.api.cloud.nodes.NodesService;
-import io.grokery.lab.api.common.context.CloudContext;
 
 
 @Component
@@ -40,7 +39,7 @@ import io.grokery.lab.api.common.context.CloudContext;
 @Api(value = "Nodes", produces = "application/json")
 public class NodesProvider {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(NodesProvider.class);
+	private static final Logger LOG = LoggerFactory.getLogger(NodesProvider.class);
 
 	@Value("${info.api.version}")
 	private String apiVersion;
@@ -49,127 +48,68 @@ public class NodesProvider {
 	@Path("{nodeType}")
 	@ApiOperation(value = "Create node", response = Node.class)
 	public Response create(
-			@HeaderParam("Authorization") String authorization,
+			@HeaderParam("Authorization") String auth,
 			@ApiParam @PathParam("cloudId") String cloudId,
 			@ApiParam @PathParam("nodeType") String nodeType,
-			@ApiParam JsonObj nodeData) {
-		LOGGER.info("POST: apiVersion={} cloudId={}", apiVersion, cloudId);
-		try {
-			CloudContext context = new CloudContext(authorization);
-			nodeData.put(Node.getNodeTypeName(), nodeType);
-			JsonObj result = NodesService.create(nodeData, context);
-			return Response.status(Status.OK).entity(result).build();
-		} catch (NotAuthorizedException e) {
-			LOGGER.error(e.message);
-			return Response.status(Status.UNAUTHORIZED).entity(e).build();
-		} catch (InvalidInputException e) {
-			LOGGER.error(e.message);
-			return Response.status(Status.BAD_REQUEST).entity(e).build();
-		} catch (NotFoundException e) {
-			LOGGER.error(e.message);
-			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e).build();
-		}
+			@ApiParam JsonObj data
+			) throws InvalidInputException, NotFoundException, NotAuthorizedException {
+		LOG.info("POST:{}/clouds/{}/nodes/{}", apiVersion, cloudId, nodeType);
+		JsonObj result = NodesService.create(auth, cloudId, nodeType, data);
+		return Response.status(Status.OK).entity(result).build();
 	}
 
 	@PUT
 	@Path("{nodeType}/{nodeId}")
 	@ApiOperation(value = "Update node", response = Node.class)
 	public Response update(
-			@HeaderParam("Authorization") String authorization,
+			@HeaderParam("Authorization") String auth,
 			@ApiParam @PathParam("cloudId") String cloudId,
 			@ApiParam @PathParam("nodeType") String nodeType,
 			@ApiParam @PathParam("nodeId") String nodeId,
-			@ApiParam JsonObj nodeData) {
-		LOGGER.info("PUT: {}/nodes/{}", apiVersion, nodeId);
-		try {
-			CloudContext context = new CloudContext(authorization);
-			nodeData.put(Node.getNodeTypeName(), nodeType);
-			nodeData.put(Node.getNodeIdName(), nodeId);
-			JsonObj result = NodesService.update(nodeData, context);
-			return Response.status(Status.OK).entity(result).build();
-		} catch (NotAuthorizedException e) {
-			LOGGER.error(e.message);
-			return Response.status(Status.UNAUTHORIZED).entity(e).build();
-		} catch (NotFoundException e) {
-			LOGGER.error(e.message);
-			return Response.status(Status.NOT_FOUND).entity(e).build();
-		} catch (InvalidInputException e) {
-			LOGGER.error(e.message);
-			return Response.status(Status.BAD_REQUEST).entity(e).build();
-		}
+			@ApiParam JsonObj nodeData) throws NotAuthorizedException, InvalidInputException, NotFoundException {
+		LOG.info("PUT:{}/clouds/{}/nodes/{}/{}", apiVersion, cloudId, nodeType, nodeId);
+		JsonObj result = NodesService.update(auth, cloudId, nodeType, nodeId, nodeData);
+		return Response.status(Status.OK).entity(result).build();
 	}
 
 	@DELETE
 	@Path("{nodeType}/{nodeId}")
 	@ApiOperation(value = "Delete node", response = Node.class)
 	public Response delete(
-			@HeaderParam("Authorization") String authorization,
+			@HeaderParam("Authorization") String auth,
 			@ApiParam @PathParam("cloudId") String cloudId,
 			@ApiParam @PathParam("nodeType") String nodeType,
-			@ApiParam @PathParam("nodeId") String nodeId) {
-		LOGGER.info("DELETE: {}/nodes/{}", apiVersion, nodeId);
-		try {
-			CloudContext context = new CloudContext(authorization);
-			JsonObj result = NodesService.delete(nodeType, nodeId, context);
-			return Response.status(Status.OK).entity(result).build();
-		} catch (NotAuthorizedException e) {
-			LOGGER.error(e.message);
-			return Response.status(Status.UNAUTHORIZED).entity(e).build();
-		} catch (NotFoundException e) {
-			LOGGER.error(e.message);
-			return Response.status(Status.NOT_FOUND).entity(e).build();
-		} catch (InvalidInputException e) {
-			LOGGER.error(e.message);
-			return Response.status(Status.BAD_REQUEST).entity(e).build();
-		}
+			@ApiParam @PathParam("nodeId") String nodeId) throws NotAuthorizedException, NotFoundException, InvalidInputException {
+		LOG.info("DELETE:{}/clouds/{}/nodes/{}/{}", apiVersion, cloudId, nodeType, nodeId);
+		JsonObj result = NodesService.delete(auth, cloudId, nodeType, nodeId);
+		return Response.status(Status.OK).entity(result).build();
 	}
 
 	@GET
 	@Path("{nodeType}/{nodeId}")
 	@ApiOperation(value = "Get node", response = Node.class)
 	public Response read(
-			@HeaderParam("Authorization") String authorization,
+			@HeaderParam("Authorization") String auth,
 			@ApiParam @PathParam("cloudId") String cloudId,
 			@ApiParam @PathParam("nodeType") String nodeType,
 			@ApiParam @PathParam("nodeId") String nodeId,
-			@DefaultValue("") @QueryParam("projection") String projection) {
-		LOGGER.info("GET: {}/nodes/{}/{}", apiVersion, nodeId);
-		try {
-			CloudContext context = new CloudContext(authorization);
-			JsonObj result = NodesService.read(nodeType, nodeId, context);
-			return Response.status(Status.OK).entity(result).build();
-		} catch (NotAuthorizedException e) {
-			LOGGER.error(e.message);
-			return Response.status(Status.UNAUTHORIZED).entity(e).build();
-		} catch (NotFoundException e) {
-			LOGGER.error(e.message);
-			return Response.status(Status.NOT_FOUND).entity(e).build();
-		} catch (InvalidInputException e) {
-			LOGGER.error(e.message);
-			return Response.status(Status.BAD_REQUEST).entity(e).build();
-		}
+			@DefaultValue("") @QueryParam("projection") String projection) throws NotAuthorizedException, NotFoundException, InvalidInputException {
+		LOG.info("GET:{}/clouds/{}/nodes/{}/{}", apiVersion, cloudId, nodeType, nodeId);
+		JsonObj result = NodesService.read(auth, cloudId, nodeType, nodeId);
+		return Response.status(Status.OK).entity(result).build();
 	}
 
 	@GET
-	@Path("")
+	@Path("search")
 	@ApiOperation(value = "Get nodes", response = Node.class)
 	public Response readAll(
-			@HeaderParam("Authorization") String authorization,
+			@HeaderParam("Authorization") String auth,
 			@ApiParam @PathParam("cloudId") String cloudId,
 			@DefaultValue("") @QueryParam("nodeType") String nodeType,
-			@DefaultValue("") @QueryParam("projection") String projection) {
-		LOGGER.info("GET: {}/nodes", apiVersion);
-		try {
-			CloudContext context = new CloudContext(authorization);
-			JsonObj result = NodesService.readAll(context);
-			return Response.status(Status.OK).entity(result).build();
-		} catch (NotAuthorizedException e) {
-			LOGGER.error(e.message);
-			return Response.status(Status.UNAUTHORIZED).entity(e).build();
-		} catch (InvalidInputException e) {
-			LOGGER.error(e.message);
-			return Response.status(Status.BAD_REQUEST).entity(e).build();
-		}
+			@DefaultValue("") @QueryParam("projection") String projection) throws NotAuthorizedException, InvalidInputException {
+		LOG.info("GET:{}/clouds/{}/nodes?nodeType={}&projection={}", apiVersion, cloudId, nodeType, projection);
+		JsonObj result = NodesService.readAll(auth, cloudId);
+		return Response.status(Status.OK).entity(result).build();
 	}
 
 }

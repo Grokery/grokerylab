@@ -20,8 +20,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.grokery.lab.api.cloud.jobruns.JobRunsService;
-import io.grokery.lab.api.common.context.CloudContext;
 import io.grokery.lab.api.common.JsonObj;
+import io.grokery.lab.api.common.exceptions.InvalidInputException;
+import io.grokery.lab.api.common.exceptions.NotAuthorizedException;
+import io.grokery.lab.api.common.exceptions.NotFoundException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -42,59 +44,44 @@ public class JobRunsProvider {
 	@Path("/")
 	@ApiOperation(value = "Create new job run", response = JsonObj.class)
 	public Response create(
-			@HeaderParam("Authorization") String authorization,
+			@HeaderParam("Authorization") String auth,
 			@ApiParam @PathParam("cloudId") String cloudId,
-			@ApiParam JsonObj request) {
-		LOG.info("POST: apiVersion={} cloudId={}", apiVersion, cloudId);
-		try {
-			CloudContext context = new CloudContext(authorization);
-			JsonObj result = JobRunsService.createAndStartJobRun(request, context);
-			return Response.status(Status.OK).entity(result).build();
-		} catch (Exception e) {
-			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e).build();
-		}
+			@ApiParam JsonObj request
+	) throws InvalidInputException, NotFoundException, NotAuthorizedException {
+		LOG.info("POST:{}/clouds/{}/jobruns", apiVersion, cloudId);
+		JsonObj result = JobRunsService.createAndStartJobRun(auth, cloudId, request);
+		return Response.status(Status.OK).entity(result).build();
 	}
 
 	@PUT
 	@Path("/{jobId}/{created}")
 	@ApiOperation(value = "Update job run", response = JsonObj.class)
 	public Response update(
-			@HeaderParam("Authorization") String authorization,
+			@HeaderParam("Authorization") String auth,
 			@ApiParam @PathParam("cloudId") String cloudId,
 			@ApiParam @PathParam("jobId") String jobId,
 			@ApiParam @PathParam("created") String created,
-			@ApiParam JsonObj request) {
-		LOG.info("POST: apiVersion={} cloudId={} jobRunId={} created={}", apiVersion, cloudId, jobId, created);
-		try {
-			CloudContext context = new CloudContext(authorization);
-			request.put("jobId", jobId);
-			request.put("created", created);
-			JsonObj result = JobRunsService.updateJobRunStatus(request, context);
-			return Response.status(Status.OK).entity(result).build();
-		} catch (Exception e) {
-			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e).build();
-		}
+			@ApiParam JsonObj request
+	) throws InvalidInputException, NotFoundException, NotAuthorizedException {
+		LOG.info("PUT:{}/clouds/{}/jobruns/{}/{}", apiVersion, cloudId, jobId, created);
+		JsonObj result = JobRunsService.updateJobRunStatus(auth, cloudId, jobId, created, request);
+		return Response.status(Status.OK).entity(result).build();
 	}
 
 	@GET
-	@Path("/{jobRunId}")
+	@Path("/search")
 	@ApiOperation(value = "Get job run info", response = JsonObj.class)
 	public Response get(
-			@HeaderParam("Authorization") String authorization,
+			@HeaderParam("Authorization") String auth,
 			@ApiParam @PathParam("cloudId") String cloudId,
-			@ApiParam @PathParam("jobRunId") String jobRunId, 
+			@ApiParam @QueryParam("jobId") String jobId, 
 			@ApiParam @QueryParam("query") String query,
 			@ApiParam @QueryParam("projection") String projection,
-			@ApiParam @QueryParam("limit") int limit) {
-		LOG.info("POST: apiVersion={} cloudId={} jobRunId={}", apiVersion, cloudId, jobRunId);
-		try {
-			CloudContext context = new CloudContext(authorization);
-			JsonObj result = JobRunsService.getJobRunsforJob(jobRunId, query, projection, limit, context);
-			return Response.status(Status.OK).entity(result).build();
-		} catch (Exception e) {
-			LOG.error(e.getMessage());
-			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e).build();
-		}
+			@ApiParam @QueryParam("limit") int limit
+	) throws NotAuthorizedException {
+		LOG.info("GET:{}/clouds/{}/jobruns/{}?query={}&projection={}&limit={}", apiVersion, cloudId, jobId, query, projection, limit);
+		JsonObj result = JobRunsService.getJobRunsforJob(auth, cloudId, jobId, query, projection, limit);
+		return Response.status(Status.OK).entity(result).build();
 	}
 
 }

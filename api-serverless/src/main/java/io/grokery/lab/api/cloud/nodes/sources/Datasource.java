@@ -19,7 +19,7 @@ import io.grokery.lab.api.cloud.nodes.NodeType;
  */
 public class Datasource extends Node {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(Datasource.class);
+	private static final Logger LOG = LoggerFactory.getLogger(Datasource.class);
 
 	private UUID templateId;
 
@@ -55,11 +55,11 @@ public class Datasource extends Node {
 			}
         } catch (IllegalArgumentException e) {
 			String message = "Unknown APIResourceSubType";
-			LOGGER.error(message, e);
+			LOG.error(message, e);
 			throw new InvalidInputException(message);
 		} catch (NullPointerException e) {
 			String message = "APIResourceSubType specification required";
-			LOGGER.error(message, e);
+			LOG.error(message, e);
 			throw new InvalidInputException(message);
         }
 
