@@ -24,16 +24,16 @@ class IChart extends Component {
         if (!node || !id) {
             return <div></div>
         }
-        const divStyle = {
-            border: 'none',
-            width: width + "px",
-            height: height + "px"
-        }
+
         const href = '/#/clouds/' + params.cloudName + '/charts/' + id
         return (
             <div>
                 <a href={href}><h4>{showTitle ? node.title : ''}</h4></a>
-                <iframe id={"ichart-" + id} style={divStyle}></iframe>
+                <iframe id={"ichart-" + id} style={{
+                    border: 'none',
+                    width: width + "px",
+                    height: height + "px"
+                }}></iframe>
             </div>
         )
     }

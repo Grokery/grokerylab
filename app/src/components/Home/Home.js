@@ -37,9 +37,6 @@ class Home extends Component {
         <div className='user-section'>
           {<h1>Hi {username}</h1>}
         </div>
-        <div className='pull-right'>
-          <a id='new-cloud-btn' className='btn' href='#' onClick={this.toggleCreateModal}><i className='fa fa-plus'/></a>
-        </div>
         <CreateEditCloudModel 
             key="createnew" 
             shown={this.state.showCreateModel} 
@@ -49,6 +46,9 @@ class Home extends Component {
           />
         <div className='cloud-sections'>
           {this.getCloudSections()}
+        </div>
+        <div>
+          <a id='new-cloud-btn' className='btn' href='#' onClick={this.toggleCreateModal}><i className='fa fa-plus'/></a>
         </div>
       </div>
     )

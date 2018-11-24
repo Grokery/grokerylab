@@ -30,12 +30,9 @@ class Auth extends Component {
       <div className='page-content auth'>
         <div className="container signin-panel">
             <div className="row">
-            <div className="col-md-4 col-md-offset-4">
+            <div className="col-md-6 col-md-offset-3">
                 <div className="panel panel-default">
-                  <div className="panel-heading">
-                    <span></span>
-                    {/* <span className="pull-right"><a href='https://grokery.io'>sign up</a> | <a href="https://grokery.io">reset pass</a></span> */}
-                </div>
+       
                   <div className="panel-body">
                     <form role="form" onSubmit={this.onSubmit.bind(this)}>
                       <fieldset>
@@ -47,6 +44,10 @@ class Auth extends Component {
                       </div>
                       <input className="btn btn-lg btn-primary btn-block" type="submit" value="Sign In" onClick={this.onSubmit.bind(this)} />
                     </fieldset>
+                    <div className="panel-headin">
+                    {/* <span>Please Authenticate</span> */}
+                    <span className="pull-right"><a href='https://grokery.io'>sign up</a> | <a href="https://grokery.io">reset pass</a></span>
+                  </div>
                       </form>
                   </div>
               </div>

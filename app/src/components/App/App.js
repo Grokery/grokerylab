@@ -13,10 +13,8 @@ class App extends Component {
     const { children } = this.props
     return (
       <div>
-        <div>
-          {/*{this.renderErrorMessage()}*/}
-          {children}
-        </div>
+        {/*{this.renderErrorMessage()}*/}
+        {children}
       </div>
     )
   }
@@ -30,7 +28,7 @@ class App extends Component {
       return null
     }
     return (
-      <p style={{ backgroundColor: '#e99', padding: 10}}>
+      <p>
         <b>{errorMessage}</b>
         {' '}
         (<a href="#"

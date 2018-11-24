@@ -1,0 +1,24 @@
+
+.cloud-section a i {
+    font-size: 15px;
+}
+
+.cloud-section {
+  padding-top:30px;
+  clear: both
+}
+
+.cloud-section .cloud-title {
+  font-weight: 300;
+  font-size: 24px;
+  line-height: 1.1;
+  color: #373F48;
+}
+
+.cloud-section .cloud-section-header {
+  margin-left: 9px;
+}
+
+.cloud-section .cloud-edit-icon {
+  padding-left: 10px;
+}

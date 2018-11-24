@@ -24,7 +24,7 @@ class InfoTab extends Component {
     if (!node) { return <div></div> }
     return (
         <div className='row info-tab'>
-            <div className='col-md-6'>
+            <div className='col-md-6 section1'>
                 <div className="row">
                     <div className="col-md-12">
                         <div className="node-title-section">

@@ -1,4 +1,3 @@
-
 color-scheme {
 
   /* blue */
@@ -13,7 +12,6 @@ color-scheme {
   color: #9467bd;
   /* brown */
   color: #8c564b;
-
 
   /* blue accent */
   color: #0291E3;
@@ -32,49 +30,20 @@ color-scheme {
 }
 
 html,
-body,
-#root {
-  margin: 0;
-  padding: 0;
+body {
   height: 100%;
   width: 100%;
-  background-color: #FFF;
+  overflow: auto;
   font-family: "Open Sans", sans-serif;
-  overflow: hidden;
+  box-sizing: border-box;
+}
+
+div {
   box-sizing: border-box;
 }
 
 pre {
   background-color: #FFF;
-}
-
-.page-content-wrapper {
-  margin-top: 50px;
-}
-
-.sidebar-page {
-  position: absolute;
-  right:0;
-  left:64px;
-  top:50px;
-  bottom:0;
-}
-
-.page-content {
-  height: 100%;
-}
-
-.page-content.white {
-  background-color: #FFF;
-}
-
-@media(max-width: 767px) {
-  .sidebar {
-    display: none;
-  }
-  .sidebar-page {
-    margin-left: 0;
-  }
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -97,6 +66,15 @@ a i:hover {
   color: #0291E3;
 }
 
+.page-content {
+  display: flex;
+  margin-top: 50px;
+}
+
+.sidebar-page {
+  margin-left: 64px;
+}
+
 .btn-primary {
   background-color: #4C5763;
   border-color: #4C5763;
@@ -107,12 +85,6 @@ a i:hover {
   border-color: #0291E3;
 }
 
-*:focus {
-  outline: none !important;
-}
-
-
-/* Default modal styles */
 .modal .modal-dialog {
   min-width: 60%;
 }

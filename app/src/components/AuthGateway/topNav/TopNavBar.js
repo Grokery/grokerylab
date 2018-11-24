@@ -36,15 +36,15 @@ class TopNavBar extends Component {
                     <div className='navbar-header'>
                         <a id='menu-toggle' className='navbar-brand' href='#'><i className='fa fa-bars'></i></a>
                         <a className='navbar-brand' href='#'><img alt="Grokery" src="./img/logo-white-on-clear.png"></img></a>
-                        {/* <a className='navbar-brand' href='#/' style={{margin:'15px'}}>GrokeryLab</a> */}
+                        {/* <a className='navbar-brand' href='#/'>GrokeryLab</a> */}
                     </div>
 
                     <ul id='top-right-nav-options' className={'nav navbar-top-links navbar-right pull-right '+showRightNav}>
                         {/* <StatusIndicator></StatusIndicator> */}
                         <li id='nav-dropdown'>
                             <a className='dropdown-toggle' onClick={() => this.toggleDropDown()}>
-                                <i className='fa fa-user fa-fw' style={{'pointerEvents':'none'}}></i>
-                                <i className='fa fa-caret-down' style={{'pointerEvents':'none'}}></i>
+                                <i className='fa fa-user fa-fw'></i>
+                                <i className='fa fa-caret-down'></i>
                             </a>
                             <ul className='dropdown-menu dropdown-user pull-right' onMouseLeave={() => this.closeDropDown()}>
                                 <li><a href='#/'><i className='fa fa-home fa-fw'></i><span>Home</span></a></li>

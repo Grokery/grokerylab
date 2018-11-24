@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { APPSTATUS } from "common"
+import Loader from 'shared/Loader/Loader'
 import D3DataFlow from 'shared/D3DataFlow/D3DataFlow'
 
 class Dataflows extends Component {
@@ -7,6 +9,7 @@ class Dataflows extends Component {
     const { params, location } = this.props
     return (
       <div className='page-content'>
+        <Loader show={this.props.appStatus === APPSTATUS.BUSY} />
         <D3DataFlow
           showControls={true}
           selectedNodeId={params.nodeId}
@@ -24,6 +27,7 @@ class Dataflows extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
+    appStatus: state.appStatus
   }
 }
 

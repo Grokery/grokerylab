@@ -23,7 +23,7 @@ class Jobs extends Component {
         <div className='btn-group pull-right item-options'>
           <a className='btn btn-default'><i className='fa fa-times'></i></a>
         </div>
-        <ul style={{paddingTop:'40px'}}>
+        <ul>
           {links}
         </ul>
         {/*<pre>{JSON.stringify(items, null, 2)}</pre>*/}

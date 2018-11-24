@@ -191,7 +191,6 @@ g.colored.selected:hover text.tooltiptext  {
     margin-right: 8px;
     position: absolute;
     right: 0;
-    top: 0;
 }
 
 .flow-header-content #create-nodes {

@@ -11,7 +11,7 @@ import ChartDetails from './charts/ChartDetails'
 import BoardDetails from './boards/BoardDetails'
 import './NodeDetails.css'
 
-const flowPreviewHeight = 300
+const flowPreviewHeight = 350
 
 class NodeDetails extends Component {
   static propTypes = {
@@ -32,14 +32,14 @@ class NodeDetails extends Component {
         <D3DataFlow
           showControls={false}
           selectedNodeId={params.nodeId}
-          height={flowPreviewHeight}
+          height={flowPreviewHeight - 50}
           zoomOnHighlight={false}
           singleClickNav={true}
           colored={false}
           nodeShape={2}
           query={location.query}
         />
-        <div id='node-details-pain' className='node-details' style={{'top':'0px'}}>
+        <div id='node-details-pain' className='node-details'>
             {function() {
                 if (params.nodeType === NODETYPE.JOB.toLowerCase()) {
                   return (<JobDetails {...props} />)
@@ -82,8 +82,8 @@ class NodeDetails extends Component {
     if (e && typeof(e.preventDefault === 'function')) {
       e.preventDefault()
     }
-    let pain = document.getElementById("node-details-pain")
-    if (pain.style.top === '0px') {
+    let el = document.getElementById("node-details-pain")
+    if (el.style.top === '50px') {
       this.openNodeDetailsPain()
     } else {
       this.closeNodeDetailsPain()
@@ -97,7 +97,7 @@ class NodeDetails extends Component {
   }
   closeNodeDetailsPain() {
     updateQueryParam('flow','closed')
-    document.getElementById("node-details-pain").style.top = '0px'
+    document.getElementById("node-details-pain").style.top = '50px'
     window.scrollTo(0,0)
   }
   close() {

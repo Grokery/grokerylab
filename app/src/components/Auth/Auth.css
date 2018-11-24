@@ -1,17 +1,25 @@
-/* TODO move next to container */
 .auth {
   position: absolute;
+  top: 0;
   right: 0;
   left: 0;
+  bottom: 0;
   background-color:#4C5763;
 }
 
+.auth .panel {
+  border: none;
+}
 .auth .signin-panel {
-  padding-top: 125px;
+  padding-top: 150px;
 }
 
 .auth .signin-panel .panel {
-  border-radius: 6px;
+  border-radius: 0px;
+}
+
+.auth .panel-heading {
+  border: none;
 }
 
 .panel-default>.panel-heading {
@@ -21,7 +29,8 @@
 }
 
 .auth .panel-body {
-  padding: 30px;
+  padding: 65px;
+  padding-top: 75px;
 }
 
 .auth .form-control {
@@ -31,7 +40,7 @@
 
 .auth .signup {
   position: relative;
-    display: block;
-    margin-top: 10px;
-    margin-bottom: 10px;
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }

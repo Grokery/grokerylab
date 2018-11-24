@@ -9,8 +9,7 @@ export default class Loader extends Component {
     render() {
         if (this.props.show) {
             return (<div className='loading'></div>)
-        } else {
-            return (<div></div>)
         }
+        return null
     }
 }

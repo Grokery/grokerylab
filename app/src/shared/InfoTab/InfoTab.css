@@ -1,4 +1,8 @@
 
+.info-tab .section1 {
+    border-right: solid 1px rgb(204, 204, 204);
+}
+
 .info-tab .node-title-section {
     padding: 15px;
 }

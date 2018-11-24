@@ -1,19 +1,20 @@
+
 #top-nav-wrapper {
   margin: 0;
   background-color: #0291E3 !important;
   border: none;
-  margin: 0;
-  height: 50px
-}
-
-#top-nav-wrapper .navbar-brand {
-  margin: 0;
-  padding: 0;
+  border-radius: 0;
+  height: 50px;
 }
 
 #top-nav-wrapper .navbar-brand img {
   height: 50px;
   margin-left: 20px;
+}
+
+#top-nav-wrapper .navbar-brand {
+  margin: 0;
+  padding: 0;
 }
 
 #top-nav-wrapper #top-menu-wrapper a i,
