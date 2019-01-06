@@ -58,6 +58,12 @@ h1 {
   font-size: 2em;
 }
 
+a:focus {
+  outline-style:none;
+  box-shadow:none;
+  border-color:transparent;
+}
+
 a i {
   color: #4C5763;  
 }

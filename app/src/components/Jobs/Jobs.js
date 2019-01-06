@@ -12,7 +12,7 @@ class Jobs extends Component {
     var links = []
     if (items.length !== 0) {
       links = items.map(function(item, index) {
-          return (<li key={index}><a href={'#/clouds/'+params.cloudName+'/'+item.nodeType.toLowerCase()+'/'+item.nodeId}>{item.title}</a></li>)
+          return (<li key={index}><a href={'#/clouds/'+params.cloudName+'/nodes/'+item.nodeType.toLowerCase()+'/'+item.nodeId}>{item.title}</a></li>)
       })
     }
     return (

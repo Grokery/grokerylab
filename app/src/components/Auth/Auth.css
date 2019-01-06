@@ -11,7 +11,7 @@
   border: none;
 }
 .auth .signin-panel {
-  padding-top: 150px;
+  padding-top: 75px;
 }
 
 .auth .signin-panel .panel {
@@ -29,8 +29,7 @@
 }
 
 .auth .panel-body {
-  padding: 65px;
-  padding-top: 75px;
+  padding: 50px;
 }
 
 .auth .form-control {

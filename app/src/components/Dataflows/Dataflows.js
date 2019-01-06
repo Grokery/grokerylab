@@ -6,13 +6,13 @@ import D3DataFlow from 'shared/D3DataFlow/D3DataFlow'
 
 class Dataflows extends Component {
   render() {
-    const { params, location } = this.props
+    const { location } = this.props
     return (
       <div className='page-content'>
         <Loader show={this.props.appStatus === APPSTATUS.BUSY} />
         <D3DataFlow
           showControls={true}
-          selectedNodeId={params.nodeId}
+          selectedNodeId={location.query.nodeId}
           zoomOnHighlight={false}
           singleClickNav={false}
           colored={false}

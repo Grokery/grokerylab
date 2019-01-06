@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { updateQueryParam, NODETYPE } from 'common'
 import { updateNode } from 'store/actions'
-import { history } from 'index'
+// import { history } from 'index'
 import D3DataFlow from 'shared/D3DataFlow/D3DataFlow'
 import JobDetails from './jobs/JobDetails'
 import SourceDetails from './sources/SourceDetails'
@@ -22,7 +22,7 @@ class NodeDetails extends Component {
     const { params, location } = this.props
     let props = {
       params: params,
-      close: this.close.bind(this),
+      // close: this.close.bind(this),
       getRightMenuOptions: this.getRightMenuOptions,
       onUpdate: this.onUpdate.bind(this),
       toggleNodeDetailsPain: this.toggleNodeDetailsPain.bind(this),
@@ -57,12 +57,12 @@ class NodeDetails extends Component {
     )
   }
   getRightMenuOptions() {
-    const { toggleNodeDetailsPain, close } = this.props
+    const { toggleNodeDetailsPain, node, params } = this.props
     return (
       <div className='btn-group pull-right item-options'>
           <a href='' onClick={this.toggleEditDialog.bind(this)} className='btn btn-default'><i className='fa fa-cog'></i></a>
           <a href='' onClick={toggleNodeDetailsPain} className='btn btn-default'><i className='fa fa-arrows-v'></i></a>
-          <a onClick={close} className='btn btn-default'><i className='fa fa-times'></i></a>
+          <a href={"#/clouds/"+ params.cloudName + "/flows?nodeId="+node.nodeId} className='btn btn-default'><i className='fa fa-times'></i></a>
       </div>
     )
   }
@@ -100,10 +100,10 @@ class NodeDetails extends Component {
     document.getElementById("node-details-pain").style.top = '50px'
     window.scrollTo(0,0)
   }
-  close() {
-    const { params } = this.props
-    history.push("/clouds/"+ params.cloudName + "/flows/"+ params.nodeId +"?center-and-fit=true")
-  }
+  // close() {
+    // const { params, node } = this.props
+    // history.push("/clouds/"+ params.cloudName + "/"+node.nodeType().toLowerCase())
+  // }
   onUpdate(nodeData) {
     const { updateNode, node } = this.props
     nodeData.nodeId = node.nodeId

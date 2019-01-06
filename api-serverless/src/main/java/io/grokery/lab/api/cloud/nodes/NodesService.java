@@ -46,7 +46,7 @@ public class NodesService {
 			existing.validateValues();
 			return dao.update(existing.getNodeType(), existing.getNodeId(), existing.toJsonObj());
 		} else {
-			Node node = Node.getClassInstance(data, context);
+			Node node = Node.getClassInstance(data);
 			node.setNodeId(existing.getNodeId());
 			node.setValues(existing.toJsonObj());
 			node.setValues(data);

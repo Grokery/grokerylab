@@ -839,11 +839,11 @@ class D3DataFlow extends Component {
           d3state.dragging = false
           this.onUpdateNodes(d3state.changedNodes)
       } else if (d3state.dblClickNodeTimeout) {
-          history.push('/clouds/'+ getSelectedCloudName() + '/' + d.nodeType.toLowerCase() + '/' + d.nodeId + '?flow=closed')
+          history.push('/clouds/'+ getSelectedCloudName() + '/flows/' + d.nodeType.toLowerCase() + '/' + d.nodeId + '?flow=closed')
       } else {
         if (this.props.singleClickNav) {
             this.clearAllSelection()
-            history.push('/clouds/'+ getSelectedCloudName() + '/' + d.nodeType.toLowerCase() + '/' + d.nodeId + '?flow=closed')
+            history.push('/clouds/'+ getSelectedCloudName() + '/flows/' + d.nodeType.toLowerCase() + '/' + d.nodeId + '?flow=closed')
         } else {
             if (this.d3state.selectedNodes[d.nodeId]) {
                 this.removeNodeFromSelected(d)

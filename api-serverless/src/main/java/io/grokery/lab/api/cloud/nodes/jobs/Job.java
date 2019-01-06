@@ -58,15 +58,13 @@ public class Job extends Node {
 		super.cleanupExternalResources(context);
 	}
 
-	public static Job getClassInstance(JsonObj obj, CloudContext context) throws InvalidInputException {
+	public static Job getClassInstance(JsonObj obj) throws InvalidInputException {
 		try {
 			String subTypeStr = obj.getString(Job.getNodeSubTypeName());
 			JobType subType = JobType.valueOf(subTypeStr);
 			switch (subType) {
 				case PLACEHOLDER:
 					return new Job();
-				case PYTHON:
-					return Job.getPythonJobForContext(context);
 				case AWSLAMBDA:
 					return new AWSLambdaJob();
 				default:
@@ -82,16 +80,6 @@ public class Job extends Node {
 			throw new InvalidInputException(message);
 		}
 
-	}
-
-	private static Job getPythonJobForContext(CloudContext context) {
-		if (context.cloudType.equals("AWS")) {
-			return new AWSLambdaJob();
-		} else if(context.cloudType.equals("AZURE")) {
-			throw new NotImplementedError();
-		} else {
-			throw new NotImplementedError();
-		}
 	}
 
 	// Getters and Setters

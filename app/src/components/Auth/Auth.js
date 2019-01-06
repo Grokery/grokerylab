@@ -30,7 +30,7 @@ class Auth extends Component {
       <div className='page-content auth'>
         <div className="container signin-panel">
             <div className="row">
-            <div className="col-md-6 col-md-offset-3">
+            <div className="col-sm-4 col-sm-offset-4">
                 <div className="panel panel-default">
        
                   <div className="panel-body">

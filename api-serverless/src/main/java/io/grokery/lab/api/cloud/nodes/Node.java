@@ -123,23 +123,23 @@ public class Node {
 	}
 
 	public static Node fromJsonObj(JsonObj obj, CloudContext context) throws InvalidInputException {
-        return Node.fromJsonObj(obj, Node.getClassInstance(obj, context));
+        return Node.fromJsonObj(obj, Node.getClassInstance(obj));
     }
 
 	public static Node fromJsonObj(JsonObj obj, Node toValueType) {
 		return MapperUtil.getInstance().convertValue(obj, toValueType.getClass());
     }
 
-    public static Node getClassInstance(JsonObj obj, CloudContext context) throws InvalidInputException {
+    public static Node getClassInstance(JsonObj obj) throws InvalidInputException {
 		try {
 			String typeName = obj.getString(Node.getNodeTypeName());
 			LOG.info("Get class instance for nodeType: " + typeName);
 			NodeType nodeType = NodeType.valueOf(typeName);
 			switch (nodeType) {
 				case JOB:
-					return Job.getClassInstance(obj, context);
+					return Job.getClassInstance(obj);
 				case DATASOURCE:
-					return Datasource.getClassInstance(obj, context);
+					return Datasource.getClassInstance(obj);
 				default:
 					throw new NotImplementedError();
 			}

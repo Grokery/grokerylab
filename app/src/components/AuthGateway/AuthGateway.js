@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { setRedirectUrl, isAuthenticated } from 'authentication'
 import { history } from 'index'
 
-import TopNavBar from './topNav/TopNavBar'
+import TopNavBar from '../../shared/TopNav/TopNavBar'
 
 class AuthGateway extends Component {
   static propTypes = {

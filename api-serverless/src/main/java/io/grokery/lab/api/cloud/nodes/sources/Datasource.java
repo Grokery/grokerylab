@@ -7,8 +7,6 @@ import org.slf4j.LoggerFactory;
 import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.errors.NotImplementedError;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
-import io.grokery.lab.api.common.dao.DAO;
-import io.grokery.lab.api.common.context.CloudContext;
 import io.grokery.lab.api.cloud.nodes.Node;
 import io.grokery.lab.api.cloud.nodes.NodeType;
 
@@ -41,7 +39,7 @@ public class Datasource extends Node {
         return "subType";
     }
 
-	public static Datasource getClassInstance(JsonObj obj, CloudContext context) throws InvalidInputException  {
+	public static Datasource getClassInstance(JsonObj obj) throws InvalidInputException  {
         try {
 			String subTypeStr = obj.getString(Datasource.getResourceSubTypeName());
 			SourceType subType = SourceType.valueOf(subTypeStr);
