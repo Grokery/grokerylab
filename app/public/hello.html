@@ -1,0 +1,179 @@
+
+<head>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        .row {
+            display: flex;
+        }
+        .chart {
+            border: 1px solid #ccc;
+            margin: 10px;
+            overflow: hidden;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body style="background-color: #e7ebee;padding-top:30px">
+    <div class='row'>
+        <div class='chart' style='height: 400px; width: 1400px; position: relative;'>
+            <div style="position: absolute; top:0; left:0; z-index: 1; padding: 10px">
+                <a href="http://localhost:3000/#/clouds/fubitz/flows/datasource/cafe1a44-1a88-4e54-99aa-84f6620fd80c?flow=open" target="_parent">data</a>
+            </div>
+            <div id="myDiv5"></div>
+        </div>
+    </div>
+    <div class='row'>
+        <div class='chart' style='height: 400px; width: 700px; position: relative;'>
+            <div style="position: absolute; top:0; left:0; z-index: 1; padding: 10px">
+                <a href="http://localhost:3000/#/clouds/fubitz/flows/datasource/dba637b0-49f1-4a97-80ce-69c88fb1399a?flow=open" target="_parent">data</a>
+            </div>
+            <div id="myDiv"></div>
+        </div>
+        <div class='chart' style='height: 400px; width: 700px; position: relative;'>
+            <div style="position: absolute; top:0; left:0; z-index: 1; padding: 10px">
+                <a href="http://localhost:3000/#/clouds/fubitz/flows/datasource/cafe1a44-1a88-4e54-99aa-84f6620fd80c?flow=open" target="_parent">data</a>
+            </div>
+            <div id="myDiv2"></div>
+        </div>
+    </div>
+    <div class='row'>
+        <div id="myDiv3" class='chart' style='height: 400px; width: 1222px;'></div>
+        <div id="myDiv4" class='chart' style='height: 400px; width: 400px;'></div>
+    </div>
+    <script>
+        fetch('https://jsonplaceholder.typicode.com/todos/1').then(res => res.json()).then((json) => {
+            console.log(json)
+            var trace1 = {
+            x: [1, 2, 3, 4],
+            y: [10, 15, 13, 17],
+            type: 'scatter',
+          };
+          var trace2 = {
+            x: [1, 2, 3, 4],
+            y: [16, 5, 11, 9],
+            type: 'scatter'
+          };
+          Plotly.newPlot('myDiv3', [trace1, trace2], {}, {showSendToCloud: true});
+        });
+
+        var data = [
+            {
+                x: ['giraffes', 'orangutans', 'monkeys'],
+                y: [20, 14, 23],
+                type: 'bar'
+            }
+        ];
+        Plotly.newPlot('myDiv2', data);
+
+        var data = [{
+            values: [19, 26, 55],
+            labels: ['Residential', 'Non-Residential', 'Utility'],
+            type: 'pie'
+        }];
+        var layout = {
+            height: 400,
+            width: 500
+        };
+        Plotly.newPlot('myDiv', data, layout);
+
+        var data = {
+        type: "sankey",
+        orientation: "h",
+        node: {
+            pad: 15,
+            thickness: 30,
+            line: {
+            color: "black",
+            width: 0.5
+            },
+        label: ["A1", "A2", "B1", "B2", "C1", "C2"],
+        color: ["blue", "blue", "blue", "blue", "blue", "blue"]
+            },
+        link: {
+            source: [0,1,0,2,3,3],
+            target: [2,3,3,4,4,5],
+            value:  [8,4,2,8,4,2]
+        }
+        }
+        var data = [data]
+        var layout = {
+        title: "Basic Sankey",
+        font: {
+            size: 10
+        }
+        }
+        Plotly.react('myDiv4', data, layout)
+
+        var Data = {
+        type: 'scatter',
+        x: [1,2,3,4,5,6,7,8,9],
+        y: [4,2,-1,4,-5,-7,0,3,8],
+        mode: 'lines+markers',
+        name: 'Data',
+        showlegend: true,
+        hoverinfo: 'all',
+        line: {
+            color: 'blue',
+            width: 2
+        },
+        marker: {
+            color: 'blue',
+            size: 8,
+            symbol: 'circle'
+        }
+        }
+        var Viol = {
+        type: 'scatter',
+        x: [6,9],
+        y: [-7,8],
+        mode: 'markers',
+        name: 'Violation',
+        showlegend: true,
+        marker: {
+            color: 'rgb(255,65,54)',
+            line: {width: 3},
+            opacity: 0.5,
+            size: 12,
+            symbol: 'circle-open'
+        }
+        }
+        var CL = {
+        type: 'scatter',
+        x: [0.5, 10, null, 0.5, 10],
+        y: [-5, -5, null, 5, 5],
+        mode: 'lines',
+        name: 'LCL/UCL',
+        showlegend: true,
+        line: {
+            color: 'red',
+            width: 2,
+            dash: 'dash'
+        }
+        }
+        var Centre = {
+        type: 'scatter',
+        x: [0.5, 10],
+        y: [0, 0],
+        mode: 'lines',
+        name: 'Centre',
+        showlegend: true,
+        line: {
+            color: 'grey',
+            width: 2
+        }
+        }
+        var data = [Data,Viol,CL,Centre]
+        var layout = {
+        title: 'Basic SPC Chart',
+        xaxis: {
+            zeroline: false
+        },
+        yaxis: {
+            range: [-10,10],
+            zeroline: false
+        }
+        }
+        Plotly.plot('myDiv5', data,layout);
+
+    </script>
+</body>

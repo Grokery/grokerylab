@@ -209,7 +209,7 @@ g.colored.selected:hover text.tooltiptext  {
     display: block;
     position: absolute;
     top: -10px;
-    right: 122px;
+    right: 171px;
     width: 0;
     height: 0;
     border-left: 8px solid transparent;
@@ -222,7 +222,7 @@ g.colored.selected:hover text.tooltiptext  {
     display: block;
     position: absolute;
     top: -11.6px;
-    right: 121px;
+    right: 170px;
     width: 0;
     height: 0;
     border-left: 9px solid transparent;

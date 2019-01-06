@@ -62,8 +62,7 @@ class D3DataFlow extends Component {
                 <p>Drag to canvas to create:</p>
                 <img className='drag-create-img' role='presentation' src='img/job.png' onMouseDown={this.createNodeDrag.bind(this, this.createJob.bind(this))}/>
                 <img className='drag-create-img' role='presentation' src='img/source.png' onMouseDown={this.createNodeDrag.bind(this, this.createSource.bind(this))}/>
-                {/* <img className='drag-create-img' role='presentation' src='img/chart.png' onMouseDown={this.createNodeDrag.bind(this, this.createChart.bind(this))}/> */}
-                {/* <img className='drag-create-img' role='presentation' src='img/board.png' onMouseDown={this.createNodeDrag.bind(this, this.createBoard.bind(this))}/> */}
+                <img className='drag-create-img' role='presentation' src='img/board.png' onMouseDown={this.createNodeDrag.bind(this, this.createBoard.bind(this))}/>
             </div>
             <a className="create-btn" href='' onClick={this.toggleCreateNodes}><i className='fa fa-plus'></i></a>
             <a id='delete-icon' href='' onClick={this.onDelete.bind(this)}><i className='fa fa-trash'></i></a>
@@ -379,8 +378,6 @@ class D3DataFlow extends Component {
     //               return '\uf121'
     //           } else if (d.nodeType===NODETYPE.DATASOURCE) {
     //               return '\uf1c0'
-    //           } else if (d.nodeType===NODETYPE.CHART) {
-    //               return '\uf201'
     //           } else if (d.nodeType===NODETYPE.DASHBOARD) {
     //               return '\uf009'
     //           } else {
@@ -440,16 +437,6 @@ class D3DataFlow extends Component {
                     'h 128' +
                     'c 8.84 0 16 26.86 16 60 0 33.13 -7.16 60 -16 60' +
                     'z';
-            } else if (d.nodeType===NODETYPE.CHART) {
-                return 'M 16 120' +
-                    'c -8.83 0 -16 -26.87 -16 -60 0 -33.14 7.17 -60 16 -60' +
-                    'h 108' +
-                    'c 2.76 0 6.05 1.96 7.35 4.4' +
-                    'l 27.3 51.17' +
-                    'c 1.3 2.45 1.3 6.4 0 8.84' +
-                    'l -27.3 51.17' +
-                    'c -1.3 2.45 -4.6 4.43-7.35 4.43' +
-                    'z';
             } else if (d.nodeType===NODETYPE.DASHBOARD) {
                 return 'M 0 5' +
                     'c 0 -2.77 2.23 -5 5 -5' +
@@ -496,17 +483,6 @@ class D3DataFlow extends Component {
                     'c 8 0 8 25 8 25' +
                     'c 0 25 -8 25 -8 25' +
                     'h -234';
-            } else if (d.nodeType===NODETYPE.CHART) {
-                return 'M 8 50' +
-                    'c -8 0 -8 -25 -8 -25' +
-                    'c 0 -25 8 -25 8 -25' +
-                    'h 234' +
-                    'c 2.76 0 6.05 1.96 7.35 4.4' +
-                    'l 10 16.2' +
-                    'c 1.3 2.45 1.3 6.4 0 8.84' +
-                    'l -10 16.2' +
-                    'c -1.3 2.45 -4.6 4.43-7.35 4.43' +
-                    'h -234';
             } else if (d.nodeType===NODETYPE.DASHBOARD) {
                 return 'M 0 4' +
                     'c 0 -2 2 -4 4 -4' +
@@ -539,8 +515,6 @@ class D3DataFlow extends Component {
                 return d.type_abrev ? d.type_abrev : 'Job'
             } else if (d.nodeType === NODETYPE.DATASOURCE) {
                 return d.type_abrev ? d.type_abrev : 'Source'
-            } else if (d.nodeType === NODETYPE.CHART) {
-                return d.type_abrev ? d.type_abrev : 'Chart'
             } else if (d.nodeType === NODETYPE.DASHBOARD) {
                 return d.type_abrev ? d.type_abrev : 'Board'
             } else {
@@ -911,18 +885,6 @@ class D3DataFlow extends Component {
         nodeType: NODETYPE.DATASOURCE,
         subType: 'PLACEHOLDER',
         title: 'New Source',
-        description: 'Default description',
-        upstream: [],
-        downstream: [],
-        x: xy[0],
-        y: xy[1]
-      })
-  }
-  createChart(xy) {
-      this.createNode({
-        nodeType: NODETYPE.CHART,
-        subtype: 'PLACEHOLDER',
-        title: 'New Chart',
         description: 'Default description',
         upstream: [],
         downstream: [],

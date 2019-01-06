@@ -12,14 +12,15 @@ class Board extends Component {
   }
   render() {
     const { cloudName, routeParams } = this.props
-    console.log("DASHBOARD")
-    console.log(this.props)
+    const url = routeParams.boardId === '2' ? "/hello.html" : null
     return (
       <div className='page-content'>
         <div>
-          <h3>Board Title</h3>
-          <h5>{routeParams.boardId}</h5>
-          <a href={'#/clouds/' + cloudName + '/boards'}><i className='fa fa-times'></i></a>
+          <a href={'#/clouds/'+cloudName+'/flows?nodeId=9f5e8a26-9a96-474e-b2a5-53d398d3c032'} style={{position: 'absolute', right:25, padding:15}}><i className='fa fa-share-alt fa-fw'></i></a>
+          <a href={'#/clouds/' + cloudName + '/boards'} style={{position: 'absolute', right:0, padding:15}}><i className='fa fa-times'></i></a>
+
+          <iframe src={url} style={{width:window.innerWidth - 64, height:window.innerHeight-50, border:'none'}}></iframe>
+
         </div>
       </div>
     )

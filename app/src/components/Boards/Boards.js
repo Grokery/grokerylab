@@ -17,9 +17,9 @@ class Boards extends Component {
       <div className='page-content'>
         <div id='boards-page-content'>
           <ul>
-            <li><a href={'#/clouds/'+cloudName+'/boards/1'}>dashboard 1</a></li>
-            <li><a href={'#/clouds/'+cloudName+'/boards/2'}>dashboard 2</a></li>
-            <li><a href={'#/clouds/'+cloudName+'/boards/3'}>dashboard 3</a></li>
+          <li><a href={'#/clouds/'+cloudName+'/boards/2'}>Personal Finance</a></li>
+            <li><a href={'#/clouds/'+cloudName+'/boards/1'}>Salary Data</a></li>
+            <li><a href={'#/clouds/'+cloudName+'/boards/3'}>Dashboard 3</a></li>
           </ul>
         </div>
       </div>
