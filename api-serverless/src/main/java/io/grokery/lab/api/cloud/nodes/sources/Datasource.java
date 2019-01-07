@@ -22,29 +22,22 @@ public class Datasource extends Node {
 	private UUID templateId;
 
 	public Datasource() {
-		super(NodeType.DATASOURCE);
-		this.setSubType(SourceType.PLACEHOLDER.toString());
+		this.initializeDefaults();
 	}
 
-    public Datasource(SourceType subType) {
-        super(NodeType.DATASOURCE);
-        this.setSubType(subType.toString());
+    protected void initializeDefaults() {
+		super.initializeDefaults();
+
+		this.setNodeType(NodeType.DATASOURCE.toString());
+		this.setSubType(SourceType.GENERIC.toString());
 	}
-
-    public void init(JsonObj obj) {
-		// TODO get field values from obj
-    }
-
-	public static String getResourceSubTypeName() {
-        return "subType";
-    }
 
 	public static Datasource getClassInstance(JsonObj obj) throws InvalidInputException  {
         try {
-			String subTypeStr = obj.getString(Datasource.getResourceSubTypeName());
+			String subTypeStr = obj.getString(Datasource.getNodeSubTypeName());
 			SourceType subType = SourceType.valueOf(subTypeStr);
 			switch (subType) {
-				case PLACEHOLDER:
+				case GENERIC:
 					return new Datasource();
 				case AWSS3:
 					return new AWSS3BucketSource();

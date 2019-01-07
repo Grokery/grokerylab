@@ -14312,7 +14312,7 @@ var BIND_FLAG = 1,
     REARG_FLAG = 256;
 
 /** Used as the internal argument placeholder. */
-var PLACEHOLDER = '__lodash_placeholder__';
+var GENERIC = '__lodash_placeholder__';
 
 /* Native method references for those with the same name as other `lodash` methods. */
 var nativeMin = Math.min;
@@ -14358,14 +14358,14 @@ function mergeData(data, source) {
   if (value) {
     var partials = data[3];
     data[3] = partials ? composeArgs(partials, value, source[4]) : arrayCopy(value);
-    data[4] = partials ? replaceHolders(data[3], PLACEHOLDER) : arrayCopy(source[4]);
+    data[4] = partials ? replaceHolders(data[3], GENERIC) : arrayCopy(source[4]);
   }
   // Compose partial right arguments.
   value = source[5];
   if (value) {
     partials = data[5];
     data[5] = partials ? composeArgsRight(partials, value, source[6]) : arrayCopy(value);
-    data[6] = partials ? replaceHolders(data[5], PLACEHOLDER) : arrayCopy(source[6]);
+    data[6] = partials ? replaceHolders(data[5], GENERIC) : arrayCopy(source[6]);
   }
   // Use source `argPos` if available.
   value = source[7];
@@ -14442,7 +14442,7 @@ module.exports = reorder;
 
 },{"./arrayCopy":64,"./isIndex":123}],134:[function(require,module,exports){
 /** Used as the internal argument placeholder. */
-var PLACEHOLDER = '__lodash_placeholder__';
+var GENERIC = '__lodash_placeholder__';
 
 /**
  * Replaces all `placeholder` elements in `array` with an internal placeholder
@@ -14461,7 +14461,7 @@ function replaceHolders(array, placeholder) {
 
   while (++index < length) {
     if (array[index] === placeholder) {
-      array[index] = PLACEHOLDER;
+      array[index] = GENERIC;
       result[++resIndex] = index;
     }
   }

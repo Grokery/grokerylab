@@ -8,16 +8,11 @@ public class AWSDataPipelineJob extends Job {
 
 	// Constructers
 	public AWSDataPipelineJob() {
-		super(JobType.AWSLAMBDA);
 		this.initializeDefaults();
 	}
 
-	public AWSDataPipelineJob(JsonObj obj) {
-		super(JobType.AWSLAMBDA);
-		this.initializeDefaults();
-	}
-
-	private void initializeDefaults() {
+	protected void initializeDefaults() {
+		super.initializeDefaults();
 	}
 
 	// Inherited class methodss

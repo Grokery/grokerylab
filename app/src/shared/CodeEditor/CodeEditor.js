@@ -56,10 +56,10 @@ class CodeEditor extends Component {
         options: PropTypes.object,
         path: PropTypes.string,
         value: PropTypes.string,
-        preserveScrollPosition: PropTypes.bool
+		preserveScrollPosition: PropTypes.bool,
     }
     static defaultProps = {
-        preserveScrollPosition: false
+		preserveScrollPosition: false,
     }
     constructor(props) {
         super(props)

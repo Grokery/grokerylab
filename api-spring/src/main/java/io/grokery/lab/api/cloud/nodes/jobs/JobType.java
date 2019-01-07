@@ -6,7 +6,7 @@ package io.grokery.lab.api.cloud.nodes.jobs;
  * @author hogue
  */
 public enum JobType {
-    PLACEHOLDER("Placeholder"),
+    GENERIC("Generic"),
     PYTHON("Python"),
     SQL("SQL"),
     JAVA("Java"),

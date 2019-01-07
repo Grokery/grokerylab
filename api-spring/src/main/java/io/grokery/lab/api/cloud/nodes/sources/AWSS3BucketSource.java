@@ -1,7 +1,5 @@
 package io.grokery.lab.api.cloud.nodes.sources;
 
-import io.grokery.lab.api.common.JsonObj;
-
 /**
  * Contains fields and logic specific to AWS S3 bucket sources
  *
@@ -12,13 +10,14 @@ public class AWSS3BucketSource extends Datasource {
 	private String s3Path;
 
     public AWSS3BucketSource() {
-        super(SourceType.AWSS3);
+        this.initializeDefaults();
 	}
 
-	public AWSS3BucketSource(JsonObj obj) {
-        super(SourceType.AWSS3);
-        // TODO get field values from obj
-    }
+	protected void initializeDefaults() {
+		super.initializeDefaults();
+
+		this.setSubType(SourceType.AWSS3.toString());
+	}
 
 	/**
 	 * @return the s3Path

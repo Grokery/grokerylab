@@ -2,10 +2,8 @@
 
 export const NODETYPE = {
     JOB: "JOB",
-    JOBRUN: "JOBRUN",
     DATASOURCE: "DATASOURCE",
-    CHART: "CHART",
-    DASHBOARD: "DASHBOARD",
+    BOARD: "BOARD",
 }
 
 export const APPSTATUS = {

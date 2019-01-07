@@ -8,7 +8,7 @@ import InfoTab from 'shared/InfoTab/InfoTab'
 import LogsTab from 'shared/LogsTab/LogsTab'
 
 import JobCode from './code/JobCode'
-import JobInfo from './info/JobInfo';
+import JobInfo from './info/JobInfo'
 
 class JobDetails extends Component {
   static propTypes = {

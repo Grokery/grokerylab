@@ -35,22 +35,13 @@ public class AWSLambdaJob extends Job {
 
 	// Constructers
 	public AWSLambdaJob() {
-		super(JobType.AWSLAMBDA);
-		this.initializeDefaults();
-	}
-
-	protected AWSLambdaJob(JobType subType) {
-		super(subType);
-		this.initializeDefaults();
-		this.setSubType(subType.toString());
-	}
-
-	public AWSLambdaJob(JsonObj obj) {
-		super(JobType.AWSLAMBDA);
 		this.initializeDefaults();
 	}
 
 	protected void initializeDefaults() {
+		super.initializeDefaults();
+
+		this.setSubType(JobType.AWSLAMBDA.toString());
 		this.runControl = "manual";
 		this.schedule = new JsonObj();
 	}
@@ -58,6 +49,7 @@ public class AWSLambdaJob extends Job {
 	// Inherited class methods
 	public void setValues(JsonObj newData) {
 		super.setValues(newData);
+
 		this.lambdaARN = newData.get("lambdaARN")!= null ? newData.getString("lambdaARN") : this.lambdaARN;
 		this.runControl = newData.get("runControl") != null ? newData.getString("runControl") : this.runControl;
 		this.schedule = newData.get("schedule") != null ? MapperUtil.getInstance().convertValue(newData.get("schedule"), JsonObj.class) : this.schedule;

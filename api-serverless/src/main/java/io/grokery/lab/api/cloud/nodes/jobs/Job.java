@@ -22,19 +22,15 @@ public class Job extends Node {
 
 	// Constructers
 	public Job() {
-		super(NodeType.JOB);
 		this.initializeDefaults();
 	}
 
-	protected Job(JobType subType) {
-		super(NodeType.JOB);
-		this.initializeDefaults();
-		this.setSubType(subType.toString());
-	}
+	protected void initializeDefaults() {
+		super.initializeDefaults();
 
-	private void initializeDefaults() {
+		this.setNodeType(NodeType.JOB.toString());
+		this.setSubType(JobType.GENERIC.toString());
 		this.setVersion(0);
-		this.setSubType(JobType.PLACEHOLDER.toString());
 	}
 
 	public void setValues(JsonObj newData) {
@@ -63,7 +59,7 @@ public class Job extends Node {
 			String subTypeStr = obj.getString(Job.getNodeSubTypeName());
 			JobType subType = JobType.valueOf(subTypeStr);
 			switch (subType) {
-				case PLACEHOLDER:
+				case GENERIC:
 					return new Job();
 				case AWSLAMBDA:
 					return new AWSLambdaJob();

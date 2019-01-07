@@ -378,7 +378,7 @@ class D3DataFlow extends Component {
     //               return '\uf121'
     //           } else if (d.nodeType===NODETYPE.DATASOURCE) {
     //               return '\uf1c0'
-    //           } else if (d.nodeType===NODETYPE.DASHBOARD) {
+    //           } else if (d.nodeType===NODETYPE.BOARD) {
     //               return '\uf009'
     //           } else {
     //               return ''
@@ -437,7 +437,7 @@ class D3DataFlow extends Component {
                     'h 128' +
                     'c 8.84 0 16 26.86 16 60 0 33.13 -7.16 60 -16 60' +
                     'z';
-            } else if (d.nodeType===NODETYPE.DASHBOARD) {
+            } else if (d.nodeType===NODETYPE.BOARD) {
                 return 'M 0 5' +
                     'c 0 -2.77 2.23 -5 5 -5' +
                     'h 150' +
@@ -483,7 +483,7 @@ class D3DataFlow extends Component {
                     'c 8 0 8 25 8 25' +
                     'c 0 25 -8 25 -8 25' +
                     'h -234';
-            } else if (d.nodeType===NODETYPE.DASHBOARD) {
+            } else if (d.nodeType===NODETYPE.BOARD) {
                 return 'M 0 4' +
                     'c 0 -2 2 -4 4 -4' +
                     'h 242' +
@@ -515,7 +515,7 @@ class D3DataFlow extends Component {
                 return d.type_abrev ? d.type_abrev : 'Job'
             } else if (d.nodeType === NODETYPE.DATASOURCE) {
                 return d.type_abrev ? d.type_abrev : 'Source'
-            } else if (d.nodeType === NODETYPE.DASHBOARD) {
+            } else if (d.nodeType === NODETYPE.BOARD) {
                 return d.type_abrev ? d.type_abrev : 'Board'
             } else {
                 return ''
@@ -813,11 +813,11 @@ class D3DataFlow extends Component {
           d3state.dragging = false
           this.onUpdateNodes(d3state.changedNodes)
       } else if (d3state.dblClickNodeTimeout) {
-          history.push('/clouds/'+ getSelectedCloudName() + '/flows/' + d.nodeType.toLowerCase() + '/' + d.nodeId + '?flow=closed')
+          history.push('/clouds/'+ getSelectedCloudName() + '/flows/' + d.nodeType.toLowerCase() + '/' + d.nodeId + '?flow=open')
       } else {
         if (this.props.singleClickNav) {
             this.clearAllSelection()
-            history.push('/clouds/'+ getSelectedCloudName() + '/flows/' + d.nodeType.toLowerCase() + '/' + d.nodeId + '?flow=closed')
+            history.push('/clouds/'+ getSelectedCloudName() + '/flows/' + d.nodeType.toLowerCase() + '/' + d.nodeId + '?flow=open')
         } else {
             if (this.d3state.selectedNodes[d.nodeId]) {
                 this.removeNodeFromSelected(d)
@@ -871,7 +871,7 @@ class D3DataFlow extends Component {
   createJob(xy) {
       this.createNode({
         nodeType: NODETYPE.JOB,
-        subType: 'PLACEHOLDER',
+        subType: 'GENERIC',
         title: 'New Job',
         description: 'Default description',
         upstream: [],
@@ -883,7 +883,7 @@ class D3DataFlow extends Component {
   createSource(xy) {
       this.createNode({
         nodeType: NODETYPE.DATASOURCE,
-        subType: 'PLACEHOLDER',
+        subType: 'GENERIC',
         title: 'New Source',
         description: 'Default description',
         upstream: [],
@@ -894,8 +894,8 @@ class D3DataFlow extends Component {
   }
   createBoard(xy) {
       this.createNode({
-        nodeType: NODETYPE.DASHBOARD,
-        subtype: 'PLACEHOLDER',
+        nodeType: NODETYPE.BOARD,
+        subType: 'GENERIC',
         title: 'New Board',
         description: 'Default description',
         upstream: [],

@@ -6,7 +6,7 @@ package io.grokery.lab.api.cloud.nodes.sources;
  * @author hogue
  */
 public enum SourceType {
-	PLACEHOLDER("Placeholder"),
+	GENERIC("Generic"),
 	SQL("SQL Table"),
 	MONGO("Mongo Collection"),
 

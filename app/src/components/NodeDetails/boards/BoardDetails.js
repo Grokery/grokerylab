@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { NODETYPE } from 'common'
 import { Tabs, Panel } from 'shared/Tabs/Tabs'
 import EditModal from 'shared/EditModal/EditModal'
-import IChart from 'shared/IChart/IChart'
+import LogsTab from 'shared/LogsTab/LogsTab'
+import BoardCode from './code/BoardCode'
+
+import './BoardDetails.css'
 
 class BoardDetails extends Component {
   static propTypes = {
@@ -19,22 +21,37 @@ class BoardDetails extends Component {
       }
   }
   render() {
-    const { node } = this.props
+    const { onUpdate, params, node } = this.props
     if (!node) { return <div></div> }
     return (
       <div className='board-details'>
         <Tabs getRightMenuOptions={this.props.getRightMenuOptions.bind(this)}>
           <Panel title={node.title}>
-            {this.getCharts()}
+            <div>
+              <iframe srcDoc={node.source} style={{width:window.innerWidth - 64, height:window.innerHeight-50, border:'none'}}></iframe>
+            </div>
           </Panel>
-          <Panel title=''>
-            <span>empty</span>
+          <Panel title='Code'>
+            <BoardCode key={params.nodeId} params={params} onUpdate={onUpdate}></BoardCode>
+          </Panel>
+          <Panel title='History'>
+            <LogsTab params={this.props.params}></LogsTab>
           </Panel>
         </Tabs>
         <EditModal title="Edit Dashboard" node={node} onUpdate={this.props.onUpdate} shown={this.state.shown} toggleEditDialog={this.toggleEditDialog.bind(this)}></EditModal>
         {this.props.children}
       </div>
     )
+  }
+  updateCode = (newCode) => {
+    if (this.debounce) {
+      clearTimeout(this.debounce)
+    }
+    this.debounce = setTimeout(() => {
+      this.props.onUpdate({
+        'source': newCode
+      })
+    }, 1000);
   }
   toggleEditDialog(e) {
     if (e) {e.preventDefault()}
@@ -43,28 +60,6 @@ class BoardDetails extends Component {
     } else {
       this.setState({shown: true})
     }
-  }
-  getCharts() {
-    const { node, params } = this.props
-    let elements = []
-    node.upstream.forEach(function(chart) {
-      if (!chart || chart.nodeType !== NODETYPE.CHART) {
-        return
-      }
-      elements.push((
-        <div key={chart.nodeId} className={'dashboard-item'}>
-          <IChart
-            key={Math.random()}
-            id={chart.id}
-            height={350}
-            width={600}
-            params={params}
-            showTitle={true}
-          ></IChart>
-        </div>
-      ))
-    })
-    return elements
   }
 }
 

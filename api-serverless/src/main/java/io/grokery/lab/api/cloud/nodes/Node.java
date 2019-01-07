@@ -15,6 +15,7 @@ import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.MapperUtil;
 import io.grokery.lab.api.common.errors.NotImplementedError;
 import io.grokery.lab.api.common.context.CloudContext;
+import io.grokery.lab.api.cloud.nodes.boards.Dashboard;
 import io.grokery.lab.api.cloud.nodes.jobs.Job;
 import io.grokery.lab.api.cloud.nodes.sources.Datasource;
 
@@ -48,20 +49,8 @@ public class Node {
 		return "subType";
 	}
 
-	// Constructers
-	public Node() {
-		this.initializeDefaults();
-	}
-
-	protected Node(NodeType nodeType) {
-		this.initializeDefaults();
-		this.nodeType = nodeType.toString();
-	}
-
-	private void initializeDefaults() {
+	protected void initializeDefaults() {
 		this.nodeId = UUID.randomUUID().toString();
-		this.nodeType = "";
-		this.subType = "";
 		this.created = new DateTime(DateTimeZone.UTC).toString();
 		this.updated = new DateTime(DateTimeZone.UTC).toString();
 
@@ -136,6 +125,8 @@ public class Node {
 			LOG.info("Get class instance for nodeType: " + typeName);
 			NodeType nodeType = NodeType.valueOf(typeName);
 			switch (nodeType) {
+				case BOARD:
+					return Dashboard.getClassInstance(obj);
 				case JOB:
 					return Job.getClassInstance(obj);
 				case DATASOURCE:
@@ -164,8 +155,8 @@ public class Node {
 	public String getNodeType() {
 		return nodeType;
 	}
-	public void setNodeType(NodeType nodeType) {
-		this.nodeType = nodeType.toString();
+	public void setNodeType(String nodeType) {
+		this.nodeType = nodeType;
 	}
 	public String getSubType() {
 		return subType;

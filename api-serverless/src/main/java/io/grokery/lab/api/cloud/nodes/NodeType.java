@@ -6,6 +6,7 @@ package io.grokery.lab.api.cloud.nodes;
  * @author hogue
  */
 public enum NodeType {
+    BOARD("Board"),
     JOB("Job"),
     DATASOURCE("Datasource");
 

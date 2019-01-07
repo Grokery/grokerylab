@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { updateQueryParam, NODETYPE } from 'common'
 import { updateNode } from 'store/actions'
-// import { history } from 'index'
 import D3DataFlow from 'shared/D3DataFlow/D3DataFlow'
 import JobDetails from './jobs/JobDetails'
 import SourceDetails from './sources/SourceDetails'
@@ -22,7 +21,6 @@ class NodeDetails extends Component {
     const { params, location } = this.props
     let props = {
       params: params,
-      // close: this.close.bind(this),
       getRightMenuOptions: this.getRightMenuOptions,
       onUpdate: this.onUpdate.bind(this),
       toggleNodeDetailsPain: this.toggleNodeDetailsPain.bind(this),
@@ -45,9 +43,7 @@ class NodeDetails extends Component {
                   return (<JobDetails {...props} />)
                 } else if (params.nodeType === NODETYPE.DATASOURCE.toLowerCase()) {
                   return (<SourceDetails {...props} />)
-                } else if (params.nodeType === NODETYPE.CHART.toLowerCase()) {
-                  return (<ChartDetails {...props} />)
-                } else if (params.nodeType === NODETYPE.DASHBOARD.toLowerCase()) {
+                } else if (params.nodeType === NODETYPE.BOARD.toLowerCase()) {
                   return (<BoardDetails {...props} />)
                 }
             }()}
@@ -100,10 +96,6 @@ class NodeDetails extends Component {
     document.getElementById("node-details-pain").style.top = '50px'
     window.scrollTo(0,0)
   }
-  // close() {
-    // const { params, node } = this.props
-    // history.push("/clouds/"+ params.cloudName + "/"+node.nodeType().toLowerCase())
-  // }
   onUpdate(nodeData) {
     const { updateNode, node } = this.props
     nodeData.nodeId = node.nodeId
