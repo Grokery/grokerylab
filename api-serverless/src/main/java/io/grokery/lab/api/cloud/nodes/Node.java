@@ -17,7 +17,7 @@ import io.grokery.lab.api.common.errors.NotImplementedError;
 import io.grokery.lab.api.common.context.CloudContext;
 import io.grokery.lab.api.cloud.nodes.boards.Dashboard;
 import io.grokery.lab.api.cloud.nodes.jobs.Job;
-import io.grokery.lab.api.cloud.nodes.sources.Datasource;
+import io.grokery.lab.api.cloud.nodes.sources.Source;
 
 public class Node {
 
@@ -130,7 +130,7 @@ public class Node {
 				case JOB:
 					return Job.getClassInstance(obj);
 				case DATASOURCE:
-					return Datasource.getClassInstance(obj);
+					return Source.getClassInstance(obj);
 				default:
 					throw new NotImplementedError();
 			}

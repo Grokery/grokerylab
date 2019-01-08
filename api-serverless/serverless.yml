@@ -90,6 +90,14 @@ functions:
           method: delete
           cors: true
       - http:
+          path: ${self:custom.urlBase}/clouds/{cloudId}/nodes/datasource/{sourceId}/query
+          method: get
+          cors: true
+      - http:
+          path: ${self:custom.urlBase}/clouds/{cloudId}/nodes/datasource/{sourceId}/write
+          method: put
+          cors: true
+      - http:
           path: ${self:custom.urlBase}/clouds/{cloudId}/nodes/search
           method: get
           cors: true
