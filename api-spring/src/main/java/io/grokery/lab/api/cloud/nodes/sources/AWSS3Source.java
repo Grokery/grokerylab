@@ -1,5 +1,7 @@
 package io.grokery.lab.api.cloud.nodes.sources;
 
+import javax.ws.rs.core.MultivaluedMap;
+
 import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.context.CloudContext;
 import io.grokery.lab.api.common.errors.NotImplementedError;
@@ -23,7 +25,7 @@ public class AWSS3Source extends Source {
 		this.setSubType(SourceType.AWSS3.toString());
 	}
 
-	public JsonObj query(CloudContext context, JsonObj request) {
+	public JsonObj query(CloudContext context, MultivaluedMap<String, String> request) {
 		// TODO map data to writeRequestObjModel and validate
 		// query is path (s3 key) 
 		// 	if multiple file matches, 

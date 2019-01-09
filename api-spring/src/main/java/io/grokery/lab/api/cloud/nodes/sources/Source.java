@@ -2,6 +2,8 @@ package io.grokery.lab.api.cloud.nodes.sources;
 
 import java.util.UUID;
 
+import javax.ws.rs.core.MultivaluedMap;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
@@ -40,14 +42,14 @@ public class Source extends Node {
 		this.setSubType(SourceType.GENERIC.toString());
 	}
 
-	public JsonObj query(CloudContext context, JsonObj request) {
+	public JsonObj query(CloudContext context, MultivaluedMap<String, String> request) {
 		// TODO validate query
 		return this.data;
 	}
 
 	public void write(CloudContext context, JsonObj request) throws NotFoundException {
 		// TODO limit input data size to something reasonable
-		this.data = request.getJsonObj("data");
+		this.data = request;
 		DAO dao = NodesDAO.getInst(context);
 		this.setUpdated(new DateTime(DateTimeZone.UTC).toString());
 		dao.update(this.getNodeType(), this.getNodeId(), this.toJsonObj());
@@ -101,7 +103,7 @@ public class Source extends Node {
 	/**
 	 * @param data the data to set
 	 */
-	public void setTemplateId(JsonObj data) {
+	public void setData(JsonObj data) {
 		this.data = data;
 	}
 }
