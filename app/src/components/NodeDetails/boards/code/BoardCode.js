@@ -10,15 +10,21 @@ class BoardCode extends Component {
     node: PropTypes.object,
     onUpdate: PropTypes.func.isRequired
   }
-  updateCode = (newCode) => {
-    if (this.debounce) {
-      clearTimeout(this.debounce)
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      draft: props.node['source'],
     }
-    this.debounce = setTimeout(() => {
-      this.props.onUpdate({
-        'source': newCode
-      })
-    }, 1000);
+  }
+  onChange = (newCode) => {
+    this.setState({ draft: newCode })
+  }
+  updateCode = (e) => {
+    e.preventDefault()
+    this.props.onUpdate({
+      'source': this.state.draft
+    })
   }
   render() {
     let { node } = this.props
@@ -31,9 +37,16 @@ class BoardCode extends Component {
       mode: {name: "html"},
       height: 'auto',
     }
+    let synced = this.state.draft === node.source
     return (
       <div className='board-code-tab'>
-        <CodeEditor value={node['source']} options={editorOptions} onChange={this.updateCode} />
+        <div style={{float:'right', paddingRight:'11px', paddingTop:'10px'}}>
+          <div style={{fontSize:'16px'}}>
+            {synced ? <i title='all changes saved' className='fa fa-check'></i> : 
+              <i onClick={this.updateCode} className='fa fa-save' style={{cursor:'pointer'}} title='unsaved changes'></i>}
+          </div>
+        </div>
+        <CodeEditor value={this.state.draft} options={editorOptions} onChange={this.onChange} />
       </div>
     )
   }

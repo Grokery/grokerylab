@@ -15,7 +15,8 @@ class App extends Component {
     const { children } = this.props
     return (
       <div>
-        {this.renderErrorMessage()}
+        {/* TODO */}
+        {/* {this.renderErrorMessage()} */}
         {children}
       </div>
     )

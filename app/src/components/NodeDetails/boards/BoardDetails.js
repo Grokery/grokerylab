@@ -34,6 +34,9 @@ class BoardDetails extends Component {
           <Panel title='Code'>
             <BoardCode key={params.nodeId} params={params} onUpdate={onUpdate}></BoardCode>
           </Panel>
+          <Panel title='Data'>
+            <div>hello</div>
+          </Panel>
           <Panel title='History'>
             <LogsTab params={this.props.params}></LogsTab>
           </Panel>

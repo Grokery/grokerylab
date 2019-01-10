@@ -138,14 +138,16 @@ class JobDetail extends Component {
           let startTime = new Date(element.startTime)
           let endTime = new Date(element.endTime)
           let difference = endTime - startTime
+          difference = difference ? (difference / 1000).toFixed(0) + 's' : '-'
           results.push(
               <tr key={element.jobrunId}>
+                  {/* <td>v0</td> */}
                   <td>Manual</td>
-                  <td>v0</td>
+                  <td>dhogue</td>
                   {/* <td>{startTime.toLocaleTimeString("en-us", dateOptions)}</td> */}
                   {/* <td>{element.startTime}</td> */}
                   <td>{element.startTime}</td>
-                  <td>{(difference / 1000).toFixed(0) + " Seconds"}</td>
+                  <td>{difference}</td>
                   <td><span className={"label " + this.getRunLabelType(element.runStatus)}>{element.runStatus}</span></td>
               </tr>
           )
@@ -174,9 +176,9 @@ class JobDetail extends Component {
                       <table className="table table-hover">
                           <thead>
                               <tr>
+                                {/* <th>Version</th> */}
                                   <th>Run Type</th>
-                                  <th>Version</th>
-                                  {/* <th>Start Time</th> */}
+                                  <th>User</th>
                                   <th>Start Time</th>
                                   <th>Duration</th>
                                   <th>Status</th>
