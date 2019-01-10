@@ -38,7 +38,7 @@ public class Source extends Node {
     protected void initializeDefaults() {
 		super.initializeDefaults();
 
-		this.setNodeType(NodeType.DATASOURCE.toString());
+		this.setNodeType(NodeType.SOURCE.toString());
 		this.setSubType(SourceType.GENERIC.toString());
 	}
 

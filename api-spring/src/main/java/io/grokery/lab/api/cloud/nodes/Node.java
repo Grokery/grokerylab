@@ -15,7 +15,7 @@ import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.MapperUtil;
 import io.grokery.lab.api.common.errors.NotImplementedError;
 import io.grokery.lab.api.common.context.CloudContext;
-import io.grokery.lab.api.cloud.nodes.boards.Dashboard;
+import io.grokery.lab.api.cloud.nodes.boards.Board;
 import io.grokery.lab.api.cloud.nodes.jobs.Job;
 import io.grokery.lab.api.cloud.nodes.sources.Source;
 
@@ -126,10 +126,10 @@ public class Node {
 			NodeType nodeType = NodeType.valueOf(typeName);
 			switch (nodeType) {
 				case BOARD:
-					return Dashboard.getClassInstance(obj);
+					return Board.getClassInstance(obj);
 				case JOB:
 					return Job.getClassInstance(obj);
-				case DATASOURCE:
+				case SOURCE:
 					return Source.getClassInstance(obj);
 				default:
 					throw new NotImplementedError();

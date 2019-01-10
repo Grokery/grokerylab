@@ -376,7 +376,7 @@ class D3DataFlow extends Component {
     //       el.text(function(d) {
     //           if (d.nodeType===NODETYPE.JOB) {
     //               return '\uf121'
-    //           } else if (d.nodeType===NODETYPE.DATASOURCE) {
+    //           } else if (d.nodeType===NODETYPE.SOURCE) {
     //               return '\uf1c0'
     //           } else if (d.nodeType===NODETYPE.BOARD) {
     //               return '\uf009'
@@ -431,7 +431,7 @@ class D3DataFlow extends Component {
                     'l -27.3 -51.16' +
                     'c -1.3 -2.44 -1.3 -6.4 0 -8.83' +
                     'z';
-            } else if (d.nodeType===NODETYPE.DATASOURCE) {
+            } else if (d.nodeType===NODETYPE.SOURCE) {
                 return 'M 16 120' +
                     'c -8.83 0 -16 -26.87 -16 -60 0 -33.14 7.17 -60 16 -60' +
                     'h 128' +
@@ -475,7 +475,7 @@ class D3DataFlow extends Component {
                     'l -10 -16.2' +
                     'c -1.3 -2.44 -1.3 -6.4 0 -8.83' +
                     'l 10 -16.2';
-            } else if (d.nodeType===NODETYPE.DATASOURCE) {
+            } else if (d.nodeType===NODETYPE.SOURCE) {
                 return 'M 8 50' +
                     'c -8 0 -8 -25 -8 -25' +
                     'c 0 -25 8 -25 8 -25' +
@@ -513,7 +513,7 @@ class D3DataFlow extends Component {
         return function (d) {
             if (d.nodeType === NODETYPE.JOB) {
                 return d.type_abrev ? d.type_abrev : 'Job'
-            } else if (d.nodeType === NODETYPE.DATASOURCE) {
+            } else if (d.nodeType === NODETYPE.SOURCE) {
                 return d.type_abrev ? d.type_abrev : 'Source'
             } else if (d.nodeType === NODETYPE.BOARD) {
                 return d.type_abrev ? d.type_abrev : 'Board'
@@ -882,7 +882,7 @@ class D3DataFlow extends Component {
   }
   createSource(xy) {
       this.createNode({
-        nodeType: NODETYPE.DATASOURCE,
+        nodeType: NODETYPE.SOURCE,
         subType: 'GENERIC',
         title: 'New Source',
         description: 'Default description',

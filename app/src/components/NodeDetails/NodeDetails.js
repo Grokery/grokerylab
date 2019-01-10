@@ -41,7 +41,7 @@ class NodeDetails extends Component {
             {function() {
                 if (params.nodeType === NODETYPE.JOB.toLowerCase()) {
                   return (<JobDetails {...props} />)
-                } else if (params.nodeType === NODETYPE.DATASOURCE.toLowerCase()) {
+                } else if (params.nodeType === NODETYPE.SOURCE.toLowerCase()) {
                   return (<SourceDetails {...props} />)
                 } else if (params.nodeType === NODETYPE.BOARD.toLowerCase()) {
                   return (<BoardDetails {...props} />)

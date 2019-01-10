@@ -31,7 +31,7 @@ const mapStateToProps = (state, ownProps) => {
   let sources = []
   // Object.keys(state.nodes).forEach(function(key){
   //   let node = state.nodes[key]
-  //   if (node.nodeType === NODETYPE.DATASOURCE){
+  //   if (node.nodeType === NODETYPE.SOURCE){
   //     sources.push(node)
   //   }
   // })

@@ -12,7 +12,7 @@ import Board from './components/Boards/Board'
 import Dataflows from './components/Dataflows/Dataflows'
 import Home from './components/Home/Home'
 import NodeDetails from './components/NodeDetails/NodeDetails'
-import Users from './components/Users/Users'
+import Users from './components/Cloud/Users'
 
 export default <Route path='/' component={App}>
   <Route path='/signin' component={Auth} />

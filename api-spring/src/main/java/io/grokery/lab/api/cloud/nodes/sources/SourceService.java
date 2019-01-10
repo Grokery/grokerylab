@@ -5,7 +5,6 @@ import javax.ws.rs.core.MultivaluedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.grokery.lab.api.cloud.nodes.Node;
 import io.grokery.lab.api.cloud.nodes.dao.NodesDAO;
 import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.context.CloudContext;
@@ -22,7 +21,7 @@ public class SourceService {
         CloudContext context = new CloudContext(cloudId, auth);
 
         DAO dao = NodesDAO.getInst(context);
-		Source source = (Source) Source.fromJsonObj(dao.get("DATASOURCE", sourceId), context);
+		Source source = (Source) Source.fromJsonObj(dao.get("SOURCE", sourceId), context);
 
         return source.query(context, request);
     }
@@ -31,7 +30,7 @@ public class SourceService {
         CloudContext context = new CloudContext(cloudId, auth);
 
         DAO dao = NodesDAO.getInst(context);
-		Source source = (Source) Source.fromJsonObj(dao.get("DATASOURCE", sourceId), context);
+		Source source = (Source) Source.fromJsonObj(dao.get("SOURCE", sourceId), context);
 
         source.write(context, request);
         return null;

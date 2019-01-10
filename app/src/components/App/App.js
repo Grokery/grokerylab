@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+
 import { resetErrorMessage } from 'store/actions'
+
 import './App.css'
 
 class App extends Component {
@@ -13,14 +15,15 @@ class App extends Component {
     const { children } = this.props
     return (
       <div>
-        {/*{this.renderErrorMessage()}*/}
+        {this.renderErrorMessage()}
         {children}
       </div>
     )
   }
-  handleDismissClick = e => {
-    this.props.resetErrorMessage()
+  handleDismissClick = (e) => {
+    const { resetErrorMessage } = this.props
     e.preventDefault()
+    resetErrorMessage()
   }
   renderErrorMessage() {
     const { errorMessage } = this.props
@@ -31,10 +34,9 @@ class App extends Component {
       <p>
         <b>{errorMessage}</b>
         {' '}
-        (<a href="#"
-            onClick={this.handleDismissClick}>
+        <a href="#" onClick={this.handleDismissClick}>
           Dismiss
-        </a>)
+        </a>
       </p>
     )
   }

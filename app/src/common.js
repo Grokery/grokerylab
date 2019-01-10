@@ -2,7 +2,7 @@
 
 export const NODETYPE = {
     JOB: "JOB",
-    DATASOURCE: "DATASOURCE",
+    SOURCE: "SOURCE",
     BOARD: "BOARD",
 }
 

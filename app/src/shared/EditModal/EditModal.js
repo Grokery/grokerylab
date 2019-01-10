@@ -53,7 +53,7 @@ class EditModal extends Component {
     }
     if (node.nodeType === NODETYPE.JOB) {
       return (<JobForm node={node} onUpdate={this.props.onUpdate}></JobForm>)
-    } else if (node.nodeType === NODETYPE.DATASOURCE) {
+    } else if (node.nodeType === NODETYPE.SOURCE) {
       return (<SourceForm node={node} onUpdate={this.props.onUpdate}></SourceForm>)
     } else if (node.nodeType === NODETYPE.CHART) {
       return (<ChartForm node={node} onUpdate={this.props.onUpdate}></ChartForm>)

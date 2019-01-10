@@ -8,7 +8,7 @@ package io.grokery.lab.api.cloud.nodes;
 public enum NodeType {
     BOARD("Board"),
     JOB("Job"),
-    DATASOURCE("Datasource");
+    SOURCE("Source");
 
     private String typeName;
 
