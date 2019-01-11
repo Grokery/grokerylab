@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { getSelectedCloudId, setBaseUrlForCloudName, setSelectedCloudName } from 'authentication'
+
+import { history } from 'index'
+import { getCloudId } from 'authentication'
 import { fetchNodes, clearNodes, fetchCloud, fetchOptions } from 'store/actions'
 import SideNavBar from 'shared/SideNavBar/SideNavBar'
 
@@ -11,6 +13,18 @@ class Cloud extends Component {
     cloudName: PropTypes.string.isRequired,
     fetchNodes: PropTypes.func.isRequired,
     clearNodes: PropTypes.func.isRequired,
+  }
+  componentDidMount() {
+    const { cloudName, clearNodes, fetchCloud, fetchNodes, fetchOptions  } = this.props
+    clearNodes()
+    if (cloudName && getCloudId(cloudName)) {
+      fetchCloud(cloudName)
+      fetchOptions(cloudName)
+      fetchNodes(cloudName)
+    } else {
+      alert("cloud name " + cloudName + " not recognized")
+      history.push("/")
+    }
   }
   render() {
     const { cloudName } = this.props
@@ -22,18 +36,6 @@ class Cloud extends Component {
         </div>
       </div>
     )
-  }
-  setCloudBaseUrlCallBack(json) {
-    const { cloudName, fetchNodes, fetchOptions } = this.props
-    setBaseUrlForCloudName(cloudName, json['url'])
-    fetchNodes()
-    fetchOptions()
-  }
-  componentDidMount() {
-    const { cloudName, clearNodes, fetchCloud } = this.props
-    clearNodes()
-    setSelectedCloudName(cloudName)
-    fetchCloud(getSelectedCloudId(), this.setCloudBaseUrlCallBack.bind(this))
   }
 }
 
@@ -47,5 +49,5 @@ export default connect(mapStateToProps, {
   fetchCloud,
   fetchNodes,
   clearNodes,
-  fetchOptions
+  fetchOptions,
 })(Cloud)

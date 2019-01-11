@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { history } from 'index'
 import { setD3State, createNode, updateNode, deleteNode } from 'store/actions'
-import { getSelectedCloudName } from 'authentication'
 import { NODETYPE } from 'common'
 import d3 from 'd3'
 import './D3DataFlow.css'
@@ -693,16 +692,18 @@ class D3DataFlow extends Component {
       }
   }
   addNodeToSelected(d) {
+    const { params } = this.props
     this.d3state.selectedNodes[d.nodeId] = d
     if (Object.keys(this.d3state.selectedNodes).length > 1) {
-        history.push('/clouds/'+ getSelectedCloudName() + '/flows')
+        history.push('/clouds/'+ params.cloudName + '/flows')
     }
     this.selectNodes(this.d3state.selectedNodes)
   }
   removeNodeFromSelected(d) {
+    const { params } = this.props
     delete this.d3state.selectedNodes[d.nodeId]
     if (Object.keys(this.d3state.selectedNodes).length < 1) {
-        history.push('/clouds/'+ getSelectedCloudName() + '/flows')
+        history.push('/clouds/'+ params.cloudName + '/flows')
     }
     this.selectNodes(this.d3state.selectedNodes)
   }
@@ -797,6 +798,7 @@ class D3DataFlow extends Component {
       }
   }
   shapeMouseUp(d) {
+      const { params } = this.props
       let d3state = this.d3state;
 
       if (d3state.drawEdge) {
@@ -813,11 +815,11 @@ class D3DataFlow extends Component {
           d3state.dragging = false
           this.onUpdateNodes(d3state.changedNodes)
       } else if (d3state.dblClickNodeTimeout) {
-          history.push('/clouds/'+ getSelectedCloudName() + '/flows/' + d.nodeType.toLowerCase() + '/' + d.nodeId + '?flow=open')
+          history.push('/clouds/'+ params.cloudName + '/flows/' + d.nodeType.toLowerCase() + '/' + d.nodeId + '?flow=open')
       } else {
         if (this.props.singleClickNav) {
             this.clearAllSelection()
-            history.push('/clouds/'+ getSelectedCloudName() + '/flows/' + d.nodeType.toLowerCase() + '/' + d.nodeId + '?flow=open')
+            history.push('/clouds/'+ params.cloudName + '/flows/' + d.nodeType.toLowerCase() + '/' + d.nodeId + '?flow=open')
         } else {
             if (this.d3state.selectedNodes[d.nodeId]) {
                 this.removeNodeFromSelected(d)
@@ -837,6 +839,7 @@ class D3DataFlow extends Component {
       this.d3state.graphMouseDown = true;
   }
   svgMouseUp() {
+      const { params } = this.props
       var d3state = this.d3state
       if (!d3state.graphMouseDown) {
           if (d3state.drawEdge) {
@@ -845,7 +848,7 @@ class D3DataFlow extends Component {
           }
       } else if (d3state.dblClickSVGTimeout) {
           this.clearAllSelection()
-          history.push('/clouds/'+ getSelectedCloudName() + '/flows')
+          history.push('/clouds/'+ params.cloudName + '/flows')
       } else {
           d3state.dblClickSVGTimeout = true
           setTimeout(function() {
@@ -910,12 +913,13 @@ class D3DataFlow extends Component {
       this.props.createNode(newNode, null)
   }
   onSave() {
-      this.onUpdateNodes(this.d3state.changedNodes)
+    this.onUpdateNodes(this.d3state.changedNodes)
   }
   onUpdateNodes(nodes) {
+    const { params } = this.props
     Object.keys(nodes).forEach(function(key){
         let node = nodes[key]
-        this.props.updateNode(node, null)
+        this.props.updateNode(params.cloudName, node, null)
     }.bind(this))
   }
   deleteEdge(edge) {

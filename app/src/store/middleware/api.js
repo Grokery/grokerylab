@@ -2,13 +2,38 @@
 // Middleware for calling REST api endpoints
 //------------------------------------------------
 
-import { ADMIN_API_BASE_URL } from "config"
-import { callApi } from './helpers/callApi'
-import { getAccountToken, getSelectedCloudUrl, getSelectedCloudToken } from 'authentication'
+import { API_BASE_URL } from "config"
 
-export const CALL_ADMIN_API = Symbol('Call admin API')
-export const adminApi = store => next => action => {
-    const actionInfo = action[CALL_ADMIN_API]
+const callApi = (baseUrl, actionInfo) => {
+    const { method, endpoint, data, token, callback } = actionInfo
+    var params = {
+        method: method,
+        mode: "cors",
+        headers: new Headers({
+            "Content-Type": "application/json",
+            "Authorization": token,
+        }),
+    }
+    if (data && (method === 'POST' || method === "PUT")) {
+        params['body'] = JSON.stringify(data)
+    }
+    return fetch(baseUrl + endpoint, params)
+        .then(response =>
+            response.json().then(json => {
+                if (!response.ok) {
+                    return Promise.reject(json)
+                }
+                if (typeof(callback) === 'function') {
+                    return callback(json, response)
+                }
+                return json
+            })
+        )
+}
+
+export const CALL_API = Symbol('Call admin API')
+export const grokeryApi = store => next => action => {
+    const actionInfo = action[CALL_API]
     if (typeof actionInfo === 'undefined') {
         return next(action)
     }
@@ -16,12 +41,11 @@ export const adminApi = store => next => action => {
     const [requestType, successType, failureType] = actionInfo.types
     const actionWith = data => {
         const finalAction = Object.assign({}, action, data)
-        delete finalAction[CALL_ADMIN_API]
+        delete finalAction[CALL_API]
         return finalAction
     }
     next(actionWith({ type: requestType }))
-
-    return callApi(ADMIN_API_BASE_URL, getAccountToken(), actionInfo).then(
+    return callApi(API_BASE_URL, actionInfo).then(
         response => next(actionWith({
             response,
             type: successType
@@ -29,33 +53,6 @@ export const adminApi = store => next => action => {
         error => next(actionWith({
             type: failureType,
             error: error.message || 'Error Calling admin API'
-        }))
-    )
-}
-
-export const CALL_CLOUD_API = Symbol('Call cloud API')
-export const cloudApi = store => next => action => {
-    const actionInfo = action[CALL_CLOUD_API]
-    if (typeof actionInfo === 'undefined') {
-        return next(action)
-    }
-
-    const [requestType, successType, failureType] = actionInfo.types
-    const actionWith = data => {
-        const finalAction = Object.assign({}, action, data)
-        delete finalAction[CALL_CLOUD_API]
-        return finalAction
-    }
-    next(actionWith({ type: requestType }))
-
-    return callApi(getSelectedCloudUrl(), getSelectedCloudToken(), actionInfo).then(
-        response => next(actionWith({
-            response,
-            type: successType
-        })),
-        error => next(actionWith({
-            type: failureType,
-            error: error.message || 'Error Calling cloud API'
         }))
     )
 }

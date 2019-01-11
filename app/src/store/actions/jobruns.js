@@ -1,4 +1,5 @@
-import { CALL_CLOUD_API } from 'store/middleware/api'
+import { CALL_API } from 'store/middleware/api'
+import { getAccountToken } from 'authentication'
 
 //--------------------------------
 
@@ -8,10 +9,11 @@ export const CREATEJOBRUN_FAILURE = 'CREATEJOBRUN_FAILURE'
 
 export const postJobRun = (data, cb) => (dispatch, getState) => {
     dispatch({
-        [CALL_CLOUD_API]: {
+        [CALL_API]: {
             types: [CREATEJOBRUN_REQUEST, CREATEJOBRUN_SUCCESS, CREATEJOBRUN_FAILURE],
             endpoint: '/jobruns',
             method: 'POST',
+            token: getAccountToken(),
             data: data,
             callback: cb
         }
@@ -31,10 +33,11 @@ export const fetchJobRunsWithRepeat = (query, cb, schedules) => (dispatch, getSt
     var count = 1
     let run = function () {
         dispatch({
-            [CALL_CLOUD_API]: {
+            [CALL_API]: {
                 types: [FETCHJOBRUNS_REQUEST, FETCHJOBRUNS_SUCCESS, FETCHJOBRUNS_FAILURE],
                 endpoint: '/jobruns/search' + (query ? query : ''),
                 method: 'GET',
+                token: getAccountToken(),
                 callback: cb
             }
         })
@@ -54,10 +57,11 @@ export const fetchJobRunsWithRepeat = (query, cb, schedules) => (dispatch, getSt
 
 export const fetchJobRuns = (query, cb) => (dispatch, getState) => {
     dispatch({
-        [CALL_CLOUD_API]: {
+        [CALL_API]: {
             types: [FETCHJOBRUNS_REQUEST, FETCHJOBRUNS_SUCCESS, FETCHJOBRUNS_FAILURE],
             endpoint: '/jobruns/search' + (query ? query : ''),
             method: 'GET',
+            token: getAccountToken(),
             callback: cb
         }
     })

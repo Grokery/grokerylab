@@ -6,7 +6,6 @@ import { updateNode } from 'store/actions'
 import D3DataFlow from 'shared/D3DataFlow/D3DataFlow'
 import JobDetails from './jobs/JobDetails'
 import SourceDetails from './sources/SourceDetails'
-import ChartDetails from './charts/ChartDetails'
 import BoardDetails from './boards/BoardDetails'
 import './NodeDetails.css'
 
@@ -15,7 +14,7 @@ const flowPreviewHeight = 350
 class NodeDetails extends Component {
   static propTypes = {
     updateNode: PropTypes.func.isRequired,
-    node: PropTypes.object
+    node: PropTypes.object.isRequired,
   }
   render() {
     const { params, location } = this.props
@@ -28,6 +27,7 @@ class NodeDetails extends Component {
     return (
       <div className='page-content white'>
         <D3DataFlow
+          params={params}
           showControls={false}
           selectedNodeId={params.nodeId}
           height={flowPreviewHeight - 50}
@@ -58,7 +58,7 @@ class NodeDetails extends Component {
       <div className='btn-group pull-right item-options'>
           <a href='' onClick={this.toggleEditDialog.bind(this)} className='btn btn-default'><i className='fa fa-cog'></i></a>
           <a href='' onClick={toggleNodeDetailsPain} className='btn btn-default'><i className='fa fa-arrows-v'></i></a>
-          <a href={"#/clouds/"+ params.cloudName + "/flows?nodeId="+node.nodeId} className='btn btn-default'><i className='fa fa-times'></i></a>
+          <a href={"#/clouds/"+ params.cloudName + "/flows?nodeId=" + node.nodeId} className='btn btn-default'><i className='fa fa-times'></i></a>
       </div>
     )
   }
@@ -97,13 +97,11 @@ class NodeDetails extends Component {
     window.scrollTo(0,0)
   }
   onUpdate(nodeData) {
-    const { updateNode, node } = this.props
+    const { updateNode, node, params } = this.props
     nodeData.nodeId = node.nodeId
     nodeData.nodeType = node.nodeType
     nodeData.subType = nodeData.subType ? nodeData.subType : node.subType
-    console.log("updateing node details: ")
-    console.log(nodeData)
-    updateNode(nodeData)
+    updateNode(params.cloudName, nodeData)
   }
 
 }

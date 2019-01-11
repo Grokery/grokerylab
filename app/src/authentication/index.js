@@ -1,4 +1,5 @@
-import { ADMIN_API_BASE_URL } from "config"
+import { get } from 'lodash'
+import { API_BASE_URL } from "config"
 import { history } from 'index'
 
 export const setRedirectUrl = (url) => {
@@ -36,7 +37,7 @@ export const authenticate = (user, pass) => {
         headers: new Headers({'Content-Type':'application/json'}),
         body: JSON.stringify({username: user, password: pass})
     }
-    return fetch(ADMIN_API_BASE_URL+"/users/authenticate", params)
+    return fetch(API_BASE_URL+"/users/authenticate", params)
         .then(response =>
             response.json().then(json => {
                 if (!response.ok) {
@@ -59,33 +60,15 @@ export const disAuthenticate = () => {
 }
 
 export const getAccountToken = () => {
-    return getSessionInfo()['accountToken']
+    return get(getSessionInfo(), ['accountToken'], null)
 }
 
-export const setSelectedCloudName = (name) => {
-    sessionStorage.setItem("selectedCloudName", name)
+export const getCloudId = (cloudName) => {
+    return get(getSessionInfo(), ['clouds', cloudName, 'cloudId'], null)
 }
 
-export const getSelectedCloudName = () => {
-    return sessionStorage.getItem("selectedCloudName")
-}
-
-export const getSelectedCloudId = () => {
-    return getSessionInfo()['clouds'][getSelectedCloudName()]['cloudId']
-}
-
-export const getSelectedCloudUrl = () => {
-    return getSessionInfo()['clouds'][getSelectedCloudName()]['url']
-}
-
-export const getSelectedCloudToken = () => {
-    return getSessionInfo()['clouds'][getSelectedCloudName()]['cloudToken']
-}
-
-export const setBaseUrlForCloudName = (name, url) => {
-    var sessionInfo = getSessionInfo()
-    sessionInfo['clouds'][name]['url'] = url
-    setSessionInfo(sessionInfo)
+export const getCloudToken = (cloudName) => {
+    return get(getSessionInfo(), ['clouds', cloudName, 'cloudToken'], null)
 }
 
 export const addNewCloudToSession = (cloud) => {

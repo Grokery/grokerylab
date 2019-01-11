@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+
 import { getSessionInfo } from 'authentication'
 import CloudSection from './CloudSection/CloudSection'
 import CreateEditCloudModel from './CreateEditCloudModel/CreateEditCloudModel'
@@ -8,17 +9,16 @@ import './Home.css'
 
 class Home extends Component {
   static propTypes = {
-    username: PropTypes.string,
-    clouds: PropTypes.object
+    sessionInfo: PropTypes.object.isRequired,
   }
   constructor(props) {
     super(props)
-      this.state = {
-        showCreateModel: false
-      }
+    this.state = {
+      showCreateModel: false
+    }
   }
   getCloudSections() {
-    const { clouds } = this.props
+    const { clouds } = this.props.sessionInfo
     let sections = []
     Object.keys(clouds).forEach(function(name) {
       sections.push(
@@ -31,11 +31,11 @@ class Home extends Component {
     this.setState({showCreateModel: !this.state.showCreateModel})
   }
   render() {
-    let { username } = this.props
+    let { name } = this.props.sessionInfo
     return (
       <div id='Home' className='page-content home'>
         <div className='user-section'>
-          {<h1>Hi {username}</h1>}
+          {<h1>Hi {name}</h1>}
         </div>
         <CreateEditCloudModel 
             key="createnew" 
@@ -56,16 +56,8 @@ class Home extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  let sessionInfo = getSessionInfo()
-  if (!sessionInfo) {
-    sessionInfo = {
-      username: "",
-      clouds:{}
-    }
-  }
   return {
-    username: sessionInfo['name'],
-    clouds: sessionInfo['clouds']
+    sessionInfo: getSessionInfo(),
   }
 }
 

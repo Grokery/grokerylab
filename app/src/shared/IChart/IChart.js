@@ -38,11 +38,11 @@ class IChart extends Component {
         )
     }
     componentDidMount() {
-        const { fetchNode, id } = this.props
+        const { fetchNode, id, params } = this.props
         if (!id) {
             return
         }
-        fetchNode('CHART', id)
+        fetchNode(params.cloudId, 'CHART', id)
         this._render()
     }
     componentDidUpdate() {

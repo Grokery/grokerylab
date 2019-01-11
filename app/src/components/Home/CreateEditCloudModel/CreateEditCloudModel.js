@@ -6,14 +6,14 @@ import { addNewCloudToSession } from 'authentication'
 import Modal from 'shared/Modal/Modal'
 import Loader from 'shared/Loader/Loader'
 import { createCloud, updateCloud } from 'store/actions'
-import { ADMIN_API_BASE_URL } from 'config'
+import { API_BASE_URL } from 'config'
 import './CreateEditCloudModel.css'
 
 let defaultData = {
   title: 'New Cloud',
   name: 'newcloud',
   cloudType: 'AWS',
-  url: ADMIN_API_BASE_URL,
+  url: API_BASE_URL,
   password: '',
   adminAccess: {
     credentials: {
@@ -95,7 +95,7 @@ class CreateEditCloudModel extends Component {
       })
     } else if (this.props.isEdit) {
       let { updateCloud } = this.props
-      updateCloud(this.props.cloudId, this.state.data, () => {
+      updateCloud(this.props.params.cloudName, this.state.data, () => {
         this.setState({
           working: false,
         })

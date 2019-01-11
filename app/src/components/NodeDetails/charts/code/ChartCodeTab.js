@@ -20,8 +20,8 @@ class ChartCodeTab extends Component {
       }
   }
   componentDidMount() {
-    const { fetchNode, params } = this.props
-    fetchNode('CHART', params.nodeId)
+    const { params, fetchNode, params } = this.props
+    fetchNode( params.cloudName, 'CHART', params.nodeId)
   }
   toggleTemplateModal(e) {
     e.preventDefault()

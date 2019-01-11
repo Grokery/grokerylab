@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { object, func, array } from 'prop-types'
 import { connect } from 'react-redux'
-import { getSelectedCloudUrl, getSelectedCloudToken } from 'authentication'
+import { getAccountToken } from 'authentication'
 import { postJobRun, fetchJobRuns, fetchJobRunsWithRepeat } from 'store/actions'
-
+import { API_BASE_URL } from 'config'
 import './JobInfo.css'
 
 export default connect(
@@ -51,8 +51,8 @@ class JobDetail extends Component {
           "jobRunType": node.subType,
           "lambdaARN": node.lambdaARN,
           "args": {
-              "baseUrl": getSelectedCloudUrl(),
-              "authorization": getSelectedCloudToken(),
+              "baseUrl": API_BASE_URL,
+              "authorization": getAccountToken(),
           }
       }, function() {
           fetchJobRunsWithRepeat("?jobId="+node.nodeId+"&limit=10", null, [[1, 0.0, 5], [1, 2.0, 5]])

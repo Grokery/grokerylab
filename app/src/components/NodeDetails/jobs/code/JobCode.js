@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { get } from 'lodash'
 import CodeEditor from 'shared/CodeEditor/CodeEditor'
 
 import './JobCode.css'
@@ -147,7 +148,7 @@ class JobCodeTab extends Component {
           </div>
           <div className='row'>
             <div className='col-md-12' style={{paddingLeft:'0px',borderTop:'1px solid #ccc'}}> 
-              <CodeEditor value={node['files']['v0']['hello.py']} options={editorOptions} onChange={this.updateCode.bind(this)} />
+              <CodeEditor value={get(node,['files','v0','hello.py','blah'])} options={editorOptions} onChange={this.updateCode.bind(this)} />
             </div>
           </div>
         </div>

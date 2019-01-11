@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getSelectedCloudId, getSelectedCloudName, removeCloudFromSession } from 'authentication'
+import { removeCloudFromSession } from 'authentication'
 import Loader from 'shared/Loader/Loader'
 import { deleteCloud } from 'store/actions'
 
@@ -13,12 +13,13 @@ class Settings extends Component {
           working: false
       }
   }
-  onSubmit(event) {
+  onClick = (event) => {
+    const { params } = this.props
     this.setState({working: true})
     event.preventDefault()
-    this.props.deleteCloud(getSelectedCloudId(), function (response, json) {
+    this.props.deleteCloud(params.cloudName, function (response, json) {
       if (response.ok) {
-        removeCloudFromSession(getSelectedCloudName())
+        removeCloudFromSession(params.cloudName)
       } else {
         alert("Error deleteing cloud")
       }
@@ -35,7 +36,7 @@ class Settings extends Component {
         <div>
           <h1></h1>
           <form>
-            <button className="btn btn-danger" type='button' onClick={this.onSubmit.bind(this)}>Delete Cloud</button>
+            <button className="btn btn-danger" type='button' onClick={this.onClick}>Delete Cloud</button>
           </form>
         </div>
       </div>
