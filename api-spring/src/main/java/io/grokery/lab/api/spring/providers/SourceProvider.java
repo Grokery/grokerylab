@@ -1,5 +1,8 @@
 package io.grokery.lab.api.spring.providers;
 
+import java.util.Iterator;
+import java.util.Map;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -51,8 +54,14 @@ public class SourceProvider {
 			@ApiParam @PathParam("sourceId") String sourceId,
 			@Context UriInfo uriInfo
 	) throws NotAuthorizedException, InvalidInputException, NotFoundException {
-		MultivaluedMap<String, String> query = uriInfo.getQueryParameters();
+		MultivaluedMap<String, String> queryValues = uriInfo.getQueryParameters();
 		LOG.info("GET:{}/clouds/{}/nodes/datasource/{}/query", apiVersion, cloudId, sourceId);
+		JsonObj query = new JsonObj();
+		Iterator it = queryValues.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            query.put(pair.getKey().toString(), pair.getValue());
+        }
 		JsonObj result = SourceService.query(auth, cloudId, sourceId, query);
 		return Response.status(Status.OK).entity(result).build();
 	}

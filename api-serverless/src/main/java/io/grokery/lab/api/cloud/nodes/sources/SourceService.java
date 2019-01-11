@@ -1,7 +1,5 @@
 package io.grokery.lab.api.cloud.nodes.sources;
 
-import javax.ws.rs.core.MultivaluedMap;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +15,7 @@ public class SourceService {
 
     private static final Logger LOG = LoggerFactory.getLogger(SourceService.class);
 
-    public static JsonObj query(String auth, String cloudId, String sourceId, MultivaluedMap<String, String> request) throws NotAuthorizedException, InvalidInputException, NotFoundException {
+    public static JsonObj query(String auth, String cloudId, String sourceId, JsonObj request) throws NotAuthorizedException, InvalidInputException, NotFoundException {
         CloudContext context = new CloudContext(cloudId, auth);
 
         DAO dao = NodesDAO.getInst(context);

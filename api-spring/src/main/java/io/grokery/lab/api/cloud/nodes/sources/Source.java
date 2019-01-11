@@ -2,8 +2,6 @@ package io.grokery.lab.api.cloud.nodes.sources;
 
 import java.util.UUID;
 
-import javax.ws.rs.core.MultivaluedMap;
-
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
@@ -42,7 +40,7 @@ public class Source extends Node {
 		this.setSubType(SourceType.GENERIC.toString());
 	}
 
-	public JsonObj query(CloudContext context, MultivaluedMap<String, String> request) {
+	public JsonObj query(CloudContext context, JsonObj request) {
 		// TODO validate query
 		return this.data;
 	}
