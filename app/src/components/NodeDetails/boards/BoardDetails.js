@@ -36,7 +36,7 @@ class BoardDetails extends Component {
           <Panel title='Code'>
             <BoardCode key={params.nodeId} params={params} onUpdate={onUpdate}></BoardCode>
           </Panel>
-          <Panel title='Data'>
+          {/* <Panel title='Data'>
             <div>
               <p>list sources (from upstream) and set/display data from board:quierys map on lift 
                 with query code and result on right when selected. Also a toggle for pulling data onload
@@ -47,7 +47,7 @@ class BoardDetails extends Component {
                 {this.getSources()}
               </ul>
             </div>
-          </Panel>
+          </Panel> */}
           <Panel title='History'>
             <LogsTab params={this.props.params}></LogsTab>
           </Panel>

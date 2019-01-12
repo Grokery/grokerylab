@@ -20,15 +20,13 @@ class IBoardFrame extends Component {
     }
     render() {
         const { board, width, height, cloudName } = this.props
+        
         let upstreamId = board.upstream[0]['nodeId']
         let url = API_BASE_URL + '/clouds/' + getCloudId(cloudName) + '/nodes/datasource/' + upstreamId + '/query'
         let token = getCloudToken(cloudName)
         let source = board.source
         source = source.replace(/URL/g, JSON.stringify(url))
         source = source.replace(/TOKEN/g, JSON.stringify(token))
-
-        // let fetchParams = ''+url+', {headers:{"Authorization":'+token+'}}'
-        // source = source.replace('FETCH_PARAMS', fetchParams)
 
         return (
             <iframe id={board.nodeId} srcDoc={source} style={{border:'none',width:width,height:height}}></iframe>

@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { getSessionInfo } from 'authentication'
 import { NODETYPE } from 'common'
 
+import IBoardFrame from 'shared/IBoardFrame/IBoardFrame'
 import './Boards.css'
 
 class Boards extends Component {
@@ -16,9 +17,9 @@ class Boards extends Component {
     return (
       <div className='page-content'>
         <div id='boards-page-content'>
-          <ul>
+
             {this.getBoardLinks()}
-          </ul>
+
         </div>
       </div>
     )
@@ -26,7 +27,14 @@ class Boards extends Component {
   getBoardLinks() {
     const { boards, cloudName } = this.props
     return boards.map((board) => {
-      return (<li key={board.nodeId}><a href={'#/clouds/'+cloudName+'/boards/'+board.nodeId}>{board.title}</a></li>)
+      return (
+        <div key={board.nodeId} style={{float:'left',marginTop:10,marginLeft:10,border:'solid 1px #ddd',padding:5}}>
+          <div>
+            <a href={'#/clouds/'+cloudName+'/boards/'+board.nodeId}>{board.title}</a>
+          </div>
+          <IBoardFrame cloudName={cloudName} boardId={board.nodeId} width={430} height={250}></IBoardFrame>
+        </div>
+      )
     })
   }
 }
