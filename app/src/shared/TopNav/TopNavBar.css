@@ -78,6 +78,10 @@
   font-size: 18px;
 }
 
+#top-nav-wrapper #top-menu-wrapper .dropdown-menu li a:focus  {
+  background-color: #4c5763;
+}
+
 #top-nav-wrapper #top-menu-wrapper .dropdown-menu li a:hover {
   background-color: #373F48;
 }

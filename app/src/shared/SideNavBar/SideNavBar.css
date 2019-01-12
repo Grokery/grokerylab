@@ -35,6 +35,10 @@
     padding-top: 15px;
 }
 
+.sidebar ul li a:focus {
+    background-color:#4c5763; 
+}
+
 .sidebar ul li a.active,
 .sidebar ul li a:hover {
     color: #fff;
