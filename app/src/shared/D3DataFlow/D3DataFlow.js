@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { history } from 'index'
 import { setD3State, createNode, updateNode, deleteNode } from 'store/actions'
-import { NODETYPE } from 'common'
+import { NODETYPE, getQueryParamByName } from 'common'
 import d3 from 'd3'
 import './D3DataFlow.css'
 
@@ -815,11 +815,12 @@ class D3DataFlow extends Component {
           d3state.dragging = false
           this.onUpdateNodes(d3state.changedNodes)
       } else if (d3state.dblClickNodeTimeout) {
-          history.push('/clouds/'+ params.cloudName + '/flows/' + d.nodeType.toLowerCase() + '/' + d.nodeId + '?flow=open')
+          history.push('/clouds/'+ params.cloudName + '/flows/' + d.nodeType.toLowerCase() + '/' + d.nodeId + '?flow=closed')
       } else {
         if (this.props.singleClickNav) {
+            let tabIndex = getQueryParamByName('activeTab')
             this.clearAllSelection()
-            history.push('/clouds/'+ params.cloudName + '/flows/' + d.nodeType.toLowerCase() + '/' + d.nodeId + '?flow=open')
+            history.push('/clouds/'+ params.cloudName + '/flows/' + d.nodeType.toLowerCase() + '/' + d.nodeId + '?flow=open&activeTab=' + tabIndex)
         } else {
             if (this.d3state.selectedNodes[d.nodeId]) {
                 this.removeNodeFromSelected(d)
@@ -872,7 +873,7 @@ class D3DataFlow extends Component {
       }.bind(this)
   }
   createJob(xy) {
-      this.createNode({
+    this.createNode({
         nodeType: NODETYPE.JOB,
         subType: 'GENERIC',
         title: 'New Job',
@@ -881,10 +882,10 @@ class D3DataFlow extends Component {
         downstream: [],
         x: xy[0],
         y: xy[1]
-      })
+    })
   }
   createSource(xy) {
-      this.createNode({
+    this.createNode({
         nodeType: NODETYPE.SOURCE,
         subType: 'GENERIC',
         title: 'New Source',
@@ -893,10 +894,10 @@ class D3DataFlow extends Component {
         downstream: [],
         x: xy[0],
         y: xy[1]
-      })
+    })
   }
   createBoard(xy) {
-      this.createNode({
+    this.createNode({
         nodeType: NODETYPE.BOARD,
         subType: 'GENERIC',
         title: 'New Board',
@@ -905,12 +906,13 @@ class D3DataFlow extends Component {
         downstream: [],
         x: xy[0],
         y: xy[1]
-      })
+    })
   }
-  createNode(newNode, tempNode) {
-      newNode.x -= this.d3state.shapeWidth/2
-      newNode.y -= this.d3state.shapeHeight/2
-      this.props.createNode(newNode, null)
+  createNode(newNode) {
+    const { params } = this.props
+    newNode.x -= this.d3state.shapeWidth/2
+    newNode.y -= this.d3state.shapeHeight/2
+    this.props.createNode(params.cloudName, newNode)
   }
   onSave() {
     this.onUpdateNodes(this.d3state.changedNodes)

@@ -27,8 +27,9 @@ class Board extends Component {
     return (
       <div className='page-content'>
         <div>
-          <a href={'#/clouds/'+cloudName+'/flows/board/'+node.nodeId+'?flow=open'} style={{position: 'absolute', right:25, padding:15}}><i className='fa fa-share-alt fa-fw'></i></a>
-          <a href={'#/clouds/' + cloudName + '/boards'} style={{position: 'absolute', right:0, padding:15}}><i className='fa fa-times'></i></a>
+          <a href={'#/clouds/'+cloudName+'/flows?nodeId='+node.nodeId} style={{position: 'absolute', right:55, padding:15}}><i className='fa fa-share-alt fa-fw'></i></a>
+          <a href={'#/clouds/'+cloudName+'/flows/board/'+node.nodeId+'?flow=closed&activeTab=2'} style={{position: 'absolute', right:25, padding:15}}><i className='fa fa-pencil fa-fw'></i></a>
+          <a href={'#/clouds/'+cloudName+'/boards'} style={{position: 'absolute', right:0, padding:15}}><i className='fa fa-times'></i></a>
           <div style={{paddingTop:30}}>
             <IBoardFrame cloudName={cloudName} boardId={node.nodeId} width={window.innerWidth - 64} height={window.innerHeight-50}></IBoardFrame>
           </div>
