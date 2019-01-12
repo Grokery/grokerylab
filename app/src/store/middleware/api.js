@@ -18,8 +18,7 @@ const callApi = (baseUrl, actionInfo) => {
         params['body'] = JSON.stringify(data)
     }
     return fetch(baseUrl + endpoint, params)
-        .then(response =>
-            response.json().then(json => {
+        .then(response => response.json().then(json => {
                 if (!response.ok) {
                     return Promise.reject(json)
                 }

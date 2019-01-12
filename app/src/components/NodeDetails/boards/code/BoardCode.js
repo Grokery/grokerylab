@@ -34,7 +34,7 @@ class BoardCode extends Component {
     let editorOptions = {
       lineNumbers: true,
       dragDrop: false,
-      mode: {name: "html"},
+      mode: {name: "htmlmixed"},
       height: 'auto',
     }
     let synced = this.state.draft === node.source
