@@ -13,29 +13,51 @@ class Boards extends Component {
     cloudInfo: PropTypes.object.isRequired,
     boards: PropTypes.array.isRequired,
   }
+  constructor(props) {
+    super(props)
+    this.state = {
+      hover: false,
+    }
+  }
   render() {
     return (
       <div className='page-content'>
         <div id='boards-page-content'>
-
             {this.getBoardLinks()}
-
         </div>
       </div>
     )
   }
   getBoardLinks() {
     const { boards, cloudName } = this.props
-    return boards.map((board) => {
+    const { hover } = this.state
+    let visibility = hover ? 'visible' : 'hidden'
+    return boards.sort(this.boardSort).map((board) => {
       return (
-        <div key={board.nodeId} style={{float:'left',marginTop:10,marginLeft:10,border:'solid 1px #ddd',padding:5}}>
-          <div>
-            <a href={'#/clouds/'+cloudName+'/boards/'+board.nodeId}>{board.title}</a>
+        <div key={board.nodeId} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} style={{float:'left',marginTop:10,marginLeft:10,border:'solid 1px #ddd',padding:5}}>
+          <div style={{position:'relative'}}>
+            <a href={'#/clouds/'+cloudName+'/boards/'+board.nodeId} style={{float:'left'}}>{board.title}</a>
+            <div style={{float:'right', visibility:visibility}}>
+              <a href={'#/clouds/'+cloudName+'/flows?nodeId='+board.nodeId} style={{float:'right', marginRight:0}}><i className='fa fa-share-alt fa-fw'></i></a>
+              <a href={'#/clouds/'+cloudName+'/flows/board/'+board.nodeId+'?flow=closed&activeTab=2'} style={{float:'right', marginRight:10}}><i className='fa fa-pencil fa-fw'></i></a>  
+            </div>
           </div>
           <IBoardFrame cloudName={cloudName} boardId={board.nodeId} width={430} height={250}></IBoardFrame>
         </div>
       )
     })
+  }
+  boardSort = (a, b) => {
+    console.log(b.sortRank)
+    console.log(a.sortRank)
+    console.log((b.sortRank || 0) - (a.sortRank || 0))
+    return (b.sortRank || 0) - (a.sortRank || 0)
+  }
+  onMouseOver = (e) => {
+    this.setState({hover:true})
+  }
+  onMouseOut = (e) => {
+    this.setState({hover:false})
   }
 }
 

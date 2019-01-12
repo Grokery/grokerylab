@@ -37,7 +37,8 @@ public class NodesService {
 		CloudContext context = new CloudContext(cloudId, auth);
 
 		DAO dao = NodesDAO.getInst(context);
-		Node existing = Node.fromJsonObj(dao.get(nodeType, nodeId), context);
+		JsonObj rawExisting = dao.get(nodeType, nodeId);
+		Node existing = Node.fromJsonObj(rawExisting, context);
 
 		String nodeSubType = data.getOrDefault(Node.getNodeSubTypeName(), "").toString();
 		if (nodeSubType.equals("") || nodeSubType.equals(existing.getSubType().toString())) {

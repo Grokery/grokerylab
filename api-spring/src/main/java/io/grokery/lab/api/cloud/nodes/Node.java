@@ -28,7 +28,7 @@ public class Node {
 	private String subType;
 	private String created;
 	private String updated;
-
+	private Double sortRank;
 	private String title;
 	private String description;
 	private Double x;
@@ -36,6 +36,10 @@ public class Node {
 	private List<Map<String, Object>> upstream;
 	private List<Map<String, Object>> downstream;
 	private List<String> secrets;
+
+	public Node() {
+		this.initializeDefaults();
+	}
 
 	public static String getNodeIdName() {
 		return "nodeId";
@@ -53,7 +57,7 @@ public class Node {
 		this.nodeId = UUID.randomUUID().toString();
 		this.created = new DateTime(DateTimeZone.UTC).toString();
 		this.updated = new DateTime(DateTimeZone.UTC).toString();
-
+		this.sortRank = 0.0;
 		this.title = "New Node";
 		this.description = "Default description.";
 		this.x = new Double(0);
@@ -67,8 +71,9 @@ public class Node {
 	public void setValues(JsonObj newData) {
 		this.updated = new DateTime(DateTimeZone.UTC).toString();
 
-		this.title = newData.get("title") != null ? newData.getString("title") : this.title;
-		this.description = newData.get("description") != null ? newData.getString("description") : this.description;
+		this.sortRank = newData.get("sortRank") != null ? new Double(newData.get("sortRank").toString()) : this.x;
+		this.title = newData.getString("title", this.title);
+		this.description = newData.getString("description", this.description);
 		this.x = newData.get("x") != null ? new Double(newData.get("x").toString()) : this.x;
 		this.y = newData.get("y") != null ? new Double(newData.get("y").toString()) : this.y;
 		this.upstream = newData.get("upstream") != null ? MapperUtil.getInstance().convertValue(newData.get("upstream"), ArrayList.class) : this.upstream;
@@ -176,7 +181,12 @@ public class Node {
 	public void setUpdated(String updated) {
 		this.updated = updated;
 	}
-
+	public Double getSortRank() {
+		return sortRank;
+	}
+	public void setSortRank(Double sortRank) {
+		this.sortRank = sortRank;
+	}
 	public String getTitle() {
 		return title;
 	}
@@ -213,11 +223,9 @@ public class Node {
 	public void setDownstream(List<Map<String, Object>> downstream) {
 		this.downstream = downstream;
 	}
-
 	public List<String> getSecrets() {
 		return secrets;
 	}
-
 	public void setSecrets(List<String> secrets) {
 		this.secrets = secrets;
 	}
