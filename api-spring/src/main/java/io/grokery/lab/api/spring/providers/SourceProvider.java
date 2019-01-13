@@ -47,7 +47,7 @@ public class SourceProvider {
 
 	@GET
 	@Path("/query")
-	@ApiOperation(value = "Query source data", response = JsonObj.class)
+	@ApiOperation(value = "Query source data", response = Object.class)
 	public Response query(
 			@HeaderParam("Authorization") String auth,
 			@ApiParam @PathParam("cloudId") String cloudId,
@@ -62,7 +62,7 @@ public class SourceProvider {
             Map.Entry pair = (Map.Entry)it.next();
             query.put(pair.getKey().toString(), pair.getValue());
         }
-		JsonObj result = SourceService.query(auth, cloudId, sourceId, query);
+		Object result = SourceService.query(auth, cloudId, sourceId, query);
 		return Response.status(Status.OK).entity(result).build();
 	}
 

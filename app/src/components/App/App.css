@@ -1,5 +1,4 @@
 color-scheme {
-
   /* blue */
   color: #1f77b4;
   /* orange */
@@ -26,14 +25,10 @@ color-scheme {
   color: #FBFCFF;
   /* font color dark */
   color: #373F48;
-
 }
 
 html,
 body {
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
   font-family: "Open Sans", sans-serif;
   box-sizing: border-box;
 }
@@ -72,42 +67,58 @@ a i:hover {
   color: #0291E3;
 }
 
+
+
 .page-content {
-  display: flex;
-  margin-top: 50px;
+  padding-top: 50px;
+}
+.sidebar-page {
+  padding-left: 64px;
 }
 
-.sidebar-page {
-  margin-left: 64px;
-}
+
 
 .btn-primary {
   background-color: #4C5763;
   border-color: #4C5763;
 }
-
 .btn-primary:hover {
   background-color: #0291E3;
   border-color: #0291E3;
 }
 
+
+.modal-body {
+  max-height: calc(100vh - 210px);
+  overflow-y: auto;
+}
 .modal .modal-dialog {
   min-width: 60%;
 }
-
 .modal .modal-body {
-  overflow-y: auto;
+  overflow-y: scroll;
 }
-
 .modal .form-help-text {
   font-size: small;
   color: #4C5763
 }
-
 .modal .ReactCodeMirror .CodeMirror {
   height: auto;
 }
-
 .modal .modal-title {
   display: inline-block;
+}
+
+
+.CodeMirror-linenumbers {
+  background-color: #e7ebee;
+}
+
+
+@media(min-width: 768px) {
+
+}
+
+@media(max-width: 768px) {
+
 }

@@ -31,12 +31,8 @@ class Home extends Component {
     this.setState({showCreateModel: !this.state.showCreateModel})
   }
   render() {
-    let { name } = this.props.sessionInfo
     return (
-      <div id='Home' className='page-content home'>
-        <div className='user-section'>
-          {<h1>Hi {name}</h1>}
-        </div>
+      <div className='page-content home'>
         <CreateEditCloudModel 
             key="createnew" 
             shown={this.state.showCreateModel} 

@@ -4,43 +4,21 @@
   text-decoration: none;
 }
 
-.home .cloud-icon {
-  height: 25px;
-  padding-bottom:5px;
-  margin-right:5px;
-}
-
 .home .new-cloud-button {
   margin: auto;
   display: block;
 }
 
-.home .user-section {
-  width: 20%;
-}
-
-.home .user-section {
-  background-color: #4C5763;
-  height: 800px
-}
-
-.home .user-section h1 {
-  color: #FBFCFF;
-  margin-left: 20px;
-  margin-top: 20px;
-}
-
-
 .home #new-cloud-btn {
   font-size: large;
   padding: 10px;
+  width: 100%;
 }
 
 .home .cloud-sections {
-  width: 80%;
+  width: 100%;
   padding-left: 30px;
   padding-right: 30px;
-  margin-top: 20px;
 }
 
 .home .cloud-sections hr {
@@ -51,4 +29,11 @@
   padding-top: 20px;
   margin:0;
   clear: both;
+}
+
+@media(min-width: 768px) {
+
+}
+
+@media(max-width: 768px) {
 }

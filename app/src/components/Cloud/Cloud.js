@@ -6,6 +6,7 @@ import { history } from 'index'
 import { getCloudId } from 'authentication'
 import { fetchNodes, clearNodes, fetchCloud, fetchOptions } from 'store/actions'
 import SideNavBar from 'shared/SideNavBar/SideNavBar'
+import './Cloud.css'
 
 class Cloud extends Component {
   static propTypes = {

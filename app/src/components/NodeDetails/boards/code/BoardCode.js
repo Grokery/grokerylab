@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import CodeEditor from 'shared/CodeEditor/CodeEditor'
 
+import CodeEditor from 'shared/CodeEditor/CodeEditor'
 import './BoardCode.css'
 
 class BoardCode extends Component {

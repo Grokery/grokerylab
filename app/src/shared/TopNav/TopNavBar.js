@@ -39,6 +39,10 @@ class TopNavBar extends Component {
             </nav>
         )
     }
+    onClick = (e) => {
+        document.getElementById('nav-dropdown').classList.remove("open")
+    }
+
     getRightNav() {
         const { isAuthenticated } = this.props
         if (!isAuthenticated()) {
@@ -52,9 +56,9 @@ class TopNavBar extends Component {
                         <i className='fa fa-caret-down'></i>
                     </a>
                     <ul className='dropdown-menu dropdown-user pull-right' onMouseLeave={() => this.closeDropDown()}>
-                        <li><a href='#/'><i className='fa fa-home fa-fw'></i><span>Home</span></a></li>
-                        <li><a href='#/account'><i className='fa fa-user fa-fw'></i><span>Account</span></a></li>
-                        <li><a href='#/signout'><i className='fa fa-sign-out fa-fw'></i><span>Sign Out</span></a></li>
+                        <li><a href='#/' onClick={this.onClick}><i className='fa fa-home fa-fw'></i><span>Home</span></a></li>
+                        <li><a href='#/account' onClick={this.onClick}><i className='fa fa-user fa-fw'></i><span>Account</span></a></li>
+                        <li><a href='#/signout' onClick={this.onClick}><i className='fa fa-sign-out fa-fw'></i><span>Sign Out</span></a></li>
                     </ul>
                 </li>
             </ul>

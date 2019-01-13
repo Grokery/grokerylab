@@ -1,6 +1,7 @@
 import { get } from 'lodash'
 import { API_BASE_URL } from "config"
 import { history } from 'index'
+import { isFunction } from 'util';
 
 export const setRedirectUrl = (url) => {
     sessionStorage.setItem("redirectUrl", url)
@@ -30,29 +31,39 @@ export const isAuthenticated = () => {
     return false
 }
 
-export const authenticate = (user, pass) => {
+export const authenticate = (user, pass, onSuccess, onError) => {
     var params = {
         method: 'POST',
         mode: 'cors',
         headers: new Headers({'Content-Type':'application/json'}),
-        body: JSON.stringify({username: user, password: pass})
+        body: JSON.stringify({username: user, password: pass}),
     }
-    return fetch(API_BASE_URL+"/users/authenticate", params)
-        .then(response =>
-            response.json().then(json => {
-                if (!response.ok) {
-                    return Promise.reject(json)
-                }
-                setSessionInfo(json)
-                let redirectUrl = getRedirectUrl()
-                if (redirectUrl) {
-                    setRedirectUrl('')
-                    history.replace(redirectUrl)
-                } else {
-                    history.replace("/")
-                }
-            })
-        )
+    return fetch(API_BASE_URL + "/users/authenticate", params)
+        .then((response) => {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+            return response.json()
+        })
+        .then((json) => {
+            if (isFunction(onSuccess)) {
+                onSuccess(json);
+            }
+            setSessionInfo(json)
+            let redirectUrl = getRedirectUrl()
+            if (redirectUrl) {
+                setRedirectUrl('')
+                history.replace(redirectUrl)
+            } else {
+                history.replace("/")
+            }
+        })
+        .catch((errorMsg) => {
+            if (isFunction(onError)) {
+                onError(errorMsg);
+            }
+            alert(errorMsg)
+        });
 }
 
 export const disAuthenticate = () => {

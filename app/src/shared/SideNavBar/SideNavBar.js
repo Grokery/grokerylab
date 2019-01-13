@@ -13,11 +13,31 @@ export default class SideNavBar extends Component {
             <div id='side-menu-wrapper' className='navbar-default sidebar' role='navigation'>
                 <div className='sidebar-nav navbar-collapse'>
                     <ul id='side-menu' className='nav'>
-                        <li title="Home"><a href={'/#'}><i className='fa fa-home fa-fw'></i></a></li>
-                        <hr className='sidebar-section-devider'></hr>
-                        <li title="DashBoards"><a href={basepath+'/boards'} className='sidebar-link'><i className='fa fa-tachometer fa-fw'></i></a></li>
-                        <li title="DataFlows"><a href={basepath+'/flows'} className="sidebar-link"><i className='fa fa-share-alt fa-fw'></i></a></li>
-                        <li title="Users"><a href={basepath+'/users'} className="sidebar-link"><i className='fa fa-users fa-fw'></i></a></li>
+                        <li title="Home">
+                            <a href={'/#'}>
+                                <i className='fa fa-home fa-fw'></i>
+                                <span className='side-menu-link-text'>Home</span>
+                            </a>
+                        </li>
+                        {/* <hr className='sidebar-section-devider'></hr> */}
+                        <li title="DashBoards">
+                            <a href={basepath+'/boards'} className='sidebar-link'>
+                                <i className='fa fa-tachometer fa-fw'></i>
+                                <span className='side-menu-link-text'>DashBoards</span>
+                            </a>
+                        </li>
+                        <li title="DataFlows">
+                            <a href={basepath+'/flows'} className="sidebar-link">
+                                <i className='fa fa-share-alt fa-fw'></i>
+                                <span className='side-menu-link-text'>DataFlows</span>
+                            </a>
+                        </li>
+                        <li title="Users">
+                            <a href={basepath+'/users'} className="sidebar-link">
+                                <i className='fa fa-users fa-fw'></i>
+                                <span className='side-menu-link-text'>Users</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>

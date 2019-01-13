@@ -113,11 +113,3 @@
 #top-nav-wrapper #menu-toggle.toggled {
   display: inline-block;
 }
-
-@media(max-width: 767px) {
-
-  #top-nav-wrapper #menu-toggle {
-    display: inline-block;
-  }
-
-}

@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+
 import { authenticate, isAuthenticated, disAuthenticate } from 'authentication'
 import { history } from 'index'
+import Loader from 'shared/Loader/Loader'
 import './Auth.css'
 
 class Auth extends Component {
@@ -11,6 +13,12 @@ class Auth extends Component {
     isAuthenticated: PropTypes.func.isRequired,
     disAuthenticate: PropTypes.func.isRequired
   }
+  constructor(props) {
+    super(props)
+    this.state = {
+      showLoading: false
+    }
+  }
   componentWillMount() {
     const { isAuthenticated, disAuthenticate} = this.props
     if (isAuthenticated()){
@@ -18,12 +26,15 @@ class Auth extends Component {
       history.push("/")
     }
   }
-  onSubmit(event) {
+  onSubmit = (event) => {
     event.preventDefault()
-    const { authenticate } = this.props
+    this.setState({showLoading:true})
+    let cb = () => {
+      this.setState({showLoading:false})
+    }
     let username = document.getElementsByName('username')[0].value
     let password = document.getElementsByName('password')[0].value
-    authenticate(username, password)
+    this.props.authenticate(username, password, cb, cb)
   }
   render() {
     return (
@@ -34,27 +45,25 @@ class Auth extends Component {
                 <div className="panel panel-default">
        
                   <div className="panel-body">
-                    <form role="form" onSubmit={this.onSubmit.bind(this)}>
+                    <Loader show={this.state.showLoading}></Loader>
+                    <form role="form" onSubmit={this.onSubmit}>
                       <fieldset>
                         <div className="form-group">
                           <input className="form-control" name="username" type="text" />
-                      </div>
-                      <div className="form-group">
-                        <input className="form-control" name="password" type="password" />
-                      </div>
-                      <input className="btn btn-lg btn-primary btn-block" type="submit" value="Sign In" onClick={this.onSubmit.bind(this)} />
-                    </fieldset>
-                    <div className="panel-headin">
-                    {/* <span>Please Authenticate</span> */}
-                    <span className="pull-right"><a href='https://grokery.io'>sign up</a> | <a href="https://grokery.io">reset pass</a></span>
+                        </div>
+                        <div className="form-group">
+                          <input className="form-control" name="password" type="password" />
+                        </div>
+                        <input className="btn btn-lg btn-primary btn-block" type="submit" value="Sign In" onClick={this.onSubmit.bind(this)} />
+                      </fieldset>
+                      <span className="pull-right"><a href='https://grokery.io'>sign up</a> | <a href="https://grokery.io">reset pass</a></span>
+                    </form>
                   </div>
-                      </form>
-                  </div>
+
               </div>
             </div>
           </div>
         </div>
-        {this.props.children}
       </div>
     )
   }
@@ -68,6 +77,4 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps, {
-
-})(Auth)
+export default connect(mapStateToProps, {})(Auth)

@@ -48,7 +48,11 @@ class Boards extends Component {
     })
   }
   boardSort = (a, b) => {
-    return (b.sortRank || 0) - (a.sortRank || 0)
+    let rank = (b.sortRank || 0) - (a.sortRank || 0)
+    if (rank === 0) {
+      rank = b.updated.localeCompare(a.updated) 
+    }
+    return rank
   }
   onMouseOver = (e) => {
     this.setState({hover:true})

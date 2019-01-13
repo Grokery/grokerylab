@@ -1,7 +1,5 @@
 package io.grokery.lab.api.cloud.nodes.sources;
 
-import java.util.UUID;
-
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
@@ -26,8 +24,8 @@ public class Source extends Node {
 
 	private static final Logger LOG = LoggerFactory.getLogger(Source.class);
 
-	private UUID templateId;
-	private JsonObj data;
+	private String templateId;
+	private Object data;
 
 	public Source() {
 		this.initializeDefaults();
@@ -38,14 +36,23 @@ public class Source extends Node {
 
 		this.setNodeType(NodeType.SOURCE.toString());
 		this.setSubType(SourceType.GENERIC.toString());
+		this.setData(new JsonObj());
 	}
 
-	public JsonObj query(CloudContext context, JsonObj request) {
+	public void setValues(JsonObj newData) {
+		super.setValues(newData);
+
+		this.templateId = newData.get("templateId") != null ? newData.getString("templateId") : this.templateId;
+		// TODO limit input data size to something reasonable
+		this.data = newData.get("data") != null ? newData.get("data") : this.data;
+	}
+
+	public Object query(CloudContext context, JsonObj request) {
 		// TODO validate query
 		return this.data;
 	}
 
-	public void write(CloudContext context, JsonObj request) throws NotFoundException {
+	public void write(CloudContext context, Object request) throws NotFoundException {
 		// TODO limit input data size to something reasonable
 		this.data = request;
 		DAO dao = NodesDAO.getInst(context);
@@ -80,28 +87,28 @@ public class Source extends Node {
 	/**
 	 * @return the templateId
 	 */
-	public UUID getTemplateId() {
+	public String getTemplateId() {
 		return templateId;
 	}
 
 	/**
 	 * @param templateId the templateId to set
 	 */
-	public void setTemplateId(UUID templateId) {
+	public void setTemplateId(String templateId) {
 		this.templateId = templateId;
 	}
 
 	/**
 	 * @return the data
 	 */
-	public JsonObj getData() {
+	public Object getData() {
 		return data;
 	}
 
 	/**
 	 * @param data the data to set
 	 */
-	public void setData(JsonObj data) {
+	public void setData(Object data) {
 		this.data = data;
 	}
 }
