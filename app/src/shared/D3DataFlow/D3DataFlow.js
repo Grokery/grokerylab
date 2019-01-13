@@ -815,7 +815,7 @@ class D3DataFlow extends Component {
           d3state.dragging = false
           this.onUpdateNodes(d3state.changedNodes)
       } else if (d3state.dblClickNodeTimeout) {
-          history.push('/clouds/'+ params.cloudName + '/flows/' + d.nodeType.toLowerCase() + '/' + d.nodeId + '?flow=closed')
+          history.push('/clouds/'+ params.cloudName + '/flows/' + d.nodeType.toLowerCase() + '/' + d.nodeId + '?flow=open')
       } else {
         if (this.props.singleClickNav) {
             let tabIndex = getQueryParamByName('activeTab')

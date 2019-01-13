@@ -48,9 +48,6 @@ class Boards extends Component {
     })
   }
   boardSort = (a, b) => {
-    console.log(b.sortRank)
-    console.log(a.sortRank)
-    console.log((b.sortRank || 0) - (a.sortRank || 0))
     return (b.sortRank || 0) - (a.sortRank || 0)
   }
   onMouseOver = (e) => {
