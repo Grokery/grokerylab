@@ -70,10 +70,13 @@ a i:hover {
 
 
 .page-content {
-  padding-top: 50px;
+  margin-top: 50px;
 }
 .sidebar-page {
-  padding-left: 64px;
+  margin-left: 64px;
+}
+.sidebar-page {
+  overflow: auto;
 }
 
 

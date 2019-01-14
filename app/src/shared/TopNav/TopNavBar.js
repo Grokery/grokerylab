@@ -30,9 +30,7 @@ class TopNavBar extends Component {
             <nav id='top-nav-wrapper' className='navbar navbar-default navbar-fixed-top' role='navigation'>
                 <div id='top-menu-wrapper'>
                     <div className='navbar-header'>
-                        <a id='menu-toggle' className='navbar-brand' href='#'><i className='fa fa-bars'></i></a>
                         <a className='navbar-brand' href='#'><img alt="Grokery" src="./img/logo-white-on-clear.png"></img></a>
-                        {/* <a className='navbar-brand' href='#/'>GrokeryLab</a> */}
                     </div>
                     {this.getRightNav()}
                 </div>
@@ -42,7 +40,6 @@ class TopNavBar extends Component {
     onClick = (e) => {
         document.getElementById('nav-dropdown').classList.remove("open")
     }
-
     getRightNav() {
         const { isAuthenticated } = this.props
         if (!isAuthenticated()) {

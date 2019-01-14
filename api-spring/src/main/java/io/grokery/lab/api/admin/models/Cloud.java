@@ -30,6 +30,7 @@ public class Cloud implements Serializable {
 	private String description;
     private String url;
 	private List<UserRef> users;
+	private Double sortRank;
 
 	public Cloud() {
 		cloudId = UUID.randomUUID().toString();
@@ -106,6 +107,14 @@ public class Cloud implements Serializable {
 	}
 	public void setUsers(List<UserRef> users) {
 		this.users = users;
+	}
+
+	@DynamoDBAttribute
+	public Double getSortRank() {
+		return sortRank;
+	}
+	public void setSortRank(Double sortRank) {
+		this.sortRank = sortRank;
 	}
 
 	@Override

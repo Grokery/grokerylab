@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import _ from 'lodash'
-import { addNewCloudToSession } from 'authentication'
+import { addNewCloudToSession, removeCloudFromSession } from 'authentication'
 import Modal from 'shared/Modal/Modal'
 import Loader from 'shared/Loader/Loader'
-import { createCloud, updateCloud } from 'store/actions'
+import { createCloud, updateCloud, deleteCloud } from 'store/actions'
 import { API_BASE_URL } from 'config'
 import './CreateEditCloudModel.css'
 
@@ -30,6 +30,7 @@ class CreateEditCloudModel extends Component {
     shown: PropTypes.bool.isRequired,
     createCloud: PropTypes.func.isRequired,
     updateCloud: PropTypes.func.isRequired,
+    deleteCloud: PropTypes.func.isRequired,
     addNewCloudToSession: PropTypes.func.isRequired,
     modalTitle: PropTypes.string,
     isCreate: PropTypes.bool,
@@ -95,7 +96,7 @@ class CreateEditCloudModel extends Component {
       })
     } else if (this.props.isEdit) {
       let { updateCloud } = this.props
-      updateCloud(this.props.params.cloudName, this.state.data, () => {
+      updateCloud(this.props.cloudData.name, this.state.data, () => {
         this.setState({
           working: false,
         })
@@ -107,6 +108,24 @@ class CreateEditCloudModel extends Component {
       // TODO
     }
 
+  }
+  deleteCloud = (e) => {
+    e.preventDefault()
+    const { cloudData } = this.props
+    if (!confirm("Perminantly delete cloud and all cloud data?")) {
+      return
+    }
+    this.setState({working: true})
+    this.props.deleteCloud(cloudData.name, (json, response) => {
+      if (response.ok) {
+        removeCloudFromSession(cloudData.name)
+      } else {
+        alert("Error deleteing cloud")
+        console.log(response)
+      }
+      this.setState({working: false})
+      return json
+    })
   }
   toggleEditModal = () => {
     this.setState(_.cloneDeep(defaultData))
@@ -218,6 +237,7 @@ class CreateEditCloudModel extends Component {
     )
   }
   render() {
+    const { isCreate } = this.props
     return (
         <div id='CreateEditCloudModel' key='add-cloud'>
           <div>
@@ -231,6 +251,7 @@ class CreateEditCloudModel extends Component {
                 {this.getForm()}
               </div>
               <div className='modal-footer'>
+                {!isCreate ? <button type='button' className='btn btn-danger' onClick={this.deleteCloud} style={{float:'left'}}>Delete</button> : null}
                 <button type='button' className='btn btn-default' onClick={this.toggleEditModal}>Cancel</button>
                 <button type='button' className='btn btn-primary' onClick={this.onSubmit}>Save</button>
               </div>
@@ -250,4 +271,5 @@ const mapStateToProps = (state, ownProps) => {
 export default connect(mapStateToProps, {
   createCloud,
   updateCloud,
+  deleteCloud,
 })(CreateEditCloudModel)
