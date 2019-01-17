@@ -7,8 +7,9 @@ import EditModal from 'shared/EditModal/EditModal'
 import InfoTab from 'shared/InfoTab/InfoTab'
 import LogsTab from 'shared/LogsTab/LogsTab'
 
-import JobCode from './code/JobCode'
-import JobInfo from './info/JobInfo'
+import JobCode from './JobCode'
+import JobInfo from './JobInfo'
+import JobForm from './JobForm'
 
 class JobDetails extends Component {
   static propTypes = {
@@ -33,7 +34,7 @@ class JobDetails extends Component {
   render() {
     const { onUpdate, params, node } = this.props
     let commonProps = {
-      key:params.nodeId, 
+      key: params.nodeId, 
       params: params,
       onUpdate: onUpdate,
     }
@@ -52,8 +53,14 @@ class JobDetails extends Component {
             <LogsTab params={this.props.params}></LogsTab>
           </Panel>
         </Tabs>
-        <EditModal title="Edit Job" node={node} onUpdate={this.props.onUpdate} shown={this.state.shown} toggleEditDialog={this.toggleEditDialog.bind(this)}></EditModal>
-        {this.props.children}
+        <EditModal 
+          title="Edit Job" 
+          node={node} 
+          onUpdate={this.props.onUpdate} 
+          shown={this.state.shown} 
+          toggleEditDialog={this.toggleEditDialog.bind(this)}
+          form={(<JobForm node={node} onUpdate={this.props.onUpdate}></JobForm>)}
+        ></EditModal>
       </div>
     )
   }

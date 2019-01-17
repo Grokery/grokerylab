@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+// import AceEditor from 'react-ace'
+// import 'brace/mode/html'
+// import 'brace/theme/github'
 
 import CodeEditor from 'shared/CodeEditor/CodeEditor'
 import './DataTab.css'
@@ -47,6 +50,25 @@ class DataTab extends Component {
           </div>
         </div>
         <CodeEditor value={this.state.draft} options={dataOptions} onChange={this.onChange} />
+        {/* <AceEditor
+          mode="html"
+          theme="github"
+          onChange={this.onChange}
+          fontSize={12}
+          showPrintMargin={false}
+          showGutter={true}
+          highlightActiveLine={true}
+          value={this.state.draft}
+          setOptions={{
+            enableBasicAutocompletion: false,
+            enableLiveAutocompletion: false,
+            enableSnippets: false,
+            showLineNumbers: true,
+            tabSize: 2,
+          }}
+          width={this.props.width+'px'}
+          height={this.props.height+'px'}
+        /> */}
       </div>
     )
   }

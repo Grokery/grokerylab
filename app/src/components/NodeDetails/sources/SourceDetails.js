@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+
 import { Tabs, Panel } from 'shared/Tabs/Tabs'
 import EditModal from 'shared/EditModal/EditModal'
 import InfoTab from 'shared/InfoTab/InfoTab'
-import DataTab from 'shared/DataTab/DataTab'
 import LogsTab from 'shared/LogsTab/LogsTab'
+import DataTab from 'shared/DataTab/DataTab'
 import SourceInfo from './SourceInfo'
+import SourceForm from './SourceForm'
 
 class SourceDetails extends Component {
   static propTypes = {
@@ -46,8 +48,14 @@ class SourceDetails extends Component {
             <LogsTab params={this.props.params}></LogsTab>
           </Panel>
         </Tabs>
-        <EditModal title="Edit Data Source" node={node} onUpdate={this.props.onUpdate} shown={this.state.shown} toggleEditDialog={this.toggleEditDialog.bind(this)}></EditModal>
-        {this.props.children}
+        <EditModal 
+          title="Edit Data Source" 
+          node={node} 
+          onUpdate={this.props.onUpdate} 
+          shown={this.state.shown} 
+          toggleEditDialog={this.toggleEditDialog.bind(this)}
+          form={(<SourceForm node={node} onUpdate={this.props.onUpdate}></SourceForm>)}
+        ></EditModal>
       </div>
     )
   }
@@ -55,7 +63,7 @@ class SourceDetails extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    node: state.nodes[ownProps.params.nodeId]
+    node: state.nodes[ownProps.params.nodeId] || {}
   }
 }
 

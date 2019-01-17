@@ -121,7 +121,7 @@ class CreateEditCloudModel extends Component {
         removeCloudFromSession(cloudData.name)
       } else {
         alert("Error deleteing cloud")
-        console.log(response)
+        console.err(response)
       }
       this.setState({working: false})
       return json

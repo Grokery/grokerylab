@@ -100,6 +100,7 @@ a i:hover {
 }
 .modal .modal-body {
   overflow-y: scroll;
+  padding: 0;
 }
 .modal .form-help-text {
   font-size: small;
@@ -115,6 +116,10 @@ a i:hover {
 
 .CodeMirror-linenumbers {
   background-color: #e7ebee;
+}
+.ace-github .ace_gutter {
+  background: #e7ebee !important;
+  border-top: 1px solid #ddd;
 }
 
 

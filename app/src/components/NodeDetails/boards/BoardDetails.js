@@ -5,16 +5,16 @@ import { connect } from 'react-redux'
 import { Tabs, Panel } from 'shared/Tabs/Tabs'
 import EditModal from 'shared/EditModal/EditModal'
 import LogsTab from 'shared/LogsTab/LogsTab'
-import BoardCode from './code/BoardCode'
+import BoardCode from './BoardCode'
 import IBoardFrame from 'shared/IBoardFrame/IBoardFrame'
 
 import './BoardDetails.css'
 
 class BoardDetails extends Component {
   static propTypes = {
-    node: PropTypes.object,
+    node: PropTypes.object.isRequired,
     toggleNodeDetailsPain: PropTypes.func.isRequired,
-    onUpdate: PropTypes.func.isRequired
+    onUpdate: PropTypes.func.isRequired,
   }
   constructor(props) {
     super(props)
@@ -30,18 +30,24 @@ class BoardDetails extends Component {
         <Tabs getRightMenuOptions={this.props.getRightMenuOptions.bind(this)}>
           <Panel title={node.title}>
             <div>
-              <IBoardFrame cloudName={params.cloudName} boardId={node.nodeId} width={window.innerWidth - 64} height={window.innerHeight-50}></IBoardFrame>
+              <IBoardFrame cloudName={params.cloudName} boardId={node.nodeId} width={window.innerWidth - 64} height={window.innerHeight - 95}></IBoardFrame>
             </div>
           </Panel>
           <Panel title='Code'>
-            <BoardCode key={params.nodeId} params={params} onUpdate={onUpdate}></BoardCode>
+            <BoardCode key={params.nodeId} params={params} onUpdate={onUpdate} width={window.innerWidth - 64} height={window.innerHeight - 90}></BoardCode>
           </Panel>
           <Panel title='History'>
             <LogsTab params={this.props.params}></LogsTab>
           </Panel>
         </Tabs>
-        <EditModal title="Edit Dashboard" node={node} onUpdate={this.props.onUpdate} shown={this.state.shown} toggleEditDialog={this.toggleEditDialog.bind(this)}></EditModal>
-        {this.props.children}
+        <EditModal 
+          title="Edit Dashboard" 
+          node={node} 
+          onUpdate={this.props.onUpdate} 
+          shown={this.state.shown} 
+          toggleEditDialog={this.toggleEditDialog}
+          form={(<form>hello</form>)}
+        ></EditModal>
       </div>
     )
   }
@@ -55,7 +61,7 @@ class BoardDetails extends Component {
       })
     }, 1000);
   }
-  toggleEditDialog(e) {
+  toggleEditDialog = (e) => {
     if (e) {e.preventDefault()}
     if (this.state.shown) {
       this.setState({shown: false})

@@ -44,7 +44,7 @@ class Auth extends Component {
             <div className="col-sm-4 col-sm-offset-4">
                 <div className="panel panel-default">
        
-                  <div className="panel-body">
+                  <div className="panel-body" style={{position:'relative'}}>
                     <Loader show={this.state.showLoading}></Loader>
                     <form role="form" onSubmit={this.onSubmit}>
                       <fieldset>

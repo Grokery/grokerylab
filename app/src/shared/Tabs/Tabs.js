@@ -1,5 +1,7 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
+import { cloneDeep } from 'lodash'
+
 import { getQueryParamByName, updateQueryParam } from 'common'
 import './Tabs.css'
 
@@ -57,11 +59,12 @@ export class Tabs extends Component {
             throw new Error('Tabs must contain at least one Panel')
         }
 
-        if (!Array.isArray(this.props.children)) {
-            this.props.children = [this.props.children]
+        let children = cloneDeep(this.props.children)
+        if (!Array.isArray(children)) {
+            children = [children]
         }
 
-        let menuItems = this.props.children
+        let menuItems = children
             .map(function(panel) {
                 return typeof panel === 'function' ? panel() : panel
             })
