@@ -1,12 +1,11 @@
 import React from 'react'
 import { Route, IndexRoute } from 'react-router'
 
-import Account from './components/Account/Account'
 import App from './components/App/App'
 import Auth from './components/Auth/Auth'
 import AuthGateway from './components/AuthGateway/AuthGateway'
+import UserAccount from './components/UserAccount/UserAccount'
 import Cloud from './components/Cloud/Cloud'
-// import CloudHome from './components/CloudHome/CloudHome'
 import Boards from './components/Boards/Boards'
 import Board from './components/Boards/Board'
 import Dataflows from './components/Dataflows/Dataflows'
@@ -19,7 +18,7 @@ export default <Route path='/' component={App}>
   <Route path='/signout' component={Auth} />
   <Route component={AuthGateway}>
     <IndexRoute component={Home} />
-    <Route path='/account' component={Account} />
+    <Route path='/account' component={UserAccount} />
     <Route path='/clouds/:cloudName' component={Cloud}>
       <IndexRoute component={Boards}></IndexRoute>
       <Route path='/clouds/:cloudName/boards' component={Boards} />

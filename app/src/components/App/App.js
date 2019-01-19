@@ -14,7 +14,7 @@ class App extends Component {
   render() {
     const { children } = this.props
     return (
-      <div>
+      <div className='app-wrapper'>
         {/* TODO */}
         {/* {this.renderErrorMessage()} */}
         {children}

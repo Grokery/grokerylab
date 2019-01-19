@@ -26,9 +26,11 @@ class AuthGateway extends Component {
       return null
     }
     return (
-      <div className='page-content-wrapper'>
+      <div className='auth-wrapper'>
         <TopNavBar cloudName={cloudName}></TopNavBar>
-        {children}
+        <div className='page-content-wrapper'>
+          {children}
+        </div>
       </div>
       )
   }

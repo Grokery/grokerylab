@@ -5,7 +5,6 @@ import { getSessionInfo } from 'authentication'
 import { NODETYPE } from 'common'
 
 import IBoardFrame from 'shared/IBoardFrame/IBoardFrame'
-import './Boards.css'
 
 class Boards extends Component {
   static propTypes = {
@@ -15,10 +14,8 @@ class Boards extends Component {
   }
   render() {
     return (
-      <div className='page-content'>
-        <div id='boards-page-content'>
-            {this.getBoardLinks()}
-        </div>
+      <div className='sidebar-page-content'>
+        {this.getBoardLinks()}
       </div>
     )
   }

@@ -32,7 +32,7 @@ class Home extends Component {
   }
   render() {
     return (
-      <div className='page-content home'>
+      <div id='home-page' className='page-content'>
         <CreateEditCloudModel 
             key="createnew" 
             shown={this.state.showCreateModel} 

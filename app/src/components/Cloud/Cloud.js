@@ -6,7 +6,6 @@ import { history } from 'index'
 import { getCloudId } from 'authentication'
 import { fetchNodes, clearNodes, fetchCloud, fetchOptions } from 'store/actions'
 import SideNavBar from 'shared/SideNavBar/SideNavBar'
-import './Cloud.css'
 
 class Cloud extends Component {
   static propTypes = {
@@ -30,9 +29,9 @@ class Cloud extends Component {
   render() {
     const { cloudName } = this.props
     return (
-      <div>
+      <div id='cloud-page' className='page-content'>
         <SideNavBar cloudName={cloudName}></SideNavBar>
-        <div className='sidebar-page'>
+        <div className='sidebar-page-wrapper'>
           {this.props.children}
         </div>
       </div>
