@@ -4,11 +4,14 @@ import { APPSTATUS } from "common"
 import Loader from 'shared/Loader/Loader'
 import D3DataFlow from 'shared/D3DataFlow/D3DataFlow'
 
+const headerNavHeight = 50
+const sideNavWidth = 64
+
 class Dataflows extends Component {
   render() {
     const { location, params } = this.props
     return (
-      <div className='page-content'>
+      <div className='sidebar-page-content'>
         <Loader show={this.props.appStatus === APPSTATUS.BUSY} />
         <D3DataFlow
           params={params}
@@ -19,6 +22,8 @@ class Dataflows extends Component {
           colored={false}
           nodeShape={2}
           query={location.query}
+          height={window.innerHeight - headerNavHeight}
+          width={window.innerWidth - sideNavWidth}
         ></D3DataFlow>
         {this.props.children}
       </div>

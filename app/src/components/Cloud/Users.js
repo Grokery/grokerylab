@@ -20,7 +20,7 @@ class Users extends Component {
       })
     }
     return (
-      <div className='page-content padded'>
+      <div className='sidebar-page-content'>
         <h1>Users</h1>
         <ul>
           {links}

@@ -26,8 +26,7 @@ Svg
     shftdrag     -> draw rectangle and select nodes and edges included under rectangle -> deselect all else
 
 */
-
-var nodeShapes = {
+const nodeShapes = {
     1: 'Fat',
     2: 'Flat',
     'Fat': 1,

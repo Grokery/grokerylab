@@ -11,7 +11,7 @@ class Account extends Component {
   render() {
     const { username } = this.props
     return (
-      <div className='page-content padded'>
+      <div id='user-account-page' className='page-content'>
         <h1>Account</h1>
         <p>{username}</p>
         {this.props.children}

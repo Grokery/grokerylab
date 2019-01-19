@@ -187,8 +187,8 @@ g.colored.selected:hover text.tooltiptext  {
 
 /* Flow Header Content */
 .flow-header-content {
-    margin-top: 8px;
-    margin-right: 8px;
+    padding-top: 8px;
+    padding-right: 8px;
     position: absolute;
     right: 0;
 }
@@ -259,6 +259,7 @@ g.colored.selected:hover text.tooltiptext  {
 }
 
 .flow-header-content .node-filter {
+    position: relative;
     float: left;
 }
 
@@ -276,7 +277,6 @@ g.colored.selected:hover text.tooltiptext  {
 }
 
 .flow-header-content .node-filter .fa {
-    /* color: #0291E3; */
     position: absolute;
     right: 8px;
     top: 8px;

@@ -50,6 +50,10 @@ body {
   height: 100%;
 }
 
+.page-content {
+  height: 100%;
+}
+
 .sidebar-page-wrapper {
   padding-left: 64px;
   height: 100%;
