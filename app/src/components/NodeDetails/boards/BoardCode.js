@@ -5,7 +5,7 @@ import AceEditor from 'react-ace'
 import 'brace/mode/html'
 import 'brace/theme/github'
 
-import './BoardCode.css'
+// import './BoardCode.css'
 
 class BoardCode extends Component {
   static propTypes = {
@@ -57,8 +57,8 @@ class BoardCode extends Component {
                 showLineNumbers: true,
                 tabSize: 2,
               }}
-              width={this.props.width+'px'}
-              height={this.props.height+'px'}
+              // width={this.props.width+'px'}
+              // height={this.props.height+'px'}
             />
       </div>
     )

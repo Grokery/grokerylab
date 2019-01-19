@@ -23,7 +23,7 @@ class SourceDetails extends Component {
           shown: false
       }
   }
-  toggleEditDialog(e) {
+  toggleEditDialog = (e) => {
     if (e) {e.preventDefault()}
     if (this.state.shown) {
       this.setState({shown: false})
@@ -35,7 +35,7 @@ class SourceDetails extends Component {
     const { params, onUpdate, node } = this.props
     return (
       <div className='source-details'>
-        <Tabs getRightMenuOptions={this.props.getRightMenuOptions.bind(this)}>
+        <Tabs getRightMenuOptions={this.getRightMenuOptions}>
           <Panel title='Info'>
             <InfoTab key={params.nodeId} params={params} onUpdate={onUpdate}>
               <SourceInfo key={params.nodeId} params={params} onUpdate={onUpdate}></SourceInfo>
@@ -53,9 +53,19 @@ class SourceDetails extends Component {
           node={node} 
           onUpdate={this.props.onUpdate} 
           shown={this.state.shown} 
-          toggleEditDialog={this.toggleEditDialog.bind(this)}
+          toggleEditDialog={this.toggleEditDialog}
           form={(<SourceForm node={node} onUpdate={this.props.onUpdate}></SourceForm>)}
         ></EditModal>
+      </div>
+    )
+  }
+  getRightMenuOptions = () => {
+    const { toggleNodeDetailsPain, params } = this.props
+    return (
+      <div className='btn-group pull-right item-options'>
+          <a href='' onClick={this.toggleEditDialog} className='btn btn-default'><i className='fa fa-cog'></i></a>
+          <a href='' onClick={toggleNodeDetailsPain} className='btn btn-default'><i className='fa fa-arrows-v'></i></a>
+          <a href={"#/clouds/"+ params.cloudName + "/flows?nodeId=" + params.nodeId} className='btn btn-default'><i className='fa fa-times'></i></a>
       </div>
     )
   }

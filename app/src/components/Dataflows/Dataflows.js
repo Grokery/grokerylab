@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { APPSTATUS } from "common"
+import { headerNavHeight, sideNavWidth } from 'config'
 import Loader from 'shared/Loader/Loader'
 import D3DataFlow from 'shared/D3DataFlow/D3DataFlow'
-
-const headerNavHeight = 50
-const sideNavWidth = 64
 
 class Dataflows extends Component {
   render() {

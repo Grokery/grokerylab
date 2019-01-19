@@ -2,10 +2,6 @@
 .tabs {
     height: 100%;
     background-color: #FFF;
-    bottom: 0;
-    position: absolute;
-    right: 0;
-    left: 0;
 }
 
 .tabs .tab-pane,

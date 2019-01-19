@@ -8,8 +8,6 @@ import LogsTab from 'shared/LogsTab/LogsTab'
 import BoardCode from './BoardCode'
 import IBoardFrame from 'shared/IBoardFrame/IBoardFrame'
 
-import './BoardDetails.css'
-
 class BoardDetails extends Component {
   static propTypes = {
     node: PropTypes.object.isRequired,
@@ -27,14 +25,14 @@ class BoardDetails extends Component {
     if (!node) { return <div></div> }
     return (
       <div className='board-details'>
-        <Tabs getRightMenuOptions={this.props.getRightMenuOptions.bind(this)}>
+        <Tabs getRightMenuOptions={this.getRightMenuOptions}>
           <Panel title={node.title}>
             <div>
-              <IBoardFrame cloudName={params.cloudName} boardId={node.nodeId} width={window.innerWidth - 64} height={window.innerHeight - 95}></IBoardFrame>
+              <IBoardFrame cloudName={params.cloudName} boardId={node.nodeId}></IBoardFrame>
             </div>
           </Panel>
           <Panel title='Code'>
-            <BoardCode key={params.nodeId} params={params} onUpdate={onUpdate} width={window.innerWidth - 64} height={window.innerHeight - 90}></BoardCode>
+            <BoardCode key={params.nodeId} params={params} onUpdate={onUpdate}></BoardCode>
           </Panel>
           <Panel title='History'>
             <LogsTab params={this.props.params}></LogsTab>
@@ -48,6 +46,16 @@ class BoardDetails extends Component {
           toggleEditDialog={this.toggleEditDialog}
           form={(<form>hello</form>)}
         ></EditModal>
+      </div>
+    )
+  }
+  getRightMenuOptions = () => {
+    const { toggleNodeDetailsPain, params } = this.props
+    return (
+      <div className='btn-group pull-right item-options'>
+          <a href='' onClick={this.toggleEditDialog} className='btn btn-default'><i className='fa fa-cog'></i></a>
+          <a href='' onClick={toggleNodeDetailsPain} className='btn btn-default'><i className='fa fa-arrows-v'></i></a>
+          <a href={"#/clouds/"+ params.cloudName + "/flows?nodeId=" + params.nodeId} className='btn btn-default'><i className='fa fa-times'></i></a>
       </div>
     )
   }

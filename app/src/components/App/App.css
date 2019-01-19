@@ -59,6 +59,10 @@ body {
   height: 100%;
 }
 
+.sidebar-page-content {
+  position: relative;
+}
+
 div {
   box-sizing: border-box;
 }
