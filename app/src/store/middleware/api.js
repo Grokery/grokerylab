@@ -23,7 +23,10 @@ const callApi = (baseUrl, actionInfo) => {
                     return Promise.reject(json)
                 }
                 if (typeof(callback) === 'function') {
-                    return callback(json, response)
+                    let cbResp = callback(json, response)
+                    if (cbResp) {
+                        json = cbResp
+                    }
                 }
                 return json
             })

@@ -1,6 +1,6 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, isFunction } from 'lodash'
 
 import { getQueryParamByName, updateQueryParam } from 'common'
 import './Tabs.css'
@@ -11,11 +11,14 @@ export class Tabs extends Component {
         onMount: PropTypes.func,
         onBeforeChange: PropTypes.func,
         onAfterChange: PropTypes.func,
-        getRightMenuOptions: PropTypes.func.isRequired,
+        getRightMenuOptions: PropTypes.func,
         children: PropTypes.oneOfType([
             PropTypes.array,
             PropTypes.element
         ]).isRequired
+    }
+    static defaultProps = {
+        rightMenuOptions: []
     }
     constructor(props) {
         super(props)
@@ -79,12 +82,14 @@ export class Tabs extends Component {
                     </li>
                 )
             }.bind(this))
-        let rightMenuItems = this.props.getRightMenuOptions()
+        let getRightMenuOptions = this.props.getRightMenuOptions
         return (
             <nav className="tabs-navigation">
                 <ul className='nav nav-tabs'>
                     {menuItems}
-                    {rightMenuItems}
+                    <div className='btn-group pull-right item-options'>
+                        {isFunction(getRightMenuOptions) ? getRightMenuOptions() : []}
+                    </div>
                 </ul>
             </nav>
         )

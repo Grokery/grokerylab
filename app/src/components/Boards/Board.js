@@ -25,7 +25,7 @@ class Board extends Component {
     return (
       <div className='sidebar-page-content'>
         <div>
-          <a href={'#/clouds/'+cloudName+'/flows?nodeId='+node.nodeId} style={{position: 'absolute', right:55, padding:15}}><i className='fa fa-share-alt fa-fw'></i></a>
+          <a href={'#/clouds/'+cloudName+'/flows/board/'+node.nodeId+'?flow=open&activeTab=1'} style={{position: 'absolute', right:55, padding:15}}><i className='fa fa-share-alt fa-fw'></i></a>
           <a href={'#/clouds/'+cloudName+'/flows/board/'+node.nodeId+'?flow=closed&activeTab=2'} style={{position: 'absolute', right:25, padding:15}}><i className='fa fa-pencil fa-fw'></i></a>
           <a href={'#/clouds/'+cloudName+'/boards'} style={{position: 'absolute', right:0, padding:15}}><i className='fa fa-times'></i></a>
           <div style={{paddingTop:'50px'}}>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { concat } from 'lodash'
 
 import { Tabs, Panel } from 'shared/Tabs/Tabs'
 import EditModal from 'shared/EditModal/EditModal'
@@ -14,13 +15,14 @@ import JobForm from './JobForm'
 class JobDetails extends Component {
   static propTypes = {
     node: PropTypes.object,
-    toggleNodeDetailsPain: PropTypes.func.isRequired,
-    onUpdate: PropTypes.func.isRequired
+    onUpdate: PropTypes.func.isRequired,
+    rightMenuOptions: PropTypes.array.isRequired,
   }
   constructor(props) {
     super(props)
       this.state = {
-          shown: false
+          shown: false,
+          dirty: false,
       }
   }
   toggleEditDialog = (e) => {
@@ -31,6 +33,23 @@ class JobDetails extends Component {
       this.setState({shown: true})
     }
   }
+  getRightMenuOptions = () => {
+    let saveOption = null
+    if (this.state.dirty) {
+      saveOption = <a key='save' href='' onClick={this.updateSourceCode} className='btn btn-default'><i className='fa fa-save'></i></a>
+    }
+    return concat([
+      saveOption,
+      <a key='edit' href='' onClick={this.toggleEditDialog} className='btn btn-default'><i className='fa fa-cog'></i></a>,
+    ], this.props.rightMenuOptions)
+  }
+  renderRightMenuOptions() {
+    return (
+      <div className='btn-group item-options' style={{position: 'absolute', right: 0, top: 0}}>
+          {this.getRightMenuOptions()}
+      </div>
+    )
+  }
   render() {
     const { onUpdate, params, node } = this.props
     let commonProps = {
@@ -40,16 +59,19 @@ class JobDetails extends Component {
     }
     return (
       <div className='job-details'>
-        <Tabs getRightMenuOptions={this.getRightMenuOptions}>
+        <Tabs>
           <Panel title='Info'>
+            {this.renderRightMenuOptions()}
             <InfoTab {...commonProps}>
               <JobInfo {...commonProps}></JobInfo>
             </InfoTab>
           </Panel>
           <Panel title='Code'>
+            {this.renderRightMenuOptions()}
             <JobCode {...commonProps}></JobCode>
           </Panel>
           <Panel title='History'>
+            {this.renderRightMenuOptions()}
             <LogsTab params={this.props.params}></LogsTab>
           </Panel>
         </Tabs>
@@ -64,22 +86,10 @@ class JobDetails extends Component {
       </div>
     )
   }
-  getRightMenuOptions = () => {
-    const { toggleNodeDetailsPain, params } = this.props
-    return (
-      <div className='btn-group pull-right item-options'>
-          <a href='' onClick={this.toggleEditDialog} className='btn btn-default'><i className='fa fa-cog'></i></a>
-          <a href='' onClick={toggleNodeDetailsPain} className='btn btn-default'><i className='fa fa-arrows-v'></i></a>
-          <a href={"#/clouds/"+ params.cloudName + "/flows?nodeId=" + params.nodeId} className='btn btn-default'><i className='fa fa-times'></i></a>
-      </div>
-    )
-  }
 }
 
 const mapStateToProps = (state, ownProps) => {
-  return {
-    node: state.nodes[ownProps.params.nodeId]
-  }
+  return {}
 }
 
 export default connect(mapStateToProps, {})(JobDetails)

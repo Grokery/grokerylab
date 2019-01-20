@@ -1,41 +1,82 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { concat } from 'lodash'
+import AceEditor from 'react-ace'
+import 'brace/mode/html'
+import 'brace/theme/github'
 
 import { Tabs, Panel } from 'shared/Tabs/Tabs'
 import EditModal from 'shared/EditModal/EditModal'
 import LogsTab from 'shared/LogsTab/LogsTab'
-import BoardCode from './BoardCode'
 import IBoardFrame from 'shared/IBoardFrame/IBoardFrame'
 
 class BoardDetails extends Component {
   static propTypes = {
-    node: PropTypes.object.isRequired,
-    toggleNodeDetailsPain: PropTypes.func.isRequired,
+    node: PropTypes.object,
     onUpdate: PropTypes.func.isRequired,
+    rightMenuOptions: PropTypes.array.isRequired,
   }
   constructor(props) {
     super(props)
       this.state = {
-          shown: false
+          shown: false,
+          dirty: false,
+          sourceDraft: props.node.source,
       }
   }
+  getRightMenuOptions = () => {
+    let saveOption = null
+    if (this.state.dirty) {
+      saveOption = <a key='save' href='' onClick={this.updateSourceCode} className='btn btn-default'><i className='fa fa-save'></i></a>
+    }
+    return concat([
+      saveOption,
+      <a key='edit' href='' onClick={this.toggleEditDialog} className='btn btn-default'><i className='fa fa-cog'></i></a>,
+    ], this.props.rightMenuOptions)
+  }
+  renderRightMenuOptions() {
+    return (
+      <div className='btn-group item-options' style={{position: 'absolute', right: 0, top: 0}}>
+          {this.getRightMenuOptions()}
+      </div>
+    )
+  }
   render() {
-    const { onUpdate, params, node } = this.props
-    if (!node) { return <div></div> }
+    const { params, node } = this.props
+    let title = node ? node.title : ''
     return (
       <div className='board-details'>
-        <Tabs getRightMenuOptions={this.getRightMenuOptions}>
-          <Panel title={node.title}>
-            <div>
-              <IBoardFrame cloudName={params.cloudName} boardId={node.nodeId}></IBoardFrame>
-            </div>
+        <Tabs>
+          <Panel title={title}>
+            {this.renderRightMenuOptions()}
+            <IBoardFrame cloudName={params.cloudName} boardId={params.nodeId}></IBoardFrame>
           </Panel>
           <Panel title='Code'>
-            <BoardCode key={params.nodeId} params={params} onUpdate={onUpdate}></BoardCode>
+            {this.renderRightMenuOptions()}
+            <AceEditor
+              mode="html"
+              theme="github"
+              onChange={this.onChange}
+              fontSize={12}
+              showPrintMargin={false}
+              showGutter={true}
+              highlightActiveLine={true}
+              value={this.state.sourceDraft}
+              width={'100%'}
+              setOptions={{
+                enableBasicAutocompletion: false,
+                enableLiveAutocompletion: false,
+                enableSnippets: false,
+                showLineNumbers: true,
+                tabSize: 2,
+                maxLines: 1000,
+              }}
+            />
           </Panel>
           <Panel title='History'>
-            <LogsTab params={this.props.params}></LogsTab>
+            {this.renderRightMenuOptions()}
+            <LogsTab params={this.props.params}></LogsTab>              
           </Panel>
         </Tabs>
         <EditModal 
@@ -49,25 +90,16 @@ class BoardDetails extends Component {
       </div>
     )
   }
-  getRightMenuOptions = () => {
-    const { toggleNodeDetailsPain, params } = this.props
-    return (
-      <div className='btn-group pull-right item-options'>
-          <a href='' onClick={this.toggleEditDialog} className='btn btn-default'><i className='fa fa-cog'></i></a>
-          <a href='' onClick={toggleNodeDetailsPain} className='btn btn-default'><i className='fa fa-arrows-v'></i></a>
-          <a href={"#/clouds/"+ params.cloudName + "/flows?nodeId=" + params.nodeId} className='btn btn-default'><i className='fa fa-times'></i></a>
-      </div>
-    )
+  onChange = (newCode) => {
+    this.setState({ sourceDraft: newCode, dirty: true })
   }
-  updateCode = (newCode) => {
-    if (this.debounce) {
-      clearTimeout(this.debounce)
-    }
-    this.debounce = setTimeout(() => {
-      this.props.onUpdate({
-        'source': newCode
-      })
-    }, 1000);
+  updateSourceCode = (e) => {
+    e.preventDefault()
+    this.props.onUpdate({
+      'source': this.state.sourceDraft
+    }, () => {
+      this.setState({ dirty: false })
+    })
   }
   toggleEditDialog = (e) => {
     if (e) {e.preventDefault()}
@@ -80,9 +112,7 @@ class BoardDetails extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  return {
-    node: state.nodes[ownProps.params.nodeId]
-  }
+  return {}
 }
 
 export default connect(mapStateToProps, {})(BoardDetails)
