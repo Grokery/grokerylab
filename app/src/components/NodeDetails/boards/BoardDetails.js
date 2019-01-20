@@ -43,6 +43,11 @@ class BoardDetails extends Component {
       </div>
     )
   }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.node.nodeId !== this.props.node.nodeId) {
+      this.setState({sourceDraft: nextProps.node.source})
+    }
+  }
   render() {
     const { params, node, flowOpen } = this.props
     let title = node ? node.title : ''
@@ -66,6 +71,7 @@ class BoardDetails extends Component {
           <Panel title='Code'>
             {this.renderRightMenuOptions()}
             <AceEditor
+              key={params.nodeId}
               mode="html"
               theme="chrome"
               onChange={this.onChange}
@@ -75,7 +81,7 @@ class BoardDetails extends Component {
               highlightActiveLine={true}
               value={this.state.sourceDraft}
               width={'100%'}
-              height={height}
+              height={height+'px'}
               setOptions={{
                 enableBasicAutocompletion: false,
                 enableLiveAutocompletion: false,
