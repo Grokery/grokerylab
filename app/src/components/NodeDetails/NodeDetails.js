@@ -42,6 +42,7 @@ class NodeDetails extends Component {
       onUpdate: this.onUpdate,
       toggleNodeDetailsPain: this.toggleNodeDetailsPain,
       rightMenuOptions: rightMenuOptions,
+      flowOpen: flowOpen,
     }
     const flowDisplay = flowOpen ? 'initial' : 'none'
     return (
@@ -56,7 +57,7 @@ class NodeDetails extends Component {
             zoomOnHighlight={false}
             singleClickNav={true}
             colored={false}
-            nodeShape={1}
+            nodeShape={2}
             query={location.query}
           />
         </div>

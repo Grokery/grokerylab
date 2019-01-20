@@ -63,7 +63,7 @@ class SourceDetails extends Component {
           </Panel>
           <Panel title='Data'>
             {this.renderRightMenuOptions()}
-            <DataTab key={params.nodeId} params={params} onUpdate={onUpdate}></DataTab>
+            <DataTab key={params.nodeId} params={params} onUpdate={onUpdate} height={window.innerHeight - 90}></DataTab>
           </Panel>
           <Panel title='History'>
             {this.renderRightMenuOptions()}

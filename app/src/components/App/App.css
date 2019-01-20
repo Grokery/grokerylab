@@ -135,7 +135,7 @@ a i:hover {
 .CodeMirror-linenumbers {
   background-color: #e7ebee;
 }
-.ace-github .ace_gutter {
+.ace_gutter {
   background: #e7ebee !important;
 }
 

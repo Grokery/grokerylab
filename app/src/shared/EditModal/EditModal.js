@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import AceEditor from 'react-ace'
 import 'brace/mode/json'
-import 'brace/theme/github'
+import 'brace/theme/chrome'
 
 import Modal from 'shared/Modal/Modal'
 import './EditModal.css'
@@ -26,9 +26,9 @@ class EditModal extends Component {
         <div className="modal-body">
           <AceEditor
               mode="json"
-              theme="github"
+              theme="chrome"
               onChange={this.updateJson}
-              fontSize={14}
+              fontSize={12}
               showPrintMargin={false}
               showGutter={true}
               highlightActiveLine={true}

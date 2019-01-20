@@ -18,7 +18,7 @@ class Dataflows extends Component {
           zoomOnHighlight={false}
           singleClickNav={false}
           colored={false}
-          nodeShape={1}
+          nodeShape={2}
           query={location.query}
           height={window.innerHeight - headerNavHeight}
           width={window.innerWidth - sideNavWidth}

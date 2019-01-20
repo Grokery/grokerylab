@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { concat } from 'lodash'
 import AceEditor from 'react-ace'
 import 'brace/mode/html'
-import 'brace/theme/github'
+import 'brace/theme/chrome'
 
 import { Tabs, Panel } from 'shared/Tabs/Tabs'
 import EditModal from 'shared/EditModal/EditModal'
@@ -16,6 +16,7 @@ class BoardDetails extends Component {
     node: PropTypes.object,
     onUpdate: PropTypes.func.isRequired,
     rightMenuOptions: PropTypes.array.isRequired,
+    flowOpen: PropTypes.bool,
   }
   constructor(props) {
     super(props)
@@ -43,20 +44,30 @@ class BoardDetails extends Component {
     )
   }
   render() {
-    const { params, node } = this.props
+    const { params, node, flowOpen } = this.props
     let title = node ? node.title : ''
+    let height = window.innerHeight
+    if (flowOpen) {
+      height -= 340
+    } else {
+      height -= 90
+    }
     return (
       <div className='board-details'>
         <Tabs>
           <Panel title={title}>
             {this.renderRightMenuOptions()}
-            <IBoardFrame cloudName={params.cloudName} boardId={params.nodeId}></IBoardFrame>
+            <IBoardFrame 
+              cloudName={params.cloudName} 
+              boardId={params.nodeId} 
+              height={height}
+            ></IBoardFrame>
           </Panel>
           <Panel title='Code'>
             {this.renderRightMenuOptions()}
             <AceEditor
               mode="html"
-              theme="github"
+              theme="chrome"
               onChange={this.onChange}
               fontSize={12}
               showPrintMargin={false}
@@ -64,13 +75,14 @@ class BoardDetails extends Component {
               highlightActiveLine={true}
               value={this.state.sourceDraft}
               width={'100%'}
+              height={height}
               setOptions={{
                 enableBasicAutocompletion: false,
                 enableLiveAutocompletion: false,
                 enableSnippets: false,
                 showLineNumbers: true,
                 tabSize: 2,
-                maxLines: 1000,
+                // maxLines: 1000,
               }}
             />
           </Panel>
