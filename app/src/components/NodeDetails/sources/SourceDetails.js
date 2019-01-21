@@ -2,12 +2,14 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { concat } from 'lodash'
+import AceEditor from 'react-ace'
+import 'brace/mode/json'
+import 'brace/theme/chrome'
 
 import { Tabs, Panel } from 'shared/Tabs/Tabs'
 import EditModal from 'shared/EditModal/EditModal'
 import InfoTab from 'shared/InfoTab/InfoTab'
 import LogsTab from 'shared/LogsTab/LogsTab'
-import DataTab from 'shared/DataTab/DataTab'
 import SourceInfo from './SourceInfo'
 import SourceForm from './SourceForm'
 
@@ -17,26 +19,25 @@ class SourceDetails extends Component {
     node: PropTypes.object.isRequired,
     onUpdate: PropTypes.func.isRequired,
     rightMenuOptions: PropTypes.array.isRequired,
+    flowOpen: PropTypes.bool,
   }
   constructor(props) {
     super(props)
       this.state = {
           shown: false,
           dirty: false,
+          dataDraft: JSON.stringify(props.node.data, null, 2),
       }
   }
-  toggleEditDialog = (e) => {
-    if (e) {e.preventDefault()}
-    if (this.state.shown) {
-      this.setState({shown: false})
-    } else {
-      this.setState({shown: true})
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.node.nodeId !== this.props.node.nodeId) {
+      this.setState({dataDraft: nextProps.node.data})
     }
   }
   getRightMenuOptions = () => {
     let saveOption = null
     if (this.state.dirty) {
-      saveOption = <a key='save' href='' onClick={this.updateSourceCode} className='btn btn-default'><i className='fa fa-save'></i></a>
+      saveOption = <a key='save' href='' onClick={this.updateData} className='btn btn-default'><i className='fa fa-save'></i></a>
     }
     return concat([
       saveOption,
@@ -51,7 +52,13 @@ class SourceDetails extends Component {
     )
   }
   render() {
-    const { params, onUpdate, node } = this.props
+    const { params, onUpdate, node, flowOpen } = this.props
+    let height = window.innerHeight
+    if (flowOpen) {
+      height -= 340
+    } else {
+      height -= 90
+    }
     return (
       <div className='source-details'>
         <Tabs>
@@ -63,7 +70,25 @@ class SourceDetails extends Component {
           </Panel>
           <Panel title='Data'>
             {this.renderRightMenuOptions()}
-            <DataTab key={params.nodeId} params={params} onUpdate={onUpdate} height={window.innerHeight - 90}></DataTab>
+            <AceEditor
+              mode="json"
+              theme="chrome"
+              onChange={this.onChange}
+              fontSize={12}
+              showPrintMargin={false}
+              showGutter={true}
+              highlightActiveLine={true}
+              value={this.state.dataDraft}
+              setOptions={{
+                enableBasicAutocompletion: false,
+                enableLiveAutocompletion: false,
+                enableSnippets: false,
+                showLineNumbers: true,
+                tabSize: 2,
+              }}
+              width={"100%"}
+              height={height+"px"}
+            />
           </Panel>
           <Panel title='History'>
             {this.renderRightMenuOptions()}
@@ -80,6 +105,25 @@ class SourceDetails extends Component {
         ></EditModal>
       </div>
     )
+  }
+  toggleEditDialog = (e) => {
+    if (e) {e.preventDefault()}
+    if (this.state.shown) {
+      this.setState({shown: false})
+    } else {
+      this.setState({shown: true})
+    }
+  }
+  onChange = (newData) => {
+    this.setState({ dataDraft: newData, dirty: true })
+  }
+  updateData = (e) => {
+    e.preventDefault()
+    this.props.onUpdate({
+      'data': JSON.parse(this.state.dataDraft)
+    }, () => {
+      this.setState({ dirty: false })
+    })
   }
 }
 

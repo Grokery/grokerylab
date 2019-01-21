@@ -88,7 +88,6 @@ class BoardDetails extends Component {
                 enableSnippets: false,
                 showLineNumbers: true,
                 tabSize: 2,
-                // maxLines: 1000,
               }}
             />
           </Panel>

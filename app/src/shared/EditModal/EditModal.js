@@ -16,6 +16,17 @@ class EditModal extends Component {
     title: PropTypes.string,
     form: PropTypes.object,
   }
+  constructor(props) {
+    super(props)
+    this.state = {
+      nodeJson: this.getNodeJsonForEdit(props.node)
+    }
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.node.nodeId !== this.props.node.nodeId) {
+      this.setState({nodeJson: this.getNodeJsonForEdit(nextProps.node)})
+    }
+  }
   render() {
     return (
       <Modal id="edit-modal" shown={this.props.shown}>
@@ -27,12 +38,12 @@ class EditModal extends Component {
           <AceEditor
               mode="json"
               theme="chrome"
-              onChange={this.updateJson}
+              onChange={this.onChange}
               fontSize={12}
               showPrintMargin={false}
               showGutter={true}
               highlightActiveLine={true}
-              value={JSON.stringify(this.getNodeJsonForEdit(), null, 2)}
+              value={this.state.nodeJson}
               setOptions={{
                 enableBasicAutocompletion: false,
                 enableLiveAutocompletion: false,
@@ -49,23 +60,23 @@ class EditModal extends Component {
       </Modal>
     )
   }
-  updateJson = (newValue) => {
-    this.json = JSON.parse(newValue)
+  onChange = (newJson) => {
+    this.setState({ nodeJson: newJson, dirty: true })
   }
   closeDialog = () => {
-    if (this.json) {
-      this.props.onUpdate(this.json)
-    }
-    this.props.toggleEditDialog()
+    this.props.onUpdate(JSON.parse(this.state.nodeJson), () => {
+      this.setState({ dirty: false })
+      this.props.toggleEditDialog()
+    })
   }
-  getNodeJsonForEdit() {
-    let json = Object.assign({}, this.props.node)
+  getNodeJsonForEdit(node = this.props.node) {
+    let json = Object.assign({}, node)
     delete json.source
     delete json.data
     if (!json) {
       json = {}
     }
-    return json
+    return JSON.stringify(json, null, 2)
   }
 }
 
