@@ -1,21 +1,72 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { get } from 'lodash'
-import CodeEditor from 'shared/CodeEditor/CodeEditor'
+import AceEditor from 'react-ace'
+import 'brace/mode/python'
+import 'brace/theme/chrome'
 
 import './JobCode.css'
 
 class JobCodeTab extends Component {
   static propTypes = {
     node: PropTypes.object,
-    onUpdate: PropTypes.func.isRequired
+    onUpdate: PropTypes.func.isRequired,
+    height: PropTypes.number,
+  }
+  static defaultProps = {
+    height: window.innerHeight,
   }
   constructor(props) {
     super(props)
       this.state = {
           showModal: false
       }
+  }
+  render() {
+    let { node, height } = this.props
+    if (!node){
+      return (<div></div>)
+    }
+    return (
+      <div className='row job-code-tab'>
+        <div className='col-md-2' style={{paddingRight:'0px'}}>
+
+          {/*  TODO store files as file objects in list in node */}
+          <ul style={{marginTop:'5px', marginBottom:'15px', paddingLeft: '0px', marignRight:'0px', listStyleType: 'none'}}>
+            <li style={{padding:'5px', paddingLeft:'15px'}}><a href='#/' onClick={(e) => {e.preventDefault()}}>job.py</a></li>
+            <li style={{padding:'5px', paddingLeft:'15px'}}><a href='#/' onClick={(e) => {e.preventDefault()}}>main.py</a></li>
+            <li style={{padding:'5px', paddingLeft:'15px'}}><a href='#/' onClick={(e) => {e.preventDefault()}}>requirements.txt</a></li>
+          </ul>
+
+        </div>
+        <div className='col-md-10'>
+          <div className='row' style={{marign:0}}>
+            <div className='col-md-12' style={{paddingLeft:'0px'}}> 
+              <AceEditor
+                mode="python"
+                theme="chrome"
+                onChange={this.onChange}
+                fontSize={12}
+                showPrintMargin={false}
+                showGutter={true}
+                highlightActiveLine={true}
+                value={'\n\n\n'}
+                setOptions={{
+                  enableBasicAutocompletion: false,
+                  enableLiveAutocompletion: false,
+                  enableSnippets: false,
+                  showLineNumbers: true,
+                  tabSize: 2,
+                }}
+                width={"100%"}
+                height={height+"px"}
+              />
+            </div>
+          </div>
+        </div>
+
+      </div>
+    )
   }
   toggleTemplateModal(e) {
     e.preventDefault()
@@ -30,20 +81,6 @@ class JobCodeTab extends Component {
       'code': template.code,
       'data': template.data
     })
-  }
-  updateCode(newCode) {
-    if (this.debounce) {
-      clearTimeout(this.debounce)
-    }
-    this.debounce = setTimeout(() => {
-      this.props.onUpdate({
-        'files': {
-          'v0': {
-            'hello.py':newCode
-          }
-        }
-      })
-    }, 1000);
   }
   getCompleted() {
     let runs = []
@@ -100,61 +137,6 @@ class JobCodeTab extends Component {
 13 Aug 2017 14:43:48 HeartBeatService: Finished waiting for heartbeat thread @ShellCommandActivityObj_2017-08-13T14:20:27_Attempt=1
 13 Aug 2017 14:43:48 TaskPoller: Work ShellCommandActivity took 0:11 to complete`
     return rawLogs
-  }
-  render() {
-    let { node } = this.props
-    if (!node){
-      return (<div></div>)
-    }
-
-    let editorOptions = {
-      lineNumbers: true,
-      dragDrop: false,
-      mode: {name: "python"}
-    }
-    // node.code = "import os\n\ndef main(event, context):\n    print('hello from main')\n    print('secret value: ' + event['SECRET_VALUE'])\n    print(event)\n"
-    return (
-      <div className='row job-code-tab'>
-        <div className='col-md-2'>
-
-          <div className='' style={{padding:'5px',paddingLeft:'15px'}}>
-            <select className={'form-control'}>
-              <option>V0</option>
-              <option>V1</option>
-              <option>V2 - Published</option>
-              <option>V3</option>
-            </select>
-          </div>
-
-          <ul style={{marginTop:'40px'}}>
-            <li><a href='#/'>requirements.txt</a></li>
-            <li><a href='#/'>main.py</a></li>
-            <li><a href='#/'> - add file - </a></li>
-          </ul>
-
-        </div>
-        <div className='col-md-10' style={{borderLeft:'1px solid #ccc'}}>
-          <div className='row' style={{paddingTop:'5px',paddingBottom:'5px',paddingRight:'15px'}}>
-            <div className="col-md-1">
-                <button className="run-btn form-control">
-                    <i className="fa fa-play" aria-hidden="true"></i>
-                </button>
-            </div>
-            <div className='col-md-11'>
-              <div className='form-inline pull-right'>
-                <button className={'form-control btn btn-default'}>Publish version</button>
-              </div>
-            </div>
-          </div>
-          <div className='row'>
-            <div className='col-md-12' style={{paddingLeft:'0px',borderTop:'1px solid #ccc'}}> 
-              <CodeEditor value={get(node,['files','v0','hello.py','blah'])} options={editorOptions} onChange={this.updateCode.bind(this)} />
-            </div>
-          </div>
-        </div>
-
-      </div>
-    )
   }
 }
 

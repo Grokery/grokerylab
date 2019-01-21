@@ -51,11 +51,18 @@ class JobDetails extends Component {
     )
   }
   render() {
-    const { onUpdate, params, node } = this.props
+    const { onUpdate, params, node, flowOpen } = this.props
+    let height = window.innerHeight
+    if (flowOpen) {
+      height -= 340
+    } else {
+      height -= 90
+    }
     let commonProps = {
       key: params.nodeId, 
       params: params,
       onUpdate: onUpdate,
+      height: height
     }
     return (
       <div className='job-details'>
