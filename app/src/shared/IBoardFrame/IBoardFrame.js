@@ -5,7 +5,6 @@ import { isArray } from 'lodash'
 
 import { API_BASE_URL } from "config"
 import { getCloudId, getCloudToken } from 'authentication'
-import './IBoardFrame.css'
 
 class IBoardFrame extends Component {
     static propTypes = {

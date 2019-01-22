@@ -34,22 +34,16 @@ class SourceDetails extends Component {
       this.setState({dataDraft: nextProps.node.data})
     }
   }
-  getRightMenuOptions = () => {
-    let saveOption = null
-    if (this.state.dirty) {
-      saveOption = <a key='save' href='' onClick={this.updateData} className='btn btn-default'><i className='fa fa-save'></i></a>
+  onKeyDown = (e) => {
+    if (e.metaKey && e.keyCode === 83) { // 83='s'
+      this.onUpdate(e)
     }
-    return concat([
-      saveOption,
-      <a key='edit' href='' onClick={this.toggleEditDialog} className='btn btn-default'><i className='fa fa-cog'></i></a>,
-    ], this.props.rightMenuOptions)
   }
-  renderRightMenuOptions() {
-    return (
-      <div className='btn-group item-options' style={{position: 'absolute', right: 0, top: 0}}>
-          {this.getRightMenuOptions()}
-      </div>
-    )
+  componentDidMount() {
+    document.addEventListener("keydown", this.onKeyDown);
+  }
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.onKeyDown);
   }
   render() {
     const { params, onUpdate, node, flowOpen } = this.props
@@ -106,6 +100,23 @@ class SourceDetails extends Component {
       </div>
     )
   }
+  getRightMenuOptions = () => {
+    let saveOption = null
+    if (this.state.dirty) {
+      saveOption = <a key='save' href='' onClick={this.onUpdate} className='btn btn-default'><i className='fa fa-save'></i></a>
+    }
+    return concat([
+      saveOption,
+      <a key='edit' href='' onClick={this.toggleEditDialog} className='btn btn-default'><i className='fa fa-cog'></i></a>,
+    ], this.props.rightMenuOptions)
+  }
+  renderRightMenuOptions() {
+    return (
+      <div className='btn-group item-options' style={{position: 'absolute', right: 0, top: 0}}>
+          {this.getRightMenuOptions()}
+      </div>
+    )
+  }
   toggleEditDialog = (e) => {
     if (e) {e.preventDefault()}
     if (this.state.shown) {
@@ -117,7 +128,7 @@ class SourceDetails extends Component {
   onChange = (newData) => {
     this.setState({ dataDraft: newData, dirty: true })
   }
-  updateData = (e) => {
+  onUpdate = (e) => {
     e.preventDefault()
     this.props.onUpdate({
       'data': JSON.parse(this.state.dataDraft)

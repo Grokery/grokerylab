@@ -71,7 +71,7 @@ public class Node {
 	public void setValues(JsonObj newData) {
 		this.updated = new DateTime(DateTimeZone.UTC).toString();
 
-		this.sortRank = newData.get("sortRank") != null ? new Double(newData.get("sortRank").toString()) : this.x;
+		this.sortRank = newData.get("sortRank") != null ? new Double(newData.get("sortRank").toString()) : this.sortRank;
 		this.title = newData.getString("title", this.title);
 		this.description = newData.getString("description", this.description);
 		this.x = newData.get("x") != null ? new Double(newData.get("x").toString()) : this.x;

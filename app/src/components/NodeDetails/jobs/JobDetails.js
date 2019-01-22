@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { concat } from 'lodash'
+import { concat, assign } from 'lodash'
 
 import { Tabs, Panel } from 'shared/Tabs/Tabs'
 import EditModal from 'shared/EditModal/EditModal'
@@ -24,32 +24,19 @@ class JobDetails extends Component {
       this.state = {
           shown: false,
           dirty: false,
+          draftCode: props.node.code,
       }
   }
-  toggleEditDialog = (e) => {
-    if (e) {e.preventDefault()}
-    if (this.state.shown) {
-      this.setState({shown: false})
-    } else {
-      this.setState({shown: true})
+  onKeyDown = (e) => {
+    if (e.metaKey && e.keyCode === 83) { // 83='s'
+      this.onUpdate(e)
     }
   }
-  getRightMenuOptions = () => {
-    let saveOption = null
-    if (this.state.dirty) {
-      saveOption = <a key='save' href='' onClick={this.updateSourceCode} className='btn btn-default'><i className='fa fa-save'></i></a>
-    }
-    return concat([
-      saveOption,
-      <a key='edit' href='' onClick={this.toggleEditDialog} className='btn btn-default'><i className='fa fa-cog'></i></a>,
-    ], this.props.rightMenuOptions)
+  componentDidMount() {
+    document.addEventListener("keydown", this.onKeyDown);
   }
-  renderRightMenuOptions() {
-    return (
-      <div className='btn-group item-options' style={{position: 'absolute', right: 0, top: 0}}>
-          {this.getRightMenuOptions()}
-      </div>
-    )
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.onKeyDown);
   }
   render() {
     const { onUpdate, params, node, flowOpen } = this.props
@@ -63,7 +50,7 @@ class JobDetails extends Component {
       key: params.nodeId, 
       params: params,
       onUpdate: onUpdate,
-      height: height
+      height: height,
     }
     return (
       <div className='job-details'>
@@ -94,15 +81,55 @@ class JobDetails extends Component {
       </div>
     )
   }
+  getRightMenuOptions = () => {
+    let saveOption = null
+    if (this.state.dirty) {
+      saveOption = <a key='save' href='' onClick={this.onUpdate} className='btn btn-default'><i className='fa fa-save'></i></a>
+    }
+    return concat([
+      saveOption,
+      <a key='edit' href='' onClick={this.toggleEditDialog} className='btn btn-default'><i className='fa fa-cog'></i></a>,
+    ], this.props.rightMenuOptions)
+  }
+  renderRightMenuOptions() {
+    return (
+      <div className='btn-group item-options' style={{position: 'absolute', right: 0, top: 0}}>
+          {this.getRightMenuOptions()}
+      </div>
+    )
+  }
   getJobCodeComponent(props) {
     const { node } = this.props
+    const codeProps = assign(props, {
+      draftCode: this.state.draftCode,
+      onCodeChange: this.onCodeChange,
+    })
     if (node.subType === 'GENERIC') {
-      return (<BrowserJs {...props}></BrowserJs>)
+      return (<BrowserJs {...codeProps}></BrowserJs>)
     } else if (node.subType === 'AWSLAMBDA') {
-      return (<AWSLambda {...props}></AWSLambda>)
+      return (<AWSLambda {...codeProps}></AWSLambda>)
     } else {
       return null
     }
+  }
+  toggleEditDialog = (e) => {
+    if (e) {e.preventDefault()}
+    if (this.state.shown) {
+      this.setState({shown: false})
+    } else {
+      this.setState({shown: true})
+    }
+  }
+  onCodeChange = (newCode) => {
+    this.setState({draftCode: newCode, dirty: true})
+  }
+  onUpdate = (e) => {
+    e.preventDefault()
+    this.props.onUpdate({
+      'code': this.state.draftCode
+    }, () => {
+      this.setState({ dirty: false })
+    })
   }
 }
 

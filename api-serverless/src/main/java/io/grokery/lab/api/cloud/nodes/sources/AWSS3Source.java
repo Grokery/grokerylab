@@ -23,7 +23,7 @@ public class AWSS3Source extends Source {
 		this.setSubType(SourceType.AWSS3.toString());
 	}
 
-	public JsonObj query(CloudContext context, JsonObj request) {
+	public Object query(CloudContext context, JsonObj request) {
 		// TODO map data to writeRequestObjModel and validate
 		// query is path (s3 key) 
 		// 	if multiple file matches, 
@@ -35,7 +35,7 @@ public class AWSS3Source extends Source {
 		throw new NotImplementedError();
 	}
 
-	public void write(CloudContext context, JsonObj request) {
+	public void write(CloudContext context, Object request) {
 		// TODO map data to writeRequestObjModel and validate
 		// if this.s3Path is folder
 		// 	    put new file

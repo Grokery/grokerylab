@@ -15,7 +15,7 @@ public class SourceService {
 
     private static final Logger LOG = LoggerFactory.getLogger(SourceService.class);
 
-    public static JsonObj query(String auth, String cloudId, String sourceId, JsonObj request) throws NotAuthorizedException, InvalidInputException, NotFoundException {
+    public static Object query(String auth, String cloudId, String sourceId, JsonObj request) throws NotAuthorizedException, InvalidInputException, NotFoundException {
         CloudContext context = new CloudContext(cloudId, auth);
 
         DAO dao = NodesDAO.getInst(context);

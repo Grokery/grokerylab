@@ -18,6 +18,7 @@ public class Job extends Node {
 
 	private int version;
 	private String templateId;
+	private String code;
 	private Map<String, Object> files;
 
 	// Constructers
@@ -35,7 +36,11 @@ public class Job extends Node {
 
 	public void setValues(JsonObj newData) {
 		super.setValues(newData);
+
+		this.version = newData.get("version") != null ? newData.getInt("version") : this.version;
 		this.templateId = newData.get("templateId") != null ? newData.getString("templateId") : this.templateId;
+		this.code = newData.get("code") != null ? newData.getString("code") : this.code;
+		this.files = newData.get("files") != null ? newData.getJsonObj("files") : this.files;
 	}
 
 	public void validateValues() throws InvalidInputException {
@@ -91,6 +96,12 @@ public class Job extends Node {
 	}
 	public void setTemplateId(String templateId) {
 		this.templateId = templateId;
+	}
+	public String getCode() {
+		return code;
+	}
+	public void setCode(String code) {
+		this.code = code;
 	}
 	public Map<String, Object> getFiles() {
 		return files;
