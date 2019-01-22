@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Gallery from 'shared/Gallery/Gallery'
-// import Modal from 'shared/Modal/Modal'
-// import CodeEditor from 'shared/CodeEditor/CodeEditor'
 import CreateEditCloudModel from '../CreateEditCloudModel/CreateEditCloudModel'
 import './CloudSection.css'
 

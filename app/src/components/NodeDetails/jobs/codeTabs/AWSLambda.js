@@ -5,9 +5,7 @@ import AceEditor from 'react-ace'
 import 'brace/mode/python'
 import 'brace/theme/chrome'
 
-import './JobCode.css'
-
-class JobCodeTab extends Component {
+class AWSLambda extends Component {
   static propTypes = {
     node: PropTypes.object,
     onUpdate: PropTypes.func.isRequired,
@@ -28,7 +26,7 @@ class JobCodeTab extends Component {
       return (<div></div>)
     }
     return (
-      <div className='row job-code-tab'>
+      <div className='row job-code-tab' style={{padding:0,margin:0}}>
         <div className='col-md-2' style={{paddingRight:'0px'}}>
 
           {/*  TODO store files as file objects in list in node */}
@@ -146,4 +144,4 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps, {})(JobCodeTab)
+export default connect(mapStateToProps, {})(AWSLambda)

@@ -146,7 +146,6 @@ public class AWSLambdaJob extends Job {
 		// 	e.printStackTrace();
 		// }
 
-
 	}
 
 	public void cleanupExternalResources(CloudContext context) {

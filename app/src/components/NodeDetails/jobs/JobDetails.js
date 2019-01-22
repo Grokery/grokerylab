@@ -8,9 +8,10 @@ import EditModal from 'shared/EditModal/EditModal'
 import InfoTab from 'shared/InfoTab/InfoTab'
 import LogsTab from 'shared/LogsTab/LogsTab'
 
-import JobCode from './JobCode'
 import JobInfo from './JobInfo'
 import JobForm from './JobForm'
+import BrowserJs from './codeTabs/BrowserJs'
+import AWSLambda from './codeTabs/AWSLambda'
 
 class JobDetails extends Component {
   static propTypes = {
@@ -75,7 +76,7 @@ class JobDetails extends Component {
           </Panel>
           <Panel title='Code'>
             {this.renderRightMenuOptions()}
-            <JobCode {...commonProps}></JobCode>
+            {this.getJobCodeComponent(commonProps)}
           </Panel>
           <Panel title='History'>
             {this.renderRightMenuOptions()}
@@ -92,6 +93,16 @@ class JobDetails extends Component {
         ></EditModal>
       </div>
     )
+  }
+  getJobCodeComponent(props) {
+    const { node } = this.props
+    if (node.subType === 'GENERIC') {
+      return (<BrowserJs {...props}></BrowserJs>)
+    } else if (node.subType === 'AWSLAMBDA') {
+      return (<AWSLambda {...props}></AWSLambda>)
+    } else {
+      return null
+    }
   }
 }
 

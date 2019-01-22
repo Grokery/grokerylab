@@ -66,6 +66,7 @@ class BoardDetails extends Component {
               cloudName={params.cloudName} 
               boardId={params.nodeId} 
               height={height}
+              width={'100%'}
             ></IBoardFrame>
           </Panel>
           <Panel title='Code'>

@@ -11,8 +11,8 @@ class IBoardFrame extends Component {
     static propTypes = {
         cloudName: PropTypes.string.isRequired,
         board: PropTypes.object.isRequired,
-        width: PropTypes.number,
-        height: PropTypes.number,
+        width: PropTypes.any,
+        height: PropTypes.any,
     }
     static defaultProps = {
         width: window.innerWidth,

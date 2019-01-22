@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import './CodeEditor.css'
 
 const className = require('classnames');
 const debounce = require('lodash.debounce');
@@ -15,7 +14,7 @@ require('codemirror/mode/htmlmixed/htmlmixed')
 
 require('codemirror/mode/sql/sql')
 
-class CodeEditor extends Component {
+class CodeMirror extends Component {
 	/*
 		I've copied substantial paortions of Jed Watson's excelent React
 		CodeMirror component available from npm under the following license:
@@ -165,4 +164,4 @@ const mapStateToProps = (state, ownProps) => {
     return {}
 }
 
-export default connect(mapStateToProps, {})(CodeEditor)
+export default connect(mapStateToProps, {})(CodeMirror)
