@@ -29,7 +29,7 @@ class BoardDetails extends Component {
   getRightMenuOptions = () => {
     let saveOption = null
     if (this.state.dirty) {
-      saveOption = <a key='save' href='' onClick={this.updateSourceCode} className='btn btn-default'><i className='fa fa-save'></i></a>
+      saveOption = <a key='save' href='' onClick={this.onUpdate} className='btn btn-default'><i className='fa fa-save'></i></a>
     }
     return concat([
       saveOption,
@@ -47,6 +47,17 @@ class BoardDetails extends Component {
     if (nextProps.node.nodeId !== this.props.node.nodeId) {
       this.setState({sourceDraft: nextProps.node.source})
     }
+  }
+  onKeyDown = (e) => {
+    if (e.metaKey && e.keyCode === 83) { // 83='s'
+      this.onUpdate(e)
+    }
+  }
+  componentDidMount() {
+    document.addEventListener("keydown", this.onKeyDown);
+  }
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.onKeyDown);
   }
   render() {
     const { params, node, flowOpen } = this.props
@@ -111,7 +122,7 @@ class BoardDetails extends Component {
   onChange = (newCode) => {
     this.setState({ sourceDraft: newCode, dirty: true })
   }
-  updateSourceCode = (e) => {
+  onUpdate = (e) => {
     e.preventDefault()
     this.props.onUpdate({
       'source': this.state.sourceDraft

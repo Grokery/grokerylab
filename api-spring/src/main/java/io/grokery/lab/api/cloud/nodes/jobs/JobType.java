@@ -6,14 +6,22 @@ package io.grokery.lab.api.cloud.nodes.jobs;
  * @author hogue
  */
 public enum JobType {
-    GENERIC("Generic"),
-    PYTHON("Python"),
-    SQL("SQL"),
-    JAVA("Java"),
 
+    // Basic
+    GENERIC("Placeholder"),
+    BROWSERJS("Browser JS"),
+
+    // Local
+    PYTHON("Python"),
+    JAVA("Java"),
+    SPROC("SQL Stored Procedure"),
+
+    // AWS
     AWSLAMBDA("AWS Lambda"),
-    AZUREFUNC("Azure Function"),
     AWSDATAPIPELINE("AWS DataPipeline"),
+
+    // Azure
+    AZUREFUNC("Azure Function"),
     AZUREDATAFACTORY("Azure DataFactory");
 
     private String typeName;

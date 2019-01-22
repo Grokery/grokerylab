@@ -27,6 +27,11 @@ class JobDetails extends Component {
           draftCode: props.node.code,
       }
   }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.node.nodeId !== this.props.node.nodeId) {
+      this.setState({draftCode: nextProps.node.code})
+    }
+  }
   onKeyDown = (e) => {
     if (e.metaKey && e.keyCode === 83) { // 83='s'
       this.onUpdate(e)
@@ -57,9 +62,7 @@ class JobDetails extends Component {
         <Tabs>
           <Panel title='Info'>
             {this.renderRightMenuOptions()}
-            <InfoTab {...commonProps}>
-              <JobInfo {...commonProps}></JobInfo>
-            </InfoTab>
+            {this.getJobInfoComponent(commonProps)}
           </Panel>
           <Panel title='Code'>
             {this.renderRightMenuOptions()}
@@ -98,6 +101,16 @@ class JobDetails extends Component {
       </div>
     )
   }
+  getJobInfoComponent(props) {
+    const { node } = this.props
+    if (node.subType === 'GENERIC') {
+      return (<InfoTab {...props}><JobInfo {...props}></JobInfo></InfoTab>)
+    } else if (node.subType === 'BROWSERJS') {
+      return (<InfoTab {...props}><JobInfo {...props}></JobInfo></InfoTab>)
+    } else if (node.subType === 'AWSLAMBDA') {
+      return (<InfoTab {...props}><JobInfo {...props}></JobInfo></InfoTab>)
+    }
+  }
   getJobCodeComponent(props) {
     const { node } = this.props
     const codeProps = assign(props, {
@@ -105,6 +118,8 @@ class JobDetails extends Component {
       onCodeChange: this.onCodeChange,
     })
     if (node.subType === 'GENERIC') {
+      return (<div>Placeholder</div>)
+    } else if (node.subType === 'BROWSERJS') {
       return (<BrowserJs {...codeProps}></BrowserJs>)
     } else if (node.subType === 'AWSLAMBDA') {
       return (<AWSLambda {...codeProps}></AWSLambda>)

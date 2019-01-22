@@ -27,8 +27,9 @@
 .tabs .nav-tabs>li.active>a,
 .tabs .nav-tabs>li.active>a:focus,
 .tabs .nav-tabs>li.active>a:hover {
-    border:none;
-    border-radius: 2px
+    /* border-bottom: 1px solid #e7ebee; */
+    border-radius: 2px;
+    box-sizing: border-box;
 }
 
 .tabs .nav>li>a:focus, .nav>li>a:hover {
