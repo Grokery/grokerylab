@@ -19,7 +19,7 @@ class SourceDetails extends Component {
     node: PropTypes.object.isRequired,
     onUpdate: PropTypes.func.isRequired,
     rightMenuOptions: PropTypes.array.isRequired,
-    flowOpen: PropTypes.bool,
+    height: PropTypes.number.isRequired,
   }
   constructor(props) {
     super(props)
@@ -46,13 +46,7 @@ class SourceDetails extends Component {
     document.removeEventListener("keydown", this.onKeyDown);
   }
   render() {
-    const { params, onUpdate, node, flowOpen } = this.props
-    let height = window.innerHeight
-    if (flowOpen) {
-      height -= 340
-    } else {
-      height -= 90
-    }
+    const { params, onUpdate, node, height } = this.props
     return (
       <div className='source-details'>
         <Tabs>

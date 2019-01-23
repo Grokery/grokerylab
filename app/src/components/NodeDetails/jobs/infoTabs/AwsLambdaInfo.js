@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { object, func, array } from 'prop-types'
 import { connect } from 'react-redux'
-import { getAccountToken } from 'authentication'
-import { postJobRun, fetchJobRuns, fetchJobRunsWithRepeat } from 'store/actions'
-import { API_BASE_URL } from 'config'
-import './JobInfo.css'
+
+import { fetchJobRuns } from 'store/actions'
+
+import './AwsLambdaInfo.css'
 
 export default connect(
     (state, ownProps) => {
@@ -14,12 +14,10 @@ export default connect(
         }
     }, 
     {
-        postJobRun,
         fetchJobRuns,
-        fetchJobRunsWithRepeat,
     }
 )(
-class JobDetail extends Component {
+class AwsLambdaInfo extends Component {
     static propTypes = {
       params: object.isRequired,
       onUpdate: func.isRequired,
@@ -43,20 +41,6 @@ class JobDetail extends Component {
       node.runControl = e.currentTarget.value
       // this.setState({'node': node})
       this.props.onUpdate({'runControl': node.runControl})
-    }
-    runJob(e) {
-        const { postJobRun, node, fetchJobRunsWithRepeat } = this.props
-        postJobRun({
-          "jobId": node.nodeId,
-          "jobRunType": node.subType,
-          "lambdaARN": node.lambdaARN,
-          "args": {
-              "baseUrl": API_BASE_URL,
-              "authorization": getAccountToken(),
-          }
-      }, function() {
-          fetchJobRunsWithRepeat("?jobId="+node.nodeId+"&limit=10", null, [[1, 0.0, 5], [1, 2.0, 5]])
-      })
     }
     getRunControl() {
       const { node } = this.props
@@ -114,7 +98,7 @@ class JobDetail extends Component {
               <div className="run-control manual-run">
                   <div className="col-md-2">
                       <label>Run Now</label>
-                      <button className="run-btn form-control" onClick={this.runJob.bind(this)}>
+                      <button className="run-btn form-control" onClick={this.props.runJob}>
                           <i className="fa fa-play" aria-hidden="true"></i>
                       </button>
                   </div>

@@ -1,14 +1,19 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { concat, assign } from 'lodash'
+import { concat, assign, isArray, cloneDeep } from 'lodash'
+
+import { API_BASE_URL } from 'config'
+import { getAccountToken, getCloudId, getCloudToken } from 'authentication'
+import { postJobRun, fetchJobRuns, fetchJobRunsWithRepeat, fetchNode, fetchNodes } from 'store/actions'
 
 import { Tabs, Panel } from 'shared/Tabs/Tabs'
 import EditModal from 'shared/EditModal/EditModal'
 import InfoTab from 'shared/InfoTab/InfoTab'
 import LogsTab from 'shared/LogsTab/LogsTab'
 
-import JobInfo from './JobInfo'
+import BrowserJsInfo from './infoTabs/BrowserJsInfo'
+import AwsLambdaInfo from './infoTabs/AwsLambdaInfo'
 import JobForm from './JobForm'
 import BrowserJs from './codeTabs/BrowserJs'
 import AWSLambda from './codeTabs/AWSLambda'
@@ -18,6 +23,12 @@ class JobDetails extends Component {
     node: PropTypes.object,
     onUpdate: PropTypes.func.isRequired,
     rightMenuOptions: PropTypes.array.isRequired,
+    height: PropTypes.number.isRequired,
+    postJobRun: PropTypes.func.isRequired,
+    fetchJobRuns: PropTypes.func.isRequired,
+    fetchJobRunsWithRepeat: PropTypes.func.isRequired,
+    fetchNode: PropTypes.func.isRequired,
+    fetchNodes: PropTypes.func.isRequired,
   }
   constructor(props) {
     super(props)
@@ -44,18 +55,13 @@ class JobDetails extends Component {
     document.removeEventListener("keydown", this.onKeyDown);
   }
   render() {
-    const { onUpdate, params, node, flowOpen } = this.props
-    let height = window.innerHeight
-    if (flowOpen) {
-      height -= 340
-    } else {
-      height -= 90
-    }
+    const { onUpdate, params, node, height } = this.props
     let commonProps = {
       key: params.nodeId, 
       params: params,
       onUpdate: onUpdate,
       height: height,
+      runJob: this.runJob,
     }
     return (
       <div className='job-details'>
@@ -91,6 +97,7 @@ class JobDetails extends Component {
     }
     return concat([
       saveOption,
+      <a key='run' href='' onClick={this.runJob} className='btn btn-default'><i className='fa fa-play'></i></a>,
       <a key='edit' href='' onClick={this.toggleEditDialog} className='btn btn-default'><i className='fa fa-cog'></i></a>,
     ], this.props.rightMenuOptions)
   }
@@ -101,14 +108,55 @@ class JobDetails extends Component {
       </div>
     )
   }
+  runJob = (e) => {
+    const { postJobRun, node, fetchJobRunsWithRepeat, params, fetchNode } = this.props
+    e.preventDefault()
+    if (node.subType === 'BROWSERJS') {
+      if (isArray(node.downstream) && node.downstream[0]) {
+        let code = cloneDeep(node.code)
+        let downstreamNode = node.downstream[0]
+        let url = API_BASE_URL + '/clouds/' + getCloudId(params.cloudName) + '/nodes/datasource/' + downstreamNode.nodeId + '/write'
+        let token = getCloudToken(params.cloudName)
+        code = code.replace(/URL/g, JSON.stringify(url))
+        code = code.replace(/TOKEN/g, JSON.stringify(token))
+
+        var iframe = document.createElement('iframe')
+        iframe.style.visibility = "hidden"
+        iframe.style.width = "1px"
+        iframe.style.height = "1px"
+        iframe.style.position = "absolute"
+        iframe.style.top = "0"
+        iframe.style.left = "0"
+  
+        document.body.appendChild(iframe)
+        iframe.contentWindow.document.open()
+        iframe.contentWindow.document.write('<script>'+code+'</script>')
+        iframe.contentWindow.document.close()
+
+        fetchNode(params.cloudName, downstreamNode.nodeType, downstreamNode.nodeId)
+      }
+    } else {
+      postJobRun({
+        "jobId": node.nodeId,
+        "jobRunType": node.subType,
+        "lambdaARN": node.lambdaARN,
+        "args": {
+            "baseUrl": API_BASE_URL,
+            "authorization": getAccountToken(),
+        }
+      }, () => {
+          fetchJobRunsWithRepeat("?jobId="+node.nodeId+"&limit=10", null, [[1, 0.0, 5], [1, 2.0, 5]])
+      })
+    }
+  }
   getJobInfoComponent(props) {
     const { node } = this.props
     if (node.subType === 'GENERIC') {
-      return (<InfoTab {...props}><JobInfo {...props}></JobInfo></InfoTab>)
+      return (<InfoTab {...props}><BrowserJsInfo {...props}></BrowserJsInfo></InfoTab>)
     } else if (node.subType === 'BROWSERJS') {
-      return (<InfoTab {...props}><JobInfo {...props}></JobInfo></InfoTab>)
+      return (<InfoTab {...props}><BrowserJsInfo {...props}></BrowserJsInfo></InfoTab>)
     } else if (node.subType === 'AWSLAMBDA') {
-      return (<InfoTab {...props}><JobInfo {...props}></JobInfo></InfoTab>)
+      return (<InfoTab {...props}><AwsLambdaInfo {...props}></AwsLambdaInfo></InfoTab>)
     }
   }
   getJobCodeComponent(props) {
@@ -152,4 +200,10 @@ const mapStateToProps = (state, ownProps) => {
   return {}
 }
 
-export default connect(mapStateToProps, {})(JobDetails)
+export default connect(mapStateToProps, {
+  postJobRun,
+  fetchJobRuns,
+  fetchJobRunsWithRepeat,
+  fetchNode,
+  fetchNodes,
+})(JobDetails)

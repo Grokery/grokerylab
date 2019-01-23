@@ -11,6 +11,7 @@ import SourceDetails from './sources/SourceDetails'
 import BoardDetails from './boards/BoardDetails'
 
 const flowPreviewHeight = 300
+const tabsNavHeight = 40
 
 class NodeDetails extends Component {
   static propTypes = {
@@ -36,13 +37,19 @@ class NodeDetails extends Component {
     const { params, location, node } = this.props
     const { flowOpen, rightMenuOptions } = this.state
     if (!node) {return null}
+    let detailsHeight = window.innerHeight
+    if (flowOpen) {
+      detailsHeight -= (flowPreviewHeight + tabsNavHeight)
+    } else {
+      detailsHeight -= (headerNavHeight + tabsNavHeight)
+    }
     let props = {
       node: node,
       params: params,
       onUpdate: this.onUpdate,
       toggleNodeDetailsPain: this.toggleNodeDetailsPain,
       rightMenuOptions: rightMenuOptions,
-      flowOpen: flowOpen,
+      height: detailsHeight,
     }
     const flowDisplay = flowOpen ? 'initial' : 'none'
     return (

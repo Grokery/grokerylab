@@ -30,7 +30,7 @@ class TopNavBar extends Component {
             <nav id='top-nav-wrapper' className='navbar navbar-default navbar-fixed-top' role='navigation'>
                 <div id='top-menu-wrapper'>
                     <div className='navbar-header'>
-                        <a className='navbar-brand' href='#'><img alt="Grokery" src="./img/logo-white-on-clear.png"></img></a>
+                        <a className='navbar-brand' href='#'><img alt="Fubitz" src="./img/logo-white-on-clear.png"></img></a>
                     </div>
                     {this.getRightNav()}
                 </div>

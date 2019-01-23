@@ -16,7 +16,7 @@ class BoardDetails extends Component {
     node: PropTypes.object,
     onUpdate: PropTypes.func.isRequired,
     rightMenuOptions: PropTypes.array.isRequired,
-    flowOpen: PropTypes.bool,
+    height: PropTypes.number.isRequired,
   }
   constructor(props) {
     super(props)
@@ -60,14 +60,8 @@ class BoardDetails extends Component {
     document.removeEventListener("keydown", this.onKeyDown);
   }
   render() {
-    const { params, node, flowOpen } = this.props
+    const { params, node, height } = this.props
     let title = node ? node.title : ''
-    let height = window.innerHeight
-    if (flowOpen) {
-      height -= 340
-    } else {
-      height -= 90
-    }
     return (
       <div className='board-details'>
         <Tabs>
