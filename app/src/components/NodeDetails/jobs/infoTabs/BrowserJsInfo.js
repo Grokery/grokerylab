@@ -26,9 +26,9 @@ class BrowserJsInfo extends Component {
       jobRuns: array.isRequired,
     }
     componentDidMount() {
-      const { fetchJobRuns, node } = this.props
+      const { fetchJobRuns, node, params } = this.props
       
-      fetchJobRuns("?jobId="+node.nodeId+"&limit=10")
+      fetchJobRuns(params.cloudName, "?jobId="+node.nodeId+"&limit=10")
     }
     getRunLabelType(status) {
         if (status === "COMPLETED") {

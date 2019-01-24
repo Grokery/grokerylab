@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import io.grokery.lab.api.common.context.CloudContext;
 import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.MapperUtil;
-import io.grokery.lab.api.common.errors.NotImplementedError;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
 
 public class JobRun {
@@ -28,6 +27,11 @@ public class JobRun {
 	private String created;
 	private String updated;
 
+	public JobRun() {
+		this.initializeDefaults();
+		this.setJobRunType(JobRunType.GENERIC.toString());
+	}
+
 	protected JobRun(JobRunType jobRunType) {
 		this.initializeDefaults();
 		this.setJobRunType(jobRunType.toString());
@@ -41,7 +45,6 @@ public class JobRun {
 	}
 
 	public void startRun(CloudContext context) {
-		throw new NotImplementedError();
 	}
 
 	public void updateStatus(JsonObj request) throws InvalidInputException {		
@@ -108,12 +111,10 @@ public class JobRun {
 			LOG.info("Get class instance for jobRunType: " + typeName);
 			JobRunType nodeType = JobRunType.valueOf(typeName);
 			switch (nodeType) {
-				case PYTHON:
-					return new AWSLambdaJobRun();
 				case AWSLAMBDA:
 					return new AWSLambdaJobRun();
 				default:
-					throw new NotImplementedError();
+					return new JobRun();
 			}
 		} catch (IllegalArgumentException e) {
 			String message = "Unknown NodeType";

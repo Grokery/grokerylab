@@ -26,9 +26,8 @@ class AwsLambdaInfo extends Component {
       jobRuns: array.isRequired,
     }
     componentDidMount() {
-      const { fetchJobRuns, node } = this.props
-      
-      fetchJobRuns("?jobId="+node.nodeId+"&limit=10")
+      const { fetchJobRuns, node, params } = this.props
+      fetchJobRuns(params.cloudName, "?jobId="+node.nodeId+"&limit=10")
     }
     toggleIsActive(e) {
       const { node } = this.props

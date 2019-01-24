@@ -4,8 +4,8 @@ import { connect } from 'react-redux'
 import { concat, assign, isArray, cloneDeep } from 'lodash'
 
 import { API_BASE_URL } from 'config'
-import { getAccountToken, getCloudId, getCloudToken } from 'authentication'
-import { postJobRun, fetchJobRuns, fetchJobRunsWithRepeat, fetchNode, fetchNodes } from 'store/actions'
+import { getCloudId, getCloudToken } from 'authentication'
+import { postJobRun, fetchJobRuns, fetchJobRunsWithRepeat, fetchNode, fetchNodes, updateJobRun } from 'store/actions'
 
 import { Tabs, Panel } from 'shared/Tabs/Tabs'
 import EditModal from 'shared/EditModal/EditModal'
@@ -29,6 +29,7 @@ class JobDetails extends Component {
     fetchJobRunsWithRepeat: PropTypes.func.isRequired,
     fetchNode: PropTypes.func.isRequired,
     fetchNodes: PropTypes.func.isRequired,
+    updateJobRun: PropTypes.func.isRequired,
   }
   constructor(props) {
     super(props)
@@ -109,7 +110,7 @@ class JobDetails extends Component {
     )
   }
   runJob = (e) => {
-    const { postJobRun, node, fetchJobRunsWithRepeat, params, fetchNode } = this.props
+    const { postJobRun, node, fetchJobRunsWithRepeat, params, fetchNode, updateJobRun } = this.props
     e.preventDefault()
     if (node.subType === 'BROWSERJS') {
       if (isArray(node.downstream) && node.downstream[0]) {
@@ -134,18 +135,21 @@ class JobDetails extends Component {
         iframe.contentWindow.document.close()
 
         fetchNode(params.cloudName, downstreamNode.nodeType, downstreamNode.nodeId)
+        postJobRun(params.cloudName, {jobId: node.nodeId, jobRunType: node.subType, runStatus: "COMPLETED"}, () => {
+          fetchJobRunsWithRepeat(params.cloudName, "?jobId="+node.nodeId+"&limit=10", null, [[1, 0.0, 5], [1, 2.0, 5]])
+      })
       }
     } else {
-      postJobRun({
+      postJobRun(params.cloudName, {
         "jobId": node.nodeId,
         "jobRunType": node.subType,
         "lambdaARN": node.lambdaARN,
         "args": {
             "baseUrl": API_BASE_URL,
-            "authorization": getAccountToken(),
+            "authorization": getCloudToken(params.cloudName),
         }
       }, () => {
-          fetchJobRunsWithRepeat("?jobId="+node.nodeId+"&limit=10", null, [[1, 0.0, 5], [1, 2.0, 5]])
+          fetchJobRunsWithRepeat(params.cloudName + "?jobId="+node.nodeId+"&limit=10", null, [[1, 0.0, 5], [1, 2.0, 5]])
       })
     }
   }
@@ -206,4 +210,5 @@ export default connect(mapStateToProps, {
   fetchJobRunsWithRepeat,
   fetchNode,
   fetchNodes,
+  updateJobRun,
 })(JobDetails)

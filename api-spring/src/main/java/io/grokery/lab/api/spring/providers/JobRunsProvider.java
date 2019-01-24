@@ -79,7 +79,7 @@ public class JobRunsProvider {
 			@ApiParam @QueryParam("projection") String projection,
 			@ApiParam @QueryParam("limit") int limit
 	) throws NotAuthorizedException {
-		LOG.info("GET:{}/clouds/{}/jobruns/{}?query={}&projection={}&limit={}", apiVersion, cloudId, jobId, query, projection, limit);
+		LOG.info("GET:{}/clouds/{}/jobruns/search/{}?query={}&projection={}&limit={}", apiVersion, cloudId, jobId, query, projection, limit);
 		JsonObj result = JobRunsService.getJobRunsforJob(auth, cloudId, jobId, query, projection, limit);
 		return Response.status(Status.OK).entity(result).build();
 	}
