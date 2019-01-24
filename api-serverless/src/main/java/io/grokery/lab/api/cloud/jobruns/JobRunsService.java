@@ -44,7 +44,7 @@ public class JobRunsService {
 		LOG.info("getJobRunsforJob query={} projection={}", query, projection);
 		DAO dao = JobRunsDAO.getInst(context);
 		if (projection == null) {
-			projection = "jobId, jobrunId, created, startTime, endTime, runStatus";
+			projection = "jobId, jobrunId, created, startTime, endTime, runStatus, userContact";
 		}
 		JsonObj results = dao.query(jobId, query, projection, limit);
 		return results;
