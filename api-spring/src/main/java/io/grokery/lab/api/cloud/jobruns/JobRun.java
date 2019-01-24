@@ -23,9 +23,10 @@ public class JobRun {
 	private String runStatus;
 	private String startTime;
 	private String endTime;
-	private JsonObj args;
 	private String created;
 	private String updated;
+	private String userContact;
+	private JsonObj args;
 
 	public JobRun() {
 		this.initializeDefaults();
@@ -181,6 +182,12 @@ public class JobRun {
 	}
 	public void setCreated(String created) {
 		this.created = created;
+	}
+	public String getUserContact() {
+		return userContact;
+	}
+	public void setUserContact(String user) {
+		this.userContact = user;
 	}
 
 }

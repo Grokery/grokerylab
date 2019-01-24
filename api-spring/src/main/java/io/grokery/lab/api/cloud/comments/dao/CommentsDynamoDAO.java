@@ -10,7 +10,7 @@ import com.amazonaws.services.dynamodbv2.model.KeyType;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
 
-import io.grokery.lab.api.common.dao.DAO; import io.grokery.lab.api.common.context.CloudContext;
+import io.grokery.lab.api.common.context.CloudContext;
 import io.grokery.lab.api.common.dao.DynamoDAO;
 
 public class CommentsDynamoDAO extends DynamoDAO {
@@ -27,7 +27,7 @@ public class CommentsDynamoDAO extends DynamoDAO {
 
 	@Override
 	protected String getTableName() {
-		return this.context.cloudId + "-comments";
+		return "comments-" + this.context.cloudId;
 	}
 
 	@Override

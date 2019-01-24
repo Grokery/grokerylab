@@ -126,7 +126,7 @@ class AwsLambdaInfo extends Component {
               <tr key={element.jobrunId}>
                   {/* <td>v0</td> */}
                   <td>Manual</td>
-                  <td>dhogue</td>
+                  <td>{element.userContact}</td>
                   {/* <td>{startTime.toLocaleTimeString("en-us", dateOptions)}</td> */}
                   {/* <td>{element.startTime}</td> */}
                   <td>{element.startTime}</td>

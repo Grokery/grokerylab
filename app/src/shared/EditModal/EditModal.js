@@ -72,6 +72,7 @@ class EditModal extends Component {
   getNodeJsonForEdit(node = this.props.node) {
     let json = Object.assign({}, node)
     delete json.source
+    delete json.code
     delete json.data
     if (!json) {
       json = {}

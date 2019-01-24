@@ -22,13 +22,25 @@ class IBoardFrame extends Component {
         
         let source = board.source
         if (isArray(board.upstream) && board.upstream[0]) {
-            let upstreamId = board.upstream[0]['nodeId']
-            let url = API_BASE_URL + '/clouds/' + getCloudId(cloudName) + '/nodes/datasource/' + upstreamId + '/query'
+            let url = API_BASE_URL + '/clouds/' + getCloudId(cloudName) + '/nodes/datasource/'
             let token = getCloudToken(cloudName)
-            source = source.replace(/URL/g, JSON.stringify(url))
-            source = source.replace(/TOKEN/g, JSON.stringify(token))
+            let code = `
+                <script>
+                    var getSource = (id, cb) => {
+                        var url = '`+url+`' + id + '/query'
+                        var options = {headers:{"Authorization":"`+token+`"}}
+                        fetch(url, options)
+                        .then((res) => {
+                            return res.json();
+                        })
+                        .then((data) => {
+                            cb(data);
+                        });
+                    }
+                </script>
+            `        
+            source = code + source
         }
-
         return (
             <iframe id={board.nodeId} srcDoc={source} style={{border: 'none', width: width, height: height}}></iframe>
         )

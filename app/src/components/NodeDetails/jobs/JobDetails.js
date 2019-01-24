@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { concat, assign, isArray, cloneDeep } from 'lodash'
 
 import { API_BASE_URL } from 'config'
-import { getCloudId, getCloudToken } from 'authentication'
+import { getCloudId, getCloudToken, getSessionInfo } from 'authentication'
 import { postJobRun, fetchJobRuns, fetchJobRunsWithRepeat, fetchNode, fetchNodes, updateJobRun } from 'store/actions'
 
 import { Tabs, Panel } from 'shared/Tabs/Tabs'
@@ -12,6 +12,7 @@ import EditModal from 'shared/EditModal/EditModal'
 import InfoTab from 'shared/InfoTab/InfoTab'
 import LogsTab from 'shared/LogsTab/LogsTab'
 
+import PlaceholderInfo from './infoTabs/PlaceholderInfo'
 import BrowserJsInfo from './infoTabs/BrowserJsInfo'
 import AwsLambdaInfo from './infoTabs/AwsLambdaInfo'
 import JobForm from './JobForm'
@@ -111,15 +112,19 @@ class JobDetails extends Component {
   }
   runJob = (e) => {
     const { postJobRun, node, fetchJobRunsWithRepeat, params, fetchNode } = this.props
+    let sessionInfo = getSessionInfo()
+    let userEmail = sessionInfo['username']
     e.preventDefault()
     if (node.subType === 'BROWSERJS') {
       if (isArray(node.downstream) && node.downstream[0]) {
         try {
           let code = cloneDeep(node.code)
+
           let downstreamNode = node.downstream[0]
           let url = API_BASE_URL + '/clouds/' + getCloudId(params.cloudName) + '/nodes/datasource/' + downstreamNode.nodeId + '/write'
           let token = getCloudToken(params.cloudName)
           code = code.replace(/URL/g, JSON.stringify(url))
+
           code = code.replace(/TOKEN/g, JSON.stringify(token))
 
           var iframe = document.createElement('iframe')
@@ -134,25 +139,26 @@ class JobDetails extends Component {
           iframe.contentWindow.document.open()
           iframe.contentWindow.document.write('<script>'+code+'</script>')
           iframe.contentWindow.document.close()
-          postJobRun(params.cloudName, {jobId: node.nodeId, jobRunType: node.subType, runStatus: "COMPLETED"}, () => {
+          postJobRun(params.cloudName, {jobId: node.nodeId, jobRunType: node.subType, runStatus: "COMPLETED", userContact: userEmail}, () => {
             fetchJobRunsWithRepeat(params.cloudName, "?jobId="+node.nodeId+"&limit=10", null, [[0, 0.0, 1]])
           })
           fetchNode(params.cloudName, downstreamNode.nodeType, downstreamNode.nodeId)
         }
         catch (e) {
-          postJobRun(params.cloudName, {jobId: node.nodeId, jobRunType: node.subType, runStatus: "ERRORED"}, () => {
+          postJobRun(params.cloudName, {jobId: node.nodeId, jobRunType: node.subType, runStatus: "ERRORED", userContact: userEmail}, () => {
             fetchJobRunsWithRepeat(params.cloudName, "?jobId="+node.nodeId+"&limit=10", null, [[0, 0.0, 1]])
           })
         }
       }
     } else {
       postJobRun(params.cloudName, {
-        "jobId": node.nodeId,
-        "jobRunType": node.subType,
-        "lambdaARN": node.lambdaARN,
-        "args": {
-            "baseUrl": API_BASE_URL,
-            "authorization": getCloudToken(params.cloudName),
+        userContact: userEmail,
+        jobId: node.nodeId,
+        jobRunType: node.subType,
+        lambdaARN: node.lambdaARN,
+        args: {
+            baseUrl: API_BASE_URL,
+            authorization: getCloudToken(params.cloudName),
         }
       }, () => {
           fetchJobRunsWithRepeat(params.cloudName, "?jobId="+node.nodeId+"&limit=10", null, [[1, 0.0, 5], [1, 2.0, 5]])
@@ -162,7 +168,7 @@ class JobDetails extends Component {
   getJobInfoComponent(props) {
     const { node } = this.props
     if (node.subType === 'GENERIC') {
-      return (<InfoTab {...props}><BrowserJsInfo {...props}></BrowserJsInfo></InfoTab>)
+      return (<InfoTab {...props}><PlaceholderInfo {...props}></PlaceholderInfo></InfoTab>)
     } else if (node.subType === 'BROWSERJS') {
       return (<InfoTab {...props}><BrowserJsInfo {...props}></BrowserJsInfo></InfoTab>)
     } else if (node.subType === 'AWSLAMBDA') {

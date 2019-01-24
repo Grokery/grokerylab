@@ -41,14 +41,13 @@ class BrowserJsInfo extends Component {
     getJobRuns() {
       const { jobRuns } = this.props
       let results = []
-      jobRuns.forEach(element => {
+      jobRuns.forEach(jobRun => {
           results.push(
-              <tr key={element.jobrunId}>
-                  <td>Manual</td>
-                  <td>dhogue</td>
-                  <td>{moment(element.startTime).format('YYYY-MM-DD')}</td>
-                  <td>{moment(element.startTime).format('HH:mm')}</td>
-                  <td><span className={"label " + this.getRunLabelType(element.runStatus)}>{element.runStatus}</span></td>
+              <tr key={jobRun.jobrunId}>
+                  <td>{jobRun.userContact}</td>
+                  <td>{moment(jobRun.startTime).format('DD MMM YYYY')}</td>
+                  <td>{moment(jobRun.startTime).format('HH:mm')}</td>
+                  <td><span className={"label " + this.getRunLabelType(jobRun.runStatus)}>{jobRun.runStatus}</span></td>
               </tr>
           )
       });
@@ -64,7 +63,6 @@ class BrowserJsInfo extends Component {
                       <table className="table table-hover">
                           <thead>
                               <tr>
-                                  <th>Run Type</th>
                                   <th>User</th>
                                   <th>Date</th>
                                   <th>Time</th>

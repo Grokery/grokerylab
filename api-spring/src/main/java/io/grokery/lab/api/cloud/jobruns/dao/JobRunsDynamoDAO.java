@@ -28,7 +28,7 @@ public class JobRunsDynamoDAO extends DynamoDAO {
 
 	@Override
 	protected String getTableName() {
-		return this.context.cloudId + "-jobruns";
+		return "jobruns-" + this.context.cloudId;
 	}
 
 	@Override
