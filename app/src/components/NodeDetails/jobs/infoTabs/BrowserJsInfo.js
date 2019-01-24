@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { object, func, array } from 'prop-types'
 import { connect } from 'react-redux'
-
+import moment from 'moment'
 import { fetchJobRuns } from 'store/actions'
 
 import './AwsLambdaInfo.css'
@@ -27,7 +27,6 @@ class BrowserJsInfo extends Component {
     }
     componentDidMount() {
       const { fetchJobRuns, node, params } = this.props
-      
       fetchJobRuns(params.cloudName, "?jobId="+node.nodeId+"&limit=10")
     }
     getRunLabelType(status) {
@@ -43,19 +42,12 @@ class BrowserJsInfo extends Component {
       const { jobRuns } = this.props
       let results = []
       jobRuns.forEach(element => {
-          let startTime = new Date(element.startTime)
-          let endTime = new Date(element.endTime)
-          let difference = endTime - startTime
-          difference = difference ? (difference / 1000).toFixed(0) + 's' : '-'
           results.push(
               <tr key={element.jobrunId}>
-                  {/* <td>v0</td> */}
                   <td>Manual</td>
                   <td>dhogue</td>
-                  {/* <td>{startTime.toLocaleTimeString("en-us", dateOptions)}</td> */}
-                  {/* <td>{element.startTime}</td> */}
-                  <td>{element.startTime}</td>
-                  <td>{difference}</td>
+                  <td>{moment(element.startTime).format('YYYY-MM-DD')}</td>
+                  <td>{moment(element.startTime).format('HH:mm')}</td>
                   <td><span className={"label " + this.getRunLabelType(element.runStatus)}>{element.runStatus}</span></td>
               </tr>
           )
@@ -74,8 +66,8 @@ class BrowserJsInfo extends Component {
                               <tr>
                                   <th>Run Type</th>
                                   <th>User</th>
-                                  <th>Start Time</th>
-                                  <th>Duration</th>
+                                  <th>Date</th>
+                                  <th>Time</th>
                                   <th>Status</th>
                               </tr>
                           </thead>

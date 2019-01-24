@@ -17,6 +17,7 @@
     "lodash": "^4.17.4",
     "lodash.debounce": "^4.0.8",
     "lodash.isequal": "^4.5.0",
+    "moment": "^2.24.0",
     "normalizr": "^2.2.1",
     "prop-types": "^15.5.10",
     "react": "^15.5.0",
