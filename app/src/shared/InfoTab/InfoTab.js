@@ -52,7 +52,7 @@ class InfoTab extends Component {
                 </div>
                 <div className="row node-comments">
                     <div className='col-md-12'>
-                        <Comments nodeId={params.nodeId}></Comments>
+                        <Comments params={params} nodeId={params.nodeId}></Comments>
                     </div>
                 </div>
             </div>

@@ -14,8 +14,6 @@ import io.grokery.lab.api.common.context.CloudContext;
 
 public class JobRunsDynamoDAO extends DynamoDAO {
 
-
-
 	@Override
 	protected String getHashKeyName() {
 		return "jobId";
@@ -33,7 +31,6 @@ public class JobRunsDynamoDAO extends DynamoDAO {
 
 	@Override
 	protected Table initTable() {
-
 		ArrayList<AttributeDefinition> attributeDefinitions = new ArrayList<AttributeDefinition>();
 		attributeDefinitions.add(new AttributeDefinition()
 			.withAttributeName(this.getHashKeyName())
@@ -67,7 +64,6 @@ public class JobRunsDynamoDAO extends DynamoDAO {
 			.withKeySchema(tableKeySchema)
 			// .withGlobalSecondaryIndexes(precipIndex)
 		);
-
 		return table;
 	}
 

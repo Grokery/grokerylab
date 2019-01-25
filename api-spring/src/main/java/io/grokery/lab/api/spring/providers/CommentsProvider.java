@@ -4,7 +4,6 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -19,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import io.grokery.lab.api.cloud.jobruns.JobRunsService;
+import io.grokery.lab.api.cloud.comments.CommentsService;
 import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
 import io.grokery.lab.api.common.exceptions.NotAuthorizedException;
@@ -29,58 +28,43 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
 @Component
-@Path("/clouds/{cloudId}/jobruns")
+@Path("/clouds/{cloudId}/comments")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-@Api(value = "JobRuns", produces = "application/json")
-public class JobRunsProvider {
+@Api(value = "Comments", produces = "application/json")
+public class CommentsProvider {
 
-	private static final Logger LOG = LoggerFactory.getLogger(JobRunsProvider.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CommentsProvider.class);
 
 	@Value("${info.api.version}")
 	private String apiVersion;
 
 	@POST
 	@Path("/")
-	@ApiOperation(value = "Create new job run", response = JsonObj.class)
+	@ApiOperation(value = "Create new comment", response = JsonObj.class)
 	public Response create(
 			@HeaderParam("Authorization") String auth,
 			@ApiParam @PathParam("cloudId") String cloudId,
 			@ApiParam JsonObj request
 	) throws InvalidInputException, NotFoundException, NotAuthorizedException {
-		LOG.info("POST:{}/clouds/{}/jobruns", apiVersion, cloudId);
-		JsonObj result = JobRunsService.createAndStartJobRun(auth, cloudId, request);
-		return Response.status(Status.OK).entity(result).build();
-	}
-
-	@PUT
-	@Path("/{jobId}/{created}")
-	@ApiOperation(value = "Update job run", response = JsonObj.class)
-	public Response update(
-			@HeaderParam("Authorization") String auth,
-			@ApiParam @PathParam("cloudId") String cloudId,
-			@ApiParam @PathParam("jobId") String jobId,
-			@ApiParam @PathParam("created") String created,
-			@ApiParam JsonObj request
-	) throws InvalidInputException, NotFoundException, NotAuthorizedException {
-		LOG.info("PUT:{}/clouds/{}/jobruns/{}/{}", apiVersion, cloudId, jobId, created);
-		JsonObj result = JobRunsService.updateJobRunStatus(auth, cloudId, jobId, created, request);
+		LOG.info("POST:{}/clouds/{}/comments", apiVersion, cloudId);
+		JsonObj result = CommentsService.createComment(auth, cloudId, request);
 		return Response.status(Status.OK).entity(result).build();
 	}
 
 	@GET
 	@Path("/search")
-	@ApiOperation(value = "Query jobruns for job", response = JsonObj.class)
+	@ApiOperation(value = "Query comments for node", response = JsonObj.class)
 	public Response get(
 			@HeaderParam("Authorization") String auth,
 			@ApiParam @PathParam("cloudId") String cloudId,
-			@ApiParam @QueryParam("jobId") String jobId, 
+			@ApiParam @QueryParam("nodeId") String nodeId, 
 			@ApiParam @QueryParam("query") String query,
 			@ApiParam @QueryParam("projection") String projection,
 			@ApiParam @QueryParam("limit") int limit
 	) throws NotAuthorizedException {
-		LOG.info("GET:{}/clouds/{}/jobruns/search/{}?query={}&projection={}&limit={}", apiVersion, cloudId, jobId, query, projection, limit);
-		JsonObj result = JobRunsService.getJobRunsforJob(auth, cloudId, jobId, query, projection, limit);
+		LOG.info("GET:{}/clouds/{}/comments/search/{}?query={}&projection={}&limit={}", apiVersion, cloudId, nodeId, query, projection, limit);
+		JsonObj result = CommentsService.getCommentsforNode(auth, cloudId, nodeId, query, projection, limit);
 		return Response.status(Status.OK).entity(result).build();
 	}
 

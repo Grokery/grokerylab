@@ -46,6 +46,7 @@ public class JobRun {
 	}
 
 	public void startRun(CloudContext context) {
+		
 	}
 
 	public void updateStatus(JsonObj request) throws InvalidInputException {		

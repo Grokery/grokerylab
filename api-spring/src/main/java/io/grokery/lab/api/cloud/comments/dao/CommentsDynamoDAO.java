@@ -1,17 +1,16 @@
 package io.grokery.lab.api.cloud.comments.dao;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
+import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
 import com.amazonaws.services.dynamodbv2.model.KeySchemaElement;
 import com.amazonaws.services.dynamodbv2.model.KeyType;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
-import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
 
-import io.grokery.lab.api.common.context.CloudContext;
 import io.grokery.lab.api.common.dao.DynamoDAO;
+import io.grokery.lab.api.common.context.CloudContext;
 
 public class CommentsDynamoDAO extends DynamoDAO {
 
@@ -32,17 +31,40 @@ public class CommentsDynamoDAO extends DynamoDAO {
 
 	@Override
 	protected Table initTable() {
-		List<KeySchemaElement> keySchema = new ArrayList<KeySchemaElement>();
-		keySchema.add(new KeySchemaElement(getHashKeyName(), KeyType.HASH));
-		keySchema.add(new KeySchemaElement(getRangeKeyName(), KeyType.RANGE));
+		ArrayList<AttributeDefinition> attributeDefinitions = new ArrayList<AttributeDefinition>();
+		attributeDefinitions.add(new AttributeDefinition()
+			.withAttributeName(this.getHashKeyName())
+			.withAttributeType("S"));
+		attributeDefinitions.add(new AttributeDefinition()
+			.withAttributeName(this.getRangeKeyName())
+			.withAttributeType("S"));
+		// attributeDefinitions.add(new AttributeDefinition()
+		// 	.withAttributeName("Precipitation")
+		// 	.withAttributeType("N"));
+		// other attributes can be added here
+		
+		ArrayList<KeySchemaElement> tableKeySchema = new ArrayList<KeySchemaElement>();
+		tableKeySchema.add(new KeySchemaElement(this.getHashKeyName(), KeyType.HASH));
+		tableKeySchema.add(new KeySchemaElement(this.getRangeKeyName(), KeyType.RANGE));
+		
+		// GlobalSecondaryIndex precipIndex = new GlobalSecondaryIndex()
+		// 	.withIndexName("PrecipIndex")
+		// 	.withProvisionedThroughput(new ProvisionedThroughput(new Long(10), new Long(10)))
+		// 	.withProjection(new Projection().withProjectionType(ProjectionType.ALL));
 
-		List<AttributeDefinition> attrDefs = new ArrayList<AttributeDefinition>();
-		attrDefs.add(new AttributeDefinition(getHashKeyName(), ScalarAttributeType.S));
-		attrDefs.add(new AttributeDefinition(getRangeKeyName(), ScalarAttributeType.S));
-
-		ProvisionedThroughput tput = new ProvisionedThroughput(new Long(10), new Long(10));
-
-		return this.client.createTable(getTableName(), keySchema, attrDefs, tput);
+		// ArrayList<KeySchemaElement> indexKeySchema = new ArrayList<KeySchemaElement>();
+		// indexKeySchema.add(new KeySchemaElement(this.getHashKeyName(), KeyType.HASH));
+		// indexKeySchema.add(new KeySchemaElement("Precipitation", KeyType.RANGE));
+		// precipIndex.setKeySchema(indexKeySchema);
+		
+		Table table = this.client.createTable(new CreateTableRequest()
+			.withTableName(this.getTableName())
+			.withProvisionedThroughput(new ProvisionedThroughput(new Long(10), new Long(10)))
+			.withAttributeDefinitions(attributeDefinitions)
+			.withKeySchema(tableKeySchema)
+			// .withGlobalSecondaryIndexes(precipIndex)
+		);
+		return table;
 	}
 
 	public CommentsDynamoDAO(CloudContext context) {

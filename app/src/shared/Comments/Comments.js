@@ -1,108 +1,91 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import moment from 'moment'
+
 import { getSessionInfo } from 'authentication'
-import { fetchLogs, appendLogItem } from 'store/actions'
+import { createComment, queryComments } from 'store/actions'
+
 import './Comments.css'
 
 class Comments extends Component {
     static propTypes = {
-        username: PropTypes.string.isRequired,
+        params: PropTypes.object.isRequired,
+        userName: PropTypes.string.isRequired,
+        userContact: PropTypes.string.isRequired,
         nodeId: PropTypes.string.isRequired,
         comments: PropTypes.array.isRequired,
-        fetchLogs: PropTypes.func.isRequired,
-        appendLogItem: PropTypes.func.isRequired
+        queryComments: PropTypes.func.isRequired,
+        createComment: PropTypes.func.isRequired
     }
     componentDidMount() {
-        // const { fetchLogs, nodeId } = this.props
-        // fetchLogs(nodeId)
-    }
-    getComments() {
-        let lis = []
-        this.props.comments.forEach(function(comment) {
-            let date = new Date(comment.datetime)
-            let options = {
-                weekday: "short", year: "numeric", month: "short",
-                day: "numeric", hour: "2-digit", minute: "2-digit"
-            }
-            lis.push((
-                <li key={comment.id} className='left clearfix'>
-                    <span className='chat-img pull-left'><i className='fa fa-user fa-fw'></i></span>
-                    <div className='chat-body clearfix'>
-                        <div className='header'>
-                            <strong className='primary-font'>{comment.user}</strong>
-                            <small className='text-muted'><i className='fa fa-clock-o fa-fw'></i>
-                                {date.toLocaleTimeString("en-us", options)}
-                            </small>
-                        </div>
-                        <p>{comment.body}</p>
-                    </div>
-                </li>
-            ))
-        })
-        return lis
-    }
-    onSubmit(event) {
-        event.preventDefault()
-        const { username, appendLogItem, nodeId } = this.props
-        let newcomment = {
-            nodeType: "comments",
-            datetime: new Date().getTime(),
-            referenceid: nodeId,
-            user: username.split('@')[0],
-            body: document.getElementById('comment-input').value
-        }
-        appendLogItem("comments", newcomment, null)
-        document.getElementById('comment-input').value = ""
+        const { queryComments, nodeId, params } = this.props
+        queryComments(params.cloudName, "?nodeId="+nodeId+"&limit=5")
     }
     render() {
         return (
             <div className='chat-panel panel panel-default'>
                 <div className='input-group'>
-                    <form onSubmit={this.onSubmit.bind(this)}>
+                    <form onSubmit={this.onCreateNewComment}>
                         <input id='comment-input' type='text' className='form-control input-sm' placeholder='Add comment ....' />
                     </form>
                     <span className='input-group-btn'>
-                        <button id='btn-chat' className='btn btn-primary btn-sm' onClick={this.onSubmit.bind(this)}>Send</button>
+                        <button id='btn-chat' className='btn btn-primary btn-sm' onClick={this.onCreateNewComment}>Send</button>
                     </span>
                 </div>
                 <div className='panel-body'>
-                    <ul className='chat'>{this.getComments()}</ul>
+                    <ul className='chat'>{this.renderComments()}</ul>
                 </div>
             </div>
         )
+    }
+    renderComments() {
+        let { comments } = this.props
+        let result = []
+        comments.forEach((comment) => {
+            result.push((
+                <li key={comment.commentId} className='left clearfix'>
+                    <span className='chat-img pull-left'><i className='fa fa-user fa-fw'></i></span>
+                    <div className='chat-body clearfix'>
+                        <div className='header'>
+                            <strong className='primary-font'>{comment.userName}</strong>
+                            <small className='text-muted'><i className='fa fa-clock-o fa-fw'></i>
+                                {moment(comment.created).format('DD MMM YYYY HH:mm')}
+                            </small>
+                        </div>
+                        <p>{comment.message}</p>
+                    </div>
+                </li>
+            ))
+        })
+        return result
+    }
+    onCreateNewComment = (e) => {
+        e.preventDefault()
+        const { userName, usderContact, createComment, queryComments, nodeId, params } = this.props
+        let data = {
+            nodeId: nodeId,
+            userName: userName,
+            userContact: usderContact,
+            message: document.getElementById('comment-input').value
+        }
+        createComment(params.cloudName, data, () => {
+            queryComments(params.cloudName, "?nodeId="+nodeId+"&limit=5")
+        })
+        document.getElementById('comment-input').value = ""
     }
 }
 
 const mapStateToProps = (state, ownProps) => {
     let sessionInfo = getSessionInfo()
-    // let filter = function(item) {
-    //     return item.nodeType === "comments"
-    // }
-    // let sort = function(a, b) {
-    //     return a.datetime < b.datetime
-    // }
-    let comments = [
-        {
-            id: "124",
-            user: "dhogue",
-            body: "Hello this is another a test",
-            datetime: "2018-06-05 10:26"
-        },
-        {
-            id: "123",
-            user: "admin",
-            body: "Hello this is a test",
-            datetime: "2018-06-05 10:27"
-        }
-    ]
     return {
-        username: sessionInfo['name'] ? sessionInfo['name'] : "User Name",
-        comments: comments//state.logs.filter(filter).sort(sort)
+        userContact: sessionInfo['userName'] ? sessionInfo['userName'] : "",
+        userName: sessionInfo['name'] ? sessionInfo['name'] : "",
+        comments: state.comments[ownProps.nodeId] ? state.comments[ownProps.nodeId] : [],
     }
 }
 
 export default connect(mapStateToProps, {
-    fetchLogs,
-    appendLogItem
+    createComment,
+    queryComments,
 })(Comments)
