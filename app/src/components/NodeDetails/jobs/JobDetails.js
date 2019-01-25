@@ -111,59 +111,93 @@ class JobDetails extends Component {
     )
   }
   runJob = (e) => {
-    const { postJobRun, node, fetchJobRunsWithRepeat, params, fetchNode } = this.props
-    let sessionInfo = getSessionInfo()
-    let userEmail = sessionInfo['username']
     e.preventDefault()
+    const { node } = this.props
     if (node.subType === 'BROWSERJS') {
-      if (isArray(node.downstream) && node.downstream[0]) {
-        try {
-          let code = cloneDeep(node.code)
-
-          let downstreamNode = node.downstream[0]
-          let url = API_BASE_URL + '/clouds/' + getCloudId(params.cloudName) + '/nodes/datasource/' + downstreamNode.nodeId + '/write'
-          let token = getCloudToken(params.cloudName)
-          code = code.replace(/URL/g, JSON.stringify(url))
-
-          code = code.replace(/TOKEN/g, JSON.stringify(token))
-
-          var iframe = document.createElement('iframe')
-          iframe.style.visibility = "hidden"
-          iframe.style.width = "1px"
-          iframe.style.height = "1px"
-          iframe.style.position = "absolute"
-          iframe.style.top = "0"
-          iframe.style.left = "0"
-
-          document.body.appendChild(iframe)
-          iframe.contentWindow.document.open()
-          iframe.contentWindow.document.write('<script>'+code+'</script>')
-          iframe.contentWindow.document.close()
-          postJobRun(params.cloudName, {jobId: node.nodeId, jobRunType: node.subType, runStatus: "COMPLETED", userContact: userEmail}, () => {
-            fetchJobRunsWithRepeat(params.cloudName, "?jobId="+node.nodeId+"&limit=10", null, [[0, 0.0, 1]])
-          })
-          fetchNode(params.cloudName, downstreamNode.nodeType, downstreamNode.nodeId)
-        }
-        catch (e) {
-          postJobRun(params.cloudName, {jobId: node.nodeId, jobRunType: node.subType, runStatus: "ERRORED", userContact: userEmail}, () => {
-            fetchJobRunsWithRepeat(params.cloudName, "?jobId="+node.nodeId+"&limit=10", null, [[0, 0.0, 1]])
-          })
-        }
-      }
+      this.runBrowserJsJob()
+    } else if (node.subType === 'AWSLAMBDA')  {
+      this.runAWSLambdaJob()
     } else {
-      postJobRun(params.cloudName, {
-        userContact: userEmail,
-        jobId: node.nodeId,
-        jobRunType: node.subType,
-        lambdaARN: node.lambdaARN,
-        args: {
-            baseUrl: API_BASE_URL,
-            authorization: getCloudToken(params.cloudName),
-        }
-      }, () => {
-          fetchJobRunsWithRepeat(params.cloudName, "?jobId="+node.nodeId+"&limit=10", null, [[1, 0.0, 5], [1, 2.0, 5]])
+      alert('No run specification defined for job type: ' + node.subType)
+    }
+  }
+  runBrowserJsJob() {
+    const { postJobRun, node, fetchJobRunsWithRepeat, params } = this.props
+    let userEmail = getSessionInfo().username
+    try {
+      var iframe = document.createElement('iframe')
+      iframe.style.visibility = "hidden"
+      iframe.style.width = "1px"
+      iframe.style.height = "1px"
+      iframe.style.position = "absolute"
+      iframe.style.top = "0"
+      iframe.style.left = "0"
+
+      document.body.appendChild(iframe)
+      iframe.contentWindow.document.open()
+      iframe.contentWindow.document.write(this.getHelperCode())
+      iframe.contentWindow.document.write('<script>'+cloneDeep(node.code)+'</script>')
+      iframe.contentWindow.document.close()
+      postJobRun(params.cloudName, {jobId: node.nodeId, jobRunType: node.subType, runStatus: "COMPLETED", userContact: userEmail}, () => {
+        fetchJobRunsWithRepeat(params.cloudName, "?jobId="+node.nodeId+"&limit=5", null, [[0, 0.0, 1]])
       })
     }
+    catch (e) {
+      postJobRun(params.cloudName, {jobId: node.nodeId, jobRunType: node.subType, runStatus: "ERRORED", userContact: userEmail}, () => {
+        fetchJobRunsWithRepeat(params.cloudName, "?jobId="+node.nodeId+"&limit=5", null, [[0, 0.0, 1]])
+      })
+    }
+  }
+  getHelperCode() {
+    const { params } = this.props
+    let url = API_BASE_URL + '/clouds/' + getCloudId(params.cloudName) + '/nodes/datasource/'
+    let token = getCloudToken(params.cloudName)
+    return `
+        <script>
+            var getSource = (id, cb) => {
+                var url = '`+url+`' + id + '/query'
+                var options = {headers:{"Authorization":"`+token+`"}}
+                fetch(url, options)
+                .then((res) => {
+                    return res.json();
+                })
+                .then((data) => {
+                    cb(data);
+                });
+            }
+        </script>
+        <script>
+          var putSource = (id, data) => {
+              var url = '`+url+`' + id + '/write'
+              var options = {
+                method: "PUT",
+                body: JSON.stringify(data),
+                headers: {
+                  "Authorization":"`+token+`",
+                  "Content-Type": "application/json"
+                }
+              }
+              fetch(url, options)
+          }
+      </script>
+    ` 
+  }
+  runAWSLambdaJob() {
+    const { postJobRun, node, fetchJobRunsWithRepeat, params } = this.props
+    let sessionInfo = getSessionInfo()
+    let userEmail = sessionInfo.username
+    postJobRun(params.cloudName, {
+      userContact: userEmail,
+      jobId: node.nodeId,
+      jobRunType: node.subType,
+      lambdaARN: node.lambdaARN,
+      args: {
+          baseUrl: API_BASE_URL,
+          authorization: getCloudToken(params.cloudName),
+      }
+    }, () => {
+        fetchJobRunsWithRepeat(params.cloudName, "?jobId="+node.nodeId+"&limit=5", null, [[1, 0.0, 5], [1, 2.0, 5]])
+    })
   }
   getJobInfoComponent(props) {
     const { node } = this.props

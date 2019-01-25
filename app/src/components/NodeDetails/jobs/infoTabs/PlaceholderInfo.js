@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { object, func, array } from 'prop-types'
+import { object, func } from 'prop-types'
 import { connect } from 'react-redux'
 
 export default connect(
