@@ -29,6 +29,52 @@ class AwsLambdaInfo extends Component {
       const { fetchJobRuns, node, params } = this.props
       fetchJobRuns(params.cloudName, "?jobId="+node.nodeId+"&limit=5")
     }
+    render() {
+        const { node } = this.props
+        if (!node) { return <div></div> }
+        return (
+            <div className="job-detail">
+                <div className="row">
+                    <div className="col-md-3 form-group run-control-select">
+                        <label>Run</label>
+                        <select className="form-control" value={this.props.node.runControl} onChange={this.onRunControlChange.bind(this)}>
+                            <option value='manual'>Manually</option>
+                            <option value='schedule'>On Schedule</option>
+                            <option value='event'>On Event</option>
+                        </select>
+                    </div>
+                    {this.getRunControl()}
+                </div>
+    
+                <div className="row">
+                    <div className="col-md-12">
+                        <table className="table table-hover">
+                            <thead>
+                                <tr>
+                                  {/* <th>Version</th> */}
+                                    <th>Run Type</th>
+                                    <th>User</th>
+                                    <th>Start Time</th>
+                                    <th>Duration</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {/* <tr>
+                                    <td>Schedule</td>
+                                    <td>Aug 3, 2018, 11:00 PM</td>
+                                    <td></td>
+                                    <td><span className="label label-default">STAGED</span></td>
+                                </tr> */}
+                                {this.getJobRuns()}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+     
+            </div>
+        )
+    }
     toggleIsActive(e) {
       const { node } = this.props
       node.schedule.isActive = !node.schedule.isActive
@@ -136,52 +182,6 @@ class AwsLambdaInfo extends Component {
           )
       });
       return results
-    }
-    render() {
-      const { node } = this.props
-      if (!node) { return <div></div> }
-      return (
-          <div className="job-detail">
-              <div className="row">
-                  <div className="col-md-3 form-group run-control-select">
-                      <label>Run</label>
-                      <select className="form-control" value={this.props.node.runControl} onChange={this.onRunControlChange.bind(this)}>
-                          <option value='manual'>Manually</option>
-                          <option value='schedule'>On Schedule</option>
-                          <option value='event'>On Event</option>
-                      </select>
-                  </div>
-                  {this.getRunControl()}
-              </div>
-  
-              <div className="row">
-                  <div className="col-md-12">
-                      <table className="table table-hover">
-                          <thead>
-                              <tr>
-                                {/* <th>Version</th> */}
-                                  <th>Run Type</th>
-                                  <th>User</th>
-                                  <th>Start Time</th>
-                                  <th>Duration</th>
-                                  <th>Status</th>
-                              </tr>
-                          </thead>
-                          <tbody>
-                              {/* <tr>
-                                  <td>Schedule</td>
-                                  <td>Aug 3, 2018, 11:00 PM</td>
-                                  <td></td>
-                                  <td><span className="label label-default">STAGED</span></td>
-                              </tr> */}
-                              {this.getJobRuns()}
-                          </tbody>
-                      </table>
-                  </div>
-              </div>
-   
-          </div>
-      )
     }
 }
 )
