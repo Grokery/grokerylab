@@ -13,7 +13,38 @@
 .tabs .tabs-menu-item,
 .tabs .tabs-menu-item a {
     border-radius: 0;
-    cursor: pointer
+    cursor: pointer;
+}
+
+.tabs .tabs-menu-item,
+.tabs .tabs-menu-item button {
+    border-radius: 0;
+    cursor: pointer;
+    height: 40px;
+    border: none;
+    color: #4C5763;
+    background-color: #e7ebee;
+    outline: none;
+}
+
+.tabs .tabs-menu-item button {
+    padding: 10px 15px;
+}
+.tabs .tabs-menu-item button:hover {
+    color: #0291E3;
+}
+.tabs .tabs-menu-item.active button:hover {
+    color: #4C5763;
+}
+.tabs .tabs-menu-item.active,
+.tabs .tabs-menu-item.active button {
+    background-color: #FFF;
+    cursor: default;
+}
+
+.tabs .tabs-menu-item,
+.tabs .tabs-menu-item button.active:focus {
+    outline: none
 }
 
 .tabs .nav.nav-tabs {

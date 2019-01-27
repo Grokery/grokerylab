@@ -9,7 +9,7 @@ export default class TopNavBar extends Component {
             <nav id='top-nav-wrapper' className='navbar navbar-default navbar-fixed-top' role='navigation'>
                 <div id='top-menu-wrapper'>
                     <div className='navbar-header'>
-                        <Link className='navbar-brand' to='/'><img alt="" src="./img/logo-white-on-clear.png"></img></Link>
+                        <Link className='navbar-brand' to='/'><img alt="logo" src="/img/logo-white-on-clear.png"></img></Link>
                         {/* <Link className='navbar-brand' to='/' style={{paddingTop:'15px', paddingLeft:'15px', paddingRight:'15px', height: '50px'}}>Grokery</Link> */}
                     </div>
                     {this.getRightNav()}

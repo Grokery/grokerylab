@@ -195,7 +195,7 @@ g.colored.selected:hover text.tooltiptext  {
 
 .flow-header-content #create-nodes {
     position: inherit;
-    top: 40px;
+    top: 45px;
     background-color: white;
     padding: 15px;
     border: 1px solid #ccc;
@@ -209,7 +209,7 @@ g.colored.selected:hover text.tooltiptext  {
     display: block;
     position: absolute;
     top: -10px;
-    right: 171px;
+    right: 189px;
     width: 0;
     height: 0;
     border-left: 8px solid transparent;
@@ -222,7 +222,7 @@ g.colored.selected:hover text.tooltiptext  {
     display: block;
     position: absolute;
     top: -11.6px;
-    right: 170px;
+    right: 188px;
     width: 0;
     height: 0;
     border-left: 9px solid transparent;
@@ -230,10 +230,13 @@ g.colored.selected:hover text.tooltiptext  {
     border-bottom: 11px solid #ccc;
 }
 
-.flow-header-content .create-btn {
+.flow-header-content button {
     float: left;
-    margin: 7px;
     font-size: 18px;
+    border: none;
+    background-color: transparent;
+    padding: 6px;
+    margin-right: 10px;
 }
 
 .flow-header-content .drag-create-img {
@@ -254,7 +257,6 @@ g.colored.selected:hover text.tooltiptext  {
 .flow-header-content #delete-icon {
     display: none;
     float: left;
-    margin: 6px;
     font-size: 18px;
 }
 

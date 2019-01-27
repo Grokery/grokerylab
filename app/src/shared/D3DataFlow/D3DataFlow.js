@@ -866,6 +866,7 @@ class D3DataFlow extends Component {
         this.d3state.dragNode = false
         window.onmouseup = null
         cb(this.d3state.mouseLocation)
+        this.toggleCreateNodes(e)
       }.bind(this)
   }
   createJob(xy) {

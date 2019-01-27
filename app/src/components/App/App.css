@@ -96,6 +96,36 @@ a i:hover {
   color: #0291E3;
 }
 
+button:focus {
+  outline-style:none;
+  box-shadow:none;
+  border-color:transparent;
+}
+button:active {
+  outline-style:none;
+  box-shadow:none;
+  border-color:transparent;
+  background-color: #2ca02c;
+}
+
+button i {
+  color: #4C5763;  
+}
+
+button i:hover {
+  color: #0291E3;
+}
+button.btn.btn-default,
+button.btn.btn-default i {
+  color: #4C5763;
+}
+button.btn.btn-default:hover,
+button.btn.btn-default:hover i {
+  color: #0291E3;
+}
+button.btn.btn-default:active {
+  box-shadow: none;
+}
 
 
 .btn-primary {

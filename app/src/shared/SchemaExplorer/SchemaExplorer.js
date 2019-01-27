@@ -28,7 +28,7 @@ class SchemaExplorer extends Component {
                     <span>min: 0</span><br />
                     <span>max: 12</span><br />
                     <span>avg: 5</span><br />
-                    <img src='' alt='presentation'></img>
+                    {/* <img src='' alt='presentation'></img> */}
                 </div>
             </div>
         )
