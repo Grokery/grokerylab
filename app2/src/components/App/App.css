@@ -1,0 +1,151 @@
+color-scheme {
+  /* blue */
+  color: #1f77b4;
+  /* orange */
+  color: #ff7f0e;
+  /* red */
+  color: #d62728;
+  /* green */
+  color: #2ca02c;
+  /* purple */
+  color: #9467bd;
+  /* brown */
+  color: #8c564b;
+
+  /* blue accent */
+  color: #0291E3;
+  /* orange accent */
+  color: #FF851A;
+  /* dark background  */
+  color: #4C5763;
+  /* light background */
+  color: #F1F2F4;
+  color: #e7ebee;
+  /* font color light */
+  color: #FBFCFF;
+  /* font color dark */
+  color: #373F48;
+}
+
+html,
+body {
+  font-family: "Open Sans", sans-serif;
+  box-sizing: border-box;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#react-root {
+  height: 100%;
+}
+
+.app-wrapper {
+  height: 100%;
+}
+
+.page-content-wrapper {
+  padding-top: 50px;
+  height: 100%;
+}
+
+.page-content {
+  height: 100%;
+}
+
+.sidebar-page-wrapper {
+  padding-left: 64px;
+  height: 100%;
+}
+
+.sidebar-page-content {
+  position: relative;
+}
+
+div {
+  box-sizing: border-box;
+}
+
+pre {
+  background-color: #FFF;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  clear: both;
+  font-weight: 300;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  color: #0291E3;
+  font-size: 2em;
+}
+
+a:focus {
+  outline-style:none;
+  box-shadow:none;
+  border-color:transparent;
+}
+
+a i {
+  color: #4C5763;  
+}
+
+a i:hover {
+  color: #0291E3;
+}
+
+
+
+.btn-primary {
+  background-color: #4C5763;
+  border-color: #4C5763;
+}
+.btn-primary:hover {
+  background-color: #0291E3;
+  border-color: #0291E3;
+}
+
+
+.modal-body {
+  max-height: calc(100vh - 210px);
+  overflow-y: auto;
+}
+.modal .modal-dialog {
+  min-width: 60%;
+}
+.modal .modal-body {
+  overflow-y: scroll;
+  padding: 0;
+}
+.modal .form-help-text {
+  font-size: small;
+  color: #4C5763
+}
+.modal .ReactCodeMirror .CodeMirror {
+  height: auto;
+}
+.modal .modal-title {
+  display: inline-block;
+}
+
+
+.CodeMirror-linenumbers {
+  background-color: #e7ebee;
+}
+.ace_gutter {
+  background: #e7ebee !important;
+  border-top: 1px solid #ddd;
+}
+.modal-body .ace_gutter {
+  border-top: none;
+}
+
+@media(min-width: 768px) {
+
+}
+
+@media(max-width: 768px) {
+
+}

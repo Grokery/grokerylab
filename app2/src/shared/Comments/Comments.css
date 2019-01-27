@@ -1,0 +1,30 @@
+.chat-panel {
+  border: none;
+  box-shadow: none;
+  padding-top: 8px;
+  padding-right: 15px;
+}
+
+.chat-panel p {
+    padding-left: 10px;
+}
+
+.chat-panel .panel-body {
+    padding: 0;
+    padding-top: 15px;
+}
+
+.chat-panel  ul.chat {
+  list-style: none;
+  padding: 0;
+}
+
+#btn-chat {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+#comment-input {
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}

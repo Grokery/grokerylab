@@ -1,0 +1,18 @@
+
+
+#edit-modal .modal-dialog .nav-tabs {
+    box-shadow: none;   
+}
+
+#edit-modal .modal-dialog .modal-body {
+    height: 500px;
+    overflow-y: auto;
+}
+
+#edit-modal .ReactCodeMirror .CodeMirror {
+    height: auto;
+}
+
+#edit-modal form {
+    padding: 15px;
+}
