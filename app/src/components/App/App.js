@@ -20,8 +20,9 @@ class App extends Component {
   componentDidMount() {
     const { location, history } = this.props
     if (!isAuthenticated()) {
-      if (location.pathname !== '/signout')
-      setRedirectUrl(location.pathname)
+      if (location.pathname !== '/signout' && location.pathname !== '/signin') {
+        setRedirectUrl(location.pathname)
+      }
       history.push('/signin')
     }
   }

@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { confirmAlert } from 'react-confirm-alert'
+import 'react-confirm-alert/src/react-confirm-alert.css'
+
 import { history } from 'index'
 import { createNode, updateNode, deleteNode } from 'store/actions/nodes'
 import { NODETYPE, getQueryParamByName } from 'common'
@@ -932,22 +935,45 @@ class D3DataFlow extends Component {
       this.onUpdateNodes(d3state.changedNodes)
   }
   onDelete(e) {
+    const { params, deleteNode } = this.props
     if (e && e.preventDefault) {e.preventDefault()}
       if (Object.keys(this.d3state.selectedNodes).length > 0) {
-          // TODO replace confirm
-        // if (confirm('Confirm delete node(s)?' ) === true) {
-        //     Object.keys(this.d3state.selectedNodes).forEach(function(nodeId) {
-        //         let node = this.d3state.selectedNodes[nodeId]
-        //         this.props.deleteNode(node, null)
-        //     }.bind(this))
-        //     this.clearAllSelection()
-        // }
+        confirmAlert({
+            title: 'Confirm delete:',
+            message: 'Permanently delete selected nodes/edges?',
+            buttons: [
+              {
+                label: 'Yes',
+                onClick: () => {
+                    Object.keys(this.d3state.selectedNodes).forEach((nodeId) => {
+                        let node = this.d3state.selectedNodes[nodeId]
+                        deleteNode(params.cloudName, node, null)
+                    })
+                    this.clearAllSelection()
+                }
+              },
+              {
+                label: 'No',
+              }
+            ]
+          })
       }
       if (this.d3state.selectedEdge) {
-          // TODO replace confirm
-        // if (confirm('Confirm delete edge?') === true) {
-        //   this.deleteEdge(this.d3state.selectedEdge)
-        // }
+        confirmAlert({
+            title: 'Confirm delete:',
+            message: 'Permanently delete selected nodes/edges?',
+            buttons: [
+              {
+                label: 'Yes',
+                onClick: () => {
+                    this.deleteEdge(this.d3state.selectedEdge)
+                }
+              },
+              {
+                label: 'No',
+              }
+            ]
+          })
       }
   }
   buildPathStr(ed) {

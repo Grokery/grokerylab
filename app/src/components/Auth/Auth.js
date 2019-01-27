@@ -17,7 +17,7 @@ class Auth extends Component {
     const { history } = this.props
     if (isAuthenticated()){
       disAuthenticate()
-      history.push("/")
+      history.push("/signin")
     }
   }
   render() {
