@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+
 import Gallery from 'shared/Gallery/Gallery'
 import CreateEditCloudModel from '../CreateEditCloudModel/CreateEditCloudModel'
 import './CloudSection.css'
@@ -27,10 +28,6 @@ class CloudSection extends Component {
   }
   getCloudLinks(cloudid, cloud) {
     let links = []
-    // links.push({
-    //     title: 'Data Flow',
-    //     url: '#/clouds/' + cloudid,
-    //   })
     if (cloud.links) {
       cloud.links.forEach(function(link){
         links.push(link)
@@ -46,11 +43,11 @@ class CloudSection extends Component {
     return (
       <div className='cloud-section'>
         <div className='cloud-section-header'>
-          <a href={'#/clouds/' + cloudid} className='cloud-title'>
-            <img src={this.getCloudIcon(cloud.cloudType)} className='cloud-icon' role="presentation"/>
+          <a href={'/clouds/' + cloudid} className='cloud-title'>
+            <img src={this.getCloudIcon(cloud.cloudType)} className='cloud-icon' alt='cloud type'/>
             {cloud.title}
           </a>
-          <a href='#' onClick={this.toggleEditModal}><i className='fa fa-cog pull-right cloud-edit-icon'/></a>
+          <button onClick={this.toggleEditModal}><i className='fa fa-cog cloud-edit-icon'/></button>
           <CreateEditCloudModel 
               key="edit-cloud" 
               shown={this.state.showEditModel} 

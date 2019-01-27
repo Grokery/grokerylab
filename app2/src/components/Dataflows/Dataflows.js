@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
+
 import { APPSTATUS } from "common"
 import { headerNavHeight, sideNavWidth } from 'config'
 import Loader from 'shared/Loader/Loader'
@@ -7,19 +9,20 @@ import D3DataFlow from 'shared/D3DataFlow/D3DataFlow'
 
 class Dataflows extends Component {
   render() {
-    const { location, params } = this.props
+    console.log(this.props)
+    const { location, match } = this.props
     return (
       <div className='sidebar-page-content'>
         <Loader show={this.props.appStatus === APPSTATUS.BUSY} />
         <D3DataFlow
-          params={params}
+          params={match.params}
           showControls={true}
-          selectedNodeId={location.query.nodeId}
+          selectedNodeId={location.query ? location.query.nodeId : null}
           zoomOnHighlight={false}
           singleClickNav={false}
           colored={false}
           nodeShape={2}
-          query={location.query}
+          query={{}}
           height={window.innerHeight - headerNavHeight}
           width={window.innerWidth - sideNavWidth}
         ></D3DataFlow>
@@ -35,5 +38,5 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps, {
-})(Dataflows)
+export default withRouter(connect(mapStateToProps, {
+})(Dataflows))

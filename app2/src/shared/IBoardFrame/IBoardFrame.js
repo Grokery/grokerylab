@@ -42,7 +42,7 @@ class IBoardFrame extends Component {
             source = code + source
         }
         return (
-            <iframe id={board.nodeId} srcDoc={source} style={{border: 'none', width: width, height: height}}></iframe>
+            <iframe id={board.nodeId} title={board.nodeId} srcDoc={source} style={{border: 'none', width: width, height: height}}></iframe>
         )
     }
 }

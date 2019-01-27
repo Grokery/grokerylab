@@ -16,9 +16,9 @@ export default class GalleryItem extends Component {
     let img = null
     if (images) {
       if (item.preview) {
-        img = (<img className="thumbnail img-responsive" src={item.preview} role="presentation"></img>)
+        img = (<img className="thumbnail img-responsive" src={item.preview} alt="preview"></img>)
       } else {
-        img = (<img className="thumbnail img-responsive" src={'img/600x350white.png'} role="presentation"></img>)
+        img = (<img className="thumbnail img-responsive" src={'img/600x350white.png'} alt="preview"></img>)
       }
     }
     return img

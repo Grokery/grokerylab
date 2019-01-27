@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { getSessionInfo } from 'authentication'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
+
+import { getSessionInfo } from 'authentication'
 
 class Account extends Component {
   static propTypes = {
@@ -28,4 +30,4 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps, {})(Account)
+export default withRouter(connect(mapStateToProps, {})(Account))

@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
 import { authenticate, isAuthenticated, disAuthenticate } from 'authentication'
-import { history } from 'index'
 import Loader from 'shared/Loader/Loader'
 import './Auth.css'
 
@@ -15,6 +14,7 @@ class Auth extends Component {
     }
   }
   componentDidMount() {
+    const { history } = this.props
     if (isAuthenticated()){
       disAuthenticate()
       history.push("/")
@@ -30,7 +30,7 @@ class Auth extends Component {
        
                   <div className="panel-body" style={{position:'relative'}}>
                     <Loader show={this.state.showLoading}></Loader>
-                    <form role="form" onSubmit={this.onSubmit}>
+                    <form onSubmit={this.onSubmit}>
                       <fieldset>
                         <div className="form-group">
                           <input className="form-control" name="username" type="text" />

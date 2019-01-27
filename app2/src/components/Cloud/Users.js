@@ -13,8 +13,8 @@ class Users extends Component {
       links = users.map(function(user, index) {
           return (
             <li key={index}>
-              <a href={'#/profiles/'+user.username}>{user.name}</a>
-              <a href=""><i className="fa fa-pencil"></i></a>
+              <a href={'/profiles/'+user.username}>{user.name}</a>
+              <button href=""><i className="fa fa-pencil"></i></button>
             </li>
           )
       })

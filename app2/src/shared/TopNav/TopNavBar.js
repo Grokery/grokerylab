@@ -1,4 +1,5 @@
 import React, { Component} from 'react'
+import { Link } from 'react-router-dom'
 
 import './TopNavBar.css'
 
@@ -8,8 +9,8 @@ export default class TopNavBar extends Component {
             <nav id='top-nav-wrapper' className='navbar navbar-default navbar-fixed-top' role='navigation'>
                 <div id='top-menu-wrapper'>
                     <div className='navbar-header'>
-                        <a className='navbar-brand' href='/'><img alt="" src="./img/logo-white-on-clear.png"></img></a>
-                        {/* <a className='navbar-brand' href='#' style={{paddingTop:'15px', paddingLeft:'15px', paddingRight:'15px', height: '50px'}}>Grokery</a> */}
+                        <Link className='navbar-brand' to='/'><img alt="" src="./img/logo-white-on-clear.png"></img></Link>
+                        {/* <Link className='navbar-brand' to='/' style={{paddingTop:'15px', paddingLeft:'15px', paddingRight:'15px', height: '50px'}}>Grokery</Link> */}
                     </div>
                     {this.getRightNav()}
                 </div>
@@ -25,9 +26,9 @@ export default class TopNavBar extends Component {
                         <i className='fa fa-caret-down'></i>
                     </button>
                     <ul className='dropdown-menu dropdown-user pull-right' onMouseLeave={() => this.closeDropDown()}>
-                        <li><a href='/' onClick={this.onClick}><i className='fa fa-home fa-fw'></i><span>Home</span></a></li>
-                        <li><a href='/account' onClick={this.onClick}><i className='fa fa-user fa-fw'></i><span>Account</span></a></li>
-                        <li><a href='/signout' onClick={this.onClick}><i className='fa fa-sign-out fa-fw'></i><span>Sign Out</span></a></li>
+                        <li><Link to='/' onClick={this.onClick}><i className='fa fa-home fa-fw'></i><span>Home</span></Link></li>
+                        <li><Link to='/account' onClick={this.onClick}><i className='fa fa-user fa-fw'></i><span>Account</span></Link></li>
+                        <li><Link to='/signout' onClick={this.onClick}><i className='fa fa-sign-out fa-fw'></i><span>Sign Out</span></Link></li>
                     </ul>
                 </li>
             </ul>

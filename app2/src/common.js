@@ -28,7 +28,7 @@ export const updateQueryParam = function(key, value) {
 // Get query string param value by name
 export const getQueryParamByName = function(name, url) {
     if (!url) url = window.location.href;
-    name = name.replace(/[\[\]]/g, "\\$&");
+    name = name.replace(/[[\]]/g, "\\$&");
     var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
         results = regex.exec(url);
     if (!results) return null;

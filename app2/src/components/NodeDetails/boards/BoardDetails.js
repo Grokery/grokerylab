@@ -26,33 +26,6 @@ class BoardDetails extends Component {
           sourceDraft: props.node.source,
       }
   }
-  getRightMenuOptions = () => {
-    let saveOption = null
-    if (this.state.dirty) {
-      saveOption = <a key='save' href='' onClick={this.onUpdate} className='btn btn-default'><i className='fa fa-save'></i></a>
-    }
-    return concat([
-      saveOption,
-      <a key='edit' href='' onClick={this.toggleEditDialog} className='btn btn-default'><i className='fa fa-cog'></i></a>,
-    ], this.props.rightMenuOptions)
-  }
-  renderRightMenuOptions() {
-    return (
-      <div className='btn-group item-options' style={{position: 'absolute', right: 0, top: 0}}>
-          {this.getRightMenuOptions()}
-      </div>
-    )
-  }
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.node.nodeId !== this.props.node.nodeId) {
-      this.setState({sourceDraft: nextProps.node.source})
-    }
-  }
-  onKeyDown = (e) => {
-    if (e.metaKey && e.keyCode === 83) { // 83='s'
-      this.onUpdate(e)
-    }
-  }
   componentDidMount() {
     document.addEventListener("keydown", this.onKeyDown);
   }
@@ -112,6 +85,33 @@ class BoardDetails extends Component {
         ></EditModal>
       </div>
     )
+  }
+  getRightMenuOptions = () => {
+    let saveOption = null
+    if (this.state.dirty) {
+      saveOption = <button key='save' onClick={this.onUpdate} className='btn btn-default'><i className='fa fa-save'></i></button>
+    }
+    return concat([
+      saveOption,
+      <button key='edit' onClick={this.toggleEditDialog} className='btn btn-default'><i className='fa fa-cog'></i></button>,
+    ], this.props.rightMenuOptions)
+  }
+  renderRightMenuOptions() {
+    return (
+      <div className='btn-group item-options' style={{position: 'absolute', right: 0, top: 0}}>
+          {this.getRightMenuOptions()}
+      </div>
+    )
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.node.nodeId !== this.props.node.nodeId) {
+      this.setState({sourceDraft: nextProps.node.source})
+    }
+  }
+  onKeyDown = (e) => {
+    if (e.metaKey && e.keyCode === 83) { // 83='s'
+      this.onUpdate(e)
+    }
   }
   onChange = (newCode) => {
     this.setState({ sourceDraft: newCode, dirty: true })

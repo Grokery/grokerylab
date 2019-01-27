@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
@@ -9,9 +8,6 @@ import CreateEditCloudModel from './CreateEditCloudModel/CreateEditCloudModel'
 import './Home.css'
 
 class Home extends Component {
-  static propTypes = {
-    sessionInfo: PropTypes.object.isRequired,
-  }
   constructor(props) {
     super(props)
     this.state = {
@@ -32,13 +28,13 @@ class Home extends Component {
           {this.getCloudSections()}
         </div>
         <div>
-          <a id='new-cloud-btn' className='btn' href='#' onClick={this.toggleCreateModal}><i className='fa fa-plus'/></a>
+          <button id='new-cloud-btn' className='btn' onClick={this.toggleCreateModal}><i className='fa fa-plus'/></button>
         </div>
       </div>
     )
   }
   getCloudSections() {
-    const { clouds } = this.props.sessionInfo
+    const { clouds } = getSessionInfo()
     let sections = []
     Object.keys(clouds).forEach(function(name) {
       sections.push(
@@ -53,9 +49,7 @@ class Home extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  return {
-    sessionInfo: getSessionInfo(),
-  }
+  return {}
 }
 
 export default withRouter(connect(mapStateToProps, {})(Home))

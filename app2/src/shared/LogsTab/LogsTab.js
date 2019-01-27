@@ -23,7 +23,7 @@ class LogsTab extends Component {
                     <span className='chat-img pull-left'></span>
                     <div className='chat-body clearfix'>
                         <div className='header'>
-                            <a className='primary-font'>{item.nodeType.charAt(0).toUpperCase() + item.nodeType.slice(1)} : {item.user}</a>
+                            <button className='primary-font'>{item.nodeType.charAt(0).toUpperCase() + item.nodeType.slice(1)} : {item.user}</button>
                             <small className='text-muted'><i className='fa fa-clock-o fa-fw'></i>{item.datetime}</small>
                         </div>
                     </div>

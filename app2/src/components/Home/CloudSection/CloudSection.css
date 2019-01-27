@@ -25,3 +25,8 @@
 .cloud-section .cloud-edit-icon {
   padding-left: 10px;
 }
+
+.cloud-section button {
+  border: none;
+  float: right;
+}

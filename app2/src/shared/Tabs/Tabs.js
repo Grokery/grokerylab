@@ -78,7 +78,7 @@ export class Tabs extends Component {
                 var active = this.state.activeTab === (index + 1) ? 'active' : ''
                 return (
                     <li ref={("tab-menu-" + (index + 1))} key={index} className={'tabs-menu-item ' + active}>
-                        <a onClick={this.setActive.bind(this, index + 1)}>{panel.props.title}</a>
+                        <button onClick={this.setActive.bind(this, index + 1)}>{panel.props.title}</button>
                     </li>
                 )
             }.bind(this))

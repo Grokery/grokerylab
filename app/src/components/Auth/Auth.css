@@ -1,9 +1,0 @@
-
-
-.auth input.btn:focus,
-.auth input.btn:active,
-.auth input.btn:active:focus {
-    outline: none;
-    border-color: #4C5763;
-    background-color: #4C5763;
-}

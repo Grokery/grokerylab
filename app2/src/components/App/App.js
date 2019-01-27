@@ -2,11 +2,14 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import { Route } from 'react-router'
 
 import { setRedirectUrl, isAuthenticated } from 'authentication'
 import { resetErrorMessage } from 'store/actions/errors'
 import TopNavBar from 'shared/TopNav/TopNavBar'
-
+import Home from 'components/Home/Home'
+import Cloud from 'components/Cloud/Cloud'
+import UserAccount from 'components/UserAccount/UserAccount'
 import './App.css'
 
 class App extends Component {
@@ -32,7 +35,9 @@ class App extends Component {
         {this.renderErrorMessage()}
         <TopNavBar />
         <div className='page-content-wrapper'>
-          <div>app</div>
+          <Route exact path='/' component={Home} />
+          <Route path='/account' component={UserAccount} />
+          <Route path='/clouds/:cloudName' component={Cloud} />
           {children}
         </div>
       </div>

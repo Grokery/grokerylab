@@ -57,12 +57,12 @@ class D3DataFlow extends Component {
             <div id='create-nodes'>
                 <div className="triangle-up"></div>
                 <p>Drag to canvas to create:</p>
-                <img className='drag-create-img' role='presentation' src='img/job.png' onMouseDown={this.createNodeDrag.bind(this, this.createJob.bind(this))}/>
-                <img className='drag-create-img' role='presentation' src='img/source.png' onMouseDown={this.createNodeDrag.bind(this, this.createSource.bind(this))}/>
-                <img className='drag-create-img' role='presentation' src='img/board.png' onMouseDown={this.createNodeDrag.bind(this, this.createBoard.bind(this))}/>
+                <img className='drag-create-img' alt='job' src='img/job.png' onMouseDown={this.createNodeDrag.bind(this, this.createJob.bind(this))}/>
+                <img className='drag-create-img' alt='source' src='img/source.png' onMouseDown={this.createNodeDrag.bind(this, this.createSource.bind(this))}/>
+                <img className='drag-create-img' alt='board' src='img/board.png' onMouseDown={this.createNodeDrag.bind(this, this.createBoard.bind(this))}/>
             </div>
-            <a className="create-btn" href='' onClick={this.toggleCreateNodes}><i className='fa fa-plus'></i></a>
-            <a id='delete-icon' href='' onClick={this.onDelete.bind(this)}><i className='fa fa-trash'></i></a>
+            <button className="create-btn" onClick={this.toggleCreateNodes}><i className='fa fa-plus'></i></button>
+            <button id='delete-icon' onClick={this.onDelete.bind(this)}><i className='fa fa-trash'></i></button>
             <div className="node-filter">
                 <input id='filter-input' className='filter-input' onChange={this.filterNodes.bind(this)}/>
                 <i className='fa fa-filter'></i>

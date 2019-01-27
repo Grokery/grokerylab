@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { withRouter, Link } from 'react-router-dom'
 
 import { getSessionInfo } from 'authentication'
 import IBoardFrame from 'shared/IBoardFrame/IBoardFrame'
@@ -17,7 +18,7 @@ class Board extends Component {
       return (
         <div className='sidebar-page-content'>
         <div>
-          <a href={'#/clouds/' + cloudName + '/boards'} style={{position: 'absolute', right:0, padding:15}}><i className='fa fa-times'></i></a>
+          <Link to={'/clouds/' + cloudName + '/boards'} style={{position: 'absolute', right:0, padding:15}}><i className='fa fa-times'></i></Link>
         </div>
         </div>
       )
@@ -25,9 +26,9 @@ class Board extends Component {
     return (
       <div className='sidebar-page-content'>
         <div>
-          <a href={'#/clouds/'+cloudName+'/flows/board/'+node.nodeId+'?flow=open&activeTab=1'} style={{position: 'absolute', right:55, padding:15}}><i className='fa fa-share-alt fa-fw'></i></a>
-          <a href={'#/clouds/'+cloudName+'/flows/board/'+node.nodeId+'?flow=closed&activeTab=2'} style={{position: 'absolute', right:25, padding:15}}><i className='fa fa-pencil fa-fw'></i></a>
-          <a href={'#/clouds/'+cloudName+'/boards'} style={{position: 'absolute', right:0, padding:15}}><i className='fa fa-times'></i></a>
+          <Link to={'/clouds/'+cloudName+'/flows/board/'+node.nodeId+'?flow=open&activeTab=1'} style={{position: 'absolute', right:55, padding:15}}><i className='fa fa-share-alt fa-fw'></i></Link>
+          <Link to={'/clouds/'+cloudName+'/flows/board/'+node.nodeId+'?flow=closed&activeTab=2'} style={{position: 'absolute', right:25, padding:15}}><i className='fa fa-pencil fa-fw'></i></Link>
+          <Link to={'/clouds/'+cloudName+'/boards'} style={{position: 'absolute', right:0, padding:15}}><i className='fa fa-times'></i></Link>
           <div style={{paddingTop:'50px'}}>
             <IBoardFrame cloudName={cloudName} boardId={node.nodeId} width={window.innerWidth - 64} height={window.innerHeight-100}></IBoardFrame>
           </div>
@@ -40,10 +41,10 @@ class Board extends Component {
 const mapStateToProps = (state, ownProps) => {
   let sessionInfo = getSessionInfo()
   return {
-    cloudName: ownProps.params.cloudName,
-    cloudInfo: sessionInfo['clouds'][ownProps.params.cloudName],
-    node: state.nodes[ownProps.routeParams.boardId],
+    cloudName: ownProps.match.params.cloudName,
+    cloudInfo: sessionInfo['clouds'][ownProps.match.params.cloudName],
+    node: state.nodes[ownProps.match.params.boardId],
   }
 }
 
-export default connect(mapStateToProps, {})(Board)
+export default withRouter(connect(mapStateToProps, {})(Board))
