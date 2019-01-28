@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
+import queryString from 'query-string'
 
 import { updateQueryParam, NODETYPE } from 'common'
 import { headerNavHeight, sideNavWidth } from 'config'
@@ -19,23 +20,25 @@ class NodeDetails extends Component {
     fetchNode: PropTypes.func.isRequired,
     updateNode: PropTypes.func.isRequired,
     node: PropTypes.object,
+    queryParams: PropTypes.object,
+    urlParams: PropTypes.object,
   }
   constructor(props) {
     super(props)
     this.state = {
-      flowOpen: props.location.query && props.location.query.flow === "open" ? true : false,
+      flowOpen: props.queryParams && props.queryParams.flow === "open" ? true : false,
       rightMenuOptions: [
         <button key='openClose' href='' onClick={this.toggleNodeDetailsPain} className='btn btn-default'><i className='fa fa-arrows-v'></i></button>,
-        <Link key='return' to={"/clouds/"+ props.match.params.cloudName + "/flows?nodeId=" + props.match.params.nodeId} className='btn btn-default'><i className='fa fa-times'></i></Link>
+        <Link key='return' to={"/clouds/"+ props.urlParams.cloudName + "/flows?nodeId=" + props.urlParams.nodeId} className='btn btn-default'><i className='fa fa-times'></i></Link>
       ],
     }
   }
   componentDidMount() {
-    const { fetchNode, match } = this.props
-    fetchNode(match.params.cloudName, match.params.nodeType, match.params.nodeId)
+    const { fetchNode, urlParams } = this.props
+    fetchNode(urlParams.cloudName, urlParams.nodeType, urlParams.nodeId)
   }
   render() {
-    const { match, node } = this.props
+    const { urlParams, node } = this.props
     const { flowOpen, rightMenuOptions } = this.state
     if (!node) {return null}
     let detailsHeight = window.innerHeight
@@ -46,7 +49,7 @@ class NodeDetails extends Component {
     }
     let props = {
       node: node,
-      params: match.params,
+      params: urlParams,
       onUpdate: this.onUpdate,
       toggleNodeDetailsPain: this.toggleNodeDetailsPain,
       rightMenuOptions: rightMenuOptions,
@@ -58,9 +61,9 @@ class NodeDetails extends Component {
       <div className='sidebar-page-content' style={{height: window.innerHeight - headerNavHeight}}>
         <div style={{display:flowDisplay}}>
           <D3DataFlow
-            params={match.params}
+            params={urlParams}
             showControls={false}
-            selectedNodeId={match.params.nodeId}
+            selectedNodeId={urlParams.nodeId}
             height={flowPreviewHeight - headerNavHeight} 
             width={window.innerWidth - sideNavWidth}
             zoomOnHighlight={false}
@@ -72,11 +75,11 @@ class NodeDetails extends Component {
         </div>
         <div style={{position:'relative'}}>
             {function() {
-                if (match.params.nodeType === NODETYPE.JOB.toLowerCase()) {
+                if (urlParams.nodeType === NODETYPE.JOB.toLowerCase()) {
                   return (<JobDetails {...props} />)
-                } else if (match.params.nodeType === NODETYPE.SOURCE.toLowerCase()) {
+                } else if (urlParams.nodeType === NODETYPE.SOURCE.toLowerCase()) {
                   return (<SourceDetails {...props} />)
-                } else if (match.params.nodeType === NODETYPE.BOARD.toLowerCase()) {
+                } else if (urlParams.nodeType === NODETYPE.BOARD.toLowerCase()) {
                   return (<BoardDetails {...props} />)
                 }
             }()}
@@ -86,8 +89,8 @@ class NodeDetails extends Component {
   }
   reloadData = (e) => {
     e.preventDefault()
-    const { fetchNode, match } = this.props
-    fetchNode(match.params.cloudName, match.params.nodeType, match.params.nodeId)
+    const { fetchNode, urlParams } = this.props
+    fetchNode(urlParams.cloudName, urlParams.nodeType, urlParams.nodeId)
   }
   toggleNodeDetailsPain = (e) => {
     e.preventDefault()
@@ -96,18 +99,20 @@ class NodeDetails extends Component {
     this.setState({flowOpen: !flowOpen})
   }
   onUpdate = (nodeData, cb) => {
-    const { updateNode, node, match } = this.props
+    const { updateNode, node, urlParams } = this.props
     nodeData.nodeId = node.nodeId
     nodeData.nodeType = node.nodeType
     nodeData.subType = nodeData.subType ? nodeData.subType : node.subType
-    updateNode(match.params.cloudName, nodeData, cb)
+    updateNode(urlParams.cloudName, nodeData, cb)
   }
 
 }
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    node: state.nodes[ownProps.match.params.nodeId]
+    urlParams: ownProps.match.params,
+    queryParams: queryString.parse(ownProps.location.search),
+    node: state.nodes[ownProps.match.params.nodeId],
   }
 }
 

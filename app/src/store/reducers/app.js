@@ -4,7 +4,7 @@ import { FETCHNODES_REQUEST, FETCHNODE_REQUEST, UPDATENODE_REQUEST,
     FETCHNODES_FAILURE, FETCHNODE_FAILURE, UPDATENODE_FAILURE } from 'store/actions/nodes'
 import { APPSTATUS } from "common"
 
-export const appStatus = (state = APPSTATUS.OK, action) => {
+export default (state = APPSTATUS.OK, action) => {
     if (action.type === FETCHNODES_REQUEST ||
         action.type === FETCHNODE_REQUEST ||
         action.type === UPDATENODE_REQUEST) {

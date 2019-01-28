@@ -8,7 +8,6 @@ import { getCloudId } from 'authentication'
 import { fetchNodes, clearNodes } from 'store/actions/nodes'
 import { fetchCloud } from 'store/actions/cloud'
 import { fetchOptions } from 'store/actions/options'
-
 import SideNavBar from 'shared/SideNavBar/SideNavBar'
 import Boards from 'components/Boards/Boards'
 import Board from 'components/Boards/Board'
@@ -37,9 +36,13 @@ class Cloud extends Component {
   }
   render() {
     const { match } = this.props
+    let cloudName = match.params.cloudName
+    if (!cloudName || !getCloudId(cloudName)) {
+      return null
+    }
     return (
       <div id='cloud-page' className='page-content'>
-        <SideNavBar cloudName={match.params.cloudName}></SideNavBar>
+        <SideNavBar cloudName={cloudName}></SideNavBar>
         <div className='sidebar-page-wrapper'>
           <Route exact path='/clouds/:cloudName' component={Boards} />
           <Route exact path='/clouds/:cloudName/boards' component={Boards} />

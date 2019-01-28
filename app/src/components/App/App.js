@@ -27,7 +27,6 @@ class App extends Component {
     }
   }
   render() {
-    const { children } = this.props
     if (!isAuthenticated()) {
       return null
     }
@@ -39,15 +38,9 @@ class App extends Component {
           <Route exact path='/' component={Home} />
           <Route path='/account' component={UserAccount} />
           <Route path='/clouds/:cloudName' component={Cloud} />
-          {children}
         </div>
       </div>
     )
-  }
-  handleDismissClick = (e) => {
-    const { resetErrorMessage } = this.props
-    e.preventDefault()
-    resetErrorMessage()
   }
   renderErrorMessage() {
     const { errorMessage } = this.props
@@ -55,14 +48,19 @@ class App extends Component {
       return null
     }
     return (
-      <p>
+      <div className='app-message'>
         <b>{errorMessage}</b>
         {' '}
         <button onClick={this.handleDismissClick}>
           Dismiss
         </button>
-      </p>
+      </div>
     )
+  }
+  handleDismissClick = (e) => {
+    const { resetErrorMessage } = this.props
+    e.preventDefault()
+    resetErrorMessage()
   }
 }
 

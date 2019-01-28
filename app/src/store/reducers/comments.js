@@ -1,6 +1,6 @@
 import { CREATECOMMENT_SUCCESS, QUERYCOMMENTS_SUCCESS } from 'store/actions/comments'
 
-export const comments = (state = {}, action) => {
+export default (state = {}, action) => {
     if (action.type === CREATECOMMENT_SUCCESS) {
         // TODO
     } else if (action.type === QUERYCOMMENTS_SUCCESS) {

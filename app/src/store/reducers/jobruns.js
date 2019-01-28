@@ -1,6 +1,6 @@
 import { CREATEJOBRUN_SUCCESS, FETCHJOBRUNS_SUCCESS } from 'store/actions/jobruns'
 
-export const jobruns = (state = {}, action) => {
+export default (state = {}, action) => {
     if (action.type === CREATEJOBRUN_SUCCESS) {
         // TODO
     } else if (action.type === FETCHJOBRUNS_SUCCESS) {

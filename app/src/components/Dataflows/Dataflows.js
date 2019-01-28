@@ -9,7 +9,6 @@ import D3DataFlow from 'shared/D3DataFlow/D3DataFlow'
 
 class Dataflows extends Component {
   render() {
-    console.log(this.props)
     const { location, match } = this.props
     return (
       <div className='sidebar-page-content'>

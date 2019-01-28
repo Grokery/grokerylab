@@ -17,18 +17,18 @@ class Home extends Component {
   render() {
     return (
       <div id='home-page' className='page-content'>
-        <CreateEditCloudModel 
+        <div className='cloud-sections'>
+          {this.getCloudSections()}
+        </div>
+        <div>
+          <button id='new-cloud-btn' className='btn' onClick={this.toggleCreateModal}><i className='fa fa-plus'/></button>
+          <CreateEditCloudModel 
             key="createnew" 
             shown={this.state.showCreateModel} 
             toggleShown={this.toggleCreateModal} 
             modalTitle={"Create New Cloud"}
             isCreate={true}
           />
-        <div className='cloud-sections'>
-          {this.getCloudSections()}
-        </div>
-        <div>
-          <button id='new-cloud-btn' className='btn' onClick={this.toggleCreateModal}><i className='fa fa-plus'/></button>
         </div>
       </div>
     )
