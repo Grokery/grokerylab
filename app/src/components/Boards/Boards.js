@@ -12,6 +12,7 @@ class Boards extends Component {
   static propTypes = {
     cloudInfo: PropTypes.object.isRequired,
     boards: PropTypes.array.isRequired,
+    urlParams: PropTypes.object,
   }
   render() {
     return (
@@ -21,8 +22,8 @@ class Boards extends Component {
     )
   }
   getBoardLinks() {
-    const { boards, match } = this.props
-    let cloudName = match.params.cloudName
+    const { boards, urlParams } = this.props
+    let cloudName = urlParams.cloudName
     return boards.sort(this.boardSort).map((board) => {
       return (
         <div key={board.nodeId} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} style={{float:'left',marginTop:10,marginLeft:10,border:'solid 1px #ddd',padding:5}}>
@@ -57,6 +58,7 @@ const mapStateToProps = (state, ownProps) => {
     }
   }
   return {
+    urlParams: ownProps.match.params,
     cloudInfo: sessionInfo['clouds'][ownProps.match.params.cloudName],
     boards: boards,
   }

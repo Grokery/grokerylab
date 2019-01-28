@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import queryString from 'query-string'
 
 import { APPSTATUS } from "common"
 import { headerNavHeight, sideNavWidth } from 'config'
@@ -8,15 +10,18 @@ import Loader from 'shared/Loader/Loader'
 import D3DataFlow from 'shared/D3DataFlow/D3DataFlow'
 
 class Dataflows extends Component {
+  static propsTypes = {
+    urlParams: PropTypes.object,
+  }
   render() {
-    const { location, match } = this.props
+    const { queryParams, urlParams } = this.props
     return (
       <div className='sidebar-page-content'>
         <Loader show={this.props.appStatus === APPSTATUS.BUSY} />
         <D3DataFlow
-          params={match.params}
+          params={urlParams}
           showControls={true}
-          selectedNodeId={location.query ? location.query.nodeId : null}
+          selectedNodeId={queryParams.nodeId}
           zoomOnHighlight={false}
           singleClickNav={false}
           colored={false}
@@ -33,7 +38,9 @@ class Dataflows extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    appStatus: state.appStatus
+    appStatus: state.appStatus,
+    urlParams: ownProps.match.params,
+    queryParams: queryString.parse(ownProps.location.search),
   }
 }
 

@@ -23,41 +23,49 @@ class InfoTab extends Component {
     const { node, params } = this.props
     if (!node) { return <div></div> }
     return (
-        <div className='row info-tab'>
-            <div className='col-md-6 section1'>
-                <div className="row">
-                    <div className="col-md-12">
-                        <div className="node-title-section">
-                            <ContentEditable type='h1' className="node-title" value={node.title} onChange={this.handleTitleChange.bind(this)}></ContentEditable>
-                            <ContentEditable type='p' className="node-description" value={node.description} onChange={this.handleDescriptionChange.bind(this)}></ContentEditable>
+        <div className='info-tab'>
+            <div className='row'>
+                <div className='col col-sm-6 '>
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <div className="node-title-section">
+                                <ContentEditable type='h1' className="node-title" value={node.title} onChange={this.handleTitleChange.bind(this)}></ContentEditable>
+                                <ContentEditable type='p' className="node-description" value={node.description} onChange={this.handleDescriptionChange.bind(this)}></ContentEditable>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div className="row">
-                    <div className="col-md-12">
-                        <div className="node-detail-section">
-                            {this.props.children}
+                <div className='col col-sm-6 '>
+                    <div className='row'>
+                        <div className="node-info-section">
+                            <div className='col-sm-6'><label>Type: </label> { node.subType || ""}</div>
+                            <div className='col-sm-6'><label>Owner: </label> {node.owner || "admin"}</div>
+                            <div className='col-sm-6'><label>Hello: </label> world</div>
+                            <div className='col-sm-6'><label>This: </label> that</div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div className='col-md-6'>
-                <div className='row'>
-                    <div className="node-info-section">
-                        <div className='col-md-6'><label>Type: </label> { node.subType || ""}</div>
-                        <div className='col-md-6'><label>Owner: </label> {node.owner || "admin"}</div>
-                        {/* <div className='col-md-6'><label>Hello: </label> world</div>
-                        <div className='col-md-6'><label>This: </label> that</div> */}
+            <div className='row'>
+                <div className='col-md-6 section1'>
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <div className="node-detail-section">
+                                {this.props.children}
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div className="row node-comments">
-                    <div className='col-md-12'>
-                        <Comments params={params} nodeId={params.nodeId}></Comments>
+                <div className='col-md-6'>
+                    <div className="row node-comments">
+                        <div className='col-sm-12'>
+                            <Comments params={params} nodeId={params.nodeId}></Comments>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    )
+ )
   }
 }
 

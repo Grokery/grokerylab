@@ -7,12 +7,10 @@ import { API_BASE_URL } from 'config'
 import { getCloudId, getCloudToken, getSessionInfo } from 'authentication'
 import { fetchNode, fetchNodes } from 'store/actions/nodes'
 import { postJobRun, fetchJobRuns, fetchJobRunsWithRepeat, updateJobRun } from 'store/actions/jobruns'
-
 import { Tabs, Panel } from 'shared/Tabs/Tabs'
 import EditModal from 'shared/EditModal/EditModal'
 import InfoTab from 'shared/InfoTab/InfoTab'
 import LogsTab from 'shared/LogsTab/LogsTab'
-
 import PlaceholderInfo from './infoTabs/PlaceholderInfo'
 import BrowserJsInfo from './infoTabs/BrowserJsInfo'
 import AwsLambdaInfo from './infoTabs/AwsLambdaInfo'
@@ -79,7 +77,7 @@ class JobDetails extends Component {
           </Panel>
           <Panel title='History'>
             {this.renderRightMenuOptions()}
-            <LogsTab params={this.props.params}></LogsTab>
+            <LogsTab {...commonProps}></LogsTab>
           </Panel>
         </Tabs>
         <EditModal 
@@ -93,23 +91,24 @@ class JobDetails extends Component {
       </div>
     )
   }
-  getRightMenuOptions = () => {
-    let saveOption = null
-    if (this.state.dirty) {
-      saveOption = <button key='save' onClick={this.onUpdate} className='btn btn-default'><i className='fa fa-save'></i></button>
-    }
-    return concat([
-      saveOption,
-      <button key='run' onClick={this.runJob} className='btn btn-default'><i className='fa fa-play'></i></button>,
-      <button key='edit' onClick={this.toggleEditDialog} className='btn btn-default'><i className='fa fa-cog'></i></button>,
-    ], this.props.rightMenuOptions)
-  }
   renderRightMenuOptions() {
     return (
       <div className='btn-group item-options' style={{position: 'absolute', right: 0, top: 0}}>
           {this.getRightMenuOptions()}
       </div>
     )
+  }
+  getRightMenuOptions = () => {
+    const { node } = this.props
+    let runOption = null
+    if (node.subType !== 'GENERIC') {
+      runOption = <button key='run' disabled={this.state.dirty} onClick={this.runJob} className='btn btn-default'><i className='fa fa-play'></i></button>
+    }
+    return concat([
+      <button key='save' disabled={!this.state.dirty} onClick={this.onUpdate} className='btn btn-default'><i className='fa fa-save'></i></button>,
+      runOption,
+      <button key='edit' onClick={this.toggleEditDialog} className='btn btn-default'><i className='fa fa-cog'></i></button>,
+    ], this.props.rightMenuOptions)
   }
   runJob = (e) => {
     e.preventDefault()

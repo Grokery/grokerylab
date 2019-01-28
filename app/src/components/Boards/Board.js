@@ -42,7 +42,7 @@ const mapStateToProps = (state, ownProps) => {
   let sessionInfo = getSessionInfo()
   return {
     cloudName: ownProps.match.params.cloudName,
-    cloudInfo: sessionInfo['clouds'][ownProps.match.params.cloudName],
+    cloudInfo: sessionInfo.clouds[ownProps.match.params.cloudName],
     node: state.nodes[ownProps.match.params.boardId],
   }
 }

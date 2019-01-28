@@ -20,10 +20,11 @@ class Cloud extends Component {
     fetchCloud: PropTypes.func.isRequired,
     fetchNodes: PropTypes.func.isRequired,
     clearNodes: PropTypes.func.isRequired,
+    urlParams: PropTypes.object,
   }
   componentDidMount() {
-    const { clearNodes, fetchCloud, fetchNodes, fetchOptions, history, match  } = this.props
-    let cloudName = match.params.cloudName
+    const { clearNodes, fetchCloud, fetchNodes, fetchOptions, history, urlParams  } = this.props
+    let cloudName = urlParams.cloudName
     clearNodes()
     if (cloudName && getCloudId(cloudName)) {
       fetchCloud(cloudName)
@@ -35,8 +36,8 @@ class Cloud extends Component {
     }
   }
   render() {
-    const { match } = this.props
-    let cloudName = match.params.cloudName
+    const { urlParams } = this.props
+    let cloudName = urlParams.cloudName
     if (!cloudName || !getCloudId(cloudName)) {
       return null
     }
@@ -57,7 +58,9 @@ class Cloud extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  return {}
+  return {
+    urlParams: ownProps.match.params,
+  }
 }
 
 export default withRouter(connect(mapStateToProps, {

@@ -87,12 +87,8 @@ class BoardDetails extends Component {
     )
   }
   getRightMenuOptions = () => {
-    let saveOption = null
-    if (this.state.dirty) {
-      saveOption = <button key='save' onClick={this.onUpdate} className='btn btn-default'><i className='fa fa-save'></i></button>
-    }
     return concat([
-      saveOption,
+      <button key='save' disabled={!this.state.dirty} onClick={this.onUpdate} className='btn btn-default'><i className='fa fa-save'></i></button>,
       <button key='edit' onClick={this.toggleEditDialog} className='btn btn-default'><i className='fa fa-cog'></i></button>,
     ], this.props.rightMenuOptions)
   }
