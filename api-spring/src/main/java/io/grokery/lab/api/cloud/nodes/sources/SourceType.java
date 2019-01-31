@@ -7,6 +7,8 @@ package io.grokery.lab.api.cloud.nodes.sources;
  */
 public enum SourceType {
 	GENERIC("Generic"),
+	DELIMITED("Delimited Data"),
+	JSON("Json data"),
 	SQL("SQL Table"),
 	MONGO("Mongo Collection"),
 

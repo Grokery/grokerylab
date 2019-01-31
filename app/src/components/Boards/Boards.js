@@ -26,7 +26,7 @@ class Boards extends Component {
     let cloudName = urlParams.cloudName
     return boards.sort(this.boardSort).map((board) => {
       return (
-        <div key={board.nodeId} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} style={{float:'left',marginTop:10,marginLeft:10,border:'solid 1px #ddd',padding:5}}>
+        <div className='paper' key={board.nodeId} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} style={{float:'left',marginTop:10,marginLeft:10,padding:5, backgroundColor:'white'}}>
           <div style={{position:'relative'}}>
             <Link to={'/clouds/'+cloudName+'/boards/'+board.nodeId} style={{float:'left'}}>{board.title}</Link>
             <div style={{float:'right'}}>

@@ -48,12 +48,14 @@ class App extends Component {
       return null
     }
     return (
-      <div className='app-message'>
-        <b>{errorMessage}</b>
-        {' '}
-        <button onClick={this.handleDismissClick}>
-          Dismiss
-        </button>
+      <div className='app-message paper'>
+        <div style={{height: '30px'}}>
+          <h4 className='pull-left'>App Message:</h4>
+            <button type="button" className="close" onClick={this.handleDismissClick} aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div style={{position:'relative'}}>
+          <b>{errorMessage}</b>
+        </div>
       </div>
     )
   }

@@ -25,7 +25,7 @@ class Auth extends Component {
       <div className='page-content auth'>
         <div className="container signin-panel">
             <div className="row">
-            <div className="col-sm-4 col-sm-offset-4">
+            <div className="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3 col-lg-4 col-lg-offset-4">
                 <div className="panel panel-default">
        
                   <div className="panel-body" style={{position:'relative'}}>
@@ -40,7 +40,7 @@ class Auth extends Component {
                         </div>
                         <input className="btn btn-lg btn-primary btn-block" type="submit" value="Sign In" onClick={this.onSubmit.bind(this)} />
                       </fieldset>
-                      <span className="pull-right"><a href='https://grokery.io'>sign up</a> | <a href="https://grokery.io">reset pass</a></span>
+                      <span className="sign-reset pull-right"><a href='https://grokery.io'>sign up</a> | <a href="https://grokery.io">reset pass</a></span>
                     </form>
                   </div>
 

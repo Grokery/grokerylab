@@ -12,6 +12,15 @@ public class JsonObj extends HashMap<String, Object> {
         super();
     }
 
+    public JsonObj(Object other) {
+        JsonObj values = MapperUtil.getInstance().convertValue(other, JsonObj.class);
+        Iterator it = values.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            this.put(pair.getKey().toString(), pair.getValue());
+        }
+    }
+
     public JsonObj(Map<String, Object> other) {
         Iterator it = other.entrySet().iterator();
         while (it.hasNext()) {

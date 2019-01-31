@@ -34,6 +34,7 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
+  /* background-color: #e7ebee; */
 }
 
 #react-root {
@@ -96,6 +97,9 @@ a i:hover {
   color: #0291E3;
 }
 
+button {
+  background-color: white;
+}
 button:focus {
   outline-style:none;
   box-shadow:none;
@@ -127,6 +131,21 @@ button.btn.btn-default:active {
   box-shadow: none;
 }
 
+.paper {
+  -webkit-box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.1),0px 2px 2px 0px rgba(0,0,0,0.1),0px 3px 1px -2px rgba(0,0,0,0.1);
+  box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.1),0px 2px 2px 0px rgba(0,0,0,0.1),0px 3px 1px -2px rgba(0,0,0,0.1);
+}
+
+.app-message {
+  position: absolute;
+  top: 0px;
+  right: 25%;
+  width: 450px;
+  height: 80px;
+  z-index: 99999;
+  background-color: white;
+  padding: 10px;
+}
 
 .btn-primary {
   background-color: #4C5763;
@@ -166,7 +185,7 @@ button.btn.btn-default:active {
 }
 .ace_gutter {
   background: #e7ebee !important;
-  border-top: 1px solid #ddd;
+  /* border-top: 1px solid #ddd; */
 }
 .modal-body .ace_gutter {
   border-top: none;

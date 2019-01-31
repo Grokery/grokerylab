@@ -4,8 +4,8 @@
 }
 
 .cloud-section {
-  padding-top: 25px;
-  clear: both
+  clear: both;
+  min-height: 80px;
 }
 
 .cloud-section .cloud-icon {

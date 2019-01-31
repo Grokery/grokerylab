@@ -43,7 +43,7 @@ class Cloud extends Component {
     }
     return (
       <div id='cloud-page' className='page-content'>
-        <SideNavBar cloudName={cloudName}></SideNavBar>
+        <SideNavBar cloudName={cloudName} />
         <div className='sidebar-page-wrapper'>
           <Route exact path='/clouds/:cloudName' component={Boards} />
           <Route exact path='/clouds/:cloudName/boards' component={Boards} />

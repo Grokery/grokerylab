@@ -12,13 +12,15 @@
 #home-page #new-cloud-btn {
   font-size: large;
   padding: 10px;
-  width: 100%;
+  float: right;
 }
 
 #home-page .cloud-sections {
-  width: 100%;
-  padding-left: 30px;
-  padding-right: 30px;
+  padding-top: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 10px;
+  background-color: white;
 }
 
 #home-page .cloud-sections hr {
@@ -26,8 +28,8 @@
   height: 1px;
   border: 0;
   border-bottom: 1px solid #c5ccd3;
-  padding-top: 20px;
   margin: 0;
+  margin-bottom: 20px;
   clear: both;
 }
 

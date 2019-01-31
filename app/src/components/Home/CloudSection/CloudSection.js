@@ -43,6 +43,7 @@ class CloudSection extends Component {
     return (
       <div className='cloud-section'>
         <div className='cloud-section-header'>
+          <hr />
           <a href={'/clouds/' + cloudid} className='cloud-title'>
             <img src={this.getCloudIcon(cloud.cloudType)} className='cloud-icon' alt='cloud type'/>
             {cloud.title}
@@ -60,7 +61,6 @@ class CloudSection extends Component {
         <div className='cloud-section-quicklinks'>
           <Gallery itemSize='medium' colorClass='light' images={false} items={this.getCloudLinks(cloudid, cloud)} params={{}}></Gallery>
         </div>
-        <hr />
       </div>
     )
   }

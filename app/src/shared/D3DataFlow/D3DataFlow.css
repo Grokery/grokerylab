@@ -65,15 +65,15 @@ g.colored.chart-node {
     stroke-width: 0;
 }
 
-g.colored.datasource-node {
+g.colored.source-node {
     fill: #0271b1;
     stroke: #0271b1;
     stroke-width: 0;
 }
 
-g.colored.dashboard-node {
-    fill: #0271b1;
-    stroke: #0271b1;
+g.colored.board-node {
+    fill: #ff9233;
+    stroke: #ff9233;
     stroke-width: 0;
 }
 

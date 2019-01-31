@@ -68,7 +68,7 @@ class NodeDetails extends Component {
             width={window.innerWidth - sideNavWidth}
             zoomOnHighlight={false}
             singleClickNav={true}
-            colored={false}
+            colored={true}
             nodeShape={2}
             query={{}}
           />
