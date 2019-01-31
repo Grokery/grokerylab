@@ -16,7 +16,7 @@ class Home extends Component {
   }
   render() {
     return (
-      <div id='home-page' className='page-content' >
+      <div id='home-page' className='row page-content' >
         <div className='cloud-sections col-xs-12 col-sm-8 col-sm-offset-2 paper' style={{minHeight:window.innerHeight - 50}}>
           <h2 className='pull-left' style={{paddingTop:'10px', paddingBottom:'15px'}}>Your Clouds:</h2>
           <button id='new-cloud-btn' className='btn' onClick={this.toggleCreateModal}><i className='fa fa-plus'/></button>
