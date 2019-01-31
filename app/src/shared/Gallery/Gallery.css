@@ -9,7 +9,7 @@
 
 .gallery .gallery-item {
   padding: 5px;
-  box-shadow: 1px 1px 2px 0 #4C5763;
+  box-shadow: 1px 1px 2px 0 #505864;
   border-radius: 3px;
   border: solid 1px #ccc;
   overflow:  hidden;
@@ -53,7 +53,7 @@
 
 .gallery .gallery-item i {
   font-size: larger;
-  color: #4C5763;
+  color: #505864;
   padding: 10px;
 }
 

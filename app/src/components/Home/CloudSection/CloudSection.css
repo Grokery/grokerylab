@@ -5,7 +5,13 @@
 
 .cloud-section {
   clear: both;
-  min-height: 80px;
+  min-height: 65px;
+}
+
+.cloud-section-header,
+.cloud-section-quicklinks {
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 .cloud-section .cloud-icon {
@@ -19,14 +25,12 @@
   font-weight: 300;
   font-size: 24px;
   line-height: 1.1;
-  color: #373F48;
+  color: #333;
 }
 
-.cloud-section .cloud-edit-icon {
-  padding-left: 10px;
-}
-
-.cloud-section button {
+.cloud-section .cloud-edit-button {
+  margin: 0;
+  padding: 0;
   border: none;
   float: right;
 }

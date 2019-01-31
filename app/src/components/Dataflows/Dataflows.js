@@ -24,7 +24,7 @@ class Dataflows extends Component {
           selectedNodeId={queryParams.nodeId}
           zoomOnHighlight={false}
           singleClickNav={false}
-          colored={true}
+          colored={false}
           nodeShape={2}
           query={{}}
           height={window.innerHeight - headerNavHeight}

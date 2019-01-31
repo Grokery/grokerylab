@@ -2,11 +2,14 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import _ from 'lodash'
+import { confirmAlert } from 'react-confirm-alert'
+import 'react-confirm-alert/src/react-confirm-alert.css'
+
 import { addNewCloudToSession, removeCloudFromSession } from 'authentication'
-import Modal from 'shared/Modal/Modal'
-import Loader from 'shared/Loader/Loader'
 import { createCloud, updateCloud, deleteCloud } from 'store/actions/cloud'
 import { API_BASE_URL } from 'config'
+import Modal from 'shared/Modal/Modal'
+import Loader from 'shared/Loader/Loader'
 import './CreateEditCloudModel.css'
 
 let defaultData = {
@@ -112,20 +115,30 @@ class CreateEditCloudModel extends Component {
   deleteCloud = (e) => {
     e.preventDefault()
     const { cloudData } = this.props
-    // TODO confirm delete
-    // if (!confirm("Perminantly delete cloud and all cloud data?")) {
-    //   return
-    // }
-    this.setState({working: true})
-    this.props.deleteCloud(cloudData.name, (json, response) => {
-      if (response.ok) {
-        removeCloudFromSession(cloudData.name)
-      } else {
-        alert("Error deleteing cloud")
-        console.err(response)
-      }
-      this.setState({working: false})
-      return json
+    confirmAlert({
+      title: 'Confirm delete:',
+      message: 'Perminantly delete cloud and all cloud data?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => {
+            this.setState({working: true})
+            this.props.deleteCloud(cloudData.name, (json, response) => {
+              if (response.ok) {
+                removeCloudFromSession(cloudData.name)
+              } else {
+                alert("Error deleteing cloud")
+                console.err(response)
+              }
+              this.setState({working: false})
+              return json
+            })
+          }
+        },
+        {
+          label: 'No',
+        }
+      ]
     })
   }
   toggleEditModal = () => {
@@ -135,67 +148,35 @@ class CreateEditCloudModel extends Component {
   getAccessKeyFormFields() {
     if (this.state.data.cloudType === 'AWS') {
       return (
-        <div key='aws-creds' className='form-row'>
-          <div className='form-group col-md-5'>
-            <label>AWS Acess Key Id:</label>
+        <div key='aws-creds' className='row'>
+          <div className='col col-sm-4'>
+            <label>Region:</label>
+            <input name='awsRegion' type='text' className='form-control' value={this.state.data.adminAccess.credentials.awsRegion} onChange={this.onAWSREgionChange.bind(this)}/>
+          </div>
+          <div className='col col-sm-8'>
+            <label>Acess Key Id:</label>
             <input name='awsAccess' type='text' className='form-control' value={this.state.data.adminAccess.credentials.awsAccessKeyId} onChange={this.onAWSAccessKeyIdChange.bind(this)}/>
           </div>
-          <div className='form-group col-md-5'>
-            <label>AWS Secret Key:</label>
+          <div className='col col-sm-12'>
+            <label>Secret Key:</label>
             <input name='awsSecret' type='text' className='form-control' value={this.state.data.adminAccess.credentials.awsSecretKey} onChange={this.onAWSSecretKeyChange.bind(this)}/>
-          </div>
-          <div className='form-group col-md-2'>
-            <label>AWS Region:</label>
-            <input name='awsRegion' type='text' className='form-control' value={this.state.data.adminAccess.credentials.awsRegion} onChange={this.onAWSREgionChange.bind(this)}/>
           </div>
         </div>
       )
     } else if (this.state.data.cloudType === 'AZURE') {
       return (
-        <div key='azure-creds' className='form-row'>
-          <div className='form-group col-md-12'>
-            <label>Azure API Access Key:</label>
+        <div key='azure-creds' className='row'>
+          <div className='col col-sm-12'>
+            <label>Azure Access Key:</label>
             <input name='AzureAccess' type='text' className='form-control' value={this.state.data.adminAccess.credentials.azureKey} onChange={this.onAzureKeyChange.bind(this)}/>
           </div>
         </div>
       )
     } else if (this.state.data.cloudType === 'CUSTOM') { 
       return (
-        <div>
-          <div className='form-row'>
-            <div className='form-group col-md-6'>
-              <label>Host API Base Url:</label>
-              <input type='text' className='form-control' value={this.state.data.url} onChange={this.onURLChange.bind(this)}/>
-            </div>
-            <div className='form-group col-md-6'>
-              <label>Cloud Id (Leave blank to create new):</label>
-              <input type='text' className='form-control' />
-            </div>
-          </div>
-          <div className='form-row'>
-            <div className='form-group col-md-12'>
-              <label>Host API Auth Key:</label>
-              <input type='text' className='form-control' />
-            </div>
-          </div>
-          <div className='form-row'>
-            <div className='form-group col-md-6'>
-              <label>Your userid on cloud host:</label>
-              <input type='text' className='form-control' />
-            </div>
-            <div className='form-group col-md-6'>
-              <label>Your password on cloud host:</label>
-              <input type='text' className='form-control' />
-            </div>
-          </div>
-        </div>
-      )
-    } else if (this.state.data.cloudType === 'LOCAL') { 
-      return (
-        <div key='local-creds' className='form-row'>
-        <div className='form-group col-md-12'>
+        <div key='local-creds' className='row'>
+        <div className='col col-sm-12'>
           <label>MongoDB Connection String:</label>
-          <p>This is where your cloud's meta data will be stored. It must be accessable from the grokeryLab server.</p>
           <input name='LocalAccess' type='text' className='form-control'/>
         </div>
       </div>
@@ -205,34 +186,33 @@ class CreateEditCloudModel extends Component {
   getForm() {
     return (
       <form onSubmit={this.onSubmit}>
-        <div className='form-row'>
-          <div className='form-group col-md-2'>
-            <label>Cloud Type:</label>
-            <select className='form-control' value={this.state.data.cloudType} onChange={this.onCloudTypeChange.bind(this)} disabled={this.props.isEdit}>
-              <option defaultValue value='AWS'>AWS</option>
-              <option value='AZURE'>Azure</option>
-              {/* <option value='LINKED'>Linked</option> */}
-              {/* <option value='CUSTOM'>Custom</option> */}
-              {/* <option value='LOCAL'>Local</option> */}
-            </select>
-          </div>
-          <div className='form-group col-md-5'>
+        <div className='row'>
+          <div className='col col-sm-7'>
             <label>Cloud Title:</label>
             <input type='text' className='form-control' value={this.state.data.title} onChange={this.onTitleChange.bind(this)}/>
           </div>
-          <div className='form-group col-md-5'>
+          <div className='col col-sm-5'>
             <label>URL Friendly Title:</label>
             <input disabled type='text' className='form-control' value={this.state.data.name} onChange={this.onNameChange.bind(this)}/>
           </div>
         </div>
+        <div className='row'>
+          <div className='col col-sm-6'>
+            <label>Cloud Type:</label>
+            <select className='form-control' value={this.state.data.cloudType} onChange={this.onCloudTypeChange.bind(this)} disabled={this.props.isEdit}>
+              <option defaultValue value='AWS'>AWS</option>
+              <option value='AZURE'>Azure</option>
+              <option value='CUSTOM'>Custom</option>
+            </select>
+          </div>
+        </div>
         {this.getAccessKeyFormFields()}
-        <div className='form-row'>
-          <div className='form-group col-md-4'>
+        <div className='row'>
+          <div className='col col-sm-5'>
             <label>Your Password:</label>
             <input type='password' className='form-control' value={this.state.data.password} onChange={this.onPasswordChange.bind(this)}/>
-            <span className='form-help-text'>(Used to encrypt access keys)</span>
           </div>
-          <div className='form-group col-md-8'></div>
+          <div className='col col-md-8'></div>
         </div>
       </form>
     )
@@ -244,7 +224,7 @@ class CreateEditCloudModel extends Component {
           <div>
             <Modal shown={this.props.shown} >
               <div className='modal-header'>
-                {/* <button type='button' className='close' onClick={this.toggleEditModal} aria-label='Close'><span aria-hidden='true'>&times;</span></button> */}
+                <button type='button' className='close' onClick={this.toggleEditModal} aria-label='Close'><span aria-hidden='true'>&times;</span></button>
                 <h4 className='modal-title'>{this.props.modalTitle}</h4>
               </div>
               <div className='modal-body'>

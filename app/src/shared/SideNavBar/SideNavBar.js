@@ -12,7 +12,7 @@ export default class SideNavBar extends Component {
         const { cloudName } = this.props
         let basepath = '/clouds/' + cloudName
         return (
-            <div id='side-menu-wrapper' className='navbar-default sidebar' role='navigation'>
+            <div id='side-menu-wrapper' className='navbar-default sidebar paper' role='navigation'>
                 <div className='sidebar-nav navbar-collapse'>
                     <ul id='side-menu' className='nav'>
                         <li title="Home">

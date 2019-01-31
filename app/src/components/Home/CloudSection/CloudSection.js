@@ -42,13 +42,13 @@ class CloudSection extends Component {
     const { cloudid, cloud } = this.props
     return (
       <div className='cloud-section'>
+        <hr />
         <div className='cloud-section-header'>
-          <hr />
           <a href={'/clouds/' + cloudid} className='cloud-title'>
             <img src={this.getCloudIcon(cloud.cloudType)} className='cloud-icon' alt='cloud type'/>
             {cloud.title}
           </a>
-          <button onClick={this.toggleEditModal}><i className='fa fa-cog cloud-edit-icon'/></button>
+          <button onClick={this.toggleEditModal} className='cloud-edit-button'><i className='fa fa-cog cloud-edit-icon'/></button>
           <CreateEditCloudModel 
               key="edit-cloud" 
               shown={this.state.showEditModel} 
@@ -58,9 +58,9 @@ class CloudSection extends Component {
               cloudData={cloud}
             />          
         </div>
-        <div className='cloud-section-quicklinks'>
+        {/* <div className='cloud-section-quicklinks'>
           <Gallery itemSize='medium' colorClass='light' images={false} items={this.getCloudLinks(cloudid, cloud)} params={{}}></Gallery>
-        </div>
+        </div> */}
       </div>
     )
   }

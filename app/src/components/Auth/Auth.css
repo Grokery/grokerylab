@@ -19,8 +19,8 @@
 .page-content.auth .auth input.btn:active,
 .page-content.auth .auth input.btn:active:focus {
     outline: none;
-    border-color: #4C5763;
-    background-color: #4C5763;
+    border-color: #505864;
+    background-color: #505864;
 }
 
 .page-content.auth .btn {

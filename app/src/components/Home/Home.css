@@ -1,4 +1,6 @@
-
+#home-page {
+  background-color: #E1E3E5;
+}
 #home-page a,
 #home-page a:hover {
   text-decoration: none;
