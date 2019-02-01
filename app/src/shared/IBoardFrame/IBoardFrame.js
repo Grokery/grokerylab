@@ -31,7 +31,7 @@ class IBoardFrame extends Component {
                         var options = {headers:{"Authorization":"`+token+`"}}
                         fetch(url, options)
                         .then((res) => {
-                            return res.json();
+                            return res.text();
                         })
                         .then((data) => {
                             cb(data);
