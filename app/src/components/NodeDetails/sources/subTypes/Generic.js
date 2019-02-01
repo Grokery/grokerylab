@@ -54,8 +54,8 @@ class Generic extends Component {
           <Panel title='Node Info'>
             {this.renderRightMenuOptions()}
             <InfoTab key={params.nodeId} params={params} onUpdate={onUpdate}>
-              <p>generic</p>
-              <SourceInfo key={params.nodeId} params={params} onUpdate={onUpdate}></SourceInfo>
+              {/* <p>generic</p> */}
+              {/* <SourceInfo key={params.nodeId} params={params} onUpdate={onUpdate}></SourceInfo> */}
             </InfoTab>
           </Panel>
           <Panel title='Data'>

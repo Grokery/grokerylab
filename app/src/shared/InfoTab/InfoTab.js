@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import moment from 'moment'
 
 import ContentEditable from 'shared/ContentEditable/ContentEditable'
 import Comments from 'shared/Comments/Comments'
@@ -38,10 +39,10 @@ class InfoTab extends Component {
                 <div className='col col-sm-6 '>
                     <div className='row'>
                         <div className="node-info-section">
-                            <div className='col-sm-6'><label>Type: </label> { node.subType || ""}</div>
-                            <div className='col-sm-6'><label>Owner: </label> {node.owner || "admin"}</div>
-                            <div className='col-sm-6'><label>Hello: </label> world</div>
-                            <div className='col-sm-6'><label>This: </label> that</div>
+                            <div className='col-sm-6'><label>Type: </label> { node.subType }</div>
+                            <div className='col-sm-6'><label>Created: </label> { moment(node.created).format('DD MMM YYYY HH:mm') }</div>
+                            <div className='col-sm-6'><label>Owner: </label> { node.owner || 'admin' }</div>
+                            <div className='col-sm-6'><label>Updated: </label> { moment(node.updated).format('DD MMM YYYY HH:mm') }</div>
                         </div>
                     </div>
                 </div>

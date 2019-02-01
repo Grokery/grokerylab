@@ -53,8 +53,8 @@ class JsonData extends Component {
           <Panel title='Node Info'>
             {this.renderRightMenuOptions()}
             <InfoTab key={params.nodeId} params={params} onUpdate={onUpdate}>
-              <p>jsonData</p>
-              <SourceInfo key={params.nodeId} params={params} onUpdate={onUpdate}></SourceInfo>
+              {/* <p>jsonData</p> */}
+              {/* <SourceInfo key={params.nodeId} params={params} onUpdate={onUpdate}></SourceInfo> */}
             </InfoTab>
           </Panel>
           <Panel title='Data'>
