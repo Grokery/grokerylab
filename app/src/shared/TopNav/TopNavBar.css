@@ -70,8 +70,6 @@
   margin: 0;
   padding: 0;
   background-color: #fff;
-  margin-top: -1px;
-  margin-right: -1px;
   border-radius: 2px;
   min-width: 200px;
   border: none;
@@ -85,6 +83,7 @@
   padding: 8px;
   padding-left: 15px;
   color: #333;
+  padding-top: 12px;
 }
 
 #top-nav-wrapper #top-menu-wrapper .dropdown-menu li a i {

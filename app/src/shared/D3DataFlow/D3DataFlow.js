@@ -57,12 +57,11 @@ class D3DataFlow extends Component {
     return (
       <div id='D3DataFlow'>
         <div className={'flow-header-content' + showControls}>
-            <div id='create-nodes'>
-                <div className="triangle-up"></div>
-                <p>Drag to canvas to create:</p>
-                <img className='drag-create-img' alt='job' src='img/job.png' onMouseDown={this.createNodeDrag.bind(this, this.createJob.bind(this))}/>
-                <img className='drag-create-img' alt='source' src='img/source.png' onMouseDown={this.createNodeDrag.bind(this, this.createSource.bind(this))}/>
-                <img className='drag-create-img' alt='board' src='img/board.png' onMouseDown={this.createNodeDrag.bind(this, this.createBoard.bind(this))}/>
+            <div id='create-nodes' className='paper'>
+                {/* <p>Drag to canvas to create:</p> */}
+                <img className='drag-create-img' alt='job' src='/img/job.png' onMouseDown={this.createNodeDrag.bind(this, this.createJob.bind(this))}/>
+                <img className='drag-create-img' alt='source' src='/img/source.png' onMouseDown={this.createNodeDrag.bind(this, this.createSource.bind(this))}/>
+                <img className='drag-create-img' alt='board' src='/img/board.png' onMouseDown={this.createNodeDrag.bind(this, this.createBoard.bind(this))}/>
             </div>
             <button className="create-btn" onClick={this.toggleCreateNodes}><i className='fa fa-plus'></i></button>
             <button id='delete-icon' onClick={this.onDelete.bind(this)}><i className='fa fa-trash'></i></button>
