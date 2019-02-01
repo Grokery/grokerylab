@@ -150,7 +150,7 @@ class JobDetails extends Component {
   }
   getHelperCode() {
     const { params } = this.props
-    let url = API_BASE_URL + '/clouds/' + getCloudId(params.cloudName) + '/nodes/datasource/'
+    let url = API_BASE_URL + '/clouds/' + getCloudId(params.cloudName) + '/nodes/source/'
     let token = getCloudToken(params.cloudName)
     return `
         <script>

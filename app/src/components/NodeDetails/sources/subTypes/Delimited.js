@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { concat } from 'lodash'
 import AceEditor from 'react-ace'
-import 'brace/mode/json'
+import 'brace/mode/text'
 import 'brace/theme/chrome'
 
 import { Tabs, Panel } from 'shared/Tabs/Tabs'
@@ -29,20 +29,16 @@ class Delimited extends Component {
     this.state = {
       shown: false,
       dirty: false,
-      dataDraft: JSON.stringify(props.node.data, null, 2),
+      dataDraft: props.node.data,
     }
   }
   componentWillReceiveProps(nextProps) {
-    this.setState({dataDraft: JSON.stringify(nextProps.node.data, null, 2)}, () => {
-      console.log(this)
+    this.setState({dataDraft: nextProps.node.data}, () => {
+      // console.log(this)
+      // TODO get ref to editor and set line
       // editor.scrollToLine(0, true, true, () => {});
-      // editor.gotoLine(0, 0, true);
+      // editor.gotoLine(0, 0, true);s
     })
-  }
-  onKeyDown = (e) => {
-    if (e.metaKey && e.keyCode === 83) { // 83='s'
-      this.onUpdate(e)
-    }
   }
   componentDidMount() {
     document.addEventListener("keydown", this.onKeyDown);
@@ -65,7 +61,7 @@ class Delimited extends Component {
           <Panel title='Data'>
             {this.renderRightMenuOptions()}
             <AceEditor
-              mode="json"
+              mode="text"
               theme="chrome"
               onChange={this.onChange}
               fontSize={12}
@@ -122,22 +118,21 @@ class Delimited extends Component {
       this.setState({shown: true})
     }
   }
+  onKeyDown = (e) => {
+    if (e.metaKey && e.keyCode === 83) { // 83='s'
+      this.onUpdate(e)
+    }
+  }
   onChange = (newData) => {
     this.setState({ dataDraft: newData, dirty: true })
   }
   onUpdate = (e) => {
     e.preventDefault()
     this.props.onUpdate({
-      'data': JSON.parse(this.state.dataDraft)
+      'data': this.state.dataDraft,
     }, () => {
       this.setState({ dirty: false })
     })
-  }
-  getDataForEditor() {
-    return JSON.stringify(this.props.node.data, null, 2)
-  }
-  getDataForApi() {
-    return JSON.parse(this.state.dataDraft)
   }
 }
 

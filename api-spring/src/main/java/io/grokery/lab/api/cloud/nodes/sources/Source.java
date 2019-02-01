@@ -24,8 +24,7 @@ public class Source extends Node {
 
 	private static final Logger LOG = LoggerFactory.getLogger(Source.class);
 
-	private String templateId;
-	private Object data;
+	private String data;
 
 	public Source() {
 		this.initializeDefaults();
@@ -36,25 +35,23 @@ public class Source extends Node {
 
 		this.setNodeType(NodeType.SOURCE.toString());
 		this.setSubType(SourceType.GENERIC.toString());
-		this.setData(new JsonObj());
 	}
 
 	public void setValues(JsonObj newData) {
 		super.setValues(newData);
 
-		this.templateId = newData.get("templateId") != null ? newData.getString("templateId") : this.templateId;
 		// TODO limit input data size to something reasonable
-		this.data = newData.get("data") != null ? newData.get("data") : this.data;
+		this.data = newData.get("data") != null ? newData.getString("data") : this.data;
 	}
 
 	public Object query(CloudContext context, JsonObj request) {
 		// TODO validate query
-		return this.data;
+		return this.getData();
 	}
 
-	public void write(CloudContext context, Object request) throws NotFoundException {
+	public void write(CloudContext context, JsonObj request) throws NotFoundException {
 		// TODO limit input data size to something reasonable
-		this.data = request;
+		this.setData(request.getString("data"));
 		DAO dao = NodesDAO.getInst(context);
 		this.setUpdated(new DateTime(DateTimeZone.UTC).toString());
 		dao.update(this.getNodeType(), this.getNodeId(), this.toJsonObj());
@@ -67,6 +64,10 @@ public class Source extends Node {
 			switch (subType) {
 				case GENERIC:
 					return new Source();
+				case DELIMITED:
+					return new DelimitedSource();
+				case JSON:
+					return new JsonSource();
 				case AWSS3:
 					return new AWSS3Source();
 				default:
@@ -85,30 +86,16 @@ public class Source extends Node {
     }
 
 	/**
-	 * @return the templateId
-	 */
-	public String getTemplateId() {
-		return templateId;
-	}
-
-	/**
-	 * @param templateId the templateId to set
-	 */
-	public void setTemplateId(String templateId) {
-		this.templateId = templateId;
-	}
-
-	/**
 	 * @return the data
 	 */
-	public Object getData() {
+	public String getData() {
 		return data;
 	}
 
 	/**
 	 * @param data the data to set
 	 */
-	public void setData(Object data) {
+	public void setData(String data) {
 		this.data = data;
 	}
 }

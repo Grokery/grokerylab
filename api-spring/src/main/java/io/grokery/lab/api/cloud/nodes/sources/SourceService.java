@@ -19,18 +19,21 @@ public class SourceService {
         CloudContext context = new CloudContext(cloudId, auth);
 
         DAO dao = NodesDAO.getInst(context);
-		Source source = (Source) Source.fromJsonObj(dao.get("SOURCE", sourceId), context);
+        JsonObj rawSource = dao.get("SOURCE", sourceId);
+		Source source = (Source) Source.fromJsonObj(rawSource, context);
 
-        return source.query(context, request);
+        Object result = source.query(context, request);
+        return result;
     }
 
     public static JsonObj write(String auth, String cloudId, String sourceId, JsonObj request) throws NotAuthorizedException, InvalidInputException, NotFoundException {
         CloudContext context = new CloudContext(cloudId, auth);
 
         DAO dao = NodesDAO.getInst(context);
-		Source source = (Source) Source.fromJsonObj(dao.get("SOURCE", sourceId), context);
-
+        Source source = (Source) Source.fromJsonObj(dao.get("SOURCE", sourceId), context);
+        
         source.write(context, request);
+
         return null;
     }
 

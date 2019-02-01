@@ -74,6 +74,7 @@ class EditModal extends Component {
     delete json.source
     delete json.code
     delete json.data
+    delete json.jsonData
     if (!json) {
       json = {}
     }

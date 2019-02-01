@@ -90,11 +90,11 @@ functions:
           method: delete
           cors: true
       - http:
-          path: ${self:custom.urlBase}/clouds/{cloudId}/nodes/datasource/{sourceId}/query
+          path: ${self:custom.urlBase}/clouds/{cloudId}/nodes/source/{sourceId}/query
           method: get
           cors: true
       - http:
-          path: ${self:custom.urlBase}/clouds/{cloudId}/nodes/datasource/{sourceId}/write
+          path: ${self:custom.urlBase}/clouds/{cloudId}/nodes/source/{sourceId}/write
           method: put
           cors: true
       - http:

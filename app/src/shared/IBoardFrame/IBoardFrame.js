@@ -22,7 +22,7 @@ class IBoardFrame extends Component {
         
         let source = board.source
         if (isArray(board.upstream) && board.upstream[0]) {
-            let url = API_BASE_URL + '/clouds/' + getCloudId(cloudName) + '/nodes/datasource/'
+            let url = API_BASE_URL + '/clouds/' + getCloudId(cloudName) + '/nodes/source/'
             let token = getCloudToken(cloudName)
             let code = `
                 <script>

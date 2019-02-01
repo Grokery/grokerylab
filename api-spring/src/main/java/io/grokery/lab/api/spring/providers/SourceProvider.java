@@ -34,7 +34,7 @@ import io.grokery.lab.api.cloud.nodes.sources.SourceService;
 
 
 @Component
-@Path("/clouds/{cloudId}/nodes/datasource/{sourceId}")
+@Path("/clouds/{cloudId}/nodes/source/{sourceId}")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @Api(value = "DataSource", produces = "application/json")
@@ -55,7 +55,7 @@ public class SourceProvider {
 			@Context UriInfo uriInfo
 	) throws NotAuthorizedException, InvalidInputException, NotFoundException {
 		MultivaluedMap<String, String> queryValues = uriInfo.getQueryParameters();
-		LOG.info("GET:{}/clouds/{}/nodes/datasource/{}/query", apiVersion, cloudId, sourceId);
+		LOG.info("GET:{}/clouds/{}/nodes/source/{}/query", apiVersion, cloudId, sourceId);
 		JsonObj query = new JsonObj();
 		Iterator it = queryValues.entrySet().iterator();
         while (it.hasNext()) {
@@ -75,7 +75,7 @@ public class SourceProvider {
 			@ApiParam @PathParam("sourceId") String sourceId,
 			@ApiParam JsonObj request
 	) throws NotAuthorizedException, InvalidInputException, NotFoundException {
-		LOG.info("GET:{}/clouds/{}/nodes/datasource/{}/write", apiVersion, cloudId, sourceId);
+		LOG.info("GET:{}/clouds/{}/nodes/source/{}/write", apiVersion, cloudId, sourceId);
 		JsonObj result = SourceService.write(auth, cloudId, sourceId, request);
 		return Response.status(Status.OK).entity(result).build();
 	}

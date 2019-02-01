@@ -29,20 +29,15 @@ class JsonData extends Component {
     this.state = {
       shown: false,
       dirty: false,
-      dataDraft: JSON.stringify(props.node.data, null, 2),
+      dataDraft: JSON.stringify(props.node.jsonData, null, 2),
     }
   }
   componentWillReceiveProps(nextProps) {
-    this.setState({dataDraft: JSON.stringify(nextProps.node.data, null, 2)}, () => {
-      console.log(this)
+    this.setState({dataDraft: JSON.stringify(nextProps.node.jsonData, null, 2)}, () => {
+      // console.log(this)
       // editor.scrollToLine(0, true, true, () => {});
       // editor.gotoLine(0, 0, true);
     })
-  }
-  onKeyDown = (e) => {
-    if (e.metaKey && e.keyCode === 83) { // 83='s'
-      this.onUpdate(e)
-    }
   }
   componentDidMount() {
     document.addEventListener("keydown", this.onKeyDown);
@@ -122,22 +117,28 @@ class JsonData extends Component {
       this.setState({shown: true})
     }
   }
+  onKeyDown = (e) => {
+    if (e.metaKey && e.keyCode === 83) { // 83='s'
+      this.onUpdate(e)
+    }
+  }
   onChange = (newData) => {
     this.setState({ dataDraft: newData, dirty: true })
   }
   onUpdate = (e) => {
     e.preventDefault()
+    let newdata = null
+    try {
+      newdata = JSON.parse(this.state.dataDraft)
+    } catch (e) {
+      alert(e)
+      return
+    }
     this.props.onUpdate({
-      'data': JSON.parse(this.state.dataDraft)
+      'jsonData': newdata,
     }, () => {
       this.setState({ dirty: false })
     })
-  }
-  getDataForEditor() {
-    return JSON.stringify(this.props.node.data, null, 2)
-  }
-  getDataForApi() {
-    return JSON.parse(this.state.dataDraft)
   }
 }
 
