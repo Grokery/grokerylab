@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import Gallery from 'shared/Gallery/Gallery'
-import CreateEditCloudModel from '../CreateEditCloudModel/CreateEditCloudModel'
+import CreateEditCloudModel from 'shared/CreateEditCloudModel/CreateEditCloudModel'
 import './CloudSection.css'
 
 class CloudSection extends Component {

@@ -24,7 +24,6 @@ class Home extends Component {
               <li><a href='/'>team 1</a></li>
               <li><a href='/'>team 2</a></li>
               <li><a href='/'>team 3</a></li>
-              <li><a href='/'>team 4</a></li>
             </ul>
           </div>
         </div>
