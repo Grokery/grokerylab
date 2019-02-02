@@ -17,9 +17,3 @@
 .info-tab .node-comments {
     padding: 15px;
 }
-
-.info-tab .row,
-.info-tab .col {
-    padding:0;
-    margin:0
-}
