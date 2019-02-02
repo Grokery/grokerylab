@@ -73,7 +73,7 @@ class NodeDetails extends Component {
             query={{}}
           />
         </div>
-        <div style={{position:'relative', zIndex:4, minHeight:detailsHeight+40, backgroundColor:'#fff'}}>
+        <div style={{position:'relative', minHeight:detailsHeight+33, backgroundColor:'#fff'}}>
             {function() {
                 if (urlParams.nodeType === NODETYPE.JOB.toLowerCase()) {
                   return (<JobDetails {...props} />)

@@ -81,7 +81,7 @@ class D3DataFlow extends Component {
     var nodeShape = this.props.nodeShape ? this.props.nodeShape : 2
     this.d3state = {
         width: this.getWindowWidth(),
-        height: this.getWindowHeight(),
+        height: this.getWindowHeight() - 7,
         scale: .5,
         maxX: -9999,
         maxY: -9999,

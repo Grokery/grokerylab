@@ -213,9 +213,9 @@ g.colored.selected:hover text.tooltiptext  {
 }
 
 .flow-header-content .drag-create-img {
-    height: 25x;
+    height: 25px;
     width: 115px;
-    margin: 6px;
+    margin: 5px;
     user-select: none;
     -moz-user-select: none;
     -webkit-user-drag: none;

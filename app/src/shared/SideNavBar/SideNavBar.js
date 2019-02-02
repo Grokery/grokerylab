@@ -15,12 +15,12 @@ export default class SideNavBar extends Component {
             <div id='side-menu-wrapper' className='navbar-default sidebar' role='navigation'>
                 <div className='sidebar-nav navbar-collapse'>
                     <ul id='side-menu' className='nav'>
-                        <li title="Home">
+                        {/* <li title="Home">
                             <Link to={'/'}>
                                 <i className='fa fa-home fa-fw'></i>
                                 <span className='side-menu-link-text'>Home</span>
                             </Link>
-                        </li>
+                        </li> */}
                         {/* <hr className='sidebar-section-devider'></hr> */}
                         <li title="DashBoards">
                             <Link to={basepath+'/boards'} className='sidebar-link'>

@@ -4,7 +4,7 @@
 }
 
 .info-tab .node-title-section h1 {
-    margin-bottom: 10px;
+    padding-bottom: 10px;
 }
 
 .info-tab .node-title-section p {
@@ -14,12 +14,11 @@
 .info-tab .node-info-section {
     padding: 15px;
 }
-.info-tab .node-detail-section {
-    padding-left: 15px;
-    padding-right: 15px;
+.info-tab .node-comments {
+    padding: 15px;
 }
 
-.info-tab .node-comments {
-    padding-left: 15px;
-    padding-right: 15px;
+.info-tab .col {
+    padding:0;
+    margin:0
 }

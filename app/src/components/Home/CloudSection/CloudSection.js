@@ -28,6 +28,11 @@ class CloudSection extends Component {
   }
   getCloudLinks(cloudid, cloud) {
     let links = []
+    // let links = [{
+    //   url: '/',
+    //   title: 'title',
+    //   description: 'description',
+    // }]
     if (cloud.links) {
       cloud.links.forEach(function(link){
         links.push(link)
@@ -58,9 +63,9 @@ class CloudSection extends Component {
               cloudData={cloud}
             />          
         </div>
-        {/* <div className='cloud-section-quicklinks'>
+        <div className='cloud-section-quicklinks'>
           <Gallery itemSize='medium' colorClass='light' images={false} items={this.getCloudLinks(cloudid, cloud)} params={{}}></Gallery>
-        </div> */}
+        </div>
       </div>
     )
   }

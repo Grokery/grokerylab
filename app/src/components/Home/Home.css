@@ -1,5 +1,5 @@
 #home-page {
-  background-color: #E1E3E5;
+  /* background-color: #E1E3E5; */
 }
 #home-page a,
 #home-page a:hover {
@@ -31,7 +31,7 @@
   border: 0;
   border-bottom: 1px solid #c5ccd3;
   margin: 0;
-  margin-bottom: 20px;
+  padding-bottom: 20px;
   clear: both;
 }
 

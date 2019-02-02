@@ -43,7 +43,7 @@ class BoardDetails extends Component {
             <IBoardFrame 
               cloudName={params.cloudName} 
               boardId={params.nodeId} 
-              height={height}
+              height={height-7}
               width={'100%'}
             ></IBoardFrame>
           </Panel>

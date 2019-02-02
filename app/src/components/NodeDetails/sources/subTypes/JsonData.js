@@ -11,7 +11,7 @@ import EditModal from 'shared/EditModal/EditModal'
 import InfoTab from 'shared/InfoTab/InfoTab'
 import LogsTab from 'shared/LogsTab/LogsTab'
 
-import SourceInfo from 'components/NodeDetails/sources/SourceInfo'
+// import SourceInfo from 'components/NodeDetails/sources/SourceInfo'
 import SourceForm from 'components/NodeDetails/sources/SourceForm'
 
 class JsonData extends Component {

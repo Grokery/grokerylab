@@ -9,8 +9,8 @@
 
 .gallery .gallery-item {
   padding: 5px;
-  box-shadow: 1px 1px 2px 0 #505864;
-  border-radius: 3px;
+  /* box-shadow: 1px 1px 2px 0 #505864; */
+  border-radius: 2px;
   border: solid 1px #ccc;
   overflow:  hidden;
   background: #FBFCFF;
@@ -46,7 +46,7 @@
 .gallery .gallery-item-title {
   margin-left: 5px;
   margin-right: 5px;
-  margin-top: 5px;
+  padding-top: 5px;
   white-space: nowrap;
   overflow: hidden;
 }
