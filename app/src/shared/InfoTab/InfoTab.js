@@ -25,7 +25,7 @@ class InfoTab extends Component {
     if (!node) { return <div></div> }
     return (
         <div className='info-tab'>
-            <div>
+            <div className='row'>
                 <div className='col col-sm-6 '>
                     <div>
                         <div className="col col-sm-12">
@@ -39,15 +39,15 @@ class InfoTab extends Component {
                 <div className='col col-sm-6 '>
                     <div>
                         <div className="node-info-section">
-                            <div className='col col-sm-6'><label>Type: </label> { node.subType }</div>
-                            <div className='col col-sm-6'><label>Created: </label> { moment(node.created).format('DD MMM YYYY HH:mm') }</div>
-                            <div className='col col-sm-6'><label>Owner: </label> { node.owner || 'admin' }</div>
-                            <div className='col col-sm-6'><label>Updated: </label> { moment(node.updated).format('DD MMM YYYY HH:mm') }</div>
+                            <div className='col col-sm-5'><label>Type: </label> { node.subType }</div>
+                            <div className='col col-sm-7'><label>Created: </label> { moment(node.created).format('DD MMM YYYY HH:mm') }</div>
+                            <div className='col col-sm-5'><label>Owner: </label> { node.owner || 'admin' }</div>
+                            <div className='col col-sm-7'><label>Updated: </label> { moment(node.updated).format('DD MMM YYYY HH:mm') }</div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div>
+            <div className='row'>
                 <div className='col col-md-6 section1'>
                     <div className="node-detail-section">
                         <div className="col col-sm-12">
