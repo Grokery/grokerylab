@@ -19,8 +19,8 @@ export default class TopNavBar extends Component {
             <nav id='top-nav-wrapper' className='navbar navbar-default navbar-fixed-top' role='navigation'>
                 <div id='top-menu-wrapper'>
                     <div className='navbar-header'>
-                        <a className='navbar-brand' href='https://grokery.io'><img alt="logo" src="/img/logo-white-on-clear.png"></img></a>
-                        {/* <a className='navbar-brand' href='https://grokery.io'><h3 style={{paddingTop:12}}>Brand</h3></a> */}
+                        {/* <a className='navbar-brand' href='https://grokery.io'><img alt="logo" src="/img/logo-white-on-clear.png"></img></a> */}
+                        <a className='navbar-brand' href='https://grokery.io'><h3 style={{paddingTop:12}}>GrokeryLab</h3></a>
                     </div>
                     <ul id='top-right-nav-options' className={'nav navbar-top-links'}>
                         <li title="Clouds" className='pull-left'>

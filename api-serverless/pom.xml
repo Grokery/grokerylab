@@ -13,6 +13,11 @@
   </properties>
 
   <dependencies>
+        <dependency>
+            <groupId>io.grokery</groupId>
+            <artifactId>grokerylab-api-core</artifactId>
+            <version>0.1.0</version>
+        </dependency>
 		<dependency>
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-java-sdk-core</artifactId>

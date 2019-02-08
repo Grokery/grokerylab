@@ -36,7 +36,7 @@ export default class SideNavBar extends Component {
                         </li>
                         <li title="Users">
                             <Link to={basepath+'/users'} className="sidebar-link">
-                                <i className='fa fa-users fa-fw'></i>
+                                <i className='fa fa-cog fa-fw'></i>
                                 <span className='side-menu-link-text'>Users</span>
                             </Link>
                         </li>

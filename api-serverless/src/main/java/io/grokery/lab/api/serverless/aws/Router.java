@@ -135,7 +135,8 @@ public class Router implements RequestHandler<ApiGatewayRequest, ApiGatewayRespo
 			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}/nodes/datasource/\\{sourceId\\}/query")) 
 			{
 				if (method.equals("GET"))
-					res = SourceService.query(auth, req.getPathValue("cloudId"), req.getPathValue("sourceId"), req.getQueryStringParameters());
+					res = (JsonObj) SourceService.query(auth, req.getPathValue("cloudId"), req.getPathValue("sourceId"),
+							req.getQueryStringParameters());
 			}
 			else if (resource.matches("/api/v[0-9]+/clouds/\\{cloudId\\}/nodes/datasource/\\{sourceId\\}/write")) 
 			{
