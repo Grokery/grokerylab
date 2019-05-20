@@ -5,6 +5,7 @@ import { withRouter, Link } from 'react-router-dom'
 
 import { getSessionInfo } from 'authentication'
 import IBoardFrame from 'shared/IBoardFrame/IBoardFrame'
+import { sideNavWidth } from 'config/'
 
 class Board extends Component {
   static propTypes = {
@@ -30,7 +31,7 @@ class Board extends Component {
           <Link to={'/clouds/'+cloudName+'/flows/board/'+node.nodeId+'?flow=closed&activeTab=2'} style={{position: 'absolute', right:25, padding:15}}><i className='fa fa-pencil fa-fw'></i></Link>
           <Link to={'/clouds/'+cloudName+'/boards'} style={{position: 'absolute', right:0, padding:15}}><i className='fa fa-times'></i></Link>
           <div style={{paddingTop:'50px'}}>
-            <IBoardFrame cloudName={cloudName} boardId={node.nodeId} width={window.innerWidth - 62} height={window.innerHeight-107}></IBoardFrame>
+            <IBoardFrame cloudName={cloudName} boardId={node.nodeId} width={window.innerWidth - sideNavWidth} height={window.innerHeight-107}></IBoardFrame>
           </div>
         </div>
       </div>

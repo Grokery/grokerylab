@@ -18,17 +18,17 @@ class Home extends Component {
       <div id='home-page' className='page-content' >
       <div className='row'>
         <div className='col-sm-3'>
-          <div style={{marginTop:'50px', marginLeft:'30px'}}>
-            <h3>Teams</h3>
+          <div style={{marginTop:'15px', marginLeft:'15px'}}>
+            <h2 className='' style={{padding:'15px', paddingTop:'5px'}}>Teams</h2>
             <ul>
               <li><a href='/'>team 1</a></li>
-              <li><a href='/'>team 2</a></li>
-              <li><a href='/'>team 3</a></li>
+              {/* <li><a href='/'>team 2</a></li>
+              <li><a href='/'>team 3</a></li> */}
             </ul>
           </div>
         </div>
         <div className='cloud-sections col-sm-9' style={{minHeight:window.innerHeight - 50}}>
-            <h2 className='pull-left' style={{padding:'15px', paddingTop:'5px'}}>Clouds:</h2>
+            <h2 className='pull-left' style={{padding:'15px', paddingTop:'5px'}}>Clouds</h2>
             {/* <button id='new-cloud-btn' className='btn' onClick={this.toggleCreateModal}><i className='fa fa-plus'/></button>
             <CreateEditCloudModel 
               key="createnew" 
