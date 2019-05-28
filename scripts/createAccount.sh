@@ -17,7 +17,7 @@ superAdminPass=${superAdminPass:-"superadmin123"}
 echo "Authorizing..."
 echo "Auth response:"
 curl -X POST \
-  "$apiUrl/auth/signin" \
+  "$apiUrl/users/authenticate" \
   -H 'Cache-Control: no-cache' \
   -H 'Content-Type: application/json' \
   -d '{ 
