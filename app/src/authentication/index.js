@@ -4,6 +4,9 @@ import { history } from 'index'
 import { isFunction } from 'util';
 
 export const setRedirectUrl = (url) => {
+    if (url.includes('signin') || url.includes('register') || url.includes('resetpass') || url.includes('signout')) {
+        return
+    }
     sessionStorage.setItem("redirectUrl", url)
 }
 
@@ -74,19 +77,38 @@ export const getAccountToken = () => {
     return get(getSessionInfo(), ['accountToken'], null)
 }
 
-export const getCloudId = (cloudName) => {
-    return get(getSessionInfo(), ['clouds', cloudName, 'cloudId'], null)
-}
-
 export const getCloudToken = (cloudName) => {
     return get(getSessionInfo(), ['clouds', cloudName, 'cloudToken'], null)
 }
 
+export const getCloudId = (cloudName) => {
+    return get(getSessionInfo(), ['clouds', cloudName, 'cloudInfo', 'cloudId'], null)
+}
+
+export const getCloudBaseUrl = (cloudName) => {
+    return get(getSessionInfo(), ['clouds', cloudName, 'cloudInfo', 'url'], null)
+}
+
 export const addNewCloudToSession = (cloud) => {
     var sessionInfo = getSessionInfo()
-    sessionInfo['clouds'][cloud['name']] = cloud
+    sessionInfo['clouds'][cloud['cloudInfo']['name']] = cloud
     setSessionInfo(sessionInfo)
-    history.replace("/")
+}
+
+export const updateCloudInfoInSession = (updatedCloudInfo) => {
+    var sessionInfo = getSessionInfo()
+    for (var key in sessionInfo['clouds']) {
+        var cloudInfo = sessionInfo['clouds'][key].cloudInfo
+        if (cloudInfo.cloudId === updatedCloudInfo.cloudId) {
+            if (cloudInfo.name !== updatedCloudInfo.name) {
+                sessionInfo['clouds'][updatedCloudInfo.name] = sessionInfo['clouds'][cloudInfo.name]
+                delete sessionInfo['clouds'][cloudInfo.name]
+            }
+            sessionInfo['clouds'][updatedCloudInfo.name].cloudInfo = updatedCloudInfo
+            setSessionInfo(sessionInfo)
+            break
+        }
+    }
 }
 
 export const removeCloudFromSession = (cloudName) => {

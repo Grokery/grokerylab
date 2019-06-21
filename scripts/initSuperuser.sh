@@ -29,5 +29,3 @@ curl -X POST \
     "name":"'"$superadminName"'",
     "accountRole":"SUPERADMIN"
 }'
-
-echo "Created Superuser: "$superadminName
