@@ -14,7 +14,7 @@ Once you've got the api and app running, you can initialize the required superad
 Finaly, use the superadmin account credentials you created in the last step and the createAdminUser.sh script to create a normal admin user that you can use to login via the app ui. 
 
 
-## Contributng
+## Contributing
 
 If you are interested in contributing please reach out to me here https://grokery.io/#contact
 
