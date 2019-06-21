@@ -2,19 +2,16 @@
 
     Grok v: To understand deeply and intuitively
 
-GrokeryLab is a business intelligence pipeline management platform.
+GrokeryLab is a data pipeline management platform.
 
 
 ## Usage
 
-The GrokeyLab rest api can be run as a Java Spring app in a Docker container, or serverlessly in AWS using ApiGateway and Lambda functions. 
-You can find instructions for running the api in the respective modes in the /api-spring and /api-serverless folders README files.
-
-The GrokeyLab ui is a Javascript/React project and can be run either in an nginx Docker container or serverlessly in AWS S3. 
+You can find instructions for running the app and the api in the README files in their respective folders.
 
 Once you've got the api and app running, you can initialize the required superadmin user with the initSuperuser.sh script found in the /scripts folder.
 
-Finaly, use the superadmin account credentials you created in the last step and the createAccount.sh script to create a normal account and admin user that you can use to login via the app ui. 
+Finaly, use the superadmin account credentials you created in the last step and the createAdminUser.sh script to create a normal admin user that you can use to login via the app ui. 
 
 
 ## Contributng
