@@ -17,42 +17,47 @@ class Home extends Component {
     return (
       <div id='home-page' className='page-content' >
       <div className='row'>
-        <div className='col-sm-3'>
+
+        <div className='cloud-sections col-sm-8' style={{minHeight:window.innerHeight - 50}}>
+            <h2 style={{padding:'15px', paddingTop:'5px'}}>Clouds</h2>
+            {this.getCloudSections()}
+        </div>
+
+        <div className='col-sm-4'>
           <div style={{marginTop:'15px', marginLeft:'15px'}}>
-            <h2 className='' style={{padding:'15px', paddingTop:'5px'}}>Teams</h2>
+            <h2 style={{padding:'15px', paddingTop:'5px'}}>Users</h2>
             <ul>
-              <li><a href='/'>team 1</a></li>
-              {/* <li><a href='/'>team 2</a></li>
-              <li><a href='/'>team 3</a></li> */}
+              <li><a href='/'>user 1</a></li>
             </ul>
           </div>
         </div>
-        <div className='cloud-sections col-sm-9' style={{minHeight:window.innerHeight - 50}}>
-            <h2 className='pull-left' style={{padding:'15px', paddingTop:'5px'}}>Clouds</h2>
-            {/* <button id='new-cloud-btn' className='btn' onClick={this.toggleCreateModal}><i className='fa fa-plus'/></button>
-            <CreateEditCloudModel 
-              key="createnew" 
-              shown={this.state.showCreateModel} 
-              toggleShown={this.toggleCreateModal} 
-              modalTitle={"Create New Cloud"}
-              isCreate={true}
-            /> */}
-            {this.getCloudSections()}
-        </div>
+
       </div>
-
-
       </div>
     )
   }
   getCloudSections() {
     const { clouds } = getSessionInfo()
+    let apis = {}
     let sections = []
     Object.keys(clouds).forEach(function(name) {
-      sections.push(
-        <CloudSection key={name} cloudid={name} cloud={clouds[name]} />
-      )
+      if (apis[clouds[name].cloudInfo.url] && apis[clouds[name].cloudInfo.url].length) {
+        apis[clouds[name].cloudInfo.url].push(clouds[name])
+      } else {
+        apis[clouds[name].cloudInfo.url] = [clouds[name]]
+      }
     })
+    Object.keys(apis).forEach(function(url) {
+      if (Object.keys(apis).length > 1) {
+        sections.push(<label style={{padding:'15px'}} key={url}>{url}</label>)
+      }
+      apis[url].forEach((cloud) => {
+        sections.push(
+          <CloudSection key={cloud.cloudInfo.name} cloudid={cloud.cloudInfo.name} cloudAccess={cloud} />
+        )
+      })
+    })
+
     return sections
   }
   toggleCreateModal = () => {

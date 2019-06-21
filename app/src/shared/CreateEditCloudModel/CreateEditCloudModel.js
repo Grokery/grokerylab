@@ -5,9 +5,9 @@ import _ from 'lodash'
 import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css'
 
-import { addNewCloudToSession, removeCloudFromSession } from 'authentication'
+import { getCloudId, addNewCloudToSession, updateCloudInfoInSession, removeCloudFromSession } from 'authentication'
 import { createCloud, updateCloud, deleteCloud } from 'store/actions/cloud'
-import { API_BASE_URL } from 'config'
+import { history } from 'index'
 import Modal from 'shared/Modal/Modal'
 import Loader from 'shared/Loader/Loader'
 import './CreateEditCloudModel.css'
@@ -16,13 +16,24 @@ let defaultData = {
   title: 'New Cloud',
   name: 'newcloud',
   cloudType: 'AWS',
-  url: API_BASE_URL,
-  password: '',
-  adminAccess: {
+  cloudHost: 'CUSTOMER',
+  installOption: 'EXISTING',
+  url: 'http://localhost:8001/api/v0',
+  jwtPrivateKey: 'fdksajfdskla843u2938fajsdkfj409r38349jwoi',
+  installAccess: {
     credentials: {
       awsAccessKeyId: '',
       awsSecretKey: '',
-      awsRegion: 'us-west-2',
+      awsRegion: '',
+      azureKey: ''
+    }
+  },
+  adminAccess: {
+    sortRank: 0.0,
+    credentials: {
+      awsAccessKeyId: '',
+      awsSecretKey: '',
+      awsRegion: '',
       azureKey: ''
     }
   }
@@ -38,13 +49,14 @@ class CreateEditCloudModel extends Component {
     modalTitle: PropTypes.string,
     isCreate: PropTypes.bool,
     isEdit: PropTypes.bool,
-    cloudData: PropTypes.object,
+    cloudInfo: PropTypes.object,
+    showEditModal: PropTypes.func,
   }
   constructor(props) {
     super(props)
       this.state = {
           working: false,
-          data: _.defaultsDeep({}, this.props.cloudData, defaultData)
+          data: _.defaultsDeep({}, this.props.cloudInfo, defaultData)
       }
   }
   mergeState(newState) {
@@ -66,8 +78,30 @@ class CreateEditCloudModel extends Component {
   onCloudTypeChange(event) {
     this.mergeState({data: {cloudType: event.target.value}})
   }
-  onPasswordChange(event) {
-    this.mergeState({data: {password: event.target.value}})
+  onCloudHostChange(event) {
+    this.mergeState({data: {cloudHost: event.target.value}})
+  }
+  onInstallOptionChange(event) {
+    this.mergeState({data: {installOption: event.target.value}})
+  }
+  onUrlChange(event) {
+    this.mergeState({data: {url: event.target.value}})
+  }
+  onJwtKeyChange(event) {
+    this.mergeState({data: {jwtPrivateKey: event.target.value}})
+  }
+  onInstallAWSAccessKeyIdChange(event) {
+    this.mergeState({data: {installAccess: {credentials: {awsAccessKeyId: event.target.value}}}})
+  }
+  onInstallAWSSecretKeyChange(event) {
+    this.mergeState({data: {installAccess: {credentials: {awsSecretKey: event.target.value}}}})
+  }
+  onInstallAWSREgionChange(event) {
+    this.mergeState({data: {installAccess: {credentials: {awsRegion: event.target.value}}}})
+    this.mergeState({data: {adminAccess: {credentials: {awsRegion: event.target.value}}}})
+  }
+  onInstallAzureKeyChange(event) {
+    this.mergeState({data: {installAccess: {credentials: {azureKey: event.target.value}}}})
   }
   onAWSAccessKeyIdChange(event) {
     this.mergeState({data: {adminAccess: {credentials: {awsAccessKeyId: event.target.value}}}})
@@ -77,44 +111,50 @@ class CreateEditCloudModel extends Component {
   }
   onAWSREgionChange(event) {
     this.mergeState({data: {adminAccess: {credentials: {awsRegion: event.target.value}}}})
+    this.mergeState({data: {installAccess: {credentials: {awsRegion: event.target.value}}}})
   }
   onAzureKeyChange(event) {
     this.mergeState({data: {adminAccess: {credentials: {azureKey: event.target.value}}}})
   }
   onSubmit = (event) => {
     event.preventDefault()
-    this.setState({working: true})
-    // TODO validate state
     if (this.props.isCreate) {
       let { createCloud, addNewCloudToSession } = this.props
-      createCloud(this.state.data, (response, json) => {
+      if (getCloudId(this.state.data.name) !== null) {
+        alert('Cloud name/title already in use. Please choose another.')
+        return
+      }
+      this.setState({working: true})
+      createCloud(this.state.data, (json, response) => {
         this.setState({
           working: false,
-          data: _.cloneDeep(defaultData)
         })
         if (response.ok && json) {
           addNewCloudToSession(json)
         }
-        this.toggleEditModal()
+        history.replace("/")
+        this.closeEditModal()
       })
     } else if (this.props.isEdit) {
       let { updateCloud } = this.props
-      updateCloud(this.props.cloudData.name, this.state.data, () => {
+      this.setState({working: true})
+      updateCloud(this.props.cloudInfo.name, this.state.data, (json, response) => {
         this.setState({
           working: false,
         })
-        // if (response.ok && json) {
-          // addNewCloudToSession(json)
-        // }
-        this.toggleEditModal()
+        if (response.ok && json) {
+          updateCloudInfoInSession(json)
+        }
+        history.replace("/")
+        this.closeEditModal()
       })
-      // TODO
     }
 
   }
   deleteCloud = (e) => {
     e.preventDefault()
-    const { cloudData } = this.props
+    const { cloudInfo } = this.props
+    this.closeEditModal()
     confirmAlert({
       title: 'Confirm delete:',
       message: 'Perminantly delete cloud and all cloud data?',
@@ -123,9 +163,9 @@ class CreateEditCloudModel extends Component {
           label: 'Yes',
           onClick: () => {
             this.setState({working: true})
-            this.props.deleteCloud(cloudData.name, (json, response) => {
+            this.props.deleteCloud(cloudInfo.name, (json, response) => {
               if (response.ok) {
-                removeCloudFromSession(cloudData.name)
+                removeCloudFromSession(cloudInfo.name)
               } else {
                 alert("Error deleteing cloud")
                 console.err(response)
@@ -141,54 +181,88 @@ class CreateEditCloudModel extends Component {
       ]
     })
   }
-  toggleEditModal = () => {
-    this.setState(_.cloneDeep(defaultData))
-    this.props.toggleShown()
+  closeEditModal = () => {
+    this.setState({ data: _.defaultsDeep({}, this.props.cloudInfo, defaultData) })
+    this.props.showEditModal(false)
+  }
+  getInstallFormFields() {
+    if (this.state.data.installOption !== 'INSTALL') {
+      return null
+    }
+    if (this.state.data.cloudType === 'AWS') {
+      return (
+        <div className='row'>
+          <div className='col col-sm-4'>
+            <label>Install Region:</label>
+            <input name='awsRegion' type='text' className='form-control' value={this.state.data.installAccess.credentials.awsRegion} onChange={this.onInstallAWSREgionChange.bind(this)}/>
+          </div>
+          <div className='col col-sm-8'>
+            <label>Install Acess Key Id:</label>
+            <input name='awsAccess' type='text' className='form-control' value={this.state.data.installAccess.credentials.awsAccessKeyId} onChange={this.onInstallAWSAccessKeyIdChange.bind(this)}/>
+          </div>
+          <div className='col col-sm-12'>
+            <label>Install Secret Key:</label>
+            <input name='awsSecret' type='text' className='form-control' value={this.state.data.installAccess.credentials.awsSecretKey} onChange={this.onInstallAWSSecretKeyChange.bind(this)}/>
+          </div>
+        </div>
+      )
+    } else if (this.state.data.cloudType === 'AZURE') {
+      return (
+        <div className='row'>
+          <div className='col col-sm-12'>
+            <label>Azure Install Access Key:</label>
+            <input name='AzureAccess' type='text' className='form-control' value={this.state.data.installAccess.credentials.azureKey} onChange={this.onInstallAzureKeyChange.bind(this)}/>
+          </div>
+        </div>
+      )
+    } else if (this.state.data.cloudType === 'CUSTOM') {
+      return (
+        <div className='row'>
+        <div className='col col-sm-12'>
+          <label>MongoDB Connection String:</label>
+          <input name='mongoDbConnectionStr' type='text' className='form-control'/>
+        </div>
+      </div>
+      )
+    }
   }
   getAccessKeyFormFields() {
     if (this.state.data.cloudType === 'AWS') {
       return (
-        <div key='aws-creds' className='row'>
+        <div className='row'>
           <div className='col col-sm-4'>
-            <label>Region:</label>
+            <label>Region (same as install):</label>
             <input name='awsRegion' type='text' className='form-control' value={this.state.data.adminAccess.credentials.awsRegion} onChange={this.onAWSREgionChange.bind(this)}/>
           </div>
           <div className='col col-sm-8'>
-            <label>Acess Key Id:</label>
+            <label>Admin User Acess Key Id:</label>
             <input name='awsAccess' type='text' className='form-control' value={this.state.data.adminAccess.credentials.awsAccessKeyId} onChange={this.onAWSAccessKeyIdChange.bind(this)}/>
           </div>
           <div className='col col-sm-12'>
-            <label>Secret Key:</label>
+            <label>Admin User Secret Key:</label>
             <input name='awsSecret' type='text' className='form-control' value={this.state.data.adminAccess.credentials.awsSecretKey} onChange={this.onAWSSecretKeyChange.bind(this)}/>
           </div>
         </div>
       )
     } else if (this.state.data.cloudType === 'AZURE') {
       return (
-        <div key='azure-creds' className='row'>
+        <div className='row'>
           <div className='col col-sm-12'>
-            <label>Azure Access Key:</label>
+            <label>Azure Admin User Access Key:</label>
             <input name='AzureAccess' type='text' className='form-control' value={this.state.data.adminAccess.credentials.azureKey} onChange={this.onAzureKeyChange.bind(this)}/>
           </div>
         </div>
       )
-    } else if (this.state.data.cloudType === 'CUSTOM') { 
-      return (
-        <div key='local-creds' className='row'>
-        <div className='col col-sm-12'>
-          <label>MongoDB Connection String:</label>
-          <input name='LocalAccess' type='text' className='form-control'/>
-        </div>
-      </div>
-      )
     }
   }
   getForm() {
+    const { isCreate, isEdit } = this.props
     return (
       <form onSubmit={this.onSubmit}>
+
         <div className='row'>
           <div className='col col-sm-7'>
-            <label>Cloud Title:</label>
+            <label>Cloud Flow Title:</label>
             <input type='text' className='form-control' value={this.state.data.title} onChange={this.onTitleChange.bind(this)}/>
           </div>
           <div className='col col-sm-5'>
@@ -196,24 +270,48 @@ class CreateEditCloudModel extends Component {
             <input disabled type='text' className='form-control' value={this.state.data.name} onChange={this.onNameChange.bind(this)}/>
           </div>
         </div>
+
         <div className='row'>
           <div className='col col-sm-6'>
             <label>Cloud Type:</label>
             <select className='form-control' value={this.state.data.cloudType} onChange={this.onCloudTypeChange.bind(this)} disabled={this.props.isEdit}>
-              <option defaultValue value='AWS'>AWS</option>
-              <option value='AZURE'>Azure</option>
-              <option value='CUSTOM'>Custom</option>
+              <option value='AWS'>AWS</option>
+              <option disabled={true} value='AZURE'>Azure (not yet available)</option>
+              <option disabled={true} value='CUSTOM'>Custom (not yet available)</option>
             </select>
           </div>
+          {/* {isCreate?
+            <div className='col col-sm-6'>
+              <label>Do you have an existing install?</label>
+              <select className='form-control' value={this.state.data.installOption} onChange={this.onInstallOptionChange.bind(this)}>
+                <option value='INSTALL'>No, please run the install script</option>
+                <option value='EXISTING'>Yes, I have already installed the api</option>
+                <option value='LATER'>No, but I'll do it later</option>
+              </select>
+            </div>
+          : null} */}
         </div>
-        {this.getAccessKeyFormFields()}
-        <div className='row'>
-          <div className='col col-sm-5'>
-            <label>Your Password:</label>
-            <input type='password' className='form-control' value={this.state.data.password} onChange={this.onPasswordChange.bind(this)}/>
-          </div>
-          <div className='col col-md-8'></div>
-        </div>
+        {isCreate? this.getInstallFormFields() : null}
+        {/* {(isCreate && this.state.data.installOption === 'EXISTING') || isEdit ?
+          <>
+            <div className='row'>
+              <div className='col col-sm-12'>
+                <label>Cloud Url:</label>
+                <input type='text' className='form-control' value={this.state.data.url} onChange={this.onUrlChange.bind(this)}/>
+              </div>
+            </div>
+            <div className='row'>
+              <div className='col col-sm-12'>
+                <label>JWT Key:</label>
+                <input type='text' className='form-control' value={this.state.data.jwtPrivateKey} onChange={this.onJwtKeyChange.bind(this)}/>
+              </div>
+            </div>
+          </>
+        : null} */}
+
+        {isCreate && this.state.data.installOption === 'INSTALL' ? <h3>Admin User Access</h3> : null}
+        {isCreate && this.state.data.installOption === 'INSTALL' ? this.getAccessKeyFormFields() : null}
+
       </form>
     )
   }
@@ -224,7 +322,7 @@ class CreateEditCloudModel extends Component {
           <div>
             <Modal shown={this.props.shown} >
               <div className='modal-header'>
-                <button type='button' className='close' onClick={this.toggleEditModal} aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                <button type='button' className='close' onClick={this.closeEditModal} aria-label='Close'><span aria-hidden='true'>&times;</span></button>
                 <h4 className='modal-title'>{this.props.modalTitle}</h4>
               </div>
               <div className='modal-body'>
@@ -233,7 +331,7 @@ class CreateEditCloudModel extends Component {
               </div>
               <div className='modal-footer'>
                 {!isCreate ? <button type='button' className='btn btn-danger' onClick={this.deleteCloud} style={{float:'left'}}>Delete</button> : null}
-                <button type='button' className='btn btn-default' onClick={this.toggleEditModal}>Cancel</button>
+                <button type='button' className='btn btn-default' onClick={this.closeEditModal}>Cancel</button>
                 <button type='button' className='btn btn-primary' onClick={this.onSubmit}>Save</button>
               </div>
             </Modal>

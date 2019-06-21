@@ -74,4 +74,16 @@ public class CloudsProvider {
 		return Response.status(Status.OK).entity(response).build();
 	}
 
+	@GET
+	@Path("/{cloudId}/options")
+	@ApiOperation(value = "Get Cloud options", response = JsonObj.class)
+	public Response options(
+		@HeaderParam("Authorization") String auth,
+		@ApiParam @PathParam("cloudId") String cloudId
+	) throws NotFoundException, NotAuthorizedException {
+		LOG.info("GET:{}/clouds/{}/options", apiVersion, cloudId);
+		JsonObj response = CloudService.getInstance().options(auth, cloudId);
+		return Response.status(Status.OK).entity(response).build();
+	}
+
 }

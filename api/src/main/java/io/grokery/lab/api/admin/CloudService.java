@@ -207,4 +207,8 @@ public class CloudService {
 		return new JsonObj();
 	}
 
+	public JsonObj options(String auth, String cloudId) {
+		return new JsonObj();
+	}
+
 }

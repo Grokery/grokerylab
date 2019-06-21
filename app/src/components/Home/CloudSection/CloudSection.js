@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 import Gallery from 'shared/Gallery/Gallery'
 import CreateEditCloudModel from 'shared/CreateEditCloudModel/CreateEditCloudModel'
@@ -9,7 +10,7 @@ import './CloudSection.css'
 class CloudSection extends Component {
   static propTypes = {
     cloudid: PropTypes.string.isRequired,
-    cloud: PropTypes.object.isRequired,
+    cloudAccess: PropTypes.object.isRequired,
   }
   constructor(props) {
     super(props)
@@ -26,47 +27,53 @@ class CloudSection extends Component {
       return 'img/custom.png'
     }
   }
-  getCloudLinks(cloudid, cloud) {
+  getCloudLinks(cloudid, cloudAccess) {
     let links = []
     // let links = [{
     //   url: '/',
     //   title: 'title',
     //   description: 'description',
     // }]
-    if (cloud.links) {
-      cloud.links.forEach(function(link){
-        links.push(link)
-      })
-    }
+    // if (cloudAccess.links) {
+    //   cloudAccess.links.forEach(function(link){
+    //     links.push(link)
+    //   })
+    // }
     return links
   }
-  toggleEditModal = () => {
-    this.setState({showEditModel: !this.state.showEditModel})
+  showEditModal = (trueFalse) => {
+    this.setState({showEditModel: trueFalse})
   }
   render() {
-    const { cloudid, cloud } = this.props
+    const { cloudid, cloudAccess } = this.props
     return (
       <div className='cloud-section'>
-        <hr />
         <div className='cloud-section-header'>
-          <a href={'/clouds/' + cloudid} className='cloud-title'>
-            <img src={this.getCloudIcon(cloud.cloudType)} className='cloud-icon' alt='cloud type'/>
-            {cloud.title}
-          </a>
-          <button onClick={this.toggleEditModal} className='cloud-edit-button'><i className='fa fa-cog cloud-edit-icon'/></button>
-          <CreateEditCloudModel 
-              key="edit-cloud" 
-              shown={this.state.showEditModel} 
-              toggleShown={this.toggleEditModal} 
+          <Link to={'/clouds/' + cloudid} className='cloud-title'>
+            <img src={this.getCloudIcon(cloudAccess.cloudInfo.cloudType)} className='cloud-icon' alt='cloud type'/>
+            {cloudAccess.cloudInfo.title}
+          </Link>
+          {/* <label style={{paddingLeft:'10px'}}>{cloudAccess.cloudInfo.url}</label> */}
+          <button onClick={() => this.showEditModal(true)} className='cloud-edit-button'><i className='fa fa-cog cloud-edit-icon'/></button>
+          {/* {this.getCloudStatusIcon(cloudAccess.cloudInfo.status)} */}
+          <CreateEditCloudModel
+              key="edit-cloud"
+              shown={this.state.showEditModel}
+              showEditModal={this.showEditModal}
               modalTitle={"Edit Cloud"}
               isEdit={true}
-              cloudData={cloud}
-            />          
+              cloudInfo={cloudAccess.cloudInfo}
+            />
         </div>
         <div className='cloud-section-quicklinks'>
-          <Gallery itemSize='medium' colorClass='light' images={false} items={this.getCloudLinks(cloudid, cloud)} params={{}}></Gallery>
+          <Gallery itemSize='medium' colorClass='light' images={false} items={this.getCloudLinks(cloudid, cloudAccess)} params={{}}></Gallery>
         </div>
       </div>
+    )
+  }
+  getCloudStatusIcon() {
+    return (
+      <button onClick={() => this.showEditModal(true)} className='cloud-edit-button'><i style={{color:'green'}} className='fa fa-check cloud-edit-icon'/></button>
     )
   }
   updateCloud(newValue) {

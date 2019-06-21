@@ -10,11 +10,11 @@ export default class TopNavBar extends Component {
         this.state = {
             showNewMenuDropDown: false,
             showUserMenuDropDown: false,
-            showCreateModel: false,
+            showCloudCreateModal: false,
         }
     }
     render() {
-        const { showUserMenuDropDown, showNewMenuDropDown, showCreateModel } = this.state
+        const { showUserMenuDropDown, showNewMenuDropDown, showCloudCreateModal } = this.state
         return (
             <nav id='top-nav-wrapper' className='navbar navbar-default navbar-fixed-top' role='navigation'>
                 <div id='top-menu-wrapper'>
@@ -31,26 +31,25 @@ export default class TopNavBar extends Component {
                         <li className={'pull-right ' + (showUserMenuDropDown ? 'open' : '')}>
                             <button className='dropdown-toggle' onClick={this.toggleUserMenuDropDown}><i className='fa fa-user fa-fw'></i></button>
                             <ul className='dropdown-menu dropdown-user' onMouseLeave={this.closeDropdowns}>
-                                <li><Link to='/account' onClick={this.closeDropdowns}><i className='fa fa-user fa-fw'></i><span>Account</span></Link></li>
+                                <li><Link to='/' onClick={this.closeDropdowns}><i className='fa fa-home fa-fw'></i><span>Home</span></Link></li>
                                 <li><Link to='/signout' onClick={this.closeDropdowns}><i className='fa fa-sign-out fa-fw'></i><span>Sign Out</span></Link></li>
                             </ul>
                         </li>
                         <li className={'pull-right ' + (showNewMenuDropDown ? 'open' : '')}>
                             <button className='dropdown-toggle' onClick={this.toggleNewMenuDropDown}><i className='fa fa-plus fa-fw'></i></button>
                             <ul className='dropdown-menu dropdown-user' onMouseLeave={this.closeDropdowns}>
-                                <li><Link to='/' onClick={this.toggleCreateModal}><i className='fa fa-cloud fa-fw'></i><span>New Cloud</span></Link></li>
+                                <li><Link to='/' onClick={() => this.showCloudCreateModal(true)}><i className='fa fa-cloud fa-fw'></i><span>New Cloud</span></Link></li>
                                 <li><Link to='/' onClick={this.closeDropdowns}><i className='fa fa-user fa-fw'></i><span>New User</span></Link></li>
-                                <li><Link to='/' onClick={this.closeDropdowns}><i className='fa fa-users fa-fw'></i><span>New Team</span></Link></li>
                             </ul>
                         </li>
                     </ul>
-                </div>            
-                <CreateEditCloudModel 
-                key="createnew" 
-                shown={showCreateModel} 
-                toggleShown={this.toggleCreateModal} 
-                modalTitle={"Create New Cloud"}
-                isCreate={true}
+                </div>
+                <CreateEditCloudModel
+                    key="createnew"
+                    shown={showCloudCreateModal}
+                    showEditModal={this.showCloudCreateModal}
+                    modalTitle={"Create New Cloud Flow"}
+                    isCreate={true}
                 />
             </nav>
         )
@@ -64,7 +63,7 @@ export default class TopNavBar extends Component {
     toggleNewMenuDropDown = () => {
         this.setState({showUserMenuDropDown: false, showNewMenuDropDown: !this.state.showNewMenuDropDown})
     }
-    toggleCreateModal = () => {
-        this.setState({showUserMenuDropDown: false, showNewMenuDropDown: false, showCreateModel: !this.state.showCreateModel})
-    }
+    showCloudCreateModal = (trueFalse) => {
+        this.setState({showNewMenuDropDown: false, showUserMenuDropDown: false, showCloudCreateModal: trueFalse})
+      }
 }
