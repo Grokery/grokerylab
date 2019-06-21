@@ -1,4 +1,4 @@
-# grokerylab-api-spring
+# grokerylab-api
 
 GrokeryLab RESTful API
 
@@ -46,6 +46,3 @@ Available at:
 ```web
 http://localhost:8000/
 ```
-
-## Notes 
-
