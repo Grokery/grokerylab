@@ -2,8 +2,8 @@ package io.grokery.lab.api.cloud.nodes.sources;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-// import org.slf4j.Logger;
-// import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.grokery.lab.api.cloud.nodes.dao.NodesDAO;
 import io.grokery.lab.api.common.JsonObj;
@@ -18,7 +18,7 @@ import io.grokery.lab.api.common.exceptions.NotFoundException;
  */
 public class JsonSource extends Source {
 
-	// private static final Logger LOG = LoggerFactory.getLogger(JsonSource.class);
+	private static final Logger LOG = LoggerFactory.getLogger(JsonSource.class);
 
 	private JsonObj jsonData;
 

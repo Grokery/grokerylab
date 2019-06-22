@@ -1,11 +1,11 @@
 package io.grokery.lab.api.cloud.jobruns;
 
-// import java.util.concurrent.Future;
+import java.util.concurrent.Future;
 
 import com.amazonaws.services.lambda.AWSLambdaAsync;
 import com.amazonaws.services.lambda.AWSLambdaAsyncClientBuilder;
 import com.amazonaws.services.lambda.model.InvokeRequest;
-// import com.amazonaws.services.lambda.model.InvokeResult;
+import com.amazonaws.services.lambda.model.InvokeResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import org.slf4j.Logger;
@@ -44,7 +44,7 @@ public class AWSLambdaJobRun extends JobRun {
 			InvokeRequest req = new InvokeRequest()
 				.withFunctionName(this.getLambdaARN())
 				.withPayload(MapperUtil.getInstance().writeValueAsString(args));
-			lambdaClient.invokeAsync(req);
+			Future<InvokeResult> future_res = lambdaClient.invokeAsync(req);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}

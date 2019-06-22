@@ -51,7 +51,7 @@ public class JobRunsService {
 	}
 
 	public static JsonObj getJobRunDetails(String auth, String cloudId, String jobRunId) throws NotAuthorizedException {
-		// CloudContext context = new CloudContext(cloudId, auth);
+		CloudContext context = new CloudContext(cloudId, auth);
 		throw new NotImplementedError();
 	}
 

@@ -14,17 +14,17 @@ public class JsonObj extends HashMap<String, Object> {
 
     public JsonObj(Object other) {
         JsonObj values = MapperUtil.getInstance().convertValue(other, JsonObj.class);
-        Iterator<Map.Entry<String,Object>> it = values.entrySet().iterator();
+        Iterator it = values.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry<String,Object> pair = (Map.Entry<String,Object>)it.next();
+            Map.Entry pair = (Map.Entry)it.next();
             this.put(pair.getKey().toString(), pair.getValue());
         }
     }
 
     public JsonObj(Map<String, Object> other) {
-        Iterator<Map.Entry<String,Object>> it = other.entrySet().iterator();
+        Iterator it = other.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry<String,Object> pair = (Map.Entry<String,Object>)it.next();
+            Map.Entry pair = (Map.Entry)it.next();
             this.put(pair.getKey().toString(), pair.getValue());
         }
     }

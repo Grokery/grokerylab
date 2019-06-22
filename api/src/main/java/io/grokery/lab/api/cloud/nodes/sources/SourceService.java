@@ -1,7 +1,7 @@
 package io.grokery.lab.api.cloud.nodes.sources;
 
-// import org.slf4j.Logger;
-// import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.grokery.lab.api.cloud.nodes.dao.NodesDAO;
 import io.grokery.lab.api.common.JsonObj;
@@ -13,7 +13,7 @@ import io.grokery.lab.api.common.exceptions.NotFoundException;
 
 public class SourceService {
 
-    // private static final Logger LOG = LoggerFactory.getLogger(SourceService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SourceService.class);
 
     public static JsonObj query(String auth, String cloudId, String sourceId, JsonObj request) throws NotAuthorizedException, InvalidInputException, NotFoundException {
         CloudContext context = new CloudContext(cloudId, auth);

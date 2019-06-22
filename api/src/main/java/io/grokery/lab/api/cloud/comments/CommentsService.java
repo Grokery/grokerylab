@@ -1,7 +1,7 @@
 package io.grokery.lab.api.cloud.comments;
 
-// import org.slf4j.Logger;
-// import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.grokery.lab.api.cloud.comments.dao.CommentsDAO;
 import io.grokery.lab.api.common.JsonObj;
@@ -13,7 +13,7 @@ import io.grokery.lab.api.common.exceptions.NotFoundException;
 
 public class CommentsService {
 
-	// private static final Logger LOG = LoggerFactory.getLogger(CommentsService.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CommentsService.class);
 
 	public static JsonObj createComment(String auth, String cloudId, JsonObj request) throws InvalidInputException, NotFoundException, NotAuthorizedException {
 		CloudContext context = new CloudContext(cloudId, auth);

@@ -14,7 +14,7 @@ import com.amazonaws.services.lambda.AWSLambda;
 import com.amazonaws.services.lambda.AWSLambdaClientBuilder;
 import com.amazonaws.services.lambda.model.CreateFunctionResult;
 import com.amazonaws.services.lambda.model.DeleteFunctionRequest;
-// import com.amazonaws.services.lambda.model.DeleteFunctionResult;
+import com.amazonaws.services.lambda.model.DeleteFunctionResult;
 import com.amazonaws.services.lambda.model.CreateFunctionRequest;
 import com.amazonaws.services.lambda.model.FunctionCode;
 import com.amazonaws.services.lambda.model.Runtime;
@@ -157,7 +157,7 @@ public class AWSLambdaJob extends Job {
 			.build();
 			DeleteFunctionRequest deleteFunctionRequest = new DeleteFunctionRequest()
 				.withFunctionName(this.getFunctionName());
-			lambdaClient.deleteFunction(deleteFunctionRequest);
+			DeleteFunctionResult result = lambdaClient.deleteFunction(deleteFunctionRequest);
 		} catch (Exception e) {
 
 		}

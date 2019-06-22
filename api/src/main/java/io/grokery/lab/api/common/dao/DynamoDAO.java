@@ -12,7 +12,6 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.ItemCollection;
-import com.amazonaws.services.dynamodbv2.document.QueryOutcome;
 import com.amazonaws.services.dynamodbv2.document.ScanOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.document.spec.QuerySpec;
@@ -67,9 +66,9 @@ public abstract class DynamoDAO implements DAO {
 	public JsonObj create(String hashKey, String rangeKey, JsonObj data) {
 		LOG.info("create {}/{}", hashKey, rangeKey);
 		Item dbItem = new Item();
-		Iterator<Map.Entry<String,Object>> it = data.entrySet().iterator();
+		Iterator it = data.entrySet().iterator();
 		while (it.hasNext()) {
-			Map.Entry<String,Object> pair = (Map.Entry<String,Object>)it.next();
+			Map.Entry pair = (Map.Entry)it.next();
 			dbItem.with(pair.getKey().toString(), pair.getValue());
 		}
 		dbItem.withString(getHashKeyName(), hashKey);
@@ -85,9 +84,9 @@ public abstract class DynamoDAO implements DAO {
 		if (dbItem == null) {
 			throw new NotFoundException();
 		}
-		Iterator<Map.Entry<String,Object>> it = data.entrySet().iterator();
+		Iterator it = data.entrySet().iterator();
 		while (it.hasNext()) {
-			Map.Entry<String,Object> pair = (Map.Entry<String,Object>)it.next();
+			Map.Entry pair = (Map.Entry)it.next();
 			dbItem.with(pair.getKey().toString(), pair.getValue());
 		}
 		dbItem.withString(getHashKeyName(), hashKey);
@@ -124,7 +123,7 @@ public abstract class DynamoDAO implements DAO {
 		if (projection != null) {
 			projectionExp = "";
 			nameMap = new NameMap();
-			Iterator<String> it = Arrays.asList(projection.split(",")).iterator();
+			Iterator it = Arrays.asList(projection.split(",")).iterator();
 			int i = 0;
 			while (it.hasNext()) {
 				String k = it.next().toString().trim();
@@ -173,7 +172,7 @@ public abstract class DynamoDAO implements DAO {
 			ValueMap valueMap = new ValueMap();
 			NameMap nameMap = new NameMap();
 			int i = 0;
-			Iterator<String> it = Arrays.asList(query.split("\\s")).iterator();
+			Iterator it = Arrays.asList(query.split("\\s")).iterator();
 			while (it.hasNext()) {
 				String k = it.next().toString();
 				String o = it.next().toString();
@@ -201,7 +200,7 @@ public abstract class DynamoDAO implements DAO {
 			spec.withMaxResultSize(limit);
 		}
 
-		ItemCollection<QueryOutcome> queryResults = this.table.query(spec);
+		ItemCollection queryResults = this.table.query(spec);
 		ArrayList<JsonObj> results = new ArrayList<>();
 		Iterator<Item> iterator = queryResults.iterator();
 		while (iterator.hasNext()) {

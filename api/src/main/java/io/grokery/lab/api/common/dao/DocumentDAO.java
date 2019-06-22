@@ -1,7 +1,7 @@
 package io.grokery.lab.api.common.dao;
 
-// import org.slf4j.Logger;
-// import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.grokery.lab.api.common.dao.DAO;
 import io.grokery.lab.api.common.context.CloudContext;
@@ -10,7 +10,7 @@ import io.grokery.lab.api.common.exceptions.NotFoundException;
 
 public class DocumentDAO implements DAO {
 
-	// private static final Logger LOG = LoggerFactory.getLogger(DocumentDAO.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DocumentDAO.class);
 
 	public DocumentDAO(CloudContext context) {
 

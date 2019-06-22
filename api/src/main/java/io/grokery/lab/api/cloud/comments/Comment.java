@@ -6,8 +6,8 @@ import java.util.UUID;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-// import org.slf4j.Logger;
-// import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import io.grokery.lab.api.common.context.CloudContext;
 import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.MapperUtil;
@@ -15,7 +15,7 @@ import io.grokery.lab.api.common.exceptions.InvalidInputException;
 
 public class Comment {
 
-	// private static final Logger LOG = LoggerFactory.getLogger(Comment.class);
+	private static final Logger LOG = LoggerFactory.getLogger(Comment.class);
 
 	private String nodeId;
 	private String commentId;
