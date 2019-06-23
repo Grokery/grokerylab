@@ -25,7 +25,7 @@ export default class TopNavBar extends Component {
                     <ul id='top-right-nav-options' className={'nav navbar-top-links'}>
                         <li title="Clouds" className='pull-left'>
                             <Link to={'/'}>
-                                <i className='fa fa-cloud fa-fw'></i> Clouds
+                                <i className='fa fa-cloud fa-fw'></i>
                             </Link>
                         </li>
                         <li className={'pull-right ' + (showUserMenuDropDown ? 'open' : '')}>
@@ -35,13 +35,13 @@ export default class TopNavBar extends Component {
                                 <li><Link to='/signout' onClick={this.closeDropdowns}><i className='fa fa-sign-out fa-fw'></i><span>Sign Out</span></Link></li>
                             </ul>
                         </li>
-                        <li className={'pull-right ' + (showNewMenuDropDown ? 'open' : '')}>
+                        {/* <li className={'pull-right ' + (showNewMenuDropDown ? 'open' : '')}>
                             <button className='dropdown-toggle' onClick={this.toggleNewMenuDropDown}><i className='fa fa-plus fa-fw'></i></button>
                             <ul className='dropdown-menu dropdown-user' onMouseLeave={this.closeDropdowns}>
                                 <li><Link to='/' onClick={() => this.showCloudCreateModal(true)}><i className='fa fa-cloud fa-fw'></i><span>New Cloud</span></Link></li>
                                 <li><Link to='/' onClick={this.closeDropdowns}><i className='fa fa-user fa-fw'></i><span>New User</span></Link></li>
                             </ul>
-                        </li>
+                        </li> */}
                     </ul>
                 </div>
                 <CreateEditCloudModel

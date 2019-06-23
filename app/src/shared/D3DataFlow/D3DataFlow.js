@@ -5,6 +5,7 @@ import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css'
 
 import { history } from 'index'
+import { getSessionInfo } from 'authentication'
 import { createNode, updateNode, deleteNode } from 'store/actions/nodes'
 import { NODETYPE, getQueryParamByName } from 'common'
 import d3 from 'd3'
@@ -50,25 +51,35 @@ class D3DataFlow extends Component {
     zoomOnHighlight: PropTypes.bool,
     singleClickNav: PropTypes.bool,
     colored: PropTypes.bool,
-    nodeShape: PropTypes.number
+    nodeShape: PropTypes.number,
   }
   render() {
+    let { cloudAccess } = this.props
     let showControls = this.props.showControls ? '' : ' hidden'
     return (
       <div id='D3DataFlow'>
         <div className={'flow-header-content' + showControls}>
-            <div id='create-nodes' className='paper'>
-                {/* <p>Drag to canvas to create:</p> */}
-                <img className='drag-create-img' alt='job' src='/img/job.png' onMouseDown={this.createNodeDrag.bind(this, this.createJob.bind(this))}/>
-                <img className='drag-create-img' alt='source' src='/img/source.png' onMouseDown={this.createNodeDrag.bind(this, this.createSource.bind(this))}/>
-                <img className='drag-create-img' alt='board' src='/img/board.png' onMouseDown={this.createNodeDrag.bind(this, this.createBoard.bind(this))}/>
+
+            <div className='cloud-title-and-links' style={{float:"left"}}>
+                <h3>{cloudAccess.cloudInfo.title}</h3>
             </div>
-            <button className="create-btn" onClick={this.toggleCreateNodes}><i className='fa fa-plus'></i></button>
-            <button id='delete-icon' onClick={this.onDelete.bind(this)}><i className='fa fa-trash'></i></button>
-            <div className="node-filter">
-                <input id='filter-input' className='filter-input' onChange={this.filterNodes.bind(this)}/>
-                <i className='fa fa-filter'></i>
+
+            <div style={{float:"right"}}>
+                <div id='create-nodes' className='paper'>
+                    {/* <p>Drag to canvas to create:</p> */}
+                    <img className='drag-create-img' alt='job' src='/img/job.png' onMouseDown={this.createNodeDrag.bind(this, this.createJob.bind(this))}/>
+                    <img className='drag-create-img' alt='source' src='/img/source.png' onMouseDown={this.createNodeDrag.bind(this, this.createSource.bind(this))}/>
+                    <img className='drag-create-img' alt='board' src='/img/board.png' onMouseDown={this.createNodeDrag.bind(this, this.createBoard.bind(this))}/>
+                </div>
+                <button className="create-btn" onClick={this.toggleCreateNodes}><i className='fa fa-plus'></i></button>
+                <button id='delete-icon' onClick={this.onDelete.bind(this)}><i className='fa fa-trash'></i></button>
+                <div className="node-filter">
+                    <input id='filter-input' className='filter-input' onChange={this.filterNodes.bind(this)}/>
+                    <i className='fa fa-filter'></i>
+                </div>
             </div>
+
+
           </div>
         <div id='flow'></div>
       </div>
@@ -207,7 +218,10 @@ class D3DataFlow extends Component {
     this.zoomSvg = d3.behavior.zoom()
         .scaleExtent([.1, 2])
         .on('zoom', function() {
-            if (d3.event.sourceEvent.shiftKey) {
+            if (d3.event.sourceEvent) {
+                d3.event.sourceEvent.preventDefault()
+            }
+            if (d3.event.sourceEvent && d3.event.sourceEvent.shiftKey) {
                 return false
             } else {
                 this.zoom.call(this)
@@ -215,7 +229,9 @@ class D3DataFlow extends Component {
             return true
         }.bind(this))
         .on('zoomstart', function() {
-            if (!d3.event.sourceEvent.shiftKey) d3.select('#flow').style('cursor', 'move')
+            if (!d3.event.sourceEvent.shiftKey) {
+                d3.select('#flow').style('cursor', 'move')
+            }
         })
         .on('zoomend', function() {
             d3.select('#flow').style('cursor', 'auto')
@@ -994,13 +1010,15 @@ class D3DataFlow extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
+    const { clouds } = getSessionInfo()
   return {
-    nodes: state.nodes
+    cloudAccess: clouds[ownProps.params.cloudName],
+    nodes: state.nodes,
   }
 }
 
 export default connect(mapStateToProps, {
     createNode,
     updateNode,
-    deleteNode
+    deleteNode,
 })(D3DataFlow)

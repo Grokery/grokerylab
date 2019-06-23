@@ -5,7 +5,6 @@ import { withRouter, Link } from 'react-router-dom'
 
 import { NODETYPE } from 'common'
 import { getSessionInfo } from 'authentication'
-
 import IBoardFrame from 'shared/IBoardFrame/IBoardFrame'
 
 class Boards extends Component {

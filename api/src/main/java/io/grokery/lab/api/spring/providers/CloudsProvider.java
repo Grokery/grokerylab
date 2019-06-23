@@ -3,6 +3,7 @@ package io.grokery.lab.api.spring.providers;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.grokery.lab.api.common.JsonObj;
+import io.grokery.lab.api.common.exceptions.InvalidInputException;
 import io.grokery.lab.api.common.exceptions.NotAuthorizedException;
 import io.grokery.lab.api.common.exceptions.NotFoundException;
 import io.grokery.lab.api.admin.CloudService;
@@ -59,6 +61,19 @@ public class CloudsProvider {
 	) throws NotFoundException, NotAuthorizedException {
 		LOG.info("GET:{}/clouds/{}", apiVersion, cloudId);
 		JsonObj response = CloudService.getInstance().retrieve(auth, cloudId);
+		return Response.status(Status.OK).entity(response).build();
+	}
+
+	@PUT
+	@Path("/{cloudId}")
+	@ApiOperation(value = "Update Cloud", response = Cloud.class)
+	public Response update(
+		@HeaderParam("Authorization") String auth,
+		@ApiParam @PathParam("cloudId") String cloudId,
+		@ApiParam JsonObj req
+	) throws NotFoundException, NotAuthorizedException, InvalidInputException {
+		LOG.info("GET:{}/clouds/{}", apiVersion, cloudId);
+		JsonObj response = CloudService.getInstance().update(auth, cloudId, req);
 		return Response.status(Status.OK).entity(response).build();
 	}
 

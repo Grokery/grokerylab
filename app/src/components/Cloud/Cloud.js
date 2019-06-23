@@ -8,7 +8,7 @@ import { getCloudId } from 'authentication'
 import { fetchNodes, clearNodes } from 'store/actions/nodes'
 import { fetchCloud } from 'store/actions/cloud'
 import { fetchOptions } from 'store/actions/options'
-import SideNavBar from 'shared/SideNavBar/SideNavBar'
+// import SideNavBar from 'shared/SideNavBar/SideNavBar'
 import Boards from 'components/Boards/Boards'
 import Board from 'components/Boards/Board'
 import Dataflows from 'components/Dataflows/Dataflows'
@@ -31,7 +31,7 @@ class Cloud extends Component {
       fetchOptions(cloudName)
       fetchNodes(cloudName)
     } else {
-      alert("cloud name " + cloudName + " not recognized")
+      console.error("cloud name " + cloudName + " not recognized")
       history.push("/")
     }
   }
@@ -43,9 +43,9 @@ class Cloud extends Component {
     }
     return (
       <div id='cloud-page' className='page-content'>
-        <SideNavBar cloudName={cloudName} />
+        {/* <SideNavBar cloudName={cloudName} /> */}
         <div className='sidebar-page-wrapper'>
-          <Route exact path='/clouds/:cloudName' component={Boards} />
+          <Route exact path='/clouds/:cloudName' component={Dataflows} />
           <Route exact path='/clouds/:cloudName/boards' component={Boards} />
           <Route exact path='/clouds/:cloudName/boards/:boardId' component={Board} />
           <Route exact path='/clouds/:cloudName/flows' component={Dataflows} />

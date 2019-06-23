@@ -187,10 +187,12 @@ g.colored.selected:hover text.tooltiptext  {
 
 /* Flow Header Content */
 .flow-header-content {
+    padding-left: 8px;
     padding-top: 8px;
     padding-right: 8px;
     position: absolute;
     right: 0;
+    left: 0;
 }
 
 .flow-header-content #create-nodes {

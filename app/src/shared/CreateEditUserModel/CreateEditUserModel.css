@@ -1,0 +1,16 @@
+
+#CreateEditCloudModel {
+    /* position: absolute;
+    right: 0;
+    margin: 5px; */
+}
+
+#CreateEditCloudModel .modal-body {
+    padding-left:15px;
+    padding-right:15px;
+    padding-bottom:15px;
+}
+
+#CreateEditCloudModel .modal-body .row .col {
+    padding-top: 15px;
+}

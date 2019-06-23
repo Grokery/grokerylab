@@ -50,7 +50,7 @@ class CloudSection extends Component {
       <div className='cloud-section'>
         <div className='cloud-section-header'>
           <Link to={'/clouds/' + cloudid} className='cloud-title'>
-            <img src={this.getCloudIcon(cloudAccess.cloudInfo.cloudType)} className='cloud-icon' alt='cloud type'/>
+            <img src={'/'+this.getCloudIcon(cloudAccess.cloudInfo.cloudType)} className='cloud-icon' alt='cloud type'/>
             {cloudAccess.cloudInfo.title}
           </Link>
           {/* <label style={{paddingLeft:'10px'}}>{cloudAccess.cloudInfo.url}</label> */}

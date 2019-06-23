@@ -1,36 +1,53 @@
+
 #home-page a,
 #home-page a:hover {
   text-decoration: none;
 }
 
-#home-page .new-cloud-button {
-  margin: auto;
-  display: block;
+#home-page .team-list {
+  padding-top: 12px;
+  padding-right: 30px;
 }
 
-#home-page #new-cloud-btn {
-  font-size: large;
-  padding: 10px;
-  float: right;
+#home-page .team-list ul {
+  list-style: none;
+  padding-top: 15px;
+  padding-left: 10px;
+}
+
+#home-page .team-list ul li i {
+  margin-right: 10px;
 }
 
 #home-page .cloud-sections {
-  padding-top: 15px;
-  padding-left: 15px;
-  padding-right: 15px;
-  padding-bottom: 10px;
-  background-color: white;
-  /* border-right: 1px solid #c5ccd3; */
+  padding-top: 12px;
+  padding-left: 45px;
+  position: relative;
 }
 
-#home-page .cloud-sections hr {
+#home-page #new-cloud-btn,
+#home-page #new-user-btn {
+  position: absolute;
+  right: 22px;
+  top: 15px;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+#home-page #new-user-btn {
+  right: 48px;
+}
+
+#home-page hr {
   display: block;
   height: 1px;
   border: 0;
-  border-bottom: 1px solid #c5ccd3;
   margin: 0;
-  margin-bottom: 20px;
   clear: both;
+  margin-top: 10px;
+  margin-bottom: 15px;
+  border-top: none;
+  border-bottom: 1px solid #40526d;;
 }
 
 @media(min-width: 768px) {
@@ -38,4 +55,20 @@
 }
 
 @media(max-width: 768px) {
+  #home-page h3 {
+    padding-left: 10px;
+  }
+  #home-page .api-install-label {
+    padding-left: 10px;
+  }
+  #home-page .cloud-sections {
+    padding-left: 15px;
+  }
+  #home-page .team-list {
+    padding-right: 0px;
+  }
+  #home-page #new-cloud-btn,
+  #home-page #new-user-btn {
+    right: 22px;
+  }
 }
