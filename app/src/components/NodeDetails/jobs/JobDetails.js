@@ -3,8 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { concat, assign, cloneDeep } from 'lodash'
 
-import { API_BASE_URL } from 'config'
-import { getCloudId, getCloudToken, getSessionInfo } from 'authentication'
+import { getCloudId, getCloudToken, getSessionInfo, getCloudBaseUrl } from 'authentication'
 import { fetchNode, fetchNodes } from 'store/actions/nodes'
 import { postJobRun, fetchJobRuns, fetchJobRunsWithRepeat, updateJobRun } from 'store/actions/jobruns'
 import { Tabs, Panel } from 'shared/Tabs/Tabs'
@@ -14,7 +13,7 @@ import LogsTab from 'shared/LogsTab/LogsTab'
 import PlaceholderInfo from './infoTabs/PlaceholderInfo'
 import BrowserJsInfo from './infoTabs/BrowserJsInfo'
 import AwsLambdaInfo from './infoTabs/AwsLambdaInfo'
-import JobForm from './JobForm'
+import JobForm from './editModal/JobForm'
 import BrowserJs from './codeTabs/BrowserJs'
 import AWSLambda from './codeTabs/AWSLambda'
 
@@ -45,7 +44,7 @@ class JobDetails extends Component {
     }
   }
   onKeyDown = (e) => {
-    if (e.metaKey && e.keyCode === 83) { // 83='s'
+    if ((e.metaKey || e.ctrlKey) && e.keyCode === 83) { // 83='s'
       this.onUpdate(e)
     }
   }
@@ -67,11 +66,11 @@ class JobDetails extends Component {
     return (
       <div className='job-details'>
         <Tabs>
-          <Panel title='Node Info'>
+          {/* <Panel title='Node Info'>
             {this.renderRightMenuOptions()}
             {this.getJobInfoComponent(commonProps)}
-          </Panel>
-          <Panel title='Code'>
+          </Panel> */}
+          <Panel title={node.title}>
             {this.renderRightMenuOptions()}
             {this.getJobCodeComponent(commonProps)}
           </Panel>
@@ -102,6 +101,7 @@ class JobDetails extends Component {
     const { node } = this.props
     let runOption = null
     if (node.subType !== 'GENERIC') {
+      // TODO move to left panel ...
       runOption = <button key='run' disabled={this.state.dirty} onClick={this.runJob} className='btn btn-default'><i className='fa fa-play'></i></button>
     }
     return concat([
@@ -125,6 +125,7 @@ class JobDetails extends Component {
     const { postJobRun, node, fetchJobRunsWithRepeat, params } = this.props
     let userEmail = getSessionInfo().username
     try {
+
       var iframe = document.createElement('iframe')
       iframe.style.visibility = "hidden"
       iframe.style.width = "1px"
@@ -134,10 +135,19 @@ class JobDetails extends Component {
       iframe.style.left = "0"
 
       document.body.appendChild(iframe)
+
+      document.getElementById("iframe-console-pre").innerHTML = "";
+      iframe.contentWindow.console.log = (logData) => {
+        let el = document.createElement('div');
+        el.innerHTML = `> ${JSON.stringify(logData, null, 2)}`;
+        document.getElementById("iframe-console-pre").appendChild(el);
+      }
+
       iframe.contentWindow.document.open()
       iframe.contentWindow.document.write(this.getHelperCode())
       iframe.contentWindow.document.write('<script>'+cloneDeep(node.code)+'</script>')
       iframe.contentWindow.document.close()
+
       postJobRun(params.cloudName, {jobId: node.nodeId, jobRunType: node.subType, runStatus: "COMPLETED", userContact: userEmail}, () => {
         fetchJobRunsWithRepeat(params.cloudName, "?jobId="+node.nodeId+"&limit=5", null, [[0, 0.0, 1]])
       })
@@ -150,7 +160,7 @@ class JobDetails extends Component {
   }
   getHelperCode() {
     const { params } = this.props
-    let url = API_BASE_URL + '/clouds/' + getCloudId(params.cloudName) + '/nodes/source/'
+    let url = getCloudBaseUrl(params.cloudName) + '/clouds/' + getCloudId(params.cloudName) + '/nodes/source/'
     let token = getCloudToken(params.cloudName)
     return `
         <script>
@@ -167,7 +177,7 @@ class JobDetails extends Component {
             }
         </script>
         <script>
-          var putSource = (id, data) => {
+            var putSource = (id, data) => {
               var url = '`+url+`' + id + '/write'
               var options = {
                 method: "PUT",
@@ -192,7 +202,7 @@ class JobDetails extends Component {
       jobRunType: node.subType,
       lambdaARN: node.lambdaARN,
       args: {
-          baseUrl: API_BASE_URL,
+          baseUrl: getCloudBaseUrl(params.cloudName),
           authorization: getCloudToken(params.cloudName),
       }
     }, () => {

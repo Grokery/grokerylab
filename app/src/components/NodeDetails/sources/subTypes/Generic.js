@@ -8,7 +8,7 @@ import 'brace/theme/chrome'
 
 import { Tabs, Panel } from 'shared/Tabs/Tabs'
 import EditModal from 'shared/EditModal/EditModal'
-import InfoTab from 'shared/InfoTab/InfoTab'
+// import InfoTab from 'shared/InfoTab/InfoTab'
 import LogsTab from 'shared/LogsTab/LogsTab'
 
 // import SourceInfo from 'components/NodeDetails/sources/SourceInfo'
@@ -51,14 +51,14 @@ class Generic extends Component {
     return (
       <div className='source-details'>
         <Tabs>
-          <Panel title='Node Info'>
+          {/* <Panel title='Node Info'>
             {this.renderRightMenuOptions()}
             <InfoTab key={params.nodeId} params={params} onUpdate={onUpdate}>
-              {/* <p>generic</p> */}
-              {/* <SourceInfo key={params.nodeId} params={params} onUpdate={onUpdate}></SourceInfo> */}
+              <p>generic</p>
+              <SourceInfo key={params.nodeId} params={params} onUpdate={onUpdate}></SourceInfo>
             </InfoTab>
-          </Panel>
-          <Panel title='Data'>
+          </Panel> */}
+          <Panel title={node.title}>
             {this.renderRightMenuOptions()}
             <AceEditor
               mode="text"
@@ -119,7 +119,7 @@ class Generic extends Component {
     }
   }
   onKeyDown = (e) => {
-    if (e.metaKey && e.keyCode === 83) { // 83='s'
+    if ((e.metaKey || e.ctrlKey) && e.keyCode === 83) { // 83='s'
       this.onUpdate(e)
     }
   }

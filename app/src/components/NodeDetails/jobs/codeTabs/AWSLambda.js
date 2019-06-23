@@ -25,21 +25,23 @@ class AWSLambda extends Component {
     if (!node){
       return (<div></div>)
     }
+    console.log(node)
     return (
-      <div className='row job-code-tab' style={{padding:0,margin:0}}>
-        <div className='col-md-2' style={{paddingRight:'0px'}}>
+      <div className='row job-code-tab'>
+        <div className='col-md-3'>
 
           {/*  TODO store files as file objects in list in node */}
           <ul style={{marginTop:'5px', marginBottom:'15px', paddingLeft: '0px', marignRight:'0px', listStyleType: 'none'}}>
             <li style={{padding:'5px', paddingLeft:'15px'}}><a href='#/' onClick={(e) => {e.preventDefault()}}>job.py</a></li>
             <li style={{padding:'5px', paddingLeft:'15px'}}><a href='#/' onClick={(e) => {e.preventDefault()}}>main.py</a></li>
             <li style={{padding:'5px', paddingLeft:'15px'}}><a href='#/' onClick={(e) => {e.preventDefault()}}>requirements.txt</a></li>
+            <li style={{padding:'5px', paddingLeft:'15px'}}><a href='#/' onClick={(e) => {e.preventDefault()}}>+</a></li>
           </ul>
 
         </div>
-        <div className='col-md-10'>
-          <div className='row' style={{marign:0}}>
-            <div className='col-md-12' style={{paddingLeft:'0px'}}> 
+        <div className='col-md-9'>
+          <div className='row'>
+            <div className='col-md-7'> 
               <AceEditor
                 mode="python"
                 theme="chrome"

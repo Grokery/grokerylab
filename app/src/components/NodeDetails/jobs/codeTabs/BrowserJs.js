@@ -19,13 +19,17 @@ class BrowserJs extends Component {
     super(props)
       this.state = {
           showModal: false,
+          consoleHeight:300
       }
   }
   render() {
     let { height, draftCode, onCodeChange } = this.props
+    let { consoleHeight } = this.state;
     return (
-      <div className='row' style={{margin:0,padding:0}}>
-          <div className='col-md-12' style={{margin:0,padding:0}}> 
+      <div className='row'>
+          <div className='col-md-3'>
+          </div>
+          <div className='col-md-9'>
             <AceEditor
               mode="javascript"
               theme="chrome"
@@ -43,8 +47,11 @@ class BrowserJs extends Component {
                 tabSize: 2,
               }}
               width={"100%"}
-              height={height+"px"}
+              height={(height-consoleHeight-10)+"px"}
             />
+            <div id="iframe-console">
+              <pre id="iframe-console-pre" style={{height:consoleHeight+'px',borderRadius:0, backgroundColor:'white',borderBottom:'none'}}>></pre>
+            </div>
         </div>
       </div>
     )

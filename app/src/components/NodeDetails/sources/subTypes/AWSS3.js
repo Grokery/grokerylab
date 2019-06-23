@@ -8,13 +8,11 @@ import 'brace/theme/chrome'
 
 import { Tabs, Panel } from 'shared/Tabs/Tabs'
 import EditModal from 'shared/EditModal/EditModal'
-// import InfoTab from 'shared/InfoTab/InfoTab'
 import LogsTab from 'shared/LogsTab/LogsTab'
 
-// import SourceInfo from 'components/NodeDetails/sources/SourceInfo'
 import SourceForm from 'components/NodeDetails/sources/SourceForm'
 
-class Delimited extends Component {
+class AWSS3 extends Component {
   static propTypes = {
     params: PropTypes.object.isRequired,
     node: PropTypes.object.isRequired,
@@ -51,15 +49,8 @@ class Delimited extends Component {
     return (
       <div className='source-details'>
         <Tabs>
-          {/* <Panel title='Node Info'>
-            {this.renderRightMenuOptions()}
-            <InfoTab key={params.nodeId} params={params} onUpdate={onUpdate}>
-              <p>delimited</p>
-              <SourceInfo key={params.nodeId} params={params} onUpdate={onUpdate}></SourceInfo>
-            </InfoTab>
-          </Panel> */}
           <Panel title={node.title}>
-            {this.renderRightMenuOptions()}
+          {this.renderRightMenuOptions()}
             <div className='row'>
               <div className='col-md-3'>
                 
@@ -92,11 +83,11 @@ class Delimited extends Component {
             <LogsTab params={this.props.params}></LogsTab>
           </Panel>
         </Tabs>
-        <EditModal 
-          title="Edit Data Source" 
-          node={node} 
-          onUpdate={this.props.onUpdate} 
-          shown={this.state.shown} 
+        <EditModal
+          title="Edit Data Source"
+          node={node}
+          onUpdate={this.props.onUpdate}
+          shown={this.state.shown}
           toggleEditDialog={this.toggleEditDialog}
           form={(<SourceForm node={node} onUpdate={this.props.onUpdate}></SourceForm>)}
         ></EditModal>
@@ -134,7 +125,8 @@ class Delimited extends Component {
     this.setState({ dataDraft: newData, dirty: true })
   }
   onUpdate = (e) => {
-    e.preventDefault()
+    e.preventDefault();
+    e.stopPropagation();
     this.props.onUpdate({
       'data': this.state.dataDraft,
     }, () => {
@@ -147,4 +139,4 @@ const mapStateToProps = (state, ownProps) => {
   return {}
 }
 
-export default connect(mapStateToProps, {})(Delimited)
+export default connect(mapStateToProps, {})(AWSS3)

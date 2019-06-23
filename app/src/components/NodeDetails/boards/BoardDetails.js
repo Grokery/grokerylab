@@ -40,14 +40,40 @@ class BoardDetails extends Component {
         <Tabs>
           <Panel title={title}>
             {this.renderRightMenuOptions()}
-            <IBoardFrame 
-              cloudName={params.cloudName} 
-              boardId={params.nodeId} 
-              height={height-7}
-              width={'100%'}
-            ></IBoardFrame>
+            <div className='row'>
+              <div className='col-md-6'style={{paddingRight:0}}>
+                <AceEditor
+                  key={params.nodeId}
+                  mode="html"
+                  theme="chrome"
+                  onChange={this.onChange}
+                  fontSize={12}
+                  showPrintMargin={false}
+                  showGutter={true}
+                  highlightActiveLine={true}
+                  value={this.state.sourceDraft}
+                  width={'100%'}
+                  height={height+'px'}
+                  setOptions={{
+                    enableBasicAutocompletion: false,
+                    enableLiveAutocompletion: false,
+                    enableSnippets: false,
+                    showLineNumbers: true,
+                    tabSize: 2,
+                  }}
+                />
+              </div>
+              <div className='col-md-6' style={{borderLeft:'solid 1px #ccc'}}>
+                <IBoardFrame 
+                  cloudName={params.cloudName} 
+                  boardId={params.nodeId} 
+                  height={height-7}
+                  width={'100%'}
+                ></IBoardFrame>
+              </div>
+            </div>
           </Panel>
-          <Panel title='Code'>
+          {/* <Panel title='Code'>
             {this.renderRightMenuOptions()}
             <AceEditor
               key={params.nodeId}
@@ -69,7 +95,7 @@ class BoardDetails extends Component {
                 tabSize: 2,
               }}
             />
-          </Panel>
+          </Panel> */}
           <Panel title='History'>
             {this.renderRightMenuOptions()}
             <LogsTab params={this.props.params}></LogsTab>              

@@ -8,7 +8,7 @@ import 'brace/theme/chrome'
 
 import { Tabs, Panel } from 'shared/Tabs/Tabs'
 import EditModal from 'shared/EditModal/EditModal'
-import InfoTab from 'shared/InfoTab/InfoTab'
+// import InfoTab from 'shared/InfoTab/InfoTab'
 import LogsTab from 'shared/LogsTab/LogsTab'
 
 // import SourceInfo from 'components/NodeDetails/sources/SourceInfo'
@@ -50,34 +50,41 @@ class JsonData extends Component {
     return (
       <div className='source-details'>
         <Tabs>
-          <Panel title='Node Info'>
+          {/* <Panel title='Node Info'>
             {this.renderRightMenuOptions()}
             <InfoTab key={params.nodeId} params={params} onUpdate={onUpdate}>
-              {/* <p>jsonData</p> */}
-              {/* <SourceInfo key={params.nodeId} params={params} onUpdate={onUpdate}></SourceInfo> */}
+              <p>jsonData</p>
+              <SourceInfo key={params.nodeId} params={params} onUpdate={onUpdate}></SourceInfo>
             </InfoTab>
-          </Panel>
-          <Panel title='Data'>
+          </Panel> */}
+          <Panel title={node.title}>
             {this.renderRightMenuOptions()}
-            <AceEditor
-              mode="json"
-              theme="chrome"
-              onChange={this.onChange}
-              fontSize={12}
-              showPrintMargin={false}
-              showGutter={true}
-              highlightActiveLine={true}
-              value={this.state.dataDraft}
-              setOptions={{
-                enableBasicAutocompletion: false,
-                enableLiveAutocompletion: false,
-                enableSnippets: false,
-                showLineNumbers: true,
-                tabSize: 2,
-              }}
-              width={"100%"}
-              height={height+"px"}
-            />
+            <div className='row'>
+              <div className='col-md-3'>
+                
+              </div>
+              <div className='col-md-9'>
+                <AceEditor
+                  mode="json"
+                  theme="chrome"
+                  onChange={this.onChange}
+                  fontSize={12}
+                  showPrintMargin={false}
+                  showGutter={true}
+                  highlightActiveLine={true}
+                  value={this.state.dataDraft}
+                  setOptions={{
+                    enableBasicAutocompletion: false,
+                    enableLiveAutocompletion: false,
+                    enableSnippets: false,
+                    showLineNumbers: true,
+                    tabSize: 2,
+                  }}
+                  width={"100%"}
+                  height={height+"px"}
+                />
+              </div>
+            </div>
           </Panel>
           <Panel title='History'>
             {this.renderRightMenuOptions()}
@@ -98,6 +105,7 @@ class JsonData extends Component {
   getRightMenuOptions = () => {
     return concat([
       <button key='save' disabled={!this.state.dirty} onClick={this.onUpdate} className='btn btn-default'><i className='fa fa-save'></i></button>,
+      // TODO make it automatically updated
       <button key='reload' onClick={this.props.reloadData} className='btn btn-default'><i className="fa fa-refresh" aria-hidden="true"></i></button>,
       <button key='edit' onClick={this.toggleEditDialog} className='btn btn-default'><i className='fa fa-cog'></i></button>,
     ], this.props.rightMenuOptions)
@@ -118,7 +126,7 @@ class JsonData extends Component {
     }
   }
   onKeyDown = (e) => {
-    if (e.metaKey && e.keyCode === 83) { // 83='s'
+    if ((e.metaKey || e.ctrlKey) && e.keyCode === 83) { // 83='s'
       this.onUpdate(e)
     }
   }

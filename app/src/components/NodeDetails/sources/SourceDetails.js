@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import Generic from './subTypes/Generic'
 import JsonData from './subTypes/JsonData'
 import Delimited from './subTypes/Delimited'
-
+import AWSS3 from './subTypes/AWSS3'
 
 class SourceDetails extends Component {
   static propTypes = {
@@ -24,6 +24,10 @@ class SourceDetails extends Component {
       return <Delimited {...this.props} />
     } else if (node.subType === 'JSON') {
       return <JsonData {...this.props} />
+    } else if (node.subType === 'AWSS3') {
+      return <AWSS3 {...this.props} />
+    } else {
+      return <Generic {...this.props} />
     }
   }
 }
