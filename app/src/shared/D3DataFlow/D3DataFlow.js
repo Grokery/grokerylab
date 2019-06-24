@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css'
@@ -54,14 +55,17 @@ class D3DataFlow extends Component {
     nodeShape: PropTypes.number,
   }
   render() {
-    let { cloudAccess } = this.props
+    let { params, cloudAccess } = this.props
     let showControls = this.props.showControls ? '' : ' hidden'
     return (
       <div id='D3DataFlow'>
         <div className={'flow-header-content' + showControls}>
 
             <div className='cloud-title-and-links' style={{float:"left"}}>
-                <h3>{cloudAccess.cloudInfo.title}</h3>
+                <h3 style={{float:'left'}}>{cloudAccess.cloudInfo.title}</h3>
+                <Link to={'/clouds/' + params.cloudName + "/boards"} style={{float:'right',marginLeft:'10px',paddingTop:'5px'}}>
+                    <i className='fa fa-tachometer cloud-edit-icon'/>
+                </Link>
             </div>
 
             <div style={{float:"right"}}>
@@ -827,7 +831,7 @@ class D3DataFlow extends Component {
           }
       } else if (d3state.dragging) {
           d3state.dragging = false
-          this.onUpdateNodes(d3state.changedNodes)
+            this.onUpdateNodes(d3state.changedNodes)
       } else if (d3state.dblClickNodeTimeout) {
           history.push('/clouds/'+ params.cloudName + '/flows/' + d.nodeType.toLowerCase() + '/' + d.nodeId + '?flow=open')
       } else {
@@ -936,7 +940,7 @@ class D3DataFlow extends Component {
     const { params } = this.props
     Object.keys(nodes).forEach(function(key){
         let node = nodes[key]
-        this.props.updateNode(params.cloudName, node, null)
+        this.props.updateNode(params.cloudName, node, () => {this.d3state.changedNodes = {}})
     }.bind(this))
   }
   deleteEdge(edge) {

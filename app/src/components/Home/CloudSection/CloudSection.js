@@ -54,7 +54,9 @@ class CloudSection extends Component {
             {cloudAccess.cloudInfo.title}
           </Link>
           {/* <label style={{paddingLeft:'10px'}}>{cloudAccess.cloudInfo.url}</label> */}
-          <button onClick={() => this.showEditModal(true)} className='cloud-edit-button'><i className='fa fa-cog cloud-edit-icon'/></button>
+          <button onClick={() => this.showEditModal(true)} className='cloud-button'><i className='fa fa-cog cloud-edit-icon'/></button>
+          <Link to={'/clouds/' + cloudid + "/flows"} className='cloud-button'><i className='fa fa-share-alt cloud-edit-icon'/></Link>
+          <Link to={'/clouds/' + cloudid + "/boards"} className='cloud-button'><i className='fa fa-tachometer cloud-edit-icon'/></Link>
           {/* {this.getCloudStatusIcon(cloudAccess.cloudInfo.status)} */}
           <CreateEditCloudModel
               key="edit-cloud"

@@ -28,8 +28,9 @@
   color: #333;
 }
 
-.cloud-section .cloud-edit-button {
+.cloud-section .cloud-button {
   margin: 0;
+  margin-left: 10px;
   padding: 0;
   border: none;
   float: right;

@@ -14,8 +14,18 @@ class Boards extends Component {
     urlParams: PropTypes.object,
   }
   render() {
+    let { urlParams, cloudInfo } = this.props
+    console.log(cloudInfo)
     return (
       <div className='sidebar-page-content'>
+        <div className='row'>
+            <div className='col-md-12' style={{paddingTop:'10px'}}>
+                <h3 style={{float:'left'}}>{cloudInfo.cloudInfo.title}</h3>
+                <Link to={'/clouds/' + urlParams.cloudName + "/flows"} style={{float:'left',marginLeft:'10px',paddingTop:'5px'}}>
+                    <i className='fa fa-share-alt cloud-edit-icon'/>
+                </Link>
+            </div>
+        </div>
         {this.getBoardLinks()}
       </div>
     )
