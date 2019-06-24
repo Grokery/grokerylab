@@ -66,13 +66,13 @@ class JobDetails extends Component {
     return (
       <div className='job-details'>
         <Tabs>
-          {/* <Panel title='Node Info'>
-            {this.renderRightMenuOptions()}
-            {this.getJobInfoComponent(commonProps)}
-          </Panel> */}
           <Panel title={node.title}>
             {this.renderRightMenuOptions()}
             {this.getJobCodeComponent(commonProps)}
+          </Panel>
+          <Panel title='Info'>
+            {this.renderRightMenuOptions()}
+            {this.getJobInfoComponent(commonProps)}
           </Panel>
           <Panel title='History'>
             {this.renderRightMenuOptions()}

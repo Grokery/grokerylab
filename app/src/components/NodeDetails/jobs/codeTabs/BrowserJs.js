@@ -19,7 +19,7 @@ class BrowserJs extends Component {
     super(props)
       this.state = {
           showModal: false,
-          consoleHeight:300
+          consoleHeight:200
       }
   }
   render() {
@@ -29,7 +29,7 @@ class BrowserJs extends Component {
       <div className='row'>
           <div className='col-md-3'>
           </div>
-          <div className='col-md-9'>
+          <div className='col-md-9' style={{paddingRight:'0px'}}>
             <AceEditor
               mode="javascript"
               theme="chrome"

@@ -51,7 +51,7 @@ class Delimited extends Component {
     return (
       <div className='source-details'>
         <Tabs>
-          {/* <Panel title='Node Info'>
+          {/* <Panel title='Info'>
             {this.renderRightMenuOptions()}
             <InfoTab key={params.nodeId} params={params} onUpdate={onUpdate}>
               <p>delimited</p>
