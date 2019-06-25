@@ -60,20 +60,17 @@ public class UserService {
 
 		User user = mapper.convertValue(requestBody, User.class);
 		
-		if (AccountRole.valueOf(user.getAccountRole()) == AccountRole.SUPERADMIN) {
+		if (auth == null && AccountRole.valueOf(user.getAccountRole()) == AccountRole.ADMIN) {
 			int userCount = dao.count(User.class, new DynamoDBQueryExpression<User>().withHashKeyValues(new User()));
 			if (userCount != 0) {
-				throw new NotAuthorizedException("SuperAdmin user may only be created during system initialization");
+				throw new NotAuthorizedException("Valid authentication token required");
 			}
-			// TODO validate superadmin request info
 		} else {
 			try {
 				Claims claims = DigitalPiglet.parseJWT(auth);
 				AccountRole accountRole = AccountRole.valueOf(claims.get("accountRole").toString());
-				if (accountRole != AccountRole.SUPERADMIN) {
-					if (accountRole != AccountRole.ADMIN) {
-						throw new NotAuthorizedException("Admin role required to create new user");
-					}
+				if (accountRole != AccountRole.ADMIN) {
+					throw new NotAuthorizedException("Admin role required to create new user");
 				}
 			} catch (NotAuthorizedException e) {
 				throw e;
@@ -84,14 +81,12 @@ public class UserService {
 			if (dao.load(User.class, User.hashKey, user.getUsername()) != null) {
 				throw new InvalidInputException("Invalid username");
 			}
-	
-			user.assertIsValidForCreate();
-
 		}
 
-		// TODO handle salt generation properly
+		// TODO handle salt generation
 		user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12)));
 
+		user.assertIsValidForCreate();
 		dao.save(user);
 
 		User created = dao.load(User.class, User.hashKey, user.getUserId());
@@ -99,9 +94,7 @@ public class UserService {
 			throw new Error("Error creating user");
 		}
 
-		created = redact(created);
-
-		return mapper.convertValue(created, JsonObj.class);
+		return mapper.convertValue(redact(created), JsonObj.class);
 	}
 
 	public JsonObj retrieve(String auth, String username) throws NotFoundException, NotAuthorizedException {
@@ -120,15 +113,10 @@ public class UserService {
 			throw new NotFoundException();
 		}
 
-		user = redact(user);
-
-		JsonObj response = mapper.convertValue(user, JsonObj.class);
-		return response;
+		return mapper.convertValue(redact(user), JsonObj.class);
 	}
 
 	public JsonObj update(String auth, String username, JsonObj requestBody) {
-		// TODO check that user name not changing and/or handle
-		// TODO check if password updating and handle (update cloud credential)
 		throw new NotImplementedError();
 	}
 
@@ -166,8 +154,7 @@ public class UserService {
 		user.setAccountToken(jwt);
 		user.setPassword(null);
 
-		// Decrypt cloud credentials with raw password and wrap in jwt tokens
-		// and set other info needed by cloud context
+		// Make and set cloud access tokens
 		HashMap<String, CloudAccess> cloudNameMap = new HashMap<>();
 		Iterator<Entry<String, CloudAccess>> it = user.getClouds().entrySet().iterator();
 		while (it.hasNext()) {
@@ -180,16 +167,16 @@ public class UserService {
 				cloudAccess.setCloudInfo(mapper.convertValue(cloudInfo, JsonObj.class));
 	
 				Claims cloudClaims = new DefaultClaims();
-				CloudCredentials creds = cloudAccess.getCredentials();
 				cloudClaims.put("cloudId", cloudInfo.getCloudId());
 				cloudClaims.put("cloudType", cloudInfo.getCloudType());
+				cloudClaims.put("daoType", cloudInfo.getDaoType());
 				cloudClaims.put("cloudName", cloudInfo.getName());
 				cloudClaims.put("cloudRole", cloudInfo.getUsers().get(user.getUserId()).getCloudRole());
-	
+
+				CloudCredentials creds = cloudAccess.getCredentials();
 				cloudClaims.put("awsAccessKeyId", creds.getAwsAccessKeyId());
 				cloudClaims.put("awsSecretKey", creds.getAwsSecretKey());
 				cloudClaims.put("awsRegion", creds.getAwsRegion());
-				cloudClaims.put("daoType", "DYNAMODB");
 	
 				cloudAccess.setCloudToken(DigitalPiglet.makeJWT(cloudClaims, JWT_TIMEOUT, cloudInfo.getJwtPrivateKey()));
 				cloudAccess.setCredentials(null);

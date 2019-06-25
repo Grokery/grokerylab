@@ -9,9 +9,7 @@ GrokeryLab is a data pipeline management platform.
 
 You can find instructions for running the app and the api in the README files in their respective folders.
 
-Once you've got the api and app running, you can initialize the required superadmin user with the initSuperuser.sh script found in the /scripts folder.
-
-Finaly, use the superadmin account credentials you created in the last step and the createAdminUser.sh script to create a normal admin user that you can use to login via the app ui. 
+Once you've got the api and app running, you can initialize a user with `createInitialAdminUser.sh` in the /scripts folder. You should then be able to login using the newly created admin user.
 
 
 ## Contributing

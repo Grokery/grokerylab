@@ -11,6 +11,7 @@ import io.grokery.lab.api.admin.models.User;
 import io.grokery.lab.api.admin.models.submodels.CloudAccess;
 import io.grokery.lab.api.admin.models.submodels.UserRef;
 import io.grokery.lab.api.admin.types.AccountRole;
+import io.grokery.lab.api.common.CommonUtils;
 import io.grokery.lab.api.common.DigitalPiglet;
 import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.MapperUtil;
@@ -27,7 +28,7 @@ public class CloudService {
 
 	private static final Logger logger = LoggerFactory.getLogger(CloudService.class);
 	private static volatile CloudService instance;
-	private static final long JWT_TIMEOUT = 28800000;
+	private static final String DEFAULT_JWT_TIMEOUT = "28800000";
 
 	private DynamoDBMapper dao;
 	public final ObjectMapper mapper;
@@ -83,9 +84,12 @@ public class CloudService {
 		cloudClaims.put("cloudType", created.getCloudType());
 		cloudClaims.put("cloudName", created.getName());
 		cloudClaims.put("cloudRole", created.getUsers().get(user.getUserId()).getCloudRole());
-		cloudClaims.put("daoType", "DYNAMODB");
+		cloudClaims.put("daoType", created.getDaoType());
 
-		adminAccess.setCloudToken(DigitalPiglet.makeJWT(cloudClaims, JWT_TIMEOUT, cloud.getJwtPrivateKey()));
+		adminAccess.setCloudToken(DigitalPiglet.makeJWT(
+			cloudClaims, 
+			Long.parseLong(CommonUtils.getOptionalEnv("JWT_TIMEOUT", DEFAULT_JWT_TIMEOUT)), 
+			cloud.getJwtPrivateKey()));
 		adminAccess.setCloudInfo(mapper.convertValue(created, JsonObj.class));
 
 		return mapper.convertValue(adminAccess, JsonObj.class);

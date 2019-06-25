@@ -27,6 +27,7 @@ public class Cloud implements Serializable {
 	public static final String hashKey = "CLOUD";
 	private String cloudId;
     private String cloudType;
+    private String daoType;
     private String name;
     private String title;
 	private String description;
@@ -42,7 +43,8 @@ public class Cloud implements Serializable {
 		this.users = new HashMap<String, UserRef>();
 		this.created = new DateTime(DateTimeZone.UTC).toString();
 		this.updated = new DateTime(DateTimeZone.UTC).toString();
-		this.status = "CREATING";
+		this.status = "READY";
+		this.daoType = "DYNAMODB";
 	}
 
 	@DynamoDBHashKey
@@ -67,6 +69,14 @@ public class Cloud implements Serializable {
 	}
 	public void setCloudType(String cloudType) {
 		this.cloudType = cloudType;
+	}
+
+    @DynamoDBAttribute
+	public String getDaoType() {
+		return daoType;
+	}
+	public void setDaoType(String daoType) {
+		this.daoType = daoType;
 	}
 
     @DynamoDBIndexRangeKey(localSecondaryIndexName="name")
