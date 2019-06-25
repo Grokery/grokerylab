@@ -18,7 +18,7 @@ let defaultData = {
   cloudType: 'AWS',
   cloudHost: 'CUSTOMER',
   installOption: 'EXISTING',
-  url: 'http://localhost:8001/api/v0',
+  url: 'http://localhost:8000/api/v0',
   jwtPrivateKey: 'fdksajfdskla843u2938fajsdkfj409r38349jwoi',
   installAccess: {
     credentials: {
@@ -115,6 +115,9 @@ class CreateEditCloudModel extends Component {
   }
   onAzureKeyChange(event) {
     this.mergeState({data: {adminAccess: {credentials: {azureKey: event.target.value}}}})
+  }
+  onSortRankChange(event) {
+    this.mergeState({data: {adminAccess: {sortRank: event.target.value}}})
   }
   onSubmit = (event) => {
     event.preventDefault()
@@ -292,7 +295,7 @@ class CreateEditCloudModel extends Component {
           : null} */}
         </div>
         {isCreate? this.getInstallFormFields() : null}
-        {/* {(isCreate && this.state.data.installOption === 'EXISTING') || isEdit ?
+        {(isCreate && this.state.data.installOption === 'EXISTING') || isEdit ?
           <>
             <div className='row'>
               <div className='col col-sm-12'>
@@ -307,6 +310,15 @@ class CreateEditCloudModel extends Component {
               </div>
             </div>
           </>
+        : null}
+
+        {/* {isEdit ? 
+          <div className='row'>
+            <div className='col col-sm-3'>
+              <label>Sort Rank:</label>
+              <input type='text' className='form-control' value={this.state.data.adminAccess.sortRank} onChange={this.onSortRankChange.bind(this)}/>
+            </div>
+          </div>
         : null} */}
 
         {isCreate && this.state.data.installOption === 'INSTALL' ? <h3>Admin User Access</h3> : null}
