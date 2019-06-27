@@ -35,7 +35,16 @@ let defaultData = {
       awsSecretKey: '',
       awsRegion: '',
       azureKey: ''
-    }
+    },
+    links: [
+      {
+        url: '/flows',
+        title: 'DataFlows'
+      },{
+        url: '/boards',
+        title: 'DashBoards'
+      }
+    ]
   }
 }
 
@@ -275,14 +284,14 @@ class CreateEditCloudModel extends Component {
         </div>
 
         <div className='row'>
-          <div className='col col-sm-6'>
+          {/* <div className='col col-sm-6'>
             <label>Cloud Type:</label>
             <select className='form-control' value={this.state.data.cloudType} onChange={this.onCloudTypeChange.bind(this)} disabled={this.props.isEdit}>
               <option value='AWS'>AWS</option>
               <option disabled={true} value='AZURE'>Azure (not yet available)</option>
               <option disabled={true} value='CUSTOM'>Custom (not yet available)</option>
             </select>
-          </div>
+          </div> */}
           {/* {isCreate?
             <div className='col col-sm-6'>
               <label>Do you have an existing install?</label>

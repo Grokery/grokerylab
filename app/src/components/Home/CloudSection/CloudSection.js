@@ -11,6 +11,7 @@ class CloudSection extends Component {
   static propTypes = {
     cloudid: PropTypes.string.isRequired,
     cloudAccess: PropTypes.object.isRequired,
+    showCloudLinks: PropTypes.bool,
   }
   constructor(props) {
     super(props)
@@ -18,45 +19,36 @@ class CloudSection extends Component {
         showEditModel: false
       }
   }
-  getCloudIcon(cloudType) {
-    if (cloudType === 'AWS') {
-      return 'img/aws.png'
-    } else if (cloudType === 'AZURE') {
-      return 'img/azure.png'
-    } else {
-      return 'img/custom.png'
-    }
-  }
   getCloudLinks(cloudid, cloudAccess) {
+    const { showCloudLinks } = this.props
     let links = []
-    // let links = [{
-    //   url: '/',
-    //   title: 'title',
-    //   description: 'description',
-    // }]
-    // if (cloudAccess.links) {
-    //   cloudAccess.links.forEach(function(link){
-    //     links.push(link)
-    //   })
-    // }
+    if (showCloudLinks && cloudAccess.links && cloudAccess.links.length) {
+      cloudAccess.links.forEach(function(link) {
+        link.url = '/clouds/' + cloudid + (link.url.slice(0,1) === '/' ? '' : '/') + link.url
+        links.push(link)
+      })
+    }
     return links
   }
   showEditModal = (trueFalse) => {
     this.setState({showEditModel: trueFalse})
   }
   render() {
-    const { cloudid, cloudAccess } = this.props
+    const { cloudid, cloudAccess, showCloudLinks } = this.props
     return (
       <div className='cloud-section'>
         <div className='cloud-section-header'>
           <Link to={'/clouds/' + cloudid} className='cloud-title'>
-            <img src={'/'+this.getCloudIcon(cloudAccess.cloudInfo.cloudType)} className='cloud-icon' alt='cloud type'/>
+            <img src={'/img/custom.png'} className='cloud-icon' alt='cloud type'/>
             {cloudAccess.cloudInfo.title}
           </Link>
-          {/* <label style={{paddingLeft:'10px'}}>{cloudAccess.cloudInfo.url}</label> */}
-          <button onClick={() => this.showEditModal(true)} className='cloud-button'><i className='fa fa-cog cloud-edit-icon'/></button>
-          <Link to={'/clouds/' + cloudid + "/flows"} className='cloud-button'><i className='fa fa-share-alt cloud-edit-icon'/></Link>
-          <Link to={'/clouds/' + cloudid + "/boards"} className='cloud-button'><i className='fa fa-tachometer cloud-edit-icon'/></Link>
+          <button onClick={() => this.showEditModal(true)} className='cloud-button float-right'><i className='fa fa-cog cloud-edit-icon'/></button>
+          {showCloudLinks ? null :
+            <>
+              <Link to={'/clouds/' + cloudid + "/flows"} className='cloud-button'><i className='fa fa-share-alt cloud-edit-icon'/></Link>
+              <Link to={'/clouds/' + cloudid + "/boards"} className='cloud-button'><i className='fa fa-tachometer cloud-edit-icon'/></Link>
+            </>
+          }
           {/* {this.getCloudStatusIcon(cloudAccess.cloudInfo.status)} */}
           <CreateEditCloudModel
               key="edit-cloud"
@@ -68,7 +60,7 @@ class CloudSection extends Component {
             />
         </div>
         <div className='cloud-section-quicklinks'>
-          <Gallery itemSize='medium' colorClass='light' images={false} items={this.getCloudLinks(cloudid, cloudAccess)} params={{}}></Gallery>
+          <Gallery itemSize='medium' colorClass='light' iframes={true} items={this.getCloudLinks(cloudid, cloudAccess)} params={{}}></Gallery>
         </div>
       </div>
     )

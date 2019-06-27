@@ -5,13 +5,13 @@
 
 .cloud-section {
   clear: both;
-  min-height: 65px;
 }
 
 .cloud-section-header,
 .cloud-section-quicklinks {
   padding-left: 15px;
   padding-right: 15px;
+  padding-top: 15px;
 }
 
 .cloud-section .cloud-icon {
@@ -30,8 +30,13 @@
 
 .cloud-section .cloud-button {
   margin: 0;
-  margin-left: 10px;
+  margin-left: 15px;
   padding: 0;
   border: none;
+  background-color: transparent;
+}
+
+.cloud-section .float-right {
   float: right;
+  padding-top: 5px;
 }

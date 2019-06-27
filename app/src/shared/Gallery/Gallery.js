@@ -8,15 +8,23 @@ export default class Gallery extends Component {
     items: PropTypes.array.isRequired,
     itemSize: PropTypes.string.isRequired,
     images: PropTypes.bool.isRequired,
+    iframes: PropTypes.bool.isRequired,
     colorClass: PropTypes.string,
     params: PropTypes.object
   }
   getGalleryItems() {
-    const { items, itemSize, images, params } = this.props
+    const { items, itemSize, images, iframes, params } = this.props
     var galleryItems = []
     if (items.length !== 0) {
       galleryItems = items.map(function(item, index) {
-        return <GalleryItem key={index} item={item} itemSize={itemSize} images={images} params={params}></GalleryItem>
+        return <GalleryItem 
+          key={index} 
+          item={item} 
+          itemSize={itemSize} 
+          images={images} 
+          iframes={iframes} 
+          params={params}
+        ></GalleryItem>
       })
     }
     return galleryItems

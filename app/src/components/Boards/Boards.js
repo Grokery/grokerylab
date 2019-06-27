@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
 
+import { headerNavHeight } from 'config'
 import { NODETYPE } from 'common'
 import { getSessionInfo } from 'authentication'
 import IBoardFrame from 'shared/IBoardFrame/IBoardFrame'
@@ -15,9 +16,8 @@ class Boards extends Component {
   }
   render() {
     let { urlParams, cloudInfo } = this.props
-    console.log(cloudInfo)
     return (
-      <div className='sidebar-page-content'>
+      <div className='sidebar-page-content clearfix' style={{backgroundColor:'#E1E3E5', minHeight:`${window.innerHeight-headerNavHeight}px`}}>
         <div className='row'>
             <div className='col-md-12' style={{paddingTop:'10px'}}>
                 <h3 style={{float:'left'}}>{cloudInfo.cloudInfo.title}</h3>
@@ -35,7 +35,10 @@ class Boards extends Component {
     let cloudName = urlParams.cloudName
     return boards.sort(this.boardSort).map((board) => {
       return (
-        <div className='paper' key={board.nodeId} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} style={{float:'left',marginTop:10,marginLeft:10,padding:5, backgroundColor:'white'}}>
+        <div className='paper' key={board.nodeId} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} style={{float:'left',marginTop:10,marginLeft:10,padding:5, backgroundColor:'white',position:'relative'}}>
+          <Link to={'/clouds/'+cloudName+'/boards/'+board.nodeId}>
+            <div style={{position:'absolute',top:0,bottom:0,right:0,left:0,zIndex:'1'}}></div>
+          </Link>
           <div style={{position:'relative'}}>
             <Link to={'/clouds/'+cloudName+'/boards/'+board.nodeId} style={{float:'left'}}>{board.title}</Link>
             <div style={{float:'right'}}>

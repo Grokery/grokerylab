@@ -22,11 +22,11 @@ class Auth extends Component {
   }
   render() {
     return (
-      <div className='page-content auth'>
+      <div className='page-content auth' style={{backgroundColor: '#E1E3E5', position:'absolute',top:0,bottom:0,left:0,right:0}}>
         <div className="container signin-panel">
             <div className="row">
             <div className="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3 col-lg-4 col-lg-offset-4">
-                <div className="panel panel-default">
+                <div className="panel panel-default paper">
        
                   <div className="panel-body" style={{position:'relative'}}>
                     <Loader show={this.state.showLoading}></Loader>

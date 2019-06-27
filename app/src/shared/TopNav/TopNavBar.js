@@ -31,7 +31,7 @@ export default class TopNavBar extends Component {
                         <li className={'pull-right ' + (showUserMenuDropDown ? 'open' : '')}>
                             <button className='dropdown-toggle' onClick={this.toggleUserMenuDropDown}><i className='fa fa-user fa-fw'></i></button>
                             <ul className='dropdown-menu dropdown-user' onMouseLeave={this.closeDropdowns}>
-                                <li><Link to='/' onClick={this.closeDropdowns}><i className='fa fa-home fa-fw'></i><span>Home</span></Link></li>
+                                <li><Link to='/' onClick={this.closeDropdowns}><i className='fa fa-cloud fa-fw'></i><span>Clouds</span></Link></li>
                                 <li><Link to='/signout' onClick={this.closeDropdowns}><i className='fa fa-sign-out fa-fw'></i><span>Sign Out</span></Link></li>
                             </ul>
                         </li>

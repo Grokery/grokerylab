@@ -54,6 +54,12 @@ body {
   height: 100%;
 }
 
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
 .app-wrapper {
   height: 100%;
 }

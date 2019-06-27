@@ -21,7 +21,7 @@ class Home extends Component {
       <div id='home-page' className='page-content' >
         <div className='row'>
 
-          <div className='cloud-sections col-sm-8'>
+          <div className='cloud-sections col-sm-8 clearfix'>
             <h3>Clouds</h3>
             <button id='new-cloud-btn' onClick={() => this.showCloudCreateModal(true)}><i className='fa fa-plus'/></button>
             <CreateEditCloudModel
@@ -35,7 +35,7 @@ class Home extends Component {
             {this.getCloudSections()}
           </div>
 
-          <div className='col-sm-4'>
+          <div className='col-sm-4 clearfix'>
             <div className='team-list'>
               <h3>Team</h3>
               <button id='new-user-btn' onClick={() => this.showUserCreateModal(true)}><i className='fa fa-plus'/></button>
@@ -76,7 +76,12 @@ class Home extends Component {
       }
       apis[url].forEach((cloud) => {
         sections.push(
-          <CloudSection key={cloud.cloudInfo.name} cloudid={cloud.cloudInfo.name} cloudAccess={cloud} />
+          <CloudSection 
+            key={cloud.cloudInfo.name} 
+            cloudid={cloud.cloudInfo.name} 
+            cloudAccess={cloud} 
+            showCloudLinks={true} 
+          />
         )
       })
     })

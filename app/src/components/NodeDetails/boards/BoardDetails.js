@@ -41,7 +41,8 @@ class BoardDetails extends Component {
           <Panel title={title}>
             {this.renderRightMenuOptions()}
             <div className='row'>
-              <div className='col-md-6'style={{paddingRight:0,paddingLeft:0}}>
+
+              <div className='col-md-6' style={{paddingRight:0,paddingLeft:0,border:'solid 1px #ccc'}}>
                 <AceEditor
                   key={params.nodeId}
                   mode="html"
@@ -63,7 +64,8 @@ class BoardDetails extends Component {
                   }}
                 />
               </div>
-              <div className='col-md-6' style={{borderLeft:'solid 1px #ccc'}}>
+
+              <div className='col-md-6' style={{paddingRight:0,paddingLeft:0}}>
                 <IBoardFrame 
                   cloudName={params.cloudName} 
                   boardId={params.nodeId} 
@@ -71,6 +73,7 @@ class BoardDetails extends Component {
                   width={'100%'}
                 ></IBoardFrame>
               </div>
+
             </div>
           </Panel>
           {/* <Panel title='Code'>
