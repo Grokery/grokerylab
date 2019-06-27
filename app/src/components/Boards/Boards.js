@@ -37,14 +37,14 @@ class Boards extends Component {
       return (
         <div className='paper' key={board.nodeId} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} style={{float:'left',marginTop:10,marginLeft:10,padding:5, backgroundColor:'white',position:'relative'}}>
           <Link to={'/clouds/'+cloudName+'/boards/'+board.nodeId}>
-            <div style={{position:'absolute',top:0,bottom:0,right:0,left:0,zIndex:'1'}}></div>
+            <div style={{position:'absolute',top:0,bottom:0,right:0,left:0,zIndex:1}}></div>
           </Link>
           <div style={{position:'relative'}}>
             <Link to={'/clouds/'+cloudName+'/boards/'+board.nodeId} style={{float:'left'}}>{board.title}</Link>
-            <div style={{float:'right'}}>
-              {/* <Link to={'/clouds/'+cloudName+'/flows?nodeId='+board.nodeId} style={{float:'right', marginRight:0}}><i className='fa fa-share-alt fa-fw'></i></Link> */}
-              {/* <Link to={'/clouds/'+cloudName+'/flows/board/'+board.nodeId+'?flow=closed&activeTab=2'} style={{float:'right', marginRight:10}}><i className='fa fa-pencil fa-fw'></i></Link>   */}
-            </div>
+            {/* <div style={{float:'right',zIndex:2}} >
+              <Link to={'/clouds/'+cloudName+'/flows?nodeId='+board.nodeId} style={{float:'right', marginRight:0}}><i className='fa fa-share-alt fa-fw'></i></Link>
+              <Link to={'/clouds/'+cloudName+'/flows/board/'+board.nodeId+'?flow=closed&activeTab=0'} style={{float:'right', marginRight:10}}><i className='fa fa-pencil fa-fw'></i></Link>  
+            </div> */}
           </div>
           <IBoardFrame cloudName={cloudName} boardId={board.nodeId} width={430} height={250}></IBoardFrame>
         </div>

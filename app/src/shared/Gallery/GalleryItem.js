@@ -40,20 +40,17 @@ export default class GalleryItem extends Component {
     const href = this.getHref();
     return (
       <div className={'gallery-item-wrapper ' + galleryItemClass}>
-        <a href={href}>
-          <div className={'paper results-item gallery-item'}>
-            <span className='hidden results-item-filter-text'>{item.title + ' ' + item.description}</span>
-            {/* <i className='fa fa-tachometer cloud-edit-icon'/> */}
-            {!this.props.images && !this.props.iframes ? 
-              <h4 className='gallery-item-title'>{item.title}</h4> :  
-              <div className='gallery-item-preview'>
-                {this.props.images && !this.props.iframes ? this.getImage() : null}
-                {this.props.iframes ? <Link to={href}><div style={{position:'absolute',top:0,bottom:0,right:0,left:0,zIndex:'1'}}></div></Link> : null}
-                {!this.props.images && this.props.iframes ? this.getIframe(href) : null}
-              </div>
-            }
-          </div>
-        </a>
+        <div className={'paper results-item gallery-item'}>
+          <span className='hidden results-item-filter-text'>{item.title + ' ' + item.description}</span>
+          {!this.props.images && !this.props.iframes ? 
+            <h4 className='gallery-item-title'>{item.title}</h4> :  
+            <div className='gallery-item-preview'>
+              {this.props.images && !this.props.iframes ? this.getImage() : null}
+              {this.props.iframes ? <Link to={href}><div style={{position:'absolute',top:0,bottom:0,right:0,left:0,zIndex:'1'}}></div></Link> : null}
+              {!this.props.images && this.props.iframes ? this.getIframe(href) : null}
+            </div>
+          }
+        </div>
       </div>
     )
   }

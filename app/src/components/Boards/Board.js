@@ -27,8 +27,8 @@ class Board extends Component {
     return (
       <div className='sidebar-page-content'>
         <div>
-          <Link to={'/clouds/'+cloudName+'/flows/board/'+node.nodeId+'?flow=open&activeTab=1'} style={{position: 'absolute', right:55, padding:15}}><i className='fa fa-share-alt fa-fw'></i></Link>
-          <Link to={'/clouds/'+cloudName+'/flows/board/'+node.nodeId+'?flow=closed&activeTab=2'} style={{position: 'absolute', right:25, padding:15}}><i className='fa fa-pencil fa-fw'></i></Link>
+          <Link to={'/clouds/'+cloudName+'/flows/board/'+node.nodeId+'?flow=open&activeTab=0'} style={{position: 'absolute', right:55, padding:15}}><i className='fa fa-share-alt fa-fw'></i></Link>
+          <Link to={'/clouds/'+cloudName+'/flows/board/'+node.nodeId+'?flow=closed&activeTab=0'} style={{position: 'absolute', right:25, padding:15}}><i className='fa fa-pencil fa-fw'></i></Link>
           <Link to={'/clouds/'+cloudName+'/boards'} style={{position: 'absolute', right:0, padding:15}}><i className='fa fa-times'></i></Link>
           <div style={{paddingTop:'50px'}}>
             <IBoardFrame cloudName={cloudName} boardId={node.nodeId} width={window.innerWidth - sideNavWidth} height={window.innerHeight-107}></IBoardFrame>

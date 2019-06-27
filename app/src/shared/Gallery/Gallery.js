@@ -7,8 +7,8 @@ export default class Gallery extends Component {
   static propTypes = {
     items: PropTypes.array.isRequired,
     itemSize: PropTypes.string.isRequired,
-    images: PropTypes.bool.isRequired,
-    iframes: PropTypes.bool.isRequired,
+    images: PropTypes.bool,
+    iframes: PropTypes.bool,
     colorClass: PropTypes.string,
     params: PropTypes.object
   }

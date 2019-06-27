@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { cloneDeep } from 'lodash'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -23,7 +24,8 @@ class CloudSection extends Component {
     const { showCloudLinks } = this.props
     let links = []
     if (showCloudLinks && cloudAccess.links && cloudAccess.links.length) {
-      cloudAccess.links.forEach(function(link) {
+      cloudAccess.links.forEach((link) => {
+        link = cloneDeep(link)
         link.url = '/clouds/' + cloudid + (link.url.slice(0,1) === '/' ? '' : '/') + link.url
         links.push(link)
       })
