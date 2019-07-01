@@ -19,7 +19,6 @@ class IBoardFrame extends Component {
     }
     render() {
         const { board, width, height, cloudName } = this.props
-        
         let source = board.source
         if (isArray(board.upstream) && board.upstream[0]) {
             let url = API_BASE_URL + '/clouds/' + getCloudId(cloudName) + '/nodes/source/'
@@ -38,11 +37,11 @@ class IBoardFrame extends Component {
                         });
                     }
                 </script>
-            `        
+            `
             source = code + source
         }
         return (
-            <iframe id={board.nodeId} title={board.nodeId} srcDoc={source} style={{border: 'none', width: width, height: height}}></iframe>
+            <iframe id={`iframe-${board.nodeId}`} title={board.nodeId} srcDoc={source} style={{border: 'none', width: width, height: height}}></iframe>
         )
     }
 }

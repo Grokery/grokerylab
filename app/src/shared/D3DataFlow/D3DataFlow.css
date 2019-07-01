@@ -200,7 +200,7 @@ g.colored.selected:hover text.tooltiptext  {
 .flow-header-content #create-nodes {
     float: left;
     background-color: white;
-    border: 1px solid #ccc;
+    border: 1px solid #d7d7d7;
     border-radius: 4px;
     padding: 5px;
     margin-right: 8px;
@@ -243,12 +243,8 @@ g.colored.selected:hover text.tooltiptext  {
 }
 
 .flow-header-content .filter-input {
-    height:35px;
-    border:none;
-    border-left: 1px solid #ccc;
-    border-top: 1px solid #ccc;
-    border-right: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
+    height: 35px;
+    border: 1px solid #d7d7d7;
     border-radius: 4px 4px 4px 4px;
     padding-left: 8px;
     padding-right: 26px;

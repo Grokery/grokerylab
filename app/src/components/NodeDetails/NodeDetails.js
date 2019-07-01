@@ -62,7 +62,7 @@ class NodeDetails extends Component {
         <div style={{display:flowDisplay}}>
           <D3DataFlow
             params={urlParams}
-            showControls={false}
+            showControls={true}
             selectedNodeId={urlParams.nodeId}
             height={flowPreviewHeight - headerNavHeight} 
             width={window.innerWidth - sideNavWidth}

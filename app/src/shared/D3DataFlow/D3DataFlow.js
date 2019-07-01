@@ -62,8 +62,8 @@ class D3DataFlow extends Component {
         <div className={'flow-header-content' + showControls}>
 
             <div className='cloud-title-and-links' style={{float:"left"}}>
-                <h3 style={{float:'left'}}>{cloudAccess.cloudInfo.title}</h3>
-                <Link to={'/clouds/' + params.cloudName + "/boards"} style={{float:'right',marginLeft:'10px',paddingTop:'5px'}}>
+                <h2 style={{float:'left'}}>{cloudAccess.cloudInfo.title}</h2>
+                <Link to={'/clouds/' + params.cloudName + "/boards"} style={{float:'right',paddingLeft:'10px',paddingTop:'8px'}}>
                     <i className='fa fa-tachometer cloud-edit-icon'/>
                 </Link>
             </div>

@@ -19,7 +19,7 @@ class BrowserJs extends Component {
     super(props)
       this.state = {
           showModal: false,
-          consoleHeight:200
+          consoleHeight: 200,
       }
   }
   render() {

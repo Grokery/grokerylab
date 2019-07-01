@@ -14,37 +14,62 @@ class Boards extends Component {
     boards: PropTypes.array.isRequired,
     urlParams: PropTypes.object,
   }
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      filterValue: '',
+    }
+  }
   render() {
     let { urlParams, cloudInfo } = this.props
     return (
       <div className='sidebar-page-content clearfix' style={{backgroundColor:'#E1E3E5', minHeight:`${window.innerHeight-headerNavHeight}px`}}>
         <div className='row'>
-            <div className='col-md-12' style={{paddingTop:'10px'}}>
-                <h3 style={{float:'left'}}>{cloudInfo.cloudInfo.title}</h3>
-                <Link to={'/clouds/' + urlParams.cloudName + "/flows"} style={{float:'left',marginLeft:'10px',paddingTop:'5px'}}>
+            <div className='col-md-9' style={{paddingTop:'8px',paddingLeft:'8px',paddingRight:'8px'}}>
+                <h2 style={{float:'left'}}>{cloudInfo.cloudInfo.title}</h2>
+                <Link to={'/clouds/' + urlParams.cloudName + "/flows"} style={{float:'left',paddingLeft:'10px',paddingTop:'8px'}}>
                     <i className='fa fa-share-alt cloud-edit-icon'/>
                 </Link>
+            </div>
+            <div className='col-md-3' style={{paddingTop:'8px',paddingLeft:'8px',paddingRight:'8px'}}>
+              <div className="board-filter" style={{position:'relative',float:'right'}}>
+                <input 
+                  id='filter-input' 
+                  className='filter-input' 
+                  onChange={this.onFilterChange} 
+                  style={{height:'35px',border:'1px solid #d7d7d7',borderRadius:'4px 4px 4px 4px',width:'240px',paddingLeft:'8px',paddingRight:'26px'}} />
+                <i style={{position:'absolute',fontSize:'18px',right:'8px',top:'8px'}} className='fa fa-filter'></i>
+              </div>
             </div>
         </div>
         {this.getBoardLinks()}
       </div>
     )
   }
+  onFilterChange = (e) => {
+    this.setState({ filterValue: e.target.value})
+  }
+  filterBoards = (board) => {
+    const { filterValue } = this.state
+    if (board.title.toLowerCase().includes(filterValue.toLowerCase())) {
+      return true
+    }
+      return false 
+  }
   getBoardLinks() {
     const { boards, urlParams } = this.props
     let cloudName = urlParams.cloudName
-    return boards.sort(this.boardSort).map((board) => {
+    return boards.filter(this.filterBoards).sort(this.boardSort).map((board) => {
       return (
         <div className='paper' key={board.nodeId} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} style={{float:'left',marginTop:10,marginLeft:10,padding:5, backgroundColor:'white',position:'relative'}}>
           <Link to={'/clouds/'+cloudName+'/boards/'+board.nodeId}>
-            <div style={{position:'absolute',top:0,bottom:0,right:0,left:0,zIndex:1}}></div>
+            <div style={{position:'absolute',top:25,bottom:0,right:0,left:0}}></div>
           </Link>
-          <div style={{position:'relative'}}>
+          <div>
             <Link to={'/clouds/'+cloudName+'/boards/'+board.nodeId} style={{float:'left'}}>{board.title}</Link>
-            {/* <div style={{float:'right',zIndex:2}} >
-              <Link to={'/clouds/'+cloudName+'/flows?nodeId='+board.nodeId} style={{float:'right', marginRight:0}}><i className='fa fa-share-alt fa-fw'></i></Link>
-              <Link to={'/clouds/'+cloudName+'/flows/board/'+board.nodeId+'?flow=closed&activeTab=0'} style={{float:'right', marginRight:10}}><i className='fa fa-pencil fa-fw'></i></Link>  
-            </div> */}
+            {/* <Link to={'/clouds/'+cloudName+'/flows?nodeId='+board.nodeId} style={{float:'right'}}><i className='fa fa-share-alt fa-fw'></i></Link> */}
+            <Link to={'/clouds/'+cloudName+'/flows/board/'+board.nodeId+'?flow=open&activeTab=0'} style={{float:'right'}}><i className='fa fa-pencil fa-fw'></i></Link>  
           </div>
           <IBoardFrame cloudName={cloudName} boardId={board.nodeId} width={430} height={250}></IBoardFrame>
         </div>

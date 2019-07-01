@@ -24,16 +24,18 @@ class BoardDetails extends Component {
           shown: false,
           dirty: false,
           sourceDraft: props.node.source,
+          consoleHeight: 180,
       }
   }
   componentDidMount() {
-    document.addEventListener("keydown", this.onKeyDown);
+    document.addEventListener("keydown", this.onKeyDown)
   }
   componentWillUnmount() {
     document.removeEventListener("keydown", this.onKeyDown);
   }
   render() {
     const { params, node, height } = this.props
+    let { consoleHeight } = this.state;
     let title = node ? node.title : ''
     return (
       <div className='board-details'>
@@ -42,7 +44,7 @@ class BoardDetails extends Component {
             {this.renderRightMenuOptions()}
             <div className='row'>
 
-              <div className='col-md-6' style={{paddingRight:0,paddingLeft:0,border:'solid 1px #ccc'}}>
+              <div className='col-md-6' style={{paddingRight:0,paddingLeft:0,borderTop:'solid 1px #d7d7d7',borderRight:'solid 1px #d7d7d7'}}>
                 <AceEditor
                   key={params.nodeId}
                   mode="html"
@@ -65,12 +67,12 @@ class BoardDetails extends Component {
                 />
               </div>
 
-              <div className='col-md-6' style={{paddingRight:0,paddingLeft:0}}>
+              <div className='col-md-6' style={{paddingRight:0,paddingLeft:0,borderTop:'solid 1px #d7d7d7'}}>
                 <IBoardFrame 
                   cloudName={params.cloudName} 
                   boardId={params.nodeId} 
-                  height={height-7}
                   width={'100%'}
+                  height={(height-7)+"px"}
                 ></IBoardFrame>
               </div>
 
