@@ -25,7 +25,6 @@ class AWSLambda extends Component {
     if (!node){
       return (<div></div>)
     }
-    console.log(node)
     return (
       <div className='row job-code-tab'>
         <div className='col-md-3'>

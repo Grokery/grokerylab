@@ -34,7 +34,6 @@ class Generic extends Component {
   }
   componentWillReceiveProps(nextProps) {
     this.setState({dataDraft: nextProps.node.data}, () => {
-      // console.log(this)
       // TODO get ref to editor and set line
       // editor.scrollToLine(0, true, true, () => {});
       // editor.gotoLine(0, 0, true);s

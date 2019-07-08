@@ -288,8 +288,8 @@ class CreateEditCloudModel extends Component {
             <label>Cloud Type:</label>
             <select className='form-control' value={this.state.data.cloudType} onChange={this.onCloudTypeChange.bind(this)} disabled={this.props.isEdit}>
               <option value='AWS'>AWS</option>
-              <option disabled={true} value='AZURE'>Azure (not yet available)</option>
-              <option disabled={true} value='CUSTOM'>Custom (not yet available)</option>
+              {/* <option disabled={true} value='AZURE'>Azure (not yet available)</option> */}
+              {/* <option disabled={true} value='CUSTOM'>Custom (not yet available)</option> */}
             </select>
           </div> */}
           {/* {isCreate?

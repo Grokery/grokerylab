@@ -1,7 +1,7 @@
 import { get } from 'lodash'
 import { API_BASE_URL } from "config"
 import { history } from 'index'
-import { isFunction } from 'util';
+import { isFunction } from 'lodash'
 
 export const setRedirectUrl = (url) => {
     if (url.includes('signin') || url.includes('register') || url.includes('resetpass') || url.includes('signout')) {
@@ -17,7 +17,7 @@ export const getRedirectUrl = () => {
 export const getSessionInfo = () => {
     let sessionInfo = sessionStorage.getItem("sessionInfo")
     if (sessionInfo) {
-        return JSON.parse(sessionInfo);
+        return JSON.parse(sessionInfo)
     }
     return null
 }
@@ -28,7 +28,7 @@ export const setSessionInfo = (sessionInfo) => {
 
 export const isAuthenticated = () => {
     let sessionInfo = getSessionInfo()
-    if (sessionInfo && sessionInfo.accountToken){
+    if (sessionInfo && sessionInfo.accountToken) {
         return true
     }
     return false

@@ -34,7 +34,6 @@ class JsonData extends Component {
   }
   componentWillReceiveProps(nextProps) {
     this.setState({dataDraft: JSON.stringify(nextProps.node.jsonData, null, 2)}, () => {
-      // console.log(this)
       // editor.scrollToLine(0, true, true, () => {});
       // editor.gotoLine(0, 0, true);
     })
