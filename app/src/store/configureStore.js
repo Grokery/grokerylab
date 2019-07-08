@@ -2,9 +2,9 @@ import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
 import thunk from 'redux-thunk'
 // import createLogger from 'redux-logger'
 
-import { grokeryApi } from './middleware/api'
+import { apiMiddleware } from './middleware/api'
 
-import appStatus  from 'store/reducers/app'
+import appStatus from 'store/reducers/app'
 import cloud from 'store/reducers/cloud'
 import comments from 'store/reducers/comments'
 import errorMessage from 'store/reducers/errors'
@@ -31,7 +31,10 @@ if (process.env.NODE_ENV === 'production') {
     rootReducer,
     preloadedState,
     compose(
-      applyMiddleware(thunk, grokeryApi)
+      applyMiddleware(
+        thunk,
+        apiMiddleware,
+      )
     )
   )
 } else {
@@ -40,8 +43,8 @@ if (process.env.NODE_ENV === 'production') {
     preloadedState,
     compose(
       applyMiddleware(
-        thunk, 
-        grokeryApi, 
+        thunk,
+        apiMiddleware,
         // createLogger()
       )
     )

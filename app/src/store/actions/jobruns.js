@@ -1,5 +1,5 @@
 import { CALL_API } from 'store/middleware/api'
-import { getCloudToken, getCloudId } from 'authentication'
+import { getCloudToken, getCloudId, getCloudBaseUrl } from 'authentication'
 
 //--------------------------------
 
@@ -11,7 +11,7 @@ export const postJobRun = (cloudName, data, cb) => (dispatch, getState) => {
     dispatch({
         [CALL_API]: {
             types: [CREATEJOBRUN_REQUEST, CREATEJOBRUN_SUCCESS, CREATEJOBRUN_FAILURE],
-            endpoint: '/clouds/' + getCloudId(cloudName) + '/jobruns',
+            endpoint: `${getCloudBaseUrl(cloudName)}/clouds/${getCloudId(cloudName)}/jobruns`,
             method: 'POST',
             token: getCloudToken(cloudName),
             data: data,
@@ -30,7 +30,7 @@ export const updateJobRun = (cloudName, jobId, created, data, cb) => (dispatch, 
     dispatch({
         [CALL_API]: {
             types: [UPDATEJOBRUN_REQUEST, UPDATEJOBRUN_SUCCESS, UPDATEJOBRUN_FAILURE],
-            endpoint: '/clouds/' + getCloudId(cloudName) + '/jobruns' + jobId + "/" + created,
+            endpoint: `${getCloudBaseUrl(cloudName)}/clouds/${getCloudId(cloudName)}/jobruns/${jobId}/${created}`,
             method: 'PUT',
             token: getCloudToken(cloudName),
             data: data,
@@ -45,6 +45,18 @@ export const FETCHJOBRUNS_REQUEST = 'FETCHJOBRUNS_REQUEST'
 export const FETCHJOBRUNS_SUCCESS = 'FETCHJOBRUNS_SUCCESS'
 export const FETCHJOBRUNS_FAILURE = 'FETCHJOBRUNS_FAILURE'
 
+export const fetchJobRuns = (cloudName, query, cb) => (dispatch, getState) => {
+    dispatch({
+        [CALL_API]: {
+            types: [FETCHJOBRUNS_REQUEST, FETCHJOBRUNS_SUCCESS, FETCHJOBRUNS_FAILURE],
+            endpoint: `${getCloudBaseUrl(cloudName)}/clouds/${getCloudId(cloudName)}/jobruns/search${(query ? query : '')}`,
+            method: 'GET',
+            token: getCloudToken(cloudName),
+            callback: cb
+        }
+    })
+}
+
 // schedules example: [[1, 0.0, 5], [1, 2.0, 5], [30, 0.0, 120], ... ]
 // given schedule [a, b, c] delay calculated in seconds as: delay_i = a + b*i for i=1 to i=c
 export const fetchJobRunsWithRepeat = (cloudName, query, cb, schedules) => (dispatch, getState) => {
@@ -54,7 +66,7 @@ export const fetchJobRunsWithRepeat = (cloudName, query, cb, schedules) => (disp
         dispatch({
             [CALL_API]: {
                 types: [FETCHJOBRUNS_REQUEST, FETCHJOBRUNS_SUCCESS, FETCHJOBRUNS_FAILURE],
-                endpoint: '/clouds/' + getCloudId(cloudName) + '/jobruns/search' + (query ? query : ''),
+                endpoint: `${getCloudBaseUrl(cloudName)}/clouds/${getCloudId(cloudName)}/jobruns/search${(query ? query : '')}`,
                 method: 'GET',
                 token: getCloudToken(cloudName),
                 callback: cb
@@ -72,16 +84,4 @@ export const fetchJobRunsWithRepeat = (cloudName, query, cb, schedules) => (disp
         count += 1
     }
     run()
-}
-
-export const fetchJobRuns = (cloudName, query, cb) => (dispatch, getState) => {
-    dispatch({
-        [CALL_API]: {
-            types: [FETCHJOBRUNS_REQUEST, FETCHJOBRUNS_SUCCESS, FETCHJOBRUNS_FAILURE],
-            endpoint: '/clouds/' + getCloudId(cloudName) + '/jobruns/search' + (query ? query : ''),
-            method: 'GET',
-            token: getCloudToken(cloudName),
-            callback: cb
-        }
-    })
 }

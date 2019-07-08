@@ -1,5 +1,5 @@
 import { CALL_API } from 'store/middleware/api'
-import { getAccountToken } from 'authentication'
+import { getCloudToken } from 'authentication'
 
 
 //--------------------------------
@@ -14,7 +14,7 @@ export const fetchLogs = (nodeid, cb) => (dispatch, getState) => {
             types: [FETCHLOGS_REQUEST, FETCHLOGS_SUCCESS, FETCHLOGS_FAILURE],
             endpoint: '/logs?referenceid='+nodeid,
             method: 'GET',
-            token: getAccountToken(),
+            token: getCloudToken(),
             callback: cb
         }
     })

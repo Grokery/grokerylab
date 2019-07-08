@@ -44,13 +44,13 @@ export const authenticate = (user, pass, onSuccess, onError) => {
     return fetch(API_BASE_URL + "/users/authenticate", params)
         .then((response) => {
             if (!response.ok) {
-                throw Error(response.statusText);
+                throw Error(response.statusText)
             }
             return response.json()
         })
         .then((json) => {
             if (isFunction(onSuccess)) {
-                onSuccess(json);
+                onSuccess(json)
             }
             setSessionInfo(json)
             let redirectUrl = getRedirectUrl()
@@ -63,10 +63,10 @@ export const authenticate = (user, pass, onSuccess, onError) => {
         })
         .catch((errorMsg) => {
             if (isFunction(onError)) {
-                onError(errorMsg);
+                onError(errorMsg)
             }
             alert(errorMsg)
-        });
+        })
 }
 
 export const disAuthenticate = () => {
