@@ -14,7 +14,7 @@ export default class TopNavBar extends Component {
         }
     }
     render() {
-        const { showUserMenuDropDown, showNewMenuDropDown, showCloudCreateModal } = this.state
+        const { showUserMenuDropDown, showCloudCreateModal } = this.state
         return (
             <nav id='top-nav-wrapper' className='navbar navbar-default navbar-fixed-top' role='navigation'>
                 <div id='top-menu-wrapper'>

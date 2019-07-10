@@ -3,8 +3,9 @@ import { connect } from 'react-redux'
 import { Text } from './Text';
 
 class Delimited extends Text {
-  getSubTypeInfo = () => {
-    return "delimited"
+  constructor(props) {
+    super(props)
+    this.sourceTypeLabel = 'Delimited Data'
   }
 }
 

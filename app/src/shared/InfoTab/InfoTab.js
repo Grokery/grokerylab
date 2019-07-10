@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import moment from 'moment'
 
-import ContentEditable from 'shared/ContentEditable/ContentEditable'
 import Comments from 'shared/Comments/Comments'
 
 import './InfoTab.css'
@@ -30,8 +29,8 @@ class InfoTab extends Component {
                     <div>
                         <div className="col col-sm-12">
                             <div className="node-title-section">
-                                <ContentEditable type='h1' className="node-title" value={node.title} onChange={this.handleTitleChange.bind(this)}></ContentEditable>
-                                <ContentEditable type='p' className="node-description" value={node.description} onChange={this.handleDescriptionChange.bind(this)}></ContentEditable>
+                                {/* <ContentEditable type='h1' className="node-title" value={node.title} onChange={this.handleTitleChange.bind(this)}></ContentEditable>
+                                <ContentEditable type='p' className="node-description" value={node.description} onChange={this.handleDescriptionChange.bind(this)}></ContentEditable> */}
                             </div>
                         </div>
                     </div>

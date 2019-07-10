@@ -118,6 +118,7 @@ a i:hover {
 
 button {
   background-color: white;
+  border: none;
 }
 button:focus {
   outline-style:none;
@@ -138,10 +139,17 @@ button i {
 button i:hover {
   color: #2196f3;
 }
+
+button.btn-default {
+  border: none;
+}
+
 button.btn.btn-default:hover,
 button.btn.btn-default:hover i {
   color: #2196f3;
+  background-color: transparent;
 }
+
 button.btn.btn-default:active {
   box-shadow: none;
 }

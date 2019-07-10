@@ -35,7 +35,6 @@ class BoardDetails extends Component {
   }
   render() {
     const { params, node, height } = this.props
-    let { consoleHeight } = this.state;
     let title = node ? node.title : ''
     return (
       <div className='board-details'>

@@ -40,7 +40,7 @@ class Auth extends Component {
                         </div>
                         <input className="btn btn-lg btn-primary btn-block" type="submit" value="Sign In" onClick={this.onSubmit.bind(this)} />
                       </fieldset>
-                      <span className="sign-reset pull-right"> <a href="">reset pass</a></span>
+                      <span className="sign-reset pull-right"> <a href="/resetpassword">reset pass</a></span>
                     </form>
                   </div>
 

@@ -25,6 +25,7 @@ export class Text extends Component {
     super(props)
     this.editor = React.createRef()
     this.mode = 'text'
+    this.sourceTypeLabel = 'Raw Text Data'
     this.state = {
       shown: false,
       dirty: false,
@@ -46,11 +47,32 @@ export class Text extends Component {
   }
   getSubTypeInfo = () => {
     return (
-      <div className='row'>
-        <div className='col-md-12'>
-          text
+      <>
+        <div className='row'>
+          <div className='col col-md-12' style={{paddingTop:'4px'}}>
+            <label style={{paddingTop:'5px',paddingLeft:'10px'}}>SourceType:</label> {this.sourceTypeLabel}
+            <button key='reload' 
+              onClick={this.props.reloadData} 
+              className='btn'
+              title={"refresh data"}
+              style={{float:'right'}}>
+                <i className="fa fa-refresh" aria-hidden="true"></i>
+            </button>
+            <button key='reload' 
+              // onClick={this.openDocumentation()} 
+              className='btn'
+              title={"open documentation about this node type"}
+              style={{}}>
+                <i className="fa fa-info-circle" aria-hidden="true"></i>
+            </button>
+          </div>
         </div>
-      </div>
+        <div className='row hidden-xs hidden-sm'>
+          <div className='col col-md-12'>
+            
+          </div>
+        </div>
+      </>
     )
   }
   render() {
@@ -61,10 +83,10 @@ export class Text extends Component {
           <Panel title={node.title}>
             {this.renderRightMenuOptions()}
             <div className='row'>
-              <div className='col-md-3'>
+              <div className='col col-md-3' style={{borderTop:'solid .5px #ccc'}}>
                 {this.getSubTypeInfo()}
               </div>
-              <div className='col-md-9' style={{padding:0}}>
+              <div className='col col-md-9' style={{borderTop:'solid .5px #ccc'}}>
                 <AceEditor
                   mode={this.mode}
                   theme="chrome"
@@ -106,7 +128,6 @@ export class Text extends Component {
   getRightMenuOptions = () => {
     return concat([
       <button key='save' disabled={!this.state.dirty} onClick={this.onUpdate} className='btn btn-default'><i className='fa fa-save'></i></button>,
-      <button key='reload' onClick={this.props.reloadData} className='btn btn-default'><i className="fa fa-refresh" aria-hidden="true"></i></button>,
       <button key='edit' onClick={this.toggleEditDialog} className='btn btn-default'><i className='fa fa-cog'></i></button>,
     ], this.props.rightMenuOptions)
   }

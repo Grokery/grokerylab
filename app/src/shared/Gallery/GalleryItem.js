@@ -26,7 +26,7 @@ export default class GalleryItem extends Component {
   }
   getIframe = (href) => {
     return (
-      <div className='iframe-preview'><a href={href}><iframe src={href}></iframe></a></div>
+      <div className='iframe-preview'><a href={href}><iframe title="preview" src={href}></iframe></a></div>
     )
   }
   render() {

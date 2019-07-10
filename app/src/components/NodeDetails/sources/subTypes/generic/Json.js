@@ -7,6 +7,7 @@ class Json extends Text {
   constructor(props) {
     super(props)
     this.mode = 'json'
+    this.sourceTypeLabel = 'Json Data'
     this.state = {
       shown: false,
       dirty: false,
@@ -18,9 +19,6 @@ class Json extends Text {
       // editor.scrollToLine(0, true, true, () => {});
       // editor.gotoLine(0, 0, true);
     })
-  }
-  getSubTypeInfo = () => {
-    return "json"
   }
   onUpdate = (e) => {
     e.preventDefault()
