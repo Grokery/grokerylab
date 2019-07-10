@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "config"
 import { CALL_API } from 'store/middleware/api'
 import { getCloudId, getAccountToken } from 'authentication'
 
@@ -11,7 +12,7 @@ export const createCloud = (data, cb) => (dispatch, getState) => {
     dispatch({
         [CALL_API]: {
             types: [CREATEECLOUD_REQUEST, CREATECLOUD_SUCCESS, CREATECLOUD_FAILURE],
-            endpoint: '/clouds',
+            endpoint: `${API_BASE_URL}/clouds`,
             method: 'POST',
             token: getAccountToken(),
             data: data,
@@ -30,7 +31,7 @@ export const fetchCloud = (cloudName, cb) => (dispatch, getState) => {
     dispatch({
         [CALL_API]: {
             types: [FETCHCLOUD_REQUEST, FETCHCLOUD_SUCCESS, FETCHCLOUD_FAILURE],
-            endpoint: '/clouds/' + getCloudId(cloudName),
+            endpoint: `${API_BASE_URL}/clouds/${getCloudId(cloudName)}`,
             method: 'GET',
             token: getAccountToken(),
             callback: cb
@@ -48,7 +49,7 @@ export const updateCloud = (cloudName, data, cb) => (dispatch, getState) => {
     dispatch({
         [CALL_API]: {
             types: [UPDATECLOUD_REQUEST, UPDATECLOUD_SUCCESS, UPDATECLOUD_FAILURE],
-            endpoint: '/clouds/' + getCloudId(cloudName),
+            endpoint: `${API_BASE_URL}/clouds/${getCloudId(cloudName)}`,
             method: 'PUT',
             token: getAccountToken(),
             data: data,
@@ -67,7 +68,7 @@ export const deleteCloud = (cloudName, cb) => (dispatch, getState) => {
     dispatch({
         [CALL_API]: {
             types: [DELETEECLOUD_REQUEST, DELETEECLOUD_SUCCESS, DELETEECLOUD_FAILURE],
-            endpoint: '/clouds/' + getCloudId(cloudName),
+            endpoint: `${API_BASE_URL}/clouds/${getCloudId(cloudName)}`,
             method: 'DELETE',
             token: getAccountToken(),
             callback: cb

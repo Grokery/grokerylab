@@ -1,5 +1,5 @@
 import { CALL_API } from 'store/middleware/api'
-import { getCloudId, getCloudToken } from 'authentication'
+import { getCloudId, getCloudToken, getCloudBaseUrl } from 'authentication'
 
 //--------------------------------
 
@@ -11,7 +11,7 @@ export const fetchNodes = (cloudName, cb) => (dispatch, getState) => {
     dispatch({
         [CALL_API]: {
             types: [FETCHNODES_REQUEST, FETCHNODES_SUCCESS, FETCHNODES_FAILURE],
-            endpoint: '/clouds/' + getCloudId(cloudName) + '/nodes/search',
+            endpoint: `${getCloudBaseUrl(cloudName)}/clouds/${getCloudId(cloudName)}/nodes/search`,
             method: 'GET',
             token: getCloudToken(cloudName),
             callback: cb
@@ -39,7 +39,7 @@ export const fetchNode = (cloudName, nodeType, nodeId, cb) => (dispatch, getStat
     dispatch({
         [CALL_API]: {
             types: [FETCHNODE_REQUEST, FETCHNODE_SUCCESS, FETCHNODE_FAILURE],
-            endpoint: '/clouds/' + getCloudId(cloudName) + '/nodes/' + nodeType.toUpperCase() + '/' + nodeId,
+            endpoint: `${getCloudBaseUrl(cloudName)}/clouds/${getCloudId(cloudName)}/nodes/${nodeType.toUpperCase()}/${nodeId}`,
             method: 'GET',
             token: getCloudToken(cloudName),
             callback: cb
@@ -57,7 +57,7 @@ export const updateNode = (cloudName, node, cb) => (dispatch, getState) => {
     dispatch({
         [CALL_API]: {
             types: [UPDATENODE_REQUEST, UPDATENODE_SUCCESS, UPDATENODE_FAILURE],
-            endpoint: '/clouds/' + getCloudId(cloudName) + '/nodes/' + node.nodeType + '/' + node.nodeId,
+            endpoint: `${getCloudBaseUrl(cloudName)}/clouds/${getCloudId(cloudName)}/nodes/${node.nodeType}/${node.nodeId}`,
             method: 'PUT',
             token: getCloudToken(cloudName),
             data: node,
@@ -76,7 +76,7 @@ export const createNode = (cloudName, node, cb) => (dispatch, getState) => {
     dispatch({
         [CALL_API]: {
             types: [CREATEENODE_REQUEST, CREATENODE_SUCCESS, CREATENODE_FAILURE],
-            endpoint: '/clouds/' + getCloudId(cloudName) + '/nodes/' + node.nodeType,
+            endpoint: `${getCloudBaseUrl(cloudName)}/clouds/${getCloudId(cloudName)}/nodes/${node.nodeType}`,
             method: 'POST',
             data: node,
             token: getCloudToken(cloudName),
@@ -95,7 +95,7 @@ export const deleteNode = (cloudName, node, cb) => (dispatch, getState) => {
     dispatch({
         [CALL_API]: {
             types: [DELETEENODE_REQUEST, DELETEENODE_SUCCESS, DELETEENODE_FAILURE],
-            endpoint: '/clouds/' + getCloudId(cloudName) + '/nodes/' + node.nodeType + '/' + node.nodeId,
+            endpoint: `${getCloudBaseUrl(cloudName)}/clouds/${getCloudId(cloudName)}/nodes/${node.nodeType}/${node.nodeId}`,
             method: 'DELETE',
             token: getCloudToken(cloudName),
             callback: cb

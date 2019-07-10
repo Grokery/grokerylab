@@ -283,26 +283,6 @@ class CreateEditCloudModel extends Component {
           </div>
         </div>
 
-        <div className='row'>
-          {/* <div className='col col-sm-6'>
-            <label>Cloud Type:</label>
-            <select className='form-control' value={this.state.data.cloudType} onChange={this.onCloudTypeChange.bind(this)} disabled={this.props.isEdit}>
-              <option value='AWS'>AWS</option>
-              <option disabled={true} value='AZURE'>Azure (not yet available)</option>
-              <option disabled={true} value='CUSTOM'>Custom (not yet available)</option>
-            </select>
-          </div> */}
-          {/* {isCreate?
-            <div className='col col-sm-6'>
-              <label>Do you have an existing install?</label>
-              <select className='form-control' value={this.state.data.installOption} onChange={this.onInstallOptionChange.bind(this)}>
-                <option value='INSTALL'>No, please run the install script</option>
-                <option value='EXISTING'>Yes, I have already installed the api</option>
-                <option value='LATER'>No, but I'll do it later</option>
-              </select>
-            </div>
-          : null} */}
-        </div>
         {isCreate? this.getInstallFormFields() : null}
         {(isCreate && this.state.data.installOption === 'EXISTING') || isEdit ?
           <>
@@ -320,15 +300,6 @@ class CreateEditCloudModel extends Component {
             </div>
           </>
         : null}
-
-        {/* {isEdit ? 
-          <div className='row'>
-            <div className='col col-sm-3'>
-              <label>Sort Rank:</label>
-              <input type='text' className='form-control' value={this.state.data.adminAccess.sortRank} onChange={this.onSortRankChange.bind(this)}/>
-            </div>
-          </div>
-        : null} */}
 
         {isCreate && this.state.data.installOption === 'INSTALL' ? <h3>Admin User Access</h3> : null}
         {isCreate && this.state.data.installOption === 'INSTALL' ? this.getAccessKeyFormFields() : null}

@@ -1,7 +1,7 @@
 import { get } from 'lodash'
 import { API_BASE_URL } from "config"
 import { history } from 'index'
-import { isFunction } from 'util';
+import { isFunction } from 'lodash'
 
 export const setRedirectUrl = (url) => {
     if (url.includes('signin') || url.includes('register') || url.includes('resetpass') || url.includes('signout')) {
@@ -17,7 +17,7 @@ export const getRedirectUrl = () => {
 export const getSessionInfo = () => {
     let sessionInfo = sessionStorage.getItem("sessionInfo")
     if (sessionInfo) {
-        return JSON.parse(sessionInfo);
+        return JSON.parse(sessionInfo)
     }
     return null
 }
@@ -28,7 +28,7 @@ export const setSessionInfo = (sessionInfo) => {
 
 export const isAuthenticated = () => {
     let sessionInfo = getSessionInfo()
-    if (sessionInfo && sessionInfo.accountToken){
+    if (sessionInfo && sessionInfo.accountToken) {
         return true
     }
     return false
@@ -44,13 +44,13 @@ export const authenticate = (user, pass, onSuccess, onError) => {
     return fetch(API_BASE_URL + "/users/authenticate", params)
         .then((response) => {
             if (!response.ok) {
-                throw Error(response.statusText);
+                throw Error(response.statusText)
             }
             return response.json()
         })
         .then((json) => {
             if (isFunction(onSuccess)) {
-                onSuccess(json);
+                onSuccess(json)
             }
             setSessionInfo(json)
             let redirectUrl = getRedirectUrl()
@@ -63,10 +63,10 @@ export const authenticate = (user, pass, onSuccess, onError) => {
         })
         .catch((errorMsg) => {
             if (isFunction(onError)) {
-                onError(errorMsg);
+                onError(errorMsg)
             }
             alert(errorMsg)
-        });
+        })
 }
 
 export const disAuthenticate = () => {

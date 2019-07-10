@@ -1,5 +1,5 @@
 import { CALL_API } from 'store/middleware/api'
-import { getCloudToken, getCloudId } from 'authentication'
+import { getCloudId, getCloudToken, getCloudBaseUrl } from 'authentication'
 
 //--------------------------------
 
@@ -11,7 +11,7 @@ export const createComment = (cloudName, data, cb) => (dispatch, getState) => {
     dispatch({
         [CALL_API]: {
             types: [CREATECOMMENT_REQUEST, CREATECOMMENT_SUCCESS, CREATECOMMENT_FAILURE],
-            endpoint: '/clouds/' + getCloudId(cloudName) + '/comments',
+            endpoint:  `${getCloudBaseUrl(cloudName)}/clouds/${getCloudId(cloudName)}/comments`,
             method: 'POST',
             token: getCloudToken(cloudName),
             data: data,
@@ -30,7 +30,7 @@ export const queryComments = (cloudName, query, cb) => (dispatch, getState) => {
     dispatch({
         [CALL_API]: {
             types: [QUERYCOMMENTS_REQUEST, QUERYCOMMENTS_SUCCESS, QUERYCOMMENTS_FAILURE],
-            endpoint: '/clouds/' + getCloudId(cloudName) + '/comments/search' + (query ? query : ''),
+            endpoint:  `${getCloudBaseUrl(cloudName)}/clouds/${getCloudId(cloudName)}/comments/search${(query ? query : '')}`,
             method: 'GET',
             token: getCloudToken(cloudName),
             callback: cb

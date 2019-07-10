@@ -2,9 +2,7 @@
 // Middleware for calling REST api endpoints
 //------------------------------------------------
 
-import { API_BASE_URL } from "config"
-
-const callApi = (baseUrl, actionInfo) => {
+const makeCall = (actionInfo) => {
     const { method, endpoint, data, token, callback } = actionInfo
     var params = {
         method: method,
@@ -17,7 +15,7 @@ const callApi = (baseUrl, actionInfo) => {
     if (data && (method === 'POST' || method === "PUT")) {
         params['body'] = JSON.stringify(data)
     }
-    return fetch(baseUrl + endpoint, params)
+    return fetch(endpoint, params)
         .then(response => response.json().then(json => {
                 if (!response.ok) {
                     return Promise.reject(json)
@@ -34,7 +32,7 @@ const callApi = (baseUrl, actionInfo) => {
 }
 
 export const CALL_API = Symbol('Call admin API')
-export const grokeryApi = store => next => action => {
+export const apiMiddleware = store => next => action => {
     const actionInfo = action[CALL_API]
     if (typeof actionInfo === 'undefined') {
         return next(action)
@@ -47,7 +45,7 @@ export const grokeryApi = store => next => action => {
         return finalAction
     }
     next(actionWith({ type: requestType }))
-    return callApi(API_BASE_URL, actionInfo).then(
+    return makeCall(actionInfo).then(
         response => next(actionWith({
             response,
             type: successType
