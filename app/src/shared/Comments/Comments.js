@@ -44,7 +44,7 @@ class Comments extends Component {
         let result = []
         comments.forEach((comment) => {
             result.push((
-                <li key={comment.commentId} className='left clearfix'>
+                <li key={comment.itemId} className='left clearfix'>
                     <span className='chat-img pull-left'><i className='fa fa-user fa-fw'></i></span>
                     <div className='chat-body clearfix'>
                         <div className='header'>

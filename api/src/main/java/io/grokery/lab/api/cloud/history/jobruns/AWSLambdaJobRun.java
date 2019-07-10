@@ -1,4 +1,4 @@
-package io.grokery.lab.api.cloud.jobruns;
+package io.grokery.lab.api.cloud.history.jobruns;
 
 import java.util.concurrent.Future;
 
@@ -36,10 +36,10 @@ public class AWSLambdaJobRun extends JobRun {
 		// TODO get secrets and pass needed values as args to the job run
 
 		JsonObj args = this.getArgs();
-		args.put("jobId", this.getJobId());
+		args.put("nodeId", this.getNodeId());
 		args.put("created", this.getCreated());
 
-		LOG.info("startRun {}/{}", this.getJobId(), this.getCreated());
+		LOG.info("startRun {}/{}", this.getNodeId(), this.getCreated());
 		try {
 			InvokeRequest req = new InvokeRequest()
 				.withFunctionName(this.getLambdaARN())

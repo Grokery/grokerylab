@@ -6,7 +6,7 @@ export default (state = {}, action) => {
     } else if (action.type === FETCHJOBRUNS_SUCCESS) {
         if (action.response.data && action.response.data[0]) {
             let newState = Object.assign({}, state)
-            newState[action.response.data[0].jobId] = action.response.data
+            newState[action.response.data[0].nodeId] = action.response.data
             state = newState
         }
     }

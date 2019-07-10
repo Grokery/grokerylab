@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import io.grokery.lab.api.admin.models.submodels.CloudOptions;
 import io.grokery.lab.api.admin.models.submodels.UserRef;
 import io.grokery.lab.api.common.CommonUtils;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
@@ -37,6 +38,7 @@ public class Cloud implements Serializable {
 	private String updated;
 	private String status;
 	private String jwtPrivateKey;
+	private CloudOptions options;
 
 	public Cloud() {
 		this.cloudId = UUID.randomUUID().toString();
@@ -45,6 +47,7 @@ public class Cloud implements Serializable {
 		this.updated = new DateTime(DateTimeZone.UTC).toString();
 		this.status = "READY";
 		this.daoType = "DYNAMODB";
+		this.options = new CloudOptions();
 	}
 
 	@DynamoDBHashKey
@@ -149,6 +152,14 @@ public class Cloud implements Serializable {
 	}
 	public void setJwtPrivateKey(String jwtPrivateKey) {
 		this.jwtPrivateKey = jwtPrivateKey;
+	}
+
+	@DynamoDBAttribute
+	public CloudOptions getOptions() {
+		return this.options;
+	}
+	public void setOptions(CloudOptions options) {
+		this.options = options;
 	}
 
 	@Override

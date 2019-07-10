@@ -27,7 +27,7 @@ class AwsLambdaInfo extends Component {
     }
     componentDidMount() {
       const { fetchJobRuns, node, params } = this.props
-      fetchJobRuns(params.cloudName, "?jobId="+node.nodeId+"&limit=5")
+      fetchJobRuns(params.cloudName, "?nodeId="+node.nodeId+"&limit=5")
     }
     render() {
         const { node } = this.props
@@ -169,7 +169,7 @@ class AwsLambdaInfo extends Component {
           let difference = endTime - startTime
           difference = difference ? (difference / 1000).toFixed(0) + 's' : '-'
           results.push(
-              <tr key={element.jobrunId}>
+              <tr key={element.itemId}>
                   {/* <td>v0</td> */}
                   <td>Manual</td>
                   <td>{element.userContact}</td>

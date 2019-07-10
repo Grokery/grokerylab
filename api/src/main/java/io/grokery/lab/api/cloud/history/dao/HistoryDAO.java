@@ -1,17 +1,17 @@
-package io.grokery.lab.api.cloud.jobruns.dao;
+package io.grokery.lab.api.cloud.history.dao;
 
-import io.grokery.lab.api.common.dao.DAO;
-import io.grokery.lab.api.common.dao.DAOType;
+import io.grokery.lab.api.common.dao.DAO; 
 import io.grokery.lab.api.common.context.CloudContext;
+import io.grokery.lab.api.common.dao.DAOType;
 import io.grokery.lab.api.common.errors.NotImplementedError;
 
-public class JobRunsDAO {
+public class HistoryDAO {
 
     public static DAO getInst(CloudContext context) {
 		DAOType daoType = DAOType.valueOf(context.daoType);
 		switch(daoType) {
 			case DYNAMODB:
-				return new JobRunsDynamoDAO(context);
+				return new HistoryDynamoDAO(context);
 			case MONGODB:
 				throw new NotImplementedError("MONGODB not implemented");
 			case DOCUMENTDB:

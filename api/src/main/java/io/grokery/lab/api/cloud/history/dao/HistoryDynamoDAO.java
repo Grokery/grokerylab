@@ -1,4 +1,4 @@
-package io.grokery.lab.api.cloud.jobruns.dao;
+package io.grokery.lab.api.cloud.history.dao;
 
 import java.util.ArrayList;
 
@@ -12,11 +12,11 @@ import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import io.grokery.lab.api.common.dao.DynamoDAO;
 import io.grokery.lab.api.common.context.CloudContext;
 
-public class JobRunsDynamoDAO extends DynamoDAO {
+public class HistoryDynamoDAO extends DynamoDAO {
 
 	@Override
 	protected String getHashKeyName() {
-		return "jobId";
+		return "nodeId";
 	}
 
 	@Override
@@ -26,7 +26,7 @@ public class JobRunsDynamoDAO extends DynamoDAO {
 
 	@Override
 	protected String getTableName() {
-		return "jobruns-" + this.context.cloudId;
+		return "history-" + this.context.cloudId;
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class JobRunsDynamoDAO extends DynamoDAO {
 		return table;
 	}
 
-	public JobRunsDynamoDAO(CloudContext context) {
+	public HistoryDynamoDAO(CloudContext context) {
 		super(context);
 	}
 

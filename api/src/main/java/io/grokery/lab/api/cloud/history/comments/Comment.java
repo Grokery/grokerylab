@@ -1,26 +1,21 @@
-package io.grokery.lab.api.cloud.comments;
+package io.grokery.lab.api.cloud.history.comments;
 
 import java.util.Iterator;
 import java.util.Map;
-import java.util.UUID;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.grokery.lab.api.common.context.CloudContext;
+import io.grokery.lab.api.cloud.history.HistoryItem;
 import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.MapperUtil;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
 
-public class Comment {
+public class Comment extends HistoryItem {
 
 	private static final Logger LOG = LoggerFactory.getLogger(Comment.class);
 
 	private String nodeId;
-	private String commentId;
-	private String created;
-	private String updated;
 	private String userContact;
 	private String userName;
 	private String message;
@@ -30,10 +25,8 @@ public class Comment {
 		this.initializeDefaults();
 	}
 
-	private void initializeDefaults() {
-		this.setCommentId(UUID.randomUUID().toString());
-		this.setCreated(new DateTime(DateTimeZone.UTC).toString());
-		this.setUpdated(this.getCreated());
+	protected void initializeDefaults() {
+		super.initializeDefaults();
 	}
 
 	public static JsonObj toJsonObj(Comment obj, Boolean removeNulls) {
@@ -121,48 +114,6 @@ public class Comment {
 	 */
 	public void setUserContact(String userContact) {
 		this.userContact = userContact;
-	}
-
-	/**
-	 * @return the updated
-	 */
-	public String getUpdated() {
-		return updated;
-	}
-
-	/**
-	 * @param updated the updated to set
-	 */
-	public void setUpdated(String updated) {
-		this.updated = updated;
-	}
-
-	/**
-	 * @return the created
-	 */
-	public String getCreated() {
-		return created;
-	}
-
-	/**
-	 * @param created the created to set
-	 */
-	public void setCreated(String created) {
-		this.created = created;
-	}
-
-	/**
-	 * @return the commentId
-	 */
-	public String getCommentId() {
-		return commentId;
-	}
-
-	/**
-	 * @param commentId the commentId to set
-	 */
-	public void setCommentId(String commentId) {
-		this.commentId = commentId;
 	}
 
 	/**

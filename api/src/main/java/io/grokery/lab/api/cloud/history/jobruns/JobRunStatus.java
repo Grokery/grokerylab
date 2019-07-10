@@ -1,4 +1,4 @@
-package io.grokery.lab.api.cloud.jobruns;
+package io.grokery.lab.api.cloud.history.jobruns;
 
 public enum JobRunStatus {
     STAGED,

@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import io.grokery.lab.api.cloud.jobruns.JobRunsService;
+import io.grokery.lab.api.cloud.history.jobruns.JobRunsService;
 import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
 import io.grokery.lab.api.common.exceptions.NotAuthorizedException;
@@ -54,17 +54,17 @@ public class JobRunsProvider {
 	}
 
 	@PUT
-	@Path("/{jobId}/{created}")
+	@Path("/{nodeId}/{created}")
 	@ApiOperation(value = "Update job run", response = JsonObj.class)
 	public Response update(
 			@HeaderParam("Authorization") String auth,
 			@ApiParam @PathParam("cloudId") String cloudId,
-			@ApiParam @PathParam("jobId") String jobId,
+			@ApiParam @PathParam("nodeId") String nodeId,
 			@ApiParam @PathParam("created") String created,
 			@ApiParam JsonObj request
 	) throws InvalidInputException, NotFoundException, NotAuthorizedException {
-		LOG.info("PUT:{}/clouds/{}/jobruns/{}/{}", apiVersion, cloudId, jobId, created);
-		JsonObj result = JobRunsService.updateJobRunStatus(auth, cloudId, jobId, created, request);
+		LOG.info("PUT:{}/clouds/{}/jobruns/{}/{}", apiVersion, cloudId, nodeId, created);
+		JsonObj result = JobRunsService.updateJobRunStatus(auth, cloudId, nodeId, created, request);
 		return Response.status(Status.OK).entity(result).build();
 	}
 
@@ -74,13 +74,13 @@ public class JobRunsProvider {
 	public Response get(
 			@HeaderParam("Authorization") String auth,
 			@ApiParam @PathParam("cloudId") String cloudId,
-			@ApiParam @QueryParam("jobId") String jobId, 
+			@ApiParam @QueryParam("nodeId") String nodeId, 
 			@ApiParam @QueryParam("query") String query,
 			@ApiParam @QueryParam("projection") String projection,
 			@ApiParam @QueryParam("limit") int limit
 	) throws NotAuthorizedException {
-		LOG.info("GET:{}/clouds/{}/jobruns/search/{}?query={}&projection={}&limit={}", apiVersion, cloudId, jobId, query, projection, limit);
-		JsonObj result = JobRunsService.getJobRunsforJob(auth, cloudId, jobId, query, projection, limit);
+		LOG.info("GET:{}/clouds/{}/jobruns/search/{}?query={}&projection={}&limit={}", apiVersion, cloudId, nodeId, query, projection, limit);
+		JsonObj result = JobRunsService.getJobRunsforJob(auth, cloudId, nodeId, query, projection, limit);
 		return Response.status(Status.OK).entity(result).build();
 	}
 

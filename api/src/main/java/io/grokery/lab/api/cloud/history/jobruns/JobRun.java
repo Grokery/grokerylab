@@ -1,30 +1,27 @@
-package io.grokery.lab.api.cloud.jobruns;
+package io.grokery.lab.api.cloud.history.jobruns;
 
 import java.util.Iterator;
 import java.util.Map;
-import java.util.UUID;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.grokery.lab.api.common.context.CloudContext;
+import io.grokery.lab.api.cloud.history.HistoryItem;
 import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.MapperUtil;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
 
-public class JobRun {
+public class JobRun extends HistoryItem {
 
 	private static final Logger LOG = LoggerFactory.getLogger(JobRun.class);
 
-	private String jobId;
+	private String nodeId;
 	private String jobRunType;
-	private String jobRunId;
 	private String runStatus;
 	private String startTime;
 	private String endTime;
-	private String created;
-	private String updated;
 	private String userContact;
 	private JsonObj args;
 
@@ -38,11 +35,9 @@ public class JobRun {
 		this.setJobRunType(jobRunType.toString());
 	}
 
-	private void initializeDefaults() {
-		this.setJobrunId(UUID.randomUUID().toString());
+	protected void initializeDefaults() {
+		super.initializeDefaults();
 		this.setRunStatus(JobRunStatus.STAGED.toString());
-		this.setCreated(new DateTime(DateTimeZone.UTC).toString());
-		this.setUpdated(this.getCreated());
 	}
 
 	public void startRun(CloudContext context) {
@@ -53,8 +48,8 @@ public class JobRun {
 		JobRunStatus status = JobRunStatus.valueOf(request.getString("runStatus"));
 		this.validateStatusTransition(status);
 
-		LOG.info("updateStatus jobId/created: {}/{} from {} to {}", 
-			this.getJobId(),
+		LOG.info("updateStatus nodeId/created: {}/{} from {} to {}", 
+			this.getNodeId(),
 			this.getCreated(),
 			this.getRunStatus(),
 			request.getString("runStatus"));
@@ -154,35 +149,17 @@ public class JobRun {
 	public void setRunStatus(String runStatus) {
 		this.runStatus = runStatus;
 	}
-	public String getJobId() {
-		return jobId;
+	public String getNodeId() {
+		return nodeId;
 	}
-	public void setJobId(String jobId) {
-		this.jobId = jobId;
+	public void setNodeId(String nodeId) {
+		this.nodeId = nodeId;
 	}
-	public String getJobrunId() {
-		return jobRunId;
-	}
-	public void setJobrunId(String jobRunId) {
-		this.jobRunId = jobRunId;
-    }
      public JsonObj getArgs() {
 		return args;
 	}
 	public void setArgs(JsonObj args) {
 		this.args = args;
-	}
-	public String getUpdated() {
-		return updated;
-	}
-	public void setUpdated(String updated) {
-		this.updated = updated;
-	}
-	public String getCreated() {
-		return created;
-	}
-	public void setCreated(String created) {
-		this.created = created;
 	}
 	public String getUserContact() {
 		return userContact;

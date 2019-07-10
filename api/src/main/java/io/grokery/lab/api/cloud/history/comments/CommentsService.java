@@ -1,9 +1,9 @@
-package io.grokery.lab.api.cloud.comments;
+package io.grokery.lab.api.cloud.history.comments;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.grokery.lab.api.cloud.comments.dao.CommentsDAO;
+import io.grokery.lab.api.cloud.history.dao.HistoryDAO;
 import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.context.CloudContext;
 import io.grokery.lab.api.common.dao.DAO;
@@ -17,7 +17,7 @@ public class CommentsService {
 
 	public static JsonObj createComment(String auth, String cloudId, JsonObj request) throws InvalidInputException, NotFoundException, NotAuthorizedException {
 		CloudContext context = new CloudContext(cloudId, auth);
-		DAO dao = CommentsDAO.getInst(context);
+		DAO dao = HistoryDAO.getInst(context);
 		Comment comment = Comment.fromMap(request, context);
 		JsonObj jsonObj = Comment.toJsonObj(comment, true);
 		dao.create(comment.getNodeId(), comment.getCreated(), jsonObj);
@@ -26,7 +26,7 @@ public class CommentsService {
 
 	public static JsonObj getCommentsforNode(String auth, String cloudId, String nodeId, String query, String projection, int limit) throws NotAuthorizedException {
 		CloudContext context = new CloudContext(cloudId, auth);
-		DAO dao = CommentsDAO.getInst(context);
+		DAO dao = HistoryDAO.getInst(context);
 		if (projection == null) {
 			projection = "commentId, created, nodeId, userContact, userName, message";
 		}

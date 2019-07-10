@@ -26,11 +26,11 @@ export const UPDATEJOBRUN_REQUEST = 'UPDATEJOBRUN_REQUEST'
 export const UPDATEJOBRUN_SUCCESS = 'UPDATEJOBRUN_SUCCESS'
 export const UPDATEJOBRUN_FAILURE = 'UPDATEJOBRUN_FAILURE'
 
-export const updateJobRun = (cloudName, jobId, created, data, cb) => (dispatch, getState) => {
+export const updateJobRun = (cloudName, nodeId, created, data, cb) => (dispatch, getState) => {
     dispatch({
         [CALL_API]: {
             types: [UPDATEJOBRUN_REQUEST, UPDATEJOBRUN_SUCCESS, UPDATEJOBRUN_FAILURE],
-            endpoint: '/clouds/' + getCloudId(cloudName) + '/jobruns' + jobId + "/" + created,
+            endpoint: '/clouds/' + getCloudId(cloudName) + '/jobruns' + nodeId + "/" + created,
             method: 'PUT',
             token: getCloudToken(cloudName),
             data: data,

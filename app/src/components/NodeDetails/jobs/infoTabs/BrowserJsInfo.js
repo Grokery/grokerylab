@@ -27,7 +27,7 @@ class BrowserJsInfo extends Component {
     }
     componentDidMount() {
       const { fetchJobRuns, node, params } = this.props
-      fetchJobRuns(params.cloudName, "?jobId="+node.nodeId+"&limit=5")
+      fetchJobRuns(params.cloudName, "?nodeId="+node.nodeId+"&limit=5")
     }
     render() {
       const { node } = this.props
@@ -69,7 +69,7 @@ class BrowserJsInfo extends Component {
       let results = []
       jobRuns.forEach(jobRun => {
           results.push(
-              <tr key={jobRun.jobrunId}>
+              <tr key={jobRun.itemId}>
                   <td>{jobRun.userContact}</td>
                   <td>{moment(jobRun.startTime).format('DD MMM YYYY')}</td>
                   <td>{moment(jobRun.startTime).format('HH:mm')}</td>

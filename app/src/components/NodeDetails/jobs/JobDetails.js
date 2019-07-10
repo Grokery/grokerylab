@@ -148,13 +148,13 @@ class JobDetails extends Component {
       iframe.contentWindow.document.write('<script>'+cloneDeep(node.code)+'</script>')
       iframe.contentWindow.document.close()
 
-      postJobRun(params.cloudName, {jobId: node.nodeId, jobRunType: node.subType, runStatus: "COMPLETED", userContact: userEmail}, () => {
-        fetchJobRunsWithRepeat(params.cloudName, "?jobId="+node.nodeId+"&limit=5", null, [[0, 0.0, 1]])
+      postJobRun(params.cloudName, {nodeId: node.nodeId, jobRunType: node.subType, runStatus: "COMPLETED", userContact: userEmail}, () => {
+        fetchJobRunsWithRepeat(params.cloudName, "?nodeId="+node.nodeId+"&limit=5", null, [[0, 0.0, 1]])
       })
     }
     catch (e) {
-      postJobRun(params.cloudName, {jobId: node.nodeId, jobRunType: node.subType, runStatus: "ERRORED", userContact: userEmail}, () => {
-        fetchJobRunsWithRepeat(params.cloudName, "?jobId="+node.nodeId+"&limit=5", null, [[0, 0.0, 1]])
+      postJobRun(params.cloudName, {nodeId: node.nodeId, jobRunType: node.subType, runStatus: "ERRORED", userContact: userEmail}, () => {
+        fetchJobRunsWithRepeat(params.cloudName, "?nodeId="+node.nodeId+"&limit=5", null, [[0, 0.0, 1]])
       })
     }
   }
@@ -198,7 +198,7 @@ class JobDetails extends Component {
     let userEmail = sessionInfo.username
     postJobRun(params.cloudName, {
       userContact: userEmail,
-      jobId: node.nodeId,
+      nodeId: node.nodeId,
       jobRunType: node.subType,
       lambdaARN: node.lambdaARN,
       args: {
@@ -206,7 +206,7 @@ class JobDetails extends Component {
           authorization: getCloudToken(params.cloudName),
       }
     }, () => {
-        fetchJobRunsWithRepeat(params.cloudName, "?jobId="+node.nodeId+"&limit=5", null, [[1, 0.0, 5], [1, 2.0, 5]])
+        fetchJobRunsWithRepeat(params.cloudName, "?nodeId="+node.nodeId+"&limit=5", null, [[1, 0.0, 5], [1, 2.0, 5]])
     })
   }
   getJobInfoComponent(props) {
