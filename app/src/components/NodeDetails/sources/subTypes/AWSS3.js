@@ -44,7 +44,7 @@ class AWSS3 extends Component {
     document.removeEventListener("keydown", this.onKeyDown);
   }
   render() {
-    const { params, onUpdate, node, height } = this.props
+    const { node, height } = this.props
     return (
       <div className='source-details'>
         <Tabs>
@@ -52,9 +52,9 @@ class AWSS3 extends Component {
           {this.renderRightMenuOptions()}
             <div className='row'>
               <div className='col-md-3'>
-                
+                S3
               </div>
-              <div className='col-md-9'>
+              <div className='col-md-9' style={{padding:0}}>
                 <AceEditor
                   mode="text"
                   theme="chrome"

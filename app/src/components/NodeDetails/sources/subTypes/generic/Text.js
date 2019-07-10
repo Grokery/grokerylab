@@ -3,18 +3,16 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { concat } from 'lodash'
 import AceEditor from 'react-ace'
-import 'brace/mode/json'
+import 'brace/mode/text'
 import 'brace/theme/chrome'
 
 import { Tabs, Panel } from 'shared/Tabs/Tabs'
 import EditModal from 'shared/EditModal/EditModal'
-// import InfoTab from 'shared/InfoTab/InfoTab'
 import LogsTab from 'shared/LogsTab/LogsTab'
 
-// import SourceInfo from 'components/NodeDetails/sources/SourceInfo'
 import SourceForm from 'components/NodeDetails/sources/SourceForm'
 
-class JsonData extends Component {
+export class Text extends Component {
   static propTypes = {
     params: PropTypes.object.isRequired,
     node: PropTypes.object.isRequired,
@@ -25,17 +23,19 @@ class JsonData extends Component {
   }
   constructor(props) {
     super(props)
-    this.editor = React.createRef();
+    this.editor = React.createRef()
+    this.mode = 'text'
     this.state = {
       shown: false,
       dirty: false,
-      dataDraft: JSON.stringify(props.node.jsonData, null, 2),
+      dataDraft: props.node.data,
     }
   }
   componentWillReceiveProps(nextProps) {
-    this.setState({dataDraft: JSON.stringify(nextProps.node.jsonData, null, 2)}, () => {
+    this.setState({dataDraft: nextProps.node.data}, () => {
+      // TODO get ref to editor and set line
       // editor.scrollToLine(0, true, true, () => {});
-      // editor.gotoLine(0, 0, true);
+      // editor.gotoLine(0, 0, true);s
     })
   }
   componentDidMount() {
@@ -44,27 +44,29 @@ class JsonData extends Component {
   componentWillUnmount() {
     document.removeEventListener("keydown", this.onKeyDown);
   }
+  getSubTypeInfo = () => {
+    return (
+      <div className='row'>
+        <div className='col-md-12'>
+          text
+        </div>
+      </div>
+    )
+  }
   render() {
-    const { params, onUpdate, node, height } = this.props
+    const { node, height } = this.props
     return (
       <div className='source-details'>
         <Tabs>
-          {/* <Panel title='Info'>
-            {this.renderRightMenuOptions()}
-            <InfoTab key={params.nodeId} params={params} onUpdate={onUpdate}>
-              <p>jsonData</p>
-              <SourceInfo key={params.nodeId} params={params} onUpdate={onUpdate}></SourceInfo>
-            </InfoTab>
-          </Panel> */}
           <Panel title={node.title}>
             {this.renderRightMenuOptions()}
             <div className='row'>
               <div className='col-md-3'>
-                
+                {this.getSubTypeInfo()}
               </div>
-              <div className='col-md-9'>
+              <div className='col-md-9' style={{padding:0}}>
                 <AceEditor
-                  mode="json"
+                  mode={this.mode}
                   theme="chrome"
                   onChange={this.onChange}
                   fontSize={12}
@@ -104,7 +106,6 @@ class JsonData extends Component {
   getRightMenuOptions = () => {
     return concat([
       <button key='save' disabled={!this.state.dirty} onClick={this.onUpdate} className='btn btn-default'><i className='fa fa-save'></i></button>,
-      // TODO make it automatically updated
       <button key='reload' onClick={this.props.reloadData} className='btn btn-default'><i className="fa fa-refresh" aria-hidden="true"></i></button>,
       <button key='edit' onClick={this.toggleEditDialog} className='btn btn-default'><i className='fa fa-cog'></i></button>,
     ], this.props.rightMenuOptions)
@@ -134,15 +135,8 @@ class JsonData extends Component {
   }
   onUpdate = (e) => {
     e.preventDefault()
-    let newdata = null
-    try {
-      newdata = JSON.parse(this.state.dataDraft)
-    } catch (e) {
-      alert(e)
-      return
-    }
     this.props.onUpdate({
-      'jsonData': newdata,
+      'data': this.state.dataDraft,
     }, () => {
       this.setState({ dirty: false })
     })
@@ -153,4 +147,4 @@ const mapStateToProps = (state, ownProps) => {
   return {}
 }
 
-export default connect(mapStateToProps, {})(JsonData)
+export default connect(mapStateToProps, {})(Text)

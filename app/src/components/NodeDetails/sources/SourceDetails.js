@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import Generic from './subTypes/Generic'
-import JsonData from './subTypes/JsonData'
-import Delimited from './subTypes/Delimited'
+import RawText from './subTypes/generic/Text'
+import Json from './subTypes/generic/Json'
+import Delimited from './subTypes/generic/Delimited'
 import AWSS3 from './subTypes/AWSS3'
 
 class SourceDetails extends Component {
@@ -19,15 +19,15 @@ class SourceDetails extends Component {
   render() {
     const { node } = this.props
     if (node.subType === 'GENERIC') {
-      return <Generic {...this.props} />
+      return <RawText {...this.props} />
     } else if (node.subType === 'DELIMITED') {
       return <Delimited {...this.props} />
     } else if (node.subType === 'JSON') {
-      return <JsonData {...this.props} />
+      return <Json {...this.props} />
     } else if (node.subType === 'AWSS3') {
       return <AWSS3 {...this.props} />
     } else {
-      return <Generic {...this.props} />
+      return <RawText {...this.props} />
     }
   }
 }
