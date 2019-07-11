@@ -151,15 +151,6 @@ class AwsLambdaInfo extends Component {
           )
       }
     }
-    getRunLabelType(status) {
-        if (status === "COMPLETED") {
-          return "label-success"
-        } else if (status === "ERRORED") {
-          return "label-danger"
-        } else {
-          return "label-default"
-        }
-    }
     getJobRuns() {
       const { jobRuns } = this.props
       let results = []
@@ -182,6 +173,15 @@ class AwsLambdaInfo extends Component {
           )
       });
       return results
+    }
+    getRunLabelType(status) {
+        if (status === "COMPLETED") {
+          return "label-success"
+        } else if (status === "ERRORED") {
+          return "label-danger"
+        } else {
+          return "label-default"
+        }
     }
 }
 )

@@ -48,7 +48,8 @@
 }
 
 .tabs .nav.nav-tabs {
-    border:none;
+    border: none;
+    border-bottom: solid .5px #E1E3E5;
 }
 
 .tabs .nav-tabs>li {

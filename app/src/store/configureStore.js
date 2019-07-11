@@ -9,7 +9,7 @@ import cloud from 'store/reducers/cloud'
 import comments from 'store/reducers/comments'
 import errorMessage from 'store/reducers/errors'
 import jobruns from 'store/reducers/jobruns'
-import { logs } from 'store/reducers/logs'
+import { history } from 'store/reducers/history'
 import { nodes } from 'store/reducers/nodes'
 import { options } from 'store/reducers/options'
 
@@ -19,7 +19,7 @@ let rootReducer = combineReducers({
   comments,
   errorMessage,
   jobruns,
-  logs,
+  history,
   nodes,
   options,
 })

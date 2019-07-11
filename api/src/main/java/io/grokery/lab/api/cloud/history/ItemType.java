@@ -6,6 +6,7 @@ package io.grokery.lab.api.cloud.history;
  * @author hogue
  */
 public enum ItemType {
+    GENERIC("Generic"),
     COMMENT("Comment"),
     JOBRUN("JobRun");
 

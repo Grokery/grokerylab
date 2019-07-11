@@ -61,14 +61,14 @@ class D3DataFlow extends Component {
       <div id='D3DataFlow'>
         <div className={'flow-header-content' + showControls}>
 
-            <div className='cloud-title-and-links' style={{float:"left"}}>
+            <div className='cloud-title-and-links' style={{float:"left",backgroundColor:'#E1E3E5',paddingRight:'8px',paddingTop:'8px',paddingLeft:'8px'}}>
                 <h2 style={{float:'left'}}>{cloudAccess.cloudInfo.title}</h2>
                 <Link to={'/clouds/' + params.cloudName + "/boards"} style={{float:'right',paddingLeft:'10px',paddingTop:'8px'}}>
                     <i className='fa fa-tachometer cloud-edit-icon'/>
                 </Link>
             </div>
 
-            <div style={{float:"right"}}>
+            <div style={{float:"right",backgroundColor:'#E1E3E5',padding:0,paddingTop:'8px',paddingRight:'8px',paddingLeft:'8px'}}>
                 <div id='create-nodes' className='paper'>
                     {/* <p>Drag to canvas to create:</p> */}
                     <img className='drag-create-img' alt='job' src='/img/job.png' onMouseDown={this.createNodeDrag.bind(this, this.createJob.bind(this))}/>

@@ -10,6 +10,7 @@ class BrowserJs extends Component {
     onCodeChange: PropTypes.func.isRequired,
     draftCode: PropTypes.string,
     height: PropTypes.number,
+    runJob: PropTypes.func.isRequired,
   }
   static defaultProps = {
     draftCode: '',
@@ -22,14 +23,46 @@ class BrowserJs extends Component {
           consoleHeight: 200,
       }
   }
+  getSubTypeInfo = () => {
+    return (
+      <>
+        <div className='row' style={{borderBottom:'solid .5px #E1E3E5'}}>
+          <div className='col col-md-12' style={{paddingTop:'4px'}}>
+            <label style={{paddingTop:'5px',paddingLeft:'10px'}}>JobType:</label> BrowserJs
+            <button 
+              key='run'
+              // disabled={this.state.dirty} 
+              onClick={this.props.runJob} 
+              className='btn'
+              title={"Run job"}
+              style={{float:'right'}}>
+                <i className='fa fa-play' aria-hidden="true"></i>
+            </button>
+            <button key='info' 
+              // onClick={this.openDocumentation()} 
+              className='btn'
+              title={"open documentation about this node type"}
+              style={{}}>
+                <i className="fa fa-info-circle" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+        <div className='row hidden-xs hidden-sm'>
+          <div className='col col-md-12'>
+          </div>
+        </div>
+      </>
+    )
+  }
   render() {
     let { height, draftCode, onCodeChange } = this.props
     let { consoleHeight } = this.state;
     return (
       <div className='row'>
-          <div className='col-md-3'>
+          <div className='col col-md-3'>
+            {this.getSubTypeInfo()}
           </div>
-          <div className='col-md-9' style={{paddingRight:'0px'}}>
+          <div className='col col-md-9' style={{paddingRight:'0px'}}>
             <AceEditor
               mode="javascript"
               theme="chrome"

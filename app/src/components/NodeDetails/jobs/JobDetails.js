@@ -8,14 +8,10 @@ import { fetchNode, fetchNodes } from 'store/actions/nodes'
 import { postJobRun, fetchJobRuns, fetchJobRunsWithRepeat, updateJobRun } from 'store/actions/jobruns'
 import { Tabs, Panel } from 'shared/Tabs/Tabs'
 import EditModal from 'shared/EditModal/EditModal'
-import InfoTab from 'shared/InfoTab/InfoTab'
-import LogsTab from 'shared/LogsTab/LogsTab'
-import PlaceholderInfo from './infoTabs/PlaceholderInfo'
-import BrowserJsInfo from './infoTabs/BrowserJsInfo'
-import AwsLambdaInfo from './infoTabs/AwsLambdaInfo'
+import HistoryTab from 'shared/HistoryTab/HistoryTab'
 import JobForm from './editModal/JobForm'
-import BrowserJs from './codeTabs/BrowserJs'
-import AWSLambda from './codeTabs/AWSLambda'
+import BrowserJs from './BrowserJs'
+import AWSLambda from './AWSLambda'
 
 class JobDetails extends Component {
   static propTypes = {
@@ -70,13 +66,9 @@ class JobDetails extends Component {
             {this.renderRightMenuOptions()}
             {this.getJobCodeComponent(commonProps)}
           </Panel>
-          <Panel title='Info'>
-            {this.renderRightMenuOptions()}
-            {this.getJobInfoComponent(commonProps)}
-          </Panel>
           <Panel title='History'>
             {this.renderRightMenuOptions()}
-            <LogsTab {...commonProps}></LogsTab>
+            <HistoryTab {...commonProps}></HistoryTab>
           </Panel>
         </Tabs>
         <EditModal 
@@ -98,15 +90,8 @@ class JobDetails extends Component {
     )
   }
   getRightMenuOptions = () => {
-    const { node } = this.props
-    let runOption = null
-    if (node.subType !== 'GENERIC') {
-      // TODO move to left panel ...
-      runOption = <button key='run' disabled={this.state.dirty} onClick={this.runJob} className='btn btn-default'><i className='fa fa-play'></i></button>
-    }
     return concat([
       <button key='save' disabled={!this.state.dirty} onClick={this.onUpdate} className='btn btn-default'><i className='fa fa-save'></i></button>,
-      runOption,
       <button key='edit' onClick={this.toggleEditDialog} className='btn btn-default'><i className='fa fa-cog'></i></button>,
     ], this.props.rightMenuOptions)
   }
@@ -209,21 +194,12 @@ class JobDetails extends Component {
         fetchJobRunsWithRepeat(params.cloudName, "?nodeId="+node.nodeId+"&limit=5", null, [[1, 0.0, 5], [1, 2.0, 5]])
     })
   }
-  getJobInfoComponent(props) {
-    const { node } = this.props
-    if (node.subType === 'GENERIC') {
-      return (<InfoTab {...props}><PlaceholderInfo {...props}></PlaceholderInfo></InfoTab>)
-    } else if (node.subType === 'BROWSERJS') {
-      return (<InfoTab {...props}><BrowserJsInfo {...props}></BrowserJsInfo></InfoTab>)
-    } else if (node.subType === 'AWSLAMBDA') {
-      return (<InfoTab {...props}><AwsLambdaInfo {...props}></AwsLambdaInfo></InfoTab>)
-    }
-  }
   getJobCodeComponent(props) {
     const { node } = this.props
     const codeProps = assign(props, {
       draftCode: this.state.draftCode,
       onCodeChange: this.onCodeChange,
+      runJob: this.runJob,
     })
     if (node.subType === 'GENERIC') {
       return (<div>Placeholder</div>)

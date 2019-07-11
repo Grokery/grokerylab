@@ -8,7 +8,7 @@ import 'brace/theme/chrome'
 
 import { Tabs, Panel } from 'shared/Tabs/Tabs'
 import EditModal from 'shared/EditModal/EditModal'
-import LogsTab from 'shared/LogsTab/LogsTab'
+import HistoryTab from 'shared/HistoryTab/HistoryTab'
 
 import SourceForm from 'components/NodeDetails/sources/SourceForm'
 
@@ -43,6 +43,35 @@ class AWSS3 extends Component {
   componentWillUnmount() {
     document.removeEventListener("keydown", this.onKeyDown);
   }
+  getSubTypeInfo = () => {
+    return (
+      <>
+        <div className='row' style={{borderBottom:'solid .5px #E1E3E5'}}>
+          <div className='col col-md-12' style={{paddingTop:'4px'}}>
+            <label style={{paddingTop:'5px',paddingLeft:'10px'}}>SourceType:</label> AWSS3
+            <button key='reload' 
+              onClick={this.props.reloadData} 
+              className='btn'
+              title={"refresh data"}
+              style={{float:'right'}}>
+                <i className="fa fa-refresh" aria-hidden="true"></i>
+            </button>
+            <button key='reload' 
+              // onClick={this.openDocumentation()} 
+              className='btn'
+              title={"open documentation about this node type"}
+              style={{}}>
+                <i className="fa fa-info-circle" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+        <div className='row hidden-xs hidden-sm'>
+          <div className='col col-md-12'>
+          </div>
+        </div>
+      </>
+    )
+  }
   render() {
     const { node, height } = this.props
     return (
@@ -51,10 +80,15 @@ class AWSS3 extends Component {
           <Panel title={node.title}>
           {this.renderRightMenuOptions()}
             <div className='row'>
-              <div className='col-md-3'>
-                S3
+              <div className='col col-md-3'>
+                {this.getSubTypeInfo()}
+                <ul style={{marginTop:'5px', marginBottom:'15px', paddingLeft: '0px', marignRight:'0px', listStyleType: 'none'}}>
+                  <li style={{padding:'5px', paddingLeft:'15px'}}><a href='#/' onClick={(e) => {e.preventDefault()}}>file1.txt</a></li>
+                  <li style={{padding:'5px', paddingLeft:'15px'}}><a href='#/' onClick={(e) => {e.preventDefault()}}>file2.csv</a></li>
+                  <li style={{padding:'5px', paddingLeft:'15px'}}><a href='#/' onClick={(e) => {e.preventDefault()}}>file3.log</a></li>
+                </ul>
               </div>
-              <div className='col-md-9' style={{padding:0}}>
+              <div className='col col-md-9' style={{padding:0}}>
                 <AceEditor
                   mode="text"
                   theme="chrome"
@@ -79,7 +113,7 @@ class AWSS3 extends Component {
           </Panel>
           <Panel title='History'>
             {this.renderRightMenuOptions()}
-            <LogsTab params={this.props.params}></LogsTab>
+            <HistoryTab params={this.props.params}></HistoryTab>
           </Panel>
         </Tabs>
         <EditModal
@@ -96,7 +130,6 @@ class AWSS3 extends Component {
   getRightMenuOptions = () => {
     return concat([
       <button key='save' disabled={!this.state.dirty} onClick={this.onUpdate} className='btn btn-default'><i className='fa fa-save'></i></button>,
-      <button key='reload' onClick={this.props.reloadData} className='btn btn-default'><i className="fa fa-refresh" aria-hidden="true"></i></button>,
       <button key='edit' onClick={this.toggleEditDialog} className='btn btn-default'><i className='fa fa-cog'></i></button>,
     ], this.props.rightMenuOptions)
   }

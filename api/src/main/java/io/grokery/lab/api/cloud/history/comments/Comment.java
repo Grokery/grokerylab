@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.grokery.lab.api.common.context.CloudContext;
 import io.grokery.lab.api.cloud.history.HistoryItem;
+import io.grokery.lab.api.cloud.history.ItemType;
 import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.MapperUtil;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
@@ -27,6 +28,7 @@ public class Comment extends HistoryItem {
 
 	protected void initializeDefaults() {
 		super.initializeDefaults();
+		this.setItemType(ItemType.COMMENT.toString());
 	}
 
 	public static JsonObj toJsonObj(Comment obj, Boolean removeNulls) {

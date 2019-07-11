@@ -8,7 +8,7 @@ import 'brace/theme/chrome'
 
 import { Tabs, Panel } from 'shared/Tabs/Tabs'
 import EditModal from 'shared/EditModal/EditModal'
-import LogsTab from 'shared/LogsTab/LogsTab'
+import HistoryTab from 'shared/HistoryTab/HistoryTab'
 import IBoardFrame from 'shared/IBoardFrame/IBoardFrame'
 
 class BoardDetails extends Component {
@@ -43,7 +43,7 @@ class BoardDetails extends Component {
             {this.renderRightMenuOptions()}
             <div className='row'>
 
-              <div className='col-md-6' style={{paddingRight:0,paddingLeft:0,borderTop:'solid 1px #d7d7d7',borderRight:'solid 1px #d7d7d7'}}>
+              <div className='col-md-6' style={{paddingRight:0,paddingLeft:0,borderRight:'solid 1px #d7d7d7'}}>
                 <AceEditor
                   key={params.nodeId}
                   mode="html"
@@ -66,7 +66,7 @@ class BoardDetails extends Component {
                 />
               </div>
 
-              <div className='col-md-6' style={{paddingRight:0,paddingLeft:0,borderTop:'solid 1px #d7d7d7'}}>
+              <div className='col-md-6' style={{paddingRight:0,paddingLeft:0}}>
                 <IBoardFrame 
                   cloudName={params.cloudName} 
                   boardId={params.nodeId} 
@@ -102,7 +102,7 @@ class BoardDetails extends Component {
           </Panel> */}
           <Panel title='History'>
             {this.renderRightMenuOptions()}
-            <LogsTab params={this.props.params}></LogsTab>              
+            <HistoryTab params={this.props.params}></HistoryTab>              
           </Panel>
         </Tabs>
         <EditModal 

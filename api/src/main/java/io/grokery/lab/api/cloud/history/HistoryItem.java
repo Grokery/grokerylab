@@ -24,9 +24,15 @@ public class HistoryItem {
 	private String itemType;
 	private String created;
 	private String updated;
+	private JsonObj data;
 
 	public HistoryItem() {
 		this.initializeDefaults();
+	}
+
+	public HistoryItem(JsonObj data) {
+		this.initializeDefaults();
+		this.data = data;
 	}
 
 	public static String getItemIdName() {
@@ -39,6 +45,7 @@ public class HistoryItem {
 
 	protected void initializeDefaults() {
 		this.itemId = UUID.randomUUID().toString();
+		this.itemType = ItemType.GENERIC.toString();
 		this.created = new DateTime(DateTimeZone.UTC).toString();
 		this.updated = new DateTime(DateTimeZone.UTC).toString();
 	}
@@ -86,6 +93,8 @@ public class HistoryItem {
 			LOG.info("Get class instance for itemType: " + typeName);
 			ItemType itemType = ItemType.valueOf(typeName);
 			switch (itemType) {
+				case GENERIC:
+					return new HistoryItem(obj);
 				case COMMENT:
 					return Comment.getClassInstance(obj);
 				case JOBRUN:
@@ -129,5 +138,10 @@ public class HistoryItem {
 	public void setUpdated(String updated) {
 		this.updated = updated;
 	}
-
+	public JsonObj getData() {
+		return data;
+	}
+	public void setData(JsonObj data) {
+		this.data = data;
+	}
 }

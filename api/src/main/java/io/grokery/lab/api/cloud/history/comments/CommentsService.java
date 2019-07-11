@@ -19,6 +19,7 @@ public class CommentsService {
 		CloudContext context = new CloudContext(cloudId, auth);
 		DAO dao = HistoryDAO.getInst(context);
 		Comment comment = Comment.fromMap(request, context);
+		comment.validateValues();
 		JsonObj jsonObj = Comment.toJsonObj(comment, true);
 		dao.create(comment.getNodeId(), comment.getCreated(), jsonObj);
 		return jsonObj;

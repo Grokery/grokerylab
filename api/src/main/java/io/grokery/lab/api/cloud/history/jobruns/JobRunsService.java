@@ -23,6 +23,7 @@ public class JobRunsService {
 		DAO dao = HistoryDAO.getInst(context);
 		JobRun jobrun = JobRun.fromMap(request, context);
 		jobrun.setStartTime(new DateTime(DateTimeZone.UTC).toString());
+		jobrun.validateValues();
 		dao.create(jobrun.getNodeId(), jobrun.getCreated(), JobRun.toJsonObj(jobrun, true));
 		LOG.info("createAndStartJobRun {}/{}", jobrun.getNodeId(), jobrun.getCreated());
 		jobrun.startRun(context);

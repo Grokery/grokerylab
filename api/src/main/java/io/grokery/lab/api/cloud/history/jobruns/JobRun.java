@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.grokery.lab.api.common.context.CloudContext;
 import io.grokery.lab.api.cloud.history.HistoryItem;
+import io.grokery.lab.api.cloud.history.ItemType;
 import io.grokery.lab.api.common.JsonObj;
 import io.grokery.lab.api.common.MapperUtil;
 import io.grokery.lab.api.common.exceptions.InvalidInputException;
@@ -37,6 +38,7 @@ public class JobRun extends HistoryItem {
 
 	protected void initializeDefaults() {
 		super.initializeDefaults();
+		this.setItemType(ItemType.JOBRUN.toString());
 		this.setRunStatus(JobRunStatus.STAGED.toString());
 	}
 

@@ -4,8 +4,6 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import { fetchJobRuns } from 'store/actions/jobruns'
 
-import './AwsLambdaInfo.css'
-
 export default connect(
     (state, ownProps) => {
         return {

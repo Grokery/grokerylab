@@ -8,7 +8,7 @@ import 'brace/theme/chrome'
 
 import { Tabs, Panel } from 'shared/Tabs/Tabs'
 import EditModal from 'shared/EditModal/EditModal'
-import LogsTab from 'shared/LogsTab/LogsTab'
+import HistoryTab from 'shared/HistoryTab/HistoryTab'
 
 import SourceForm from 'components/NodeDetails/sources/SourceForm'
 
@@ -48,7 +48,7 @@ export class Text extends Component {
   getSubTypeInfo = () => {
     return (
       <>
-        <div className='row'>
+        <div className='row' style={{borderBottom:'solid .5px #E1E3E5'}}>
           <div className='col col-md-12' style={{paddingTop:'4px'}}>
             <label style={{paddingTop:'5px',paddingLeft:'10px'}}>SourceType:</label> {this.sourceTypeLabel}
             <button key='reload' 
@@ -69,7 +69,6 @@ export class Text extends Component {
         </div>
         <div className='row hidden-xs hidden-sm'>
           <div className='col col-md-12'>
-            
           </div>
         </div>
       </>
@@ -83,10 +82,10 @@ export class Text extends Component {
           <Panel title={node.title}>
             {this.renderRightMenuOptions()}
             <div className='row'>
-              <div className='col col-md-3' style={{borderTop:'solid .5px #ccc'}}>
+              <div className='col col-md-3'>
                 {this.getSubTypeInfo()}
               </div>
-              <div className='col col-md-9' style={{borderTop:'solid .5px #ccc'}}>
+              <div className='col col-md-9'>
                 <AceEditor
                   mode={this.mode}
                   theme="chrome"
@@ -111,7 +110,7 @@ export class Text extends Component {
           </Panel>
           <Panel title='History'>
             {this.renderRightMenuOptions()}
-            <LogsTab params={this.props.params}></LogsTab>
+            <HistoryTab params={this.props.params}></HistoryTab>
           </Panel>
         </Tabs>
         <EditModal 

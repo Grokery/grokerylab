@@ -10,6 +10,7 @@ class AWSLambda extends Component {
     node: PropTypes.object,
     onUpdate: PropTypes.func.isRequired,
     height: PropTypes.number,
+    runJob: PropTypes.func.isRequired,
   }
   static defaultProps = {
     height: window.innerHeight,
@@ -20,6 +21,37 @@ class AWSLambda extends Component {
           showModal: false
       }
   }
+  getSubTypeInfo = () => {
+    return (
+      <>
+        <div className='row' style={{borderBottom:'solid .5px #E1E3E5'}}>
+          <div className='col col-md-12' style={{paddingTop:'4px'}}>
+            <label style={{paddingTop:'5px',paddingLeft:'10px'}}>JobType:</label> AWS Lambda
+            <button 
+              key='run'
+              // disabled={this.state.dirty} 
+              // onClick={this.runJob} 
+              className='btn'
+              title={"Run job"}
+              style={{float:'right'}}>
+                <i className='fa fa-play' aria-hidden="true"></i>
+            </button>
+            <button key='info' 
+              // onClick={this.openDocumentation()} 
+              className='btn'
+              title={"open documentation about this node type"}
+              style={{}}>
+                <i className="fa fa-info-circle" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+        <div className='row hidden-xs hidden-sm'>
+          <div className='col col-md-12'>
+          </div>
+        </div>
+      </>
+    )
+  }
   render() {
     let { node, height } = this.props
     if (!node){
@@ -27,7 +59,8 @@ class AWSLambda extends Component {
     }
     return (
       <div className='row job-code-tab'>
-        <div className='col-md-3'>
+        <div className='col col-md-3'>
+          {this.getSubTypeInfo()}
 
           {/*  TODO store files as file objects in list in node */}
           <ul style={{marginTop:'5px', marginBottom:'15px', paddingLeft: '0px', marignRight:'0px', listStyleType: 'none'}}>
@@ -38,9 +71,9 @@ class AWSLambda extends Component {
           </ul>
 
         </div>
-        <div className='col-md-9'>
+        <div className='col col-md-9'>
           <div className='row'>
-            <div className='col-md-7'> 
+            <div className='col col-md-7'> 
               <AceEditor
                 mode="python"
                 theme="chrome"
