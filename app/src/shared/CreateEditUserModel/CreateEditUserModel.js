@@ -5,16 +5,13 @@ import _ from 'lodash'
 // import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css'
 
-// import { addNewCloudToSession, updateuserInfoInSession, removeCloudFromSession } from 'authentication'
-// import { createCloud, updateCloud, deleteCloud } from 'store/actions/cloud'
-// import { GROKERY_API_BASE_URL } from 'config'
-// import { history } from 'index'
+import { createUser } from 'store/actions/users'
 import Modal from 'shared/Modal/Modal'
 import Loader from 'shared/Loader/Loader'
-import './CreateEditUserModel.css'
 
 let defaultData = {
-  userName: '',
+  accountRole: 'USER',
+  username: '',
   name: '',
   password: '',
 }
@@ -22,7 +19,7 @@ let defaultData = {
 class CreateEditUserModel extends Component {
   static propTypes = {
     shown: PropTypes.bool.isRequired,
-    // createCloud: PropTypes.func.isRequired,
+    createUser: PropTypes.func.isRequired,
     // updateCloud: PropTypes.func.isRequired,
     // deleteCloud: PropTypes.func.isRequired,
     modalTitle: PropTypes.string,
@@ -41,28 +38,36 @@ class CreateEditUserModel extends Component {
   mergeState(newState) {
     this.setState(_.merge(this.state, newState))
   }
-  onNameChange(event) {
+  onAccountRoleChange = (event) => {
+    this.mergeState({data: {accountRole: event.target.value}})
+  }
+  onUserNameChange = (event) => {
+    this.mergeState({data: {username: event.target.value}})
+  }
+  onNameChange = (event) => {
     this.mergeState({data: {name: event.target.value}})
   }
-  onPasswordChange(event) {
+  onPasswordChange = (event) => {
     this.mergeState({data: {password: event.target.value}})
   }
   onSubmit = (event) => {
     event.preventDefault()
     this.setState({working: true})
     if (this.props.isCreate) {
-      // let { createCloud, addNewCloudToSession } = this.props
-      // createCloud(this.state.data, (json, response) => {
-      //   this.setState({
-      //     working: false,
-      //     data: _.cloneDeep(defaultData)
-      //   })
-      //   if (response.ok && json) {
-      //     addNewCloudToSession(json)
-      //   }
-        // history.replace("/")
-      // })
+      let { createUser } = this.props
+      createUser(this.state.data, (json, response) => {
+        this.setState({
+          working: false,
+          data: _.cloneDeep(defaultData)
+        })
+        if (response.ok && json) {
+          this.closeEditModal()
+          alert('success')
+        }
+      })
     } else if (this.props.isEdit) {
+      console.log('edit')
+      console.log(this.state.data)
       // let { updateCloud } = this.props
       // updateCloud(this.props.userInfo.name, this.state.data, (json, response) => {
       //   this.setState({
@@ -80,21 +85,32 @@ class CreateEditUserModel extends Component {
     this.setState(_.cloneDeep(defaultData))
     this.props.showEditModal(false)
   }
-  getPasswordFormField() {
-    return (
-      <div className='row'>
-        <div className='col col-sm-5'>
-          <label>Your Password:</label>
-          <input type='password' className='form-control' value={this.state.data.password} onChange={this.onPasswordChange.bind(this)}/>
-        </div>
-        <div className='col col-md-8'></div>
-      </div>
-    )
-  }
   getForm() {
     return (
       <form onSubmit={this.onSubmit}>
-
+        <div className='row'>
+          <div className='col col-md-6'>
+            <label>Name:</label>
+            <input type='name' className='form-control' value={this.state.data.name} onChange={this.onNameChange}/>
+          </div>
+          <div className='col col-md-6'>
+            <label>Role:</label>
+            <select className='form-control' value={this.state.data.accountRole} onChange={this.onAccountRoleChange}>
+              <option value='ADMIN'>Admin</option>
+              <option value='USER'>User</option>
+            </select>
+          </div>
+        </div>
+        <div className='row' style={{paddingTop:'10px'}}>
+          <div className='col col-md-6'>
+            <label>Email:</label>
+            <input type='email' className='form-control' value={this.state.data.username} onChange={this.onUserNameChange}/>
+          </div>
+          <div className='col col-md-6'>
+            <label>Password:</label>
+            <input type='password' className='form-control' value={this.state.data.password} onChange={this.onPasswordChange}/>
+          </div>
+        </div>
       </form>
     )
   }
@@ -107,7 +123,7 @@ class CreateEditUserModel extends Component {
                 <button type='button' className='close' onClick={this.closeEditModal} aria-label='Close'><span aria-hidden='true'>&times;</span></button>
                 <h4 className='modal-title'>{this.props.modalTitle}</h4>
               </div>
-              <div className='modal-body'>
+              <div className='modal-body' style={{padding:'15px'}}>
                 <Loader show={this.state.working} />
                 {this.getForm()}
               </div>
@@ -127,7 +143,7 @@ const mapStateToProps = (state, ownProps) => {
 }
 
 export default connect(mapStateToProps, {
-  // createCloud,
+  createUser,
   // updateCloud,
   // deleteCloud,
 })(CreateEditUserModel)

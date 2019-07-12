@@ -20,7 +20,8 @@ class BrowserJs extends Component {
     super(props)
       this.state = {
           showModal: false,
-          consoleHeight: 200,
+          showConsole: false,
+          consoleHeight: 0,//200
       }
   }
   getSubTypeInfo = () => {
@@ -56,13 +57,14 @@ class BrowserJs extends Component {
   }
   render() {
     let { height, draftCode, onCodeChange } = this.props
-    let { consoleHeight } = this.state;
+    let { consoleHeight, showConsole } = this.state;
+    let displayConsole = showConsole ? 'block' : 'none'
     return (
       <div className='row'>
           <div className='col col-md-3'>
             {this.getSubTypeInfo()}
           </div>
-          <div className='col col-md-9' style={{paddingRight:'0px'}}>
+          <div className='col col-md-9' style={{paddingRight:'0px',position:'relative'}}>
             <AceEditor
               mode="javascript"
               theme="chrome"
@@ -80,9 +82,9 @@ class BrowserJs extends Component {
                 tabSize: 2,
               }}
               width={"100%"}
-              height={(height-consoleHeight-10)+"px"}
+              height={`${height-consoleHeight}px`}// -10
             />
-            <div id="iframe-console">
+            <div id="iframe-console" style={{display:displayConsole}}>
               <pre id="iframe-console-pre" style={{height:consoleHeight+'px',borderRadius:0, backgroundColor:'white',borderBottom:'none'}}>></pre>
             </div>
         </div>

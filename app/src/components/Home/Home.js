@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
@@ -6,15 +7,24 @@ import { getSessionInfo } from 'authentication'
 import CreateEditCloudModel from 'shared/CreateEditCloudModel/CreateEditCloudModel'
 import CreateEditUserModel from 'shared/CreateEditUserModel/CreateEditUserModel'
 import CloudSection from './CloudSection/CloudSection'
+import { fetchUsers } from 'store/actions/users'
 import './Home.css'
 
 class Home extends Component {
+  static propTypes = {
+    fetchUsers: PropTypes.func,
+    users: PropTypes.array,
+  }
   constructor(props) {
     super(props)
     this.state = {
       showCloudCreateModal: false,
       showUserCreateModel: false,
     }
+  }
+  componentDidMount() {
+    let { fetchUsers } = this.props
+    fetchUsers()
   }
   render() {
     return (
@@ -48,9 +58,7 @@ class Home extends Component {
               />
               <hr />
               <ul>
-                <li><a href='/'><i className='fa fa-user'/>Donald Duck</a></li>
-                <li><a href='/'><i className='fa fa-user'/>Uncle Scrooge</a></li>
-                <li><a href='/'><i className='fa fa-user'/>Goofy</a></li>
+                {this.getUsers()}
               </ul>
             </div>
           </div>
@@ -58,6 +66,14 @@ class Home extends Component {
         </div>
       </div>
     )
+  }
+  getUsers = () => {
+    let { users } = this.props
+    return users.map((user) => {
+      return (
+        <li key={user.username}><a href='/'><i className='fa fa-user'/>{user.name}</a></li>
+      )
+    })
   }
   getCloudSections() {
     const { clouds } = getSessionInfo()
@@ -97,7 +113,11 @@ class Home extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  return {}
+  return {
+    users: state.users
+  }
 }
 
-export default withRouter(connect(mapStateToProps, {})(Home))
+export default withRouter(connect(mapStateToProps, {
+  fetchUsers
+})(Home))

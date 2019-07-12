@@ -160,8 +160,6 @@ class JobDetails extends Component {
                     cb(data);
                 });
             }
-        </script>
-        <script>
             var putSource = (id, data) => {
               var url = '`+url+`' + id + '/write'
               var options = {

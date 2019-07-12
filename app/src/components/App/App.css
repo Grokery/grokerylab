@@ -192,7 +192,7 @@ button.btn.btn-default:active {
   overflow-y: auto;
 }
 .modal .modal-dialog {
-  min-width: 60%;
+  min-width: 30%;
 }
 .modal .modal-body {
   overflow-y: scroll;

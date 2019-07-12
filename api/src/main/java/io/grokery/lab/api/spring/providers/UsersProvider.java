@@ -52,7 +52,7 @@ public class UsersProvider {
 
 	@GET
 	@Path("/{userId}")
-	@ApiOperation(value = "Get User", response = User.class)
+	@ApiOperation(value = "Get User")
 	public Response retreive(
 		@HeaderParam("Authorization") String auth,
 		@ApiParam @PathParam("userId") String userId
@@ -62,9 +62,20 @@ public class UsersProvider {
 		return Response.status(Status.OK).entity(response).build();
 	}
 
+	@GET
+	@Path("/")
+	@ApiOperation(value = "Get All Users")
+	public Response retreiveAll(
+		@HeaderParam("Authorization") String auth
+	) throws NotFoundException, NotAuthorizedException {
+		LOG.info("GET:{}/users", apiVersion);
+		JsonObj response = UserService.getInstance().retrieveAll(auth);
+		return Response.status(Status.OK).entity(response).build();
+	}
+
 	@POST
 	@Path("/authenticate")
-	@ApiOperation(value = "Authenticate User", response = User.class)
+	@ApiOperation(value = "Authenticate User")
 	public Response authenticate(
 		@ApiParam JsonObj req
 	) throws InvalidInputException, NotAuthorizedException {

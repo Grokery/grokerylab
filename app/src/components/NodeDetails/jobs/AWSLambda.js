@@ -36,6 +36,15 @@ class AWSLambda extends Component {
               style={{float:'right'}}>
                 <i className='fa fa-play' aria-hidden="true"></i>
             </button>
+            <button 
+              key='deploy'
+              // disabled={this.state.dirty} 
+              // onClick={this.runJob} 
+              className='btn'
+              title={"Deploy job to AWS"}
+              style={{float:'right'}}>
+                <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+            </button>
             <button key='info' 
               // onClick={this.openDocumentation()} 
               className='btn'
@@ -67,7 +76,7 @@ class AWSLambda extends Component {
             <li style={{padding:'5px', paddingLeft:'15px'}}><a href='#/' onClick={(e) => {e.preventDefault()}}>job.py</a></li>
             <li style={{padding:'5px', paddingLeft:'15px'}}><a href='#/' onClick={(e) => {e.preventDefault()}}>main.py</a></li>
             <li style={{padding:'5px', paddingLeft:'15px'}}><a href='#/' onClick={(e) => {e.preventDefault()}}>requirements.txt</a></li>
-            <li style={{padding:'5px', paddingLeft:'15px'}}><a href='#/' onClick={(e) => {e.preventDefault()}}>+</a></li>
+            {/* <li style={{padding:'5px', paddingLeft:'15px'}}><a href='#/' onClick={(e) => {e.preventDefault()}}>+</a></li> */}
           </ul>
 
         </div>

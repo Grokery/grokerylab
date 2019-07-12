@@ -12,6 +12,7 @@ import jobruns from 'store/reducers/jobruns'
 import { history } from 'store/reducers/history'
 import { nodes } from 'store/reducers/nodes'
 import { options } from 'store/reducers/options'
+import { users } from 'store/reducers/users'
 
 let rootReducer = combineReducers({
   appStatus,
@@ -22,6 +23,7 @@ let rootReducer = combineReducers({
   history,
   nodes,
   options,
+  users,
 })
 
 let configureStore = null

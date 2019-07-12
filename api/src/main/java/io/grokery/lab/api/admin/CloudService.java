@@ -51,10 +51,6 @@ public class CloudService {
 		User user = null;
 		try {
 			Claims claims = DigitalPiglet.parseJWT(auth);
-			String accountRole = claims.get("accountRole").toString();
-			if (AccountRole.valueOf(accountRole) != AccountRole.ADMIN) {
-				throw new NotAuthorizedException("Admin role required to create new cloud");
-			}
 			user = dao.load(User.class, User.hashKey, claims.get("userId").toString());
 		} catch (Throwable e) {
 			throw new NotAuthorizedException();

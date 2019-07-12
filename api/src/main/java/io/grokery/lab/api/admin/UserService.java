@@ -1,5 +1,6 @@
 package io.grokery.lab.api.admin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -7,6 +8,8 @@ import java.util.Map.Entry;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedScanList;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -98,7 +101,6 @@ public class UserService {
 	}
 
 	public JsonObj retrieve(String auth, String username) throws NotFoundException, NotAuthorizedException {
-
 		try {
 			Claims claims = DigitalPiglet.parseJWT(auth);
 			if (!claims.getSubject().equals(username)) {
@@ -114,6 +116,23 @@ public class UserService {
 		}
 
 		return mapper.convertValue(redact(user), JsonObj.class);
+	}
+
+	public JsonObj retrieveAll(String auth) throws NotAuthorizedException {
+		try {
+			DigitalPiglet.parseJWT(auth);
+		} catch (Throwable e) {
+			throw new NotAuthorizedException();
+		}
+
+		PaginatedScanList<User> users = dao.scan(User.class, new DynamoDBScanExpression());
+		List<User> redactedUsers = new ArrayList<User>();
+		for (User user : users) {
+			redactedUsers.add(this.redact(user));
+		}
+		JsonObj result = new JsonObj();
+		result.put("data", redactedUsers);
+		return mapper.convertValue(result, JsonObj.class);
 	}
 
 	public JsonObj update(String auth, String username, JsonObj requestBody) {

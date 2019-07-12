@@ -10,7 +10,6 @@ import { createCloud, updateCloud, deleteCloud } from 'store/actions/cloud'
 import { history } from 'index'
 import Modal from 'shared/Modal/Modal'
 import Loader from 'shared/Loader/Loader'
-import './CreateEditCloudModel.css'
 
 let defaultData = {
   title: 'New Cloud',
@@ -19,7 +18,7 @@ let defaultData = {
   cloudHost: 'CUSTOMER',
   installOption: 'EXISTING',
   url: 'http://localhost:8000/api/v0',
-  jwtPrivateKey: 'fdksajfdskla843u2938fajsdkfj409r38349jwoi',
+  jwtPrivateKey: '',
   installAccess: {
     credentials: {
       awsAccessKeyId: '',
@@ -286,13 +285,13 @@ class CreateEditCloudModel extends Component {
         {isCreate? this.getInstallFormFields() : null}
         {(isCreate && this.state.data.installOption === 'EXISTING') || isEdit ?
           <>
-            <div className='row'>
+            <div className='row' style={{paddingTop:'10px'}}>
               <div className='col col-sm-12'>
                 <label>Cloud Url:</label>
                 <input type='text' className='form-control' value={this.state.data.url} onChange={this.onUrlChange.bind(this)}/>
               </div>
             </div>
-            <div className='row'>
+            <div className='row' style={{paddingTop:'10px'}}>
               <div className='col col-sm-12'>
                 <label>JWT Key:</label>
                 <input type='text' className='form-control' value={this.state.data.jwtPrivateKey} onChange={this.onJwtKeyChange.bind(this)}/>
@@ -317,7 +316,7 @@ class CreateEditCloudModel extends Component {
                 <button type='button' className='close' onClick={this.closeEditModal} aria-label='Close'><span aria-hidden='true'>&times;</span></button>
                 <h4 className='modal-title'>{this.props.modalTitle}</h4>
               </div>
-              <div className='modal-body'>
+              <div className='modal-body' style={{padding:'15px'}}>
                 <Loader show={this.state.working} />
                 {this.getForm()}
               </div>
