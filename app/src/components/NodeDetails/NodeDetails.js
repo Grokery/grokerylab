@@ -5,7 +5,7 @@ import { withRouter, Link } from 'react-router-dom'
 import queryString from 'query-string'
 
 import { updateQueryParam, NODETYPE } from 'common'
-import { headerNavHeight, sideNavWidth } from 'config'
+import { headerNavHeight, sideNavWidth } from 'constants.js'
 import { updateNode, fetchNode } from 'store/actions/nodes'
 import D3DataFlow from 'shared/D3DataFlow/D3DataFlow'
 import JobDetails from './jobs/JobDetails'

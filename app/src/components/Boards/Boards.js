@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
 
-import { headerNavHeight } from 'config'
+import { headerNavHeight } from 'constants.js'
 import { NODETYPE } from 'common'
 import { getSessionInfo } from 'authentication'
 import IBoardFrame from 'shared/IBoardFrame/IBoardFrame'

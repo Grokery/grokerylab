@@ -23,11 +23,11 @@ history.listen((location) => {
 ReactDOM.render(
     <Provider store={store}>
         <Router history={history}> 
-            <div>
+            <>
                 <Route exact path='/signin' component={Auth}></Route>
                 <Route exact path='/signout' component={Auth}></Route>
                 <Route path='/' component={App}></Route>
-            </div>
+            </>
         </Router>
     </Provider>,
     document.getElementById('root')

@@ -6,6 +6,7 @@ import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css'
 
 import { getCloudId, addNewCloudToSession, updateCloudInfoInSession, removeCloudFromSession } from 'authentication'
+import { API_BASE_URL } from 'config'
 import { createCloud, updateCloud, deleteCloud } from 'store/actions/cloud'
 import { history } from 'index'
 import Modal from 'shared/Modal/Modal'
@@ -17,7 +18,7 @@ let defaultData = {
   cloudType: 'AWS',
   cloudHost: 'CUSTOMER',
   installOption: 'EXISTING',
-  url: 'http://localhost:8000/api/v0',
+  url: API_BASE_URL,
   jwtPrivateKey: '',
   installAccess: {
     credentials: {

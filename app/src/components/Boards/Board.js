@@ -5,7 +5,7 @@ import { withRouter, Link } from 'react-router-dom'
 
 import { getSessionInfo } from 'authentication'
 import IBoardFrame from 'shared/IBoardFrame/IBoardFrame'
-import { sideNavWidth } from 'config/'
+import { sideNavWidth } from 'constants.js'
 
 class Board extends Component {
   static propTypes = {

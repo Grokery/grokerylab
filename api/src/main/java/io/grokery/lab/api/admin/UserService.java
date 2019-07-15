@@ -1,6 +1,7 @@
 package io.grokery.lab.api.admin;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -130,6 +131,7 @@ public class UserService {
 		for (User user : users) {
 			redactedUsers.add(this.redact(user));
 		}
+		redactedUsers.sort(Comparator.comparing(User::getCreated).reversed());
 		JsonObj result = new JsonObj();
 		result.put("data", redactedUsers);
 		return mapper.convertValue(result, JsonObj.class);

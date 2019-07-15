@@ -6,6 +6,7 @@ import _ from 'lodash'
 import 'react-confirm-alert/src/react-confirm-alert.css'
 
 import { createUser } from 'store/actions/users'
+import { history } from 'index'
 import Modal from 'shared/Modal/Modal'
 import Loader from 'shared/Loader/Loader'
 
@@ -62,7 +63,7 @@ class CreateEditUserModel extends Component {
         })
         if (response.ok && json) {
           this.closeEditModal()
-          alert('success')
+          history.replace("/")
         }
       })
     } else if (this.props.isEdit) {
