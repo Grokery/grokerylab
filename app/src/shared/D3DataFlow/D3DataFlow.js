@@ -8,7 +8,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css'
 import { history } from 'index'
 import { getSessionInfo } from 'authentication'
 import { createNode, updateNode, deleteNode } from 'store/actions/nodes'
-import { NODETYPE, getQueryParamByName } from 'common'
+import { NODETYPE, getQueryParamByName, updateQueryParam } from 'common'
 import d3 from 'd3'
 import './D3DataFlow.css'
 
@@ -693,6 +693,7 @@ class D3DataFlow extends Component {
   filterNodes() {
     let { nodes } = this.props
     let filterText = document.getElementById('filter-input').value.toLowerCase()
+    updateQueryParam('filterText', filterText)
     this.setState({filterText})
     Object.keys(nodes).forEach(function(key) {
         let node = nodes[key]

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import queryString from 'query-string'
 
-import { APPSTATUS } from "common"
+import { APPSTATUS, updateQueryParam } from "common"
 import { headerNavHeight, sideNavWidth } from 'constants.js'
 import Loader from 'shared/Loader/Loader'
 import D3DataFlow from 'shared/D3DataFlow/D3DataFlow'
