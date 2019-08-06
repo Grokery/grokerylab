@@ -21,7 +21,7 @@ class App extends Component {
     const { location, history } = this.props
     if (!isAuthenticated()) {
       if (location.pathname !== '/signout' && location.pathname !== '/signin') {
-        setRedirectUrl(location.pathname)
+        setRedirectUrl(location.pathname + location.search)
       }
       history.push('/signin')
     }

@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
+import queryString from 'query-string'
 
 import { headerNavHeight } from 'constants.js'
-import { NODETYPE } from 'common'
+import { NODETYPE, updateQueryParam } from 'common'
 import { getSessionInfo } from 'authentication'
 import IBoardFrame from 'shared/IBoardFrame/IBoardFrame'
 
@@ -13,12 +14,13 @@ class Boards extends Component {
     cloudInfo: PropTypes.object.isRequired,
     boards: PropTypes.array.isRequired,
     urlParams: PropTypes.object,
+    queryParams: PropTypes.object,
   }
   constructor(props) {
     super(props)
-
+    let { filterText } = props.queryParams
     this.state = {
-      filterValue: '',
+      filterText: filterText ? filterText : '',
     }
   }
   render() {
@@ -35,8 +37,10 @@ class Boards extends Component {
             <div className='col-md-3' style={{paddingTop:'8px',paddingLeft:'8px',paddingRight:'8px'}}>
               <div className="board-filter" style={{position:'relative',float:'right'}}>
                 <input 
+                  autoFocus
                   id='filter-input' 
                   className='filter-input' 
+                  value={this.state.filterText}
                   onChange={this.onFilterChange} 
                   style={{height:'35px',border:'1px solid #d7d7d7',borderRadius:'4px 4px 4px 4px',width:'240px',paddingLeft:'8px',paddingRight:'26px'}} />
                 <i style={{position:'absolute',fontSize:'18px',right:'8px',top:'8px'}} className='fa fa-filter'></i>
@@ -48,11 +52,13 @@ class Boards extends Component {
     )
   }
   onFilterChange = (e) => {
-    this.setState({ filterValue: e.target.value})
+    let filterText = e.target.value
+    updateQueryParam('filterText', filterText)
+    this.setState({ filterText })
   }
   filterBoards = (board) => {
-    const { filterValue } = this.state
-    if (board.title.toLowerCase().includes(filterValue.toLowerCase())) {
+    const { filterText } = this.state
+    if (board.title.toLowerCase().includes(filterText.toLowerCase())) {
       return true
     }
       return false 
@@ -96,6 +102,7 @@ const mapStateToProps = (state, ownProps) => {
   }
   return {
     urlParams: ownProps.match.params,
+    queryParams: queryString.parse(ownProps.location.search),
     cloudInfo: sessionInfo['clouds'][ownProps.match.params.cloudName],
     boards: boards,
   }

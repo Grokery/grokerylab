@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { Route } from 'react-router'
+import queryString from 'query-string'
 
 import { getCloudId } from 'authentication'
 import { fetchNodes, clearNodes } from 'store/actions/nodes'
@@ -21,6 +22,7 @@ class Cloud extends Component {
     fetchNodes: PropTypes.func.isRequired,
     clearNodes: PropTypes.func.isRequired,
     urlParams: PropTypes.object,
+    queryParams: PropTypes.object,
   }
   componentDidMount() {
     const { clearNodes, fetchCloud, fetchNodes, fetchOptions, history, urlParams  } = this.props
@@ -60,6 +62,7 @@ class Cloud extends Component {
 const mapStateToProps = (state, ownProps) => {
   return {
     urlParams: ownProps.match.params,
+    queryParams: queryString.parse(ownProps.location.search),
   }
 }
 

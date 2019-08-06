@@ -39,6 +39,12 @@ const nodeShapes = {
 }
 
 class D3DataFlow extends Component {
+  constructor(props) {
+      super(props)
+      this.state = {
+        filterText: this.props.filterText ? this.props.filterText : '',
+      }
+  }
   static propTypes = {
     createNode: PropTypes.func.isRequired,
     updateNode: PropTypes.func.isRequired,
@@ -53,6 +59,7 @@ class D3DataFlow extends Component {
     singleClickNav: PropTypes.bool,
     colored: PropTypes.bool,
     nodeShape: PropTypes.number,
+    filterText: PropTypes.string,
   }
   render() {
     let { params, cloudAccess } = this.props
@@ -78,7 +85,7 @@ class D3DataFlow extends Component {
                 <button className="create-btn" onClick={this.toggleCreateNodes}><i className='fa fa-plus'></i></button>
                 <button id='delete-icon' onClick={this.onDelete.bind(this)}><i className='fa fa-trash'></i></button>
                 <div className="node-filter">
-                    <input id='filter-input' className='filter-input' onChange={this.filterNodes.bind(this)}/>
+                    <input id='filter-input' className='filter-input' onChange={this.filterNodes.bind(this)} value={this.state.filterText} autoFocus/>
                     <i className='fa fa-filter'></i>
                 </div>
             </div>
@@ -686,14 +693,15 @@ class D3DataFlow extends Component {
   filterNodes() {
     let { nodes } = this.props
     let filterText = document.getElementById('filter-input').value.toLowerCase()
+    this.setState({filterText})
     Object.keys(nodes).forEach(function(key) {
         let node = nodes[key]
         if (node.title.toLowerCase().includes(filterText) &&
             filterText !== '' &&
             filterText.length > 1) {
-            this.addNodeToSelected(node)
+            this.addNodeToSelected(node, filterText)
         } else {
-            this.removeNodeFromSelected(node)
+            this.removeNodeFromSelected(node, filterText)
         }
     }.bind(this))
   }
@@ -709,19 +717,19 @@ class D3DataFlow extends Component {
           icon.style.display = 'none'
       }
   }
-  addNodeToSelected(d) {
+  addNodeToSelected(d, filterText) {
     const { params } = this.props
     this.d3state.selectedNodes[d.nodeId] = d
     if (Object.keys(this.d3state.selectedNodes).length > 1) {
-        history.push('/clouds/'+ params.cloudName + '/flows')
+        history.push('/clouds/'+ params.cloudName + '/flows' + (filterText ? '?filterText=' + filterText : ''))
     }
     this.selectNodes(this.d3state.selectedNodes)
   }
-  removeNodeFromSelected(d) {
+  removeNodeFromSelected(d, filterText) {
     const { params } = this.props
     delete this.d3state.selectedNodes[d.nodeId]
     if (Object.keys(this.d3state.selectedNodes).length < 1) {
-        history.push('/clouds/'+ params.cloudName + '/flows')
+        history.push('/clouds/'+ params.cloudName + '/flows' + (filterText ? '?filterText=' + filterText : ''))
     }
     this.selectNodes(this.d3state.selectedNodes)
   }

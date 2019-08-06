@@ -43,7 +43,7 @@ class AWSLambda extends Component {
               className='btn'
               title={"Deploy job to AWS"}
               style={{float:'right'}}>
-                <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                <i className="fa fa-cloud-upload" aria-hidden="true"></i>
             </button>
             <button key='info' 
               // onClick={this.openDocumentation()} 

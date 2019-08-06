@@ -12,6 +12,7 @@ import D3DataFlow from 'shared/D3DataFlow/D3DataFlow'
 class Dataflows extends Component {
   static propsTypes = {
     urlParams: PropTypes.object,
+    queryParams: PropTypes.object,
   }
   render() {
     const { queryParams, urlParams } = this.props
@@ -22,6 +23,7 @@ class Dataflows extends Component {
           params={urlParams}
           showControls={true}
           selectedNodeId={queryParams.nodeId}
+          filterText={queryParams.filterText}
           zoomOnHighlight={false}
           singleClickNav={false}
           colored={false}
